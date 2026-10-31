@@ -48,7 +48,7 @@ if exist "%BUNDLED_JAVA%" (
     )
 )
 
-:: 4. Auto-cura de juncoes NTFS portateis (garante portabilidade caso movido de drive)
+:: 4. Auto-cura de juncoes NTFS portateis e sincronizacao de Java
 set "INST_DOT_MC=%BASE_DIR%Launcher\data\instances\Minecraft_Russo\.minecraft"
 if exist "%INST_DOT_MC%" (
     if not exist "%INST_DOT_MC%\mods" (
@@ -57,7 +57,20 @@ if exist "%INST_DOT_MC%" (
     if not exist "%INST_DOT_MC%\config" (
         mklink /J "%INST_DOT_MC%\config" "%BASE_DIR%Instancia_Cliente\config" >nul 2>&1
     )
+    if not exist "%INST_DOT_MC%\CustomSkinLoader" (
+        mklink /J "%INST_DOT_MC%\CustomSkinLoader" "%BASE_DIR%Instancia_Cliente\CustomSkinLoader" >nul 2>&1
+    )
 )
+
+if not exist "%BASE_DIR%Launcher\Java17" (
+    mklink /J "%BASE_DIR%Launcher\Java17" "%BASE_DIR%Java17" >nul 2>&1
+)
+if not exist "%BASE_DIR%Launcher\data\Java17" (
+    mklink /J "%BASE_DIR%Launcher\data\Java17" "%BASE_DIR%Java17" >nul 2>&1
+)
+
+:: Auto-configuracao dinamica do caminho do Java portatil no Launcher
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$j = ('%BASE_DIR%Java17/bin/javaw.exe' -replace '\\','/'); @('%BASE_DIR%Launcher\data\ultimmc.cfg', '%BASE_DIR%Launcher\ultimmc.cfg', '%BASE_DIR%Launcher\data\instances\Minecraft_Russo\instance.cfg', '%BASE_DIR%Launcher\instances\Minecraft_Russo\instance.cfg', '%BASE_DIR%Instancia_Cliente\instance.cfg') | ForEach-Object { if (Test-Path $_) { (Get-Content $_) -replace '^JavaPath=.*', ('JavaPath=' + $j) | Set-Content $_ } }" >nul 2>&1
 
 :: 5. Iniciar o Jogo
 echo.

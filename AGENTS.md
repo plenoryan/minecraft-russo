@@ -130,4 +130,8 @@
 - **Armadilha:** No Windows PowerShell 5.1, o encadeamento via pipe (`$script | & jshell.exe`) insere bytes de preâmbulo/BOM no fluxo de entrada padrão (STDIN), fazendo com que utilitários nativos como o JShell falhem com `illegal character: '\ufeff'` ou `illegal character: '\u00bb'`.
 - **Solução:** Escrever o script em arquivo temporário sem BOM (`[System.Text.UTF8Encoding]::new($false)`) e passá-lo como argumento direto (`jshell.exe -s "$tempFile"`).
 
+### L19. Parâmetros de Memória JVM e Resolução de Java no MultiMC/UltimMC
+- **Armadilha:** O MultiMC/UltimMC possui campos dedicados (`MinMemAlloc` e `MaxMemAlloc`) para gerenciar `-Xms` e `-Xmx`. Se esses argumentos forem inseridos manualmente dentro da string `JvmArgs`, o inicializador bloqueia a inicialização exibindo o erro: `You tried to manually set a JVM memory option (using "-XX:PermSize", "-XX-MaxHeapSize", "-XX:InitialHeapSize", "-Xmx" or "-Xms")...`. Além disso, caminhos relativos em `JavaPath` que resolvem para caminhos inexistentes disparam o assistente inicial (wizard de seleção de idioma e Java).
+- **Solução:** Remover `-Xms` e `-Xmx` da chave `JvmArgs` em todos os `instance.cfg`, utilizando exclusivamente `MinMemAlloc=2048` e `MaxMemAlloc=4096`. No script `Jogar.bat`, sincronizar dinamicamente o `JavaPath` absoluto em `ultimmc.cfg` e `instance.cfg`, e criar junções NTFS (`Launcher\Java17` e `Launcher\data\Java17`) para garantir portabilidade em qualquer diretório ou máquina sem nunca exibir o assistente.
+
 

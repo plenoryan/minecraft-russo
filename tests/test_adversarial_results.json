@@ -1,8 +1,8 @@
 ﻿{
     "Suite":  "Adversarial Stress Test Suite (Tier 5)",
     "TargetDir":  "F:\\Jogos\\Mine",
-    "Timestamp":  "2026-10-31T02:37:56Z",
-    "DurationMs":  7989,
+    "Timestamp":  "2026-10-31T02:56:16Z",
+    "DurationMs":  7112,
     "Verdict":  "APPROVE",
     "Summary":  {
                     "Warnings":  0,
@@ -22,7 +22,7 @@
                                          "OutputSnippet":  "======================================================================\r\n            MINECRAFT RUSSO - PACOTE DE APRENDIZADO\r\n======================================================================\r\n\r\n[ERRO] O executavel do inicializador nao foi encontrado em:\r\n       \"C:\\Users\\Ryan\\.gemini\\antigravity\\scratch\\adversarial_tests\\adv01_no_launcher\\Launcher\\UltimMC.exe\"\r\n\r\nCertifique-se de extrair o pacote completo com a pasta Launcher.\r\nPressione qualquer tecla para sair.",
                                          "ExitCode":  1
                                      },
-                        "Timestamp":  "2026-10-31T02:37:48Z"
+                        "Timestamp":  "2026-10-31T02:56:09Z"
                     },
                     {
                         "Id":  "ADV-02",
@@ -34,7 +34,7 @@
                                          "Match":  "ERRO CRITICO",
                                          "ExitCode":  1
                                      },
-                        "Timestamp":  "2026-10-31T02:37:48Z"
+                        "Timestamp":  "2026-10-31T02:56:09Z"
                     },
                     {
                         "Id":  "ADV-03",
@@ -46,7 +46,7 @@
                                          "TestPath":  "C:\\Users\\Ryan\\.gemini\\antigravity\\scratch\\adversarial_tests\\adv03_path with spaces and symbols",
                                          "ExitCode":  0
                                      },
-                        "Timestamp":  "2026-10-31T02:37:48Z"
+                        "Timestamp":  "2026-10-31T02:56:09Z"
                     },
                     {
                         "Id":  "ADV-04",
@@ -60,7 +60,7 @@
                                          "RFCFailures":  0,
                                          "Collisions":  0
                                      },
-                        "Timestamp":  "2026-10-31T02:37:49Z"
+                        "Timestamp":  "2026-10-31T02:56:09Z"
                     },
                     {
                         "Id":  "ADV-05",
@@ -72,7 +72,7 @@
                                          "TestedSamples":  9,
                                          "Mismatches":  0
                                      },
-                        "Timestamp":  "2026-10-31T02:37:50Z"
+                        "Timestamp":  "2026-10-31T02:56:10Z"
                     },
                     {
                         "Id":  "ADV-06",
@@ -83,7 +83,7 @@
                         "Evidence":  {
                                          "Status":  "Server Running"
                                      },
-                        "Timestamp":  "2026-10-31T02:37:56Z"
+                        "Timestamp":  "2026-10-31T02:56:15Z"
                     },
                     {
                         "Id":  "ADV-07",
@@ -363,7 +363,7 @@
                                                                       "ReadCount":  6
                                                                   }
                                      },
-                        "Timestamp":  "2026-10-31T02:37:56Z"
+                        "Timestamp":  "2026-10-31T02:56:15Z"
                     },
                     {
                         "Id":  "ADV-08",
@@ -433,7 +433,7 @@
                                                         }
                                                     ]
                                      },
-                        "Timestamp":  "2026-10-31T02:37:56Z"
+                        "Timestamp":  "2026-10-31T02:56:15Z"
                     },
                     {
                         "Id":  "ADV-09",
@@ -452,7 +452,7 @@
                                                               "sayit-1.20.1-fabric.jar"
                                                           ]
                                      },
-                        "Timestamp":  "2026-10-31T02:37:56Z"
+                        "Timestamp":  "2026-10-31T02:56:15Z"
                     },
                     {
                         "Id":  "ADV-10",
@@ -465,7 +465,7 @@
                                          "ShareToLanMixin":  true,
                                          "ModJar":  "e4all-fabric-1.6.4.jar"
                                      },
-                        "Timestamp":  "2026-10-31T02:37:56Z"
+                        "Timestamp":  "2026-10-31T02:56:15Z"
                     },
                     {
                         "Id":  "ADV-11",
@@ -477,7 +477,7 @@
                                          "Echo":  "VOICE_CHAT_HEARTBEAT_STRESS_TEST",
                                          "Port":  24454
                                      },
-                        "Timestamp":  "2026-10-31T02:37:56Z"
+                        "Timestamp":  "2026-10-31T02:56:16Z"
                     },
                     {
                         "Id":  "ADV-12",
@@ -489,7 +489,7 @@
                                          "ConflictCaught":  true,
                                          "Port":  24454
                                      },
-                        "Timestamp":  "2026-10-31T02:37:56Z"
+                        "Timestamp":  "2026-10-31T02:56:16Z"
                     },
                     {
                         "Id":  "ADV-13",
@@ -502,7 +502,7 @@
                                          "PayloadsTested":  9,
                                          "SanitizationPolicy":  "Strip path delimiters [\\\\/] and \u0027..\u0027 from offline usernames before resolving against LocalSkin directory"
                                      },
-                        "Timestamp":  "2026-10-31T02:37:56Z"
+                        "Timestamp":  "2026-10-31T02:56:16Z"
                     }
                 ]
 }
