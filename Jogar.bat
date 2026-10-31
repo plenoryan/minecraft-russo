@@ -69,8 +69,8 @@ if not exist "%BASE_DIR%Launcher\data\Java17" (
     mklink /J "%BASE_DIR%Launcher\data\Java17" "%BASE_DIR%Java17" >nul 2>&1
 )
 
-:: Auto-configuracao dinamica do caminho do Java portatil no Launcher
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$j = ('%BASE_DIR%Java17/bin/javaw.exe' -replace '\\','/'); @('%BASE_DIR%Launcher\data\ultimmc.cfg', '%BASE_DIR%Launcher\ultimmc.cfg', '%BASE_DIR%Launcher\data\instances\Minecraft_Russo\instance.cfg', '%BASE_DIR%Launcher\instances\Minecraft_Russo\instance.cfg', '%BASE_DIR%Instancia_Cliente\instance.cfg') | ForEach-Object { if (Test-Path $_) { (Get-Content $_) -replace '^JavaPath=.*', ('JavaPath=' + $j) | Set-Content $_ } }" >nul 2>&1
+:: Auto-configuracao dinamica do caminho do Java portatil no Launcher e contas offline
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$j = ('%BASE_DIR%Java17/bin/javaw.exe' -replace '\\','/'); @('%BASE_DIR%Launcher\data\ultimmc.cfg', '%BASE_DIR%Launcher\ultimmc.cfg', '%BASE_DIR%Launcher\data\instances\Minecraft_Russo\instance.cfg', '%BASE_DIR%Launcher\instances\Minecraft_Russo\instance.cfg', '%BASE_DIR%Instancia_Cliente\instance.cfg') | ForEach-Object { if (Test-Path $_) { (Get-Content $_) -replace '^JavaPath=.*', ('JavaPath=' + $j) | Set-Content $_ } }; @('%BASE_DIR%Launcher\data\accounts.json', '%BASE_DIR%Launcher\accounts.json') | ForEach-Object { if (Test-Path $_) { (Get-Content $_) -replace '\"type\":\s*\"Offline\"', '\"type\": \"dummy\"' | Set-Content $_ } }" >nul 2>&1
 
 :: 5. Iniciar o Jogo
 echo.

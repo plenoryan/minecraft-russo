@@ -12,7 +12,7 @@
                 "name": "EstudanteRusso",
                 "skins": []
             },
-            "type": "Offline",
+            "type": "dummy",
             "ygg": {
                 "extra": {
                     "clientToken": "069a79f444e93726a5befca90e38aaf5",
