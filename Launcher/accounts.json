@@ -1,0 +1,26 @@
+{
+    "accounts": [
+        {
+            "active": true,
+            "entitlement": {
+                "canPlayMinecraft": true,
+                "ownsMinecraft": true
+            },
+            "profile": {
+                "capes": [],
+                "id": "069a79f4-44e9-3726-a5be-fca90e38aaf5",
+                "name": "EstudanteRusso",
+                "skins": []
+            },
+            "type": "Offline",
+            "ygg": {
+                "extra": {
+                    "clientToken": "069a79f444e93726a5befca90e38aaf5",
+                    "userName": "EstudanteRusso"
+                },
+                "token": "0"
+            }
+        }
+    ],
+    "formatVersion": 3
+}

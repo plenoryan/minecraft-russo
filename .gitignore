@@ -1,0 +1,39 @@
+# Minecraft runtime logs and crash dumps
+logs/
+*.log
+crash-reports/
+hs_err_pid*.log
+replay_recordings/
+screenshots/
+
+# Minecraft internal caches & transient files
+.fabric/
+.cache/
+cache/
+usercache.json
+usernamecache.json
+session.lock
+*.lock
+*.tmp
+*.bak
+
+# MultiMC / UltimMC transient caches
+Launcher/cache/
+Launcher/instances/*/.minecraft/logs/
+Launcher/instances/*/.minecraft/crash-reports/
+Launcher/data/cache/
+Launcher/data/instances/*/.minecraft/logs/
+Launcher/data/instances/*/.minecraft/crash-reports/
+
+# World saves (do not commit transient gameplay worlds)
+**/saves/
+**/backups/
+
+# Java 17 portable runtime environment (recreatable via install_java17.ps1)
+Java17/
+
+# System and OS files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
