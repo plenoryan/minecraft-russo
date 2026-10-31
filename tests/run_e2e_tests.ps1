@@ -122,8 +122,8 @@ function Normalize-Cyrillic {
     # 5. Replace 'yo' (U+0451) with 'ye' (U+0435) - Universal equivalence in Russian STT / Vosk
     $normalized = $normalized.Replace([char]0x0451, [char]0x0435)
     
-    # 6. Remove punctuation, brackets, quotes, hyphens
-    $normalized = [System.Text.RegularExpressions.Regex]::Replace($normalized, "[^\p{IsCyrillic}\p{IsBasicLatin}\s]", "")
+    # 6. Remove punctuation, brackets, quotes, hyphens (aligned with Java [a-zA-Z])
+    $normalized = [System.Text.RegularExpressions.Regex]::Replace($normalized, "[^\p{IsCyrillic}a-zA-Z\s]", "")
     
     # 7. Collapse whitespace and trim
     $normalized = [System.Text.RegularExpressions.Regex]::Replace($normalized, "\s+", " ").Trim()
@@ -170,9 +170,16 @@ function Calculate-PronunciationScore {
         return @{ Score = 1.0; Passed = $true; Distance = 0 }
     }
     
-    # Substring match (e.g. compound tokens or spoken base nouns)
-    if ($normSpoken.Length -gt 0 -and $normTarget.Length -gt 0 -and ($normSpoken.Contains($normTarget) -or $normTarget.Contains($normSpoken))) {
-        return @{ Score = 0.95; Passed = $true; Distance = 0 }
+    # Token-level match constrained to >= 4 letters
+    if ($normSpoken.Length -ge 4 -and $normTarget.Length -ge 4) {
+        $shorter = if ($normSpoken.Length -le $normTarget.Length) { $normSpoken } else { $normTarget }
+        $longer = if ($normSpoken.Length -le $normTarget.Length) { $normTarget } else { $normSpoken }
+        $tokens = $longer.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
+        foreach ($tok in $tokens) {
+            if ($tok -eq $shorter) {
+                return @{ Score = 0.95; Passed = $true; Distance = 0 }
+            }
+        }
     }
     
     $maxLen = [Math]::Max($normSpoken.Length, $normTarget.Length)
@@ -182,8 +189,13 @@ function Calculate-PronunciationScore {
     
     $dist = Get-LevenshteinDistance $normSpoken $normTarget
     $score = [Math]::Max(0.0, 1.0 - ($dist / [double]$maxLen))
-    $passed = ($score -ge $Threshold)
-    return @{ Score = [Math]::Round($score, 4); Passed = $passed; Distance = $dist }
+    $score = [Math]::Round($score, 4)
+    $passed = if ($maxLen -le 3) {
+        $dist -eq 0
+    } else {
+        $score -ge $Threshold
+    }
+    return @{ Score = $score; Passed = $passed; Distance = $dist }
 }
 
 # ==============================================================================
@@ -399,9 +411,15 @@ Register-Test "T1_F14" "Tier 1" "F14: Bilingual and Phonetic Tooltips Schema" "M
 
 # F15: Tier-Gated Voice Penalty Adaptation
 Register-Test "T1_F15" "Tier 1" "F15: Tier-Gated Voice Penalty and Adaptive Timers" "M3" {
-    $timerTiers = @{ 1 = 18; 2 = 14; 3 = 10; 4 = 5 }
-    if ($timerTiers[1] -le $timerTiers[4]) { throw "Adaptive timer progression inverted: Tier 1 must be longer than Tier 4" }
-    return @{ Status = "PASSED"; Message = "Adaptive timer curve verified (Tier 1: 18s down to Tier 4: 5s)" }
+    $sayitConfigPath = Join-Path $TargetRoot "Instancia_Cliente\config\sayit.json"
+    if (-not (Test-Path $sayitConfigPath)) { throw "sayit.json missing from client config" }
+    $cfg = Get-Content -Raw -Encoding UTF8 $sayitConfigPath | ConvertFrom-Json
+    $timers = $cfg.mechanics.adaptiveTimers
+    if (-not $timers.enabled) { throw "adaptiveTimers is not enabled in sayit.json" }
+    if ($timers.tier1_novice_seconds -le $timers.tier4_master_seconds) {
+        throw "Adaptive timer progression inverted: Tier 1 ($($timers.tier1_novice_seconds)s) must be > Tier 4 ($($timers.tier4_master_seconds)s)"
+    }
+    return @{ Status = "PASSED"; Message = "Live sayit.json config verified: Tier 1 ($($timers.tier1_novice_seconds)s) down to Tier 4 ($($timers.tier4_master_seconds)s)" }
 }
 
 # F16: Offline Skin System (CustomSkinLoader)
@@ -473,11 +491,19 @@ Register-Test "T1_F20" "Tier 1" "F20: Portuguese Distribution Manual (GUIA_DISTR
 
 # F21: Client-Side Voice Sync / No Desync
 Register-Test "T1_F21" "Tier 1" "F21: Client-Side STT Architecture and Zero Inventory Desync" "M4" {
-    $dummyPacketBytes = [System.Text.Encoding]::UTF8.GetBytes('{"action":"VERIFY","item":"minecraft:oak_log","nonce":12345}')
-    if ($dummyPacketBytes.Length -gt 64) {
-        throw ("Verification packet exceeds 64-byte bandwidth limit: " + $dummyPacketBytes.Length + " bytes")
-    }
-    return @{ Status = "PASSED"; Message = "Client-side STT isolation and sub-64-byte packet protocol verified" }
+    $sayitConfigPath = Join-Path $TargetRoot "Instancia_Cliente\config\sayit.json"
+    if (-not (Test-Path $sayitConfigPath)) { throw "sayit.json missing" }
+    $cfg = Get-Content -Raw -Encoding UTF8 $sayitConfigPath | ConvertFrom-Json
+    
+    if (-not $cfg.speechEngine.offlineOnly) { throw "Speech engine is not marked offlineOnly" }
+    if ($cfg.speechEngine.sampleRate -ne 16000) { throw "Sample rate must be 16000 Hz for Vosk small model" }
+    
+    # Real payload test against protocol schema
+    $payload = @{ action = "VERIFY"; item = "minecraft:oak_log"; nonce = 12345 } | ConvertTo-Json -Compress
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($payload)
+    if ($bytes.Length -gt 64) { throw "Verification packet ($($bytes.Length) bytes) exceeds 64-byte bandwidth limit" }
+    
+    return @{ Status = "PASSED"; Message = "Client-side STT offline isolation ($($bytes.Length) bytes packet) verified" }
 }
 
 # F22: E2E Test Suite & Test Harness
@@ -697,14 +723,18 @@ Register-Test "T3_02" "Tier 3" "T3.2: Heracles Quest Vocabulary to SayIt Diction
 
 # T3.3: Pedagogical Difficulty Tiers <-> Adaptive Voice Timer Scaling
 Register-Test "T3_03" "Tier 3" "T3.3: Quest Tier Progression to Adaptive Timer Reduction" "M3" {
-    $tiers = [ordered]@{ "Novice" = 18; "Apprentice" = 14; "Journeyman" = 10; "Master" = 5 }
-    $prev = 999
-    foreach ($t in $tiers.Keys) {
-        $val = $tiers[$t]
-        if ($val -ge $prev) { throw ("Timer did not decrease for tier " + $t + ": " + $val + " vs " + $prev) }
-        $prev = $val
+    $sayitConfigPath = Join-Path $TargetRoot "Instancia_Cliente\config\sayit.json"
+    if (-not (Test-Path $sayitConfigPath)) { throw "sayit.json missing" }
+    $cfg = Get-Content -Raw -Encoding UTF8 $sayitConfigPath | ConvertFrom-Json
+    $t1 = $cfg.mechanics.adaptiveTimers.tier1_novice_seconds
+    $t2 = $cfg.mechanics.adaptiveTimers.tier2_apprentice_seconds
+    $t3 = $cfg.mechanics.adaptiveTimers.tier3_journeyman_seconds
+    $t4 = $cfg.mechanics.adaptiveTimers.tier4_master_seconds
+    
+    if (-not ($t1 -gt $t2 -and $t2 -gt $t3 -and $t3 -gt $t4)) {
+        throw "Adaptive timers in sayit.json do not strictly decrease across tiers: Novice=$t1, Apprentice=$t2, Journeyman=$t3, Master=$t4"
     }
-    return @{ Status = "PASSED"; Message = "Strict monotonic decrease of voice countdown timer across pedagogical tiers verified" }
+    return @{ Status = "PASSED"; Message = "Strict monotonic decrease verified from sayit.json: Novice ($t1 s) > Apprentice ($t2 s) > Journeyman ($t3 s) > Master ($t4 s)" }
 }
 
 # T3.4: Dedicated Server Configuration <-> Client Instance Mod Synchronization
@@ -767,62 +797,116 @@ Register-Test "T4_01" "Tier 4" "T4.1: Scenario: Zero-Install Friend 1-Click Firs
 
 # T4.2: Scenario "Melty Voice Challenge: Novice Item Acquisition"
 Register-Test "T4_02" "Tier 4" "T4.2: Scenario: Melty Voice Challenge - Novice Oak Log Acquisition" "M2" {
-    $itemId = "minecraft:oak_log"
-    $targetWord = $RU.derevo
-    $spokenMic = $RU.derevo
-    $score = Calculate-PronunciationScore -Spoken $spokenMic -Target $targetWord
-    if (-not $score.Passed) { throw "Scenario failed: accurate pronunciation rejected" }
-    $packet = @{ player = "Player1"; item = $itemId; score = $score.Score; status = "SUCCESS" }
-    if ($packet.status -ne "SUCCESS") { throw "Packet status must be SUCCESS" }
-    
-    return @{ Status = "PASSED"; Message = "Scenario verified: Player acquires oak log, speaks Russian name, retains item" }
+    $sayitConfig = Join-Path $TargetRoot "Instancia_Cliente\config\sayit.json"
+    if (-not (Test-Path $sayitConfig)) { throw "sayit.json missing" }
+    $cfg = Get-Content -Raw -Encoding UTF8 $sayitConfig | ConvertFrom-Json
+    if (-not $cfg.mechanics.triggerOnNewItemAcquisition) { throw "triggerOnNewItemAcquisition disabled in sayit.json" }
+
+    $ruDictPath = Join-Path $TargetRoot "Instancia_Cliente\config\sayit\lang\ru_ru.json"
+    if (-not (Test-Path $ruDictPath)) { throw "ru_ru.json dictionary missing" }
+    $ruDict = Get-Content -Raw -Encoding UTF8 $ruDictPath | ConvertFrom-Json
+    $targetWord = $ruDict.'block.minecraft.oak_log'
+    if ([string]::IsNullOrWhiteSpace($targetWord)) { throw "Oak log entry missing in ru_ru.json" }
+
+    $score = Calculate-PronunciationScore -Spoken $targetWord -Target $targetWord
+    if (-not $score.Passed -or $score.Score -lt 0.99) { throw "Accurate pronunciation rejected: Score=$($score.Score)" }
+
+    return @{ Status = "PASSED"; Message = "Scenario verified: Acquisition trigger active, Russian dictionary loaded ($targetWord), pronunciation scored 1.0" }
 }
 
 # T4.3: Scenario "Melty Voice Penalty: Timeout and Authoritative Item Drop"
 Register-Test "T4_03" "Tier 4" "T4.3: Scenario: Melty Voice Penalty - Timer Expiration and Item Loss" "M2" {
-    $itemId = "minecraft:diamond"
-    $targetWord = $RU.almaz
-    $spokenMic = $RU.yabloko
-    $score = Calculate-PronunciationScore -Spoken $spokenMic -Target $targetWord
-    if ($score.Passed) { throw "Scenario failed: wrong word accepted for diamond" }
-    $serverAction = "DROP_ITEM_ENTITY"
-    if ($serverAction -ne "DROP_ITEM_ENTITY") { throw "Server failed to execute authoritative item drop" }
-    
-    return @{ Status = "PASSED"; Message = "Scenario verified: Player fails challenge, server executes authoritative item drop" }
+    $sayitConfig = Join-Path $TargetRoot "Instancia_Cliente\config\sayit.json"
+    if (-not (Test-Path $sayitConfig)) { throw "sayit.json missing" }
+    $cfg = Get-Content -Raw -Encoding UTF8 $sayitConfig | ConvertFrom-Json
+    if ($cfg.mechanics.penaltyOnTimeout -ne "DROP" -and -not $cfg.mechanics.penaltyModes.drop) {
+        throw "SayIt configuration does not enforce DROP penalty on timeout"
+    }
+
+    $ruDict = Get-Content -Raw -Encoding UTF8 (Join-Path $TargetRoot "Instancia_Cliente\config\sayit\lang\ru_ru.json") | ConvertFrom-Json
+    $targetWord = $ruDict.'item.minecraft.diamond'
+    $wrongWord = $ruDict.'item.minecraft.apple'
+
+    $score = Calculate-PronunciationScore -Spoken $wrongWord -Target $targetWord
+    if ($score.Passed) { throw "Wrong word accepted for diamond: Score=$($score.Score)" }
+
+    return @{ Status = "PASSED"; Message = "Scenario verified: Incorrect pronunciation ($wrongWord vs $targetWord) rejected; sayit.json enforces penaltyOnTimeout: DROP" }
 }
 
 # T4.4: Scenario "Multiplayer P2P Session with Offline Cracked Friends"
 Register-Test "T4_04" "Tier 4" "T4.4: Scenario: Multiplayer P2P Session via e4all LAN Tunnel" "M4" {
-    $onlineMode = "OFF"
-    $tunnelDomain = "mine-russo-test.e4mc.link:25565"
+    $srvProps = Join-Path $TargetRoot "Servidor_Dedicado\server.properties"
+    if (-not (Test-Path $srvProps)) { throw "server.properties missing" }
+    $propsContent = Get-Content -Raw $srvProps
+    if ($propsContent -notmatch '(?m)^online-mode\s*=\s*false') { throw "server.properties missing online-mode=false" }
+    if ($propsContent -notmatch '(?m)^enforce-secure-profile\s*=\s*false') { throw "server.properties missing enforce-secure-profile=false" }
+
+    $e4all = Get-ChildItem (Join-Path $TargetRoot "Instancia_Cliente\mods") -Filter "e4all*.jar" -ErrorAction SilentlyContinue
+    if (-not $e4all) { throw "e4all P2P tunnel mod missing in client mods" }
+
     $friendNick = "Dmitri"
     $friendUUID = Compute-OfflineUUID $friendNick
-    $handshakeAllowed = ($onlineMode -eq "OFF")
-    if (-not $handshakeAllowed) { throw "Handshake rejected in offline mode" }
-    
-    return @{ Status = "PASSED"; Message = ("Scenario verified: Host opens e4all tunnel, cracked friend (" + $friendNick + ", " + $friendUUID + ") connects") }
+    if ($friendUUID.Length -ne 36 -or $friendUUID[14] -ne "3") { throw "Offline UUID failed RFC 4122 v3" }
+
+    return @{ Status = "PASSED"; Message = "Scenario verified: e4all mod present, server.properties enforces offline mode, cracked UUID ($friendNick -> $friendUUID) validated" }
 }
 
 # T4.5: Scenario "Dedicated Server Long-Term Survival Boot and Recovery"
 Register-Test "T4_05" "Tier 4" "T4.5: Scenario: Dedicated Server Long-Term Survival Boot" "M4" {
-    $eulaState = "eula=true"
-    $aikarGc = "-XX:+UseG1GC"
-    $memFlags = "-Xms2G -Xmx4G"
-    if ($eulaState -ne "eula=true" -or $aikarGc -ne "-XX:+UseG1GC") { throw "Server parameters invalid" }
-    
-    return @{ Status = "PASSED"; Message = "Scenario verified: Dedicated server automated boot, Aikar G1GC flags, and EULA handling" }
+    $eulaPath = Join-Path $TargetRoot "Servidor_Dedicado\eula.txt"
+    if (-not (Test-Path $eulaPath)) { throw "eula.txt missing" }
+    if ((Get-Content -Raw $eulaPath) -notmatch 'eula\s*=\s*true') { throw "eula.txt does not accept EULA" }
+
+    $iniciarBat = Join-Path $TargetRoot "Iniciar_Servidor.bat"
+    if (-not (Test-Path $iniciarBat)) { throw "Iniciar_Servidor.bat missing" }
+    $bat = Get-Content -Raw $iniciarBat
+    if ($bat -notmatch '-XX:\+UseG1GC' -or $bat -notmatch '-Xms2G' -or $bat -notmatch '-Xmx4G') {
+        throw "Iniciar_Servidor.bat does not contain required Aikar G1GC flags or memory settings"
+    }
+
+    $javaExe = Join-Path $TargetRoot "Java17\bin\java.exe"
+    $srvDir = Join-Path $TargetRoot "Servidor_Dedicado"
+    $srvJar = Join-Path $srvDir "fabric-server-launch.jar"
+    if (-not (Test-Path $srvJar)) { throw "fabric-server-launch.jar missing" }
+
+    # Execute genuine headless dry-run smoke test (invoking FabricServerLauncher)
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $javaExe
+    $psi.Arguments = "-Dfabric.dli.main=net.fabricmc.loader.impl.launch.server.FabricServerLauncher -jar `"$srvJar`" --help"
+    $psi.WorkingDirectory = $srvDir
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+
+    $proc = [System.Diagnostics.Process]::Start($psi)
+    $stdout = $proc.StandardOutput.ReadToEnd()
+    $stderr = $proc.StandardError.ReadToEnd()
+    $proc.WaitForExit(10000)
+    $combined = $stdout + "`n" + $stderr
+
+    if ($combined -match "Incompatible mods found|FormattedException|Mod resolution failed") {
+        throw "Dedicated server dry-run failed with mod incompatibility: $combined"
+    }
+
+    return @{ Status = "PASSED"; Message = "Scenario verified: Dedicated server booted cleanly without mod resolution exceptions, EULA confirmed, Aikar flags verified" }
 }
 
 # T4.6: Scenario "Emergency Microphone Disconnect and Keyboard Typing Fallback"
 Register-Test "T4_06" "Tier 4" "T4.6: Scenario: Microphone Disconnect and Keyboard 'Y' Typing Fallback" "M2" {
-    $micConnected = $false
-    $pressedKey = "Y"
-    $typedText = $RU.bulyzhnik
-    $targetWord = $RU.bulyzhnik
-    $score = Calculate-PronunciationScore -Spoken $typedText -Target $targetWord
-    if (-not $score.Passed) { throw "Fallback typing failed for bulyzhnik" }
-    
-    return @{ Status = "PASSED"; Message = "Scenario verified: Microphone failure safely recovered via Cyrillic keyboard input ('Y')" }
+    $sayitConfig = Join-Path $TargetRoot "Instancia_Cliente\config\sayit.json"
+    if (-not (Test-Path $sayitConfig)) { throw "sayit.json missing" }
+    $cfg = Get-Content -Raw -Encoding UTF8 $sayitConfig | ConvertFrom-Json
+    if (-not $cfg.accessibility.keyboardFallbackEnabled) { throw "keyboardFallbackEnabled is false in sayit.json" }
+    if ($cfg.accessibility.fallbackTriggerKey -ne "key.keyboard.y") { throw "fallbackTriggerKey is not mapped to key.keyboard.y" }
+
+    $ruDict = Get-Content -Raw -Encoding UTF8 (Join-Path $TargetRoot "Instancia_Cliente\config\sayit\lang\ru_ru.json") | ConvertFrom-Json
+    $targetWord = $ruDict.'block.minecraft.cobblestone'
+
+    $score = Calculate-PronunciationScore -Spoken $targetWord -Target $targetWord
+    if (-not $score.Passed) { throw "Fallback typing failed for cobblestone" }
+
+    return @{ Status = "PASSED"; Message = "Scenario verified: sayit.json configures keyboard fallback on key 'Y', typed input scored $($score.Score)" }
 }
 
 # ==============================================================================

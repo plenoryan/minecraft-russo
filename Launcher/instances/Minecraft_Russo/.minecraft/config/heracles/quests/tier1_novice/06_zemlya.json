@@ -1,4 +1,4 @@
-{
+﻿{
     "dependencies":  [
                          "01_derevo"
                      ],
@@ -7,12 +7,12 @@
                      "unlockable":  true
                  },
     "display":  {
-                    "title":  "Tier 1: Земл́я (Terra)",
+                    "title":  "Tier 1: Земля́ (Terra)",
                     "subtitle":  "Pronúncia: [zyem-LYAH] | Terra • Feminino (ж.р.)",
                     "description":  [
                                         "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
                                         "",
-                                        "Item: \u003cgold\u003eЗемл́я\u003c/gold\u003e (Terra)",
+                                        "Item: \u003cgold\u003eЗемля́\u003c/gold\u003e (Terra)",
                                         "Gênero Gramatical: \u003caqua\u003eFeminino (ж.р.)\u003c/aqua\u003e",
                                         "Guia de Pronúncia: \u003cyellow\u003e[zyem-LYAH]\u003c/yellow\u003e",
                                         "",
@@ -20,7 +20,7 @@
                                         "Substantivo feminino oxítono terminado em -я. A primeira sílaba \u0027зем-\u0027 é suave.",
                                         "",
                                         "§cDesafio de Voz (Mecânica Melty):§r",
-                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Земл́я»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Земля́»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
                                         "",
                                         "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
                                     ],
@@ -43,7 +43,7 @@
                                              "item":  "minecraft:dirt",
                                              "amount":  1,
                                              "collection":  "AUTOMATIC",
-                                             "title":  "Segure ou colete Земл́я (Terra)"
+                                             "title":  "Segure ou colete Земля́ (Terra)"
                                          }
               },
     "rewards":  {

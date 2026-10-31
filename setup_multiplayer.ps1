@@ -68,6 +68,14 @@ if (Test-Path $launcherInstanceDir) {
     }
 }
 
+function Sanitize-SkinNickname([string]$Nickname) {
+    if ([string]::IsNullOrWhiteSpace($Nickname)) { return "Steve" }
+    $clean = [System.IO.Path]::GetFileName($Nickname)
+    $clean = $clean -replace '[\\/:\*\?"<>\|]', '' -replace '\.\.', ''
+    if ([string]::IsNullOrWhiteSpace($clean)) { $clean = "Steve" }
+    return $clean
+}
+
 # =========================================================================
 # ETAPA 2: Configuracao CustomSkinLoader (LocalSkin + Ely.by API)
 # =========================================================================
@@ -182,8 +190,8 @@ Write-Host "  [OK] server.properties configurado (online-mode=false, enforce-sec
 
 # 3.3 Baixar fabric-server-launch.jar
 $srvJarPath = Join-Path $serverDir "fabric-server-launch.jar"
-$srvJarUrl = "https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.15.11/1.0.1/server/jar"
-if (-not (Test-Path $srvJarPath) -or ((Get-Item $srvJarPath).Length -lt 10000)) {
+$srvJarUrl = "https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.16.14/1.0.1/server/jar"
+if (-not (Test-Path $srvJarPath) -or ((Get-Item $srvJarPath).Length -lt 100000)) {
     Write-Host "  Baixando fabric-server-launch.jar da API Fabric Meta..." -ForegroundColor Cyan
     $webClient.DownloadFile($srvJarUrl, $srvJarPath)
     Write-Host "  [OK] fabric-server-launch.jar baixado ($((Get-Item $srvJarPath).Length) bytes)." -ForegroundColor Green

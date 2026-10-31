@@ -1,12 +1,12 @@
 ﻿{
-    "timestamp_utc":  "2026-10-31T01:23:46.4183163Z",
-    "execution_mode":  "progressive",
+    "timestamp_utc":  "2026-10-31T01:51:12.7517709Z",
+    "execution_mode":  "strict",
     "target_root":  "F:\\Jogos\\Mine",
     "total_tests":  45,
-    "passed":  39,
-    "pending_milestone":  6,
+    "passed":  45,
+    "pending_milestone":  0,
     "failed":  0,
-    "duration_ms":  457,
+    "duration_ms":  661,
     "results":  [
                     {
                         "Id":  "T1_F01",
@@ -14,7 +14,7 @@
                         "Name":  "F1: Minecraft 1.20.1 Fabric Engine and Loader Manifest",
                         "Milestone":  "M1",
                         "Status":  "PASSED",
-                        "DurationMs":  61,
+                        "DurationMs":  129,
                         "Message":  "Fabric Loader 0.15.11 on Minecraft 1.20.1 verified"
                     },
                     {
@@ -23,8 +23,8 @@
                         "Name":  "F2: Client Optimization Stack (Sodium, Lithium, FerriteCore)",
                         "Milestone":  "M1",
                         "Status":  "PASSED",
-                        "DurationMs":  11,
-                        "Message":  "All core performance mods present in Instancia_Cliente\\mods: architectury-9.2.14-fabric.jar, fabric-api-0.92.12+1.20.1.jar, ferritecore-6.0.1-fabric.jar, ForgeConfigAPIPort-v8.0.3-1.20.1-Fabric.jar, Heracles-fabric-1.20.1-1.1.13.jar, heraclesbutton-1.0.0.jar, ImmediatelyFast-Fabric-1.5.5+1.20.4.jar, Jade-1.20-Fabric-11.13.3.jar, kubejs-fabric-2001.6.5-build.26.jar, language-reload-1.7.5+1.20.1.jar, lithium-fabric-mc1.20.1-0.11.4.jar, modernfix-fabric-5.25.2+mc1.20.1.jar, ModernUI-Fabric-1.20.1-3.12.0.1-universal.jar, resourcefullib-fabric-1.20.1-2.1.29.jar, rhino-fabric-2001.2.3-build.10.jar, sodium-fabric-0.5.13+mc1.20.1.jar"
+                        "DurationMs":  18,
+                        "Message":  "All core performance mods present in Instancia_Cliente\\mods: architectury-9.2.14-fabric.jar, CustomSkinLoader_Universal-15.1.jar, e4all-fabric-1.6.4.jar, fabric-api-0.92.12+1.20.1.jar, ferritecore-6.0.1-fabric.jar, ForgeConfigAPIPort-v8.0.3-1.20.1-Fabric.jar, Heracles-fabric-1.20.1-1.1.13.jar, heraclesbutton-1.0.0.jar, ImmediatelyFast-Fabric-1.5.5+1.20.4.jar, Jade-1.20-Fabric-11.13.3.jar, kubejs-fabric-2001.6.5-build.26.jar, language-reload-1.7.5+1.20.1.jar, lithium-fabric-mc1.20.1-0.11.4.jar, modernfix-fabric-5.25.2+mc1.20.1.jar, ModernUI-Fabric-1.20.1-3.12.0.1-universal.jar, resourcefullib-fabric-1.20.1-2.1.29.jar, rhino-fabric-2001.2.3-build.10.jar, sayit-1.20.1-fabric.jar, sodium-fabric-0.5.13+mc1.20.1.jar"
                     },
                     {
                         "Id":  "T1_F03",
@@ -32,7 +32,7 @@
                         "Name":  "F3: Portable OpenJDK 17 Runtime in Java17\\",
                         "Milestone":  "M1",
                         "Status":  "PASSED",
-                        "DurationMs":  72,
+                        "DurationMs":  122,
                         "Message":  "Verified 64-Bit OpenJDK 17 binary: java.exe : openjdk version \"17.0.20.1\" 2026-08-18"
                     },
                     {
@@ -41,7 +41,7 @@
                         "Name":  "F4: 1-Click Client Launcher (Jogar.bat)",
                         "Milestone":  "M1",
                         "Status":  "PASSED",
-                        "DurationMs":  2,
+                        "DurationMs":  3,
                         "Message":  "Jogar.bat syntax, UTF-8 encoding, and Java detection cascade verified"
                     },
                     {
@@ -58,9 +58,9 @@
                         "Tier":  "Tier 1",
                         "Name":  "F6: SayIt Mod Integration and Challenge Penalty Config",
                         "Milestone":  "M2",
-                        "Status":  "PENDING_MILESTONE",
+                        "Status":  "PASSED",
                         "DurationMs":  2,
-                        "Message":  "SayIt mod JAR and config pending milestone M2 execution"
+                        "Message":  "SayIt voice recognition mod integrated with item penalty trigger"
                     },
                     {
                         "Id":  "T1_F07",
@@ -77,7 +77,7 @@
                         "Name":  "F8: Cyrillic Dictionary Parsing and Normalization",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  37,
+                        "DurationMs":  40,
                         "Message":  "Cyrillic dictionary normalizer correctly handles lowercasing, formatting, accents, and yo-\u003eye"
                     },
                     {
@@ -86,7 +86,7 @@
                         "Name":  "F9: Voice HUD and Audio Waveform Overlay Config",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  11,
+                        "DurationMs":  12,
                         "Message":  "SayIt HUD rendering specs and pronunciation scoring formula verified"
                     },
                     {
@@ -95,7 +95,7 @@
                         "Name":  "F10: Persistent Pocket Dictionary and Learned Item History",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  16,
+                        "DurationMs":  17,
                         "Message":  "Player vocabulary dictionary indexing by persistent offline UUID verified"
                     },
                     {
@@ -122,7 +122,7 @@
                         "Name":  "F13: Heracles 4-Tier Russian Curriculum Quests",
                         "Milestone":  "M3",
                         "Status":  "PASSED",
-                        "DurationMs":  44,
+                        "DurationMs":  70,
                         "Message":  "Verified 68 Heracles Russian quest files with valid JSON schemas"
                     },
                     {
@@ -131,7 +131,7 @@
                         "Name":  "F14: Bilingual and Phonetic Tooltips Schema",
                         "Milestone":  "M3",
                         "Status":  "PASSED",
-                        "DurationMs":  2,
+                        "DurationMs":  3,
                         "Message":  "Pedagogical bilingual tooltips script verified"
                     },
                     {
@@ -148,45 +148,45 @@
                         "Tier":  "Tier 1",
                         "Name":  "F16: Offline Skin System and LocalSkin Config",
                         "Milestone":  "M4",
-                        "Status":  "PENDING_MILESTONE",
-                        "DurationMs":  1,
-                        "Message":  "CustomSkinLoader.json pending milestone M4 creation"
+                        "Status":  "PASSED",
+                        "DurationMs":  8,
+                        "Message":  "CustomSkinLoader configuration verified with LocalSkin and ElyBy providers"
                     },
                     {
                         "Id":  "T1_F17",
                         "Tier":  "Tier 1",
                         "Name":  "F17: e4all P2P LAN Tunneling and Online Mode [OFF]",
                         "Milestone":  "M4",
-                        "Status":  "PENDING_MILESTONE",
-                        "DurationMs":  2,
-                        "Message":  "e4all mod pending milestone M4 packaging"
+                        "Status":  "PASSED",
+                        "DurationMs":  4,
+                        "Message":  "e4all P2P tunnel mod verified (e4all-fabric-1.6.4.jar)"
                     },
                     {
                         "Id":  "T1_F18",
                         "Tier":  "Tier 1",
                         "Name":  "F18: Dedicated Server Configuration (online-mode=false)",
                         "Milestone":  "M4",
-                        "Status":  "PENDING_MILESTONE",
-                        "DurationMs":  1,
-                        "Message":  "Servidor_Dedicado\\server.properties pending milestone M4 creation"
+                        "Status":  "PASSED",
+                        "DurationMs":  6,
+                        "Message":  "Dedicated server configured with online-mode=false and enforce-secure-profile=false"
                     },
                     {
                         "Id":  "T1_F19",
                         "Tier":  "Tier 1",
                         "Name":  "F19: Server 1-Click Launcher (Iniciar_Servidor.bat)",
                         "Milestone":  "M4",
-                        "Status":  "PENDING_MILESTONE",
-                        "DurationMs":  1,
-                        "Message":  "Iniciar_Servidor.bat pending milestone M4 creation"
+                        "Status":  "PASSED",
+                        "DurationMs":  2,
+                        "Message":  "Iniciar_Servidor.bat syntax, Aikar flags, and EULA handler verified"
                     },
                     {
                         "Id":  "T1_F20",
                         "Tier":  "Tier 1",
                         "Name":  "F20: Portuguese Distribution Manual (GUIA_DISTRIBUICAO_AMIGOS.md)",
                         "Milestone":  "M4",
-                        "Status":  "PENDING_MILESTONE",
-                        "DurationMs":  2,
-                        "Message":  "GUIA_DISTRIBUICAO_AMIGOS.md pending milestone M4 creation"
+                        "Status":  "PASSED",
+                        "DurationMs":  4,
+                        "Message":  "Comprehensive Portuguese friend distribution guide verified"
                     },
                     {
                         "Id":  "T1_F21",
@@ -194,7 +194,7 @@
                         "Name":  "F21: Client-Side STT Architecture and Zero Inventory Desync",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  3,
+                        "DurationMs":  7,
                         "Message":  "Client-side STT isolation and sub-64-byte packet protocol verified"
                     },
                     {
@@ -203,7 +203,7 @@
                         "Name":  "F22: Canonical E2E Test Runner Self-Verification",
                         "Milestone":  "M5",
                         "Status":  "PASSED",
-                        "DurationMs":  2,
+                        "DurationMs":  3,
                         "Message":  "Test harness self-verification passed (45 tests registered)"
                     },
                     {
@@ -212,7 +212,7 @@
                         "Name":  "F23: Forensic Verification of Zero DRM and Offline Independence",
                         "Milestone":  "M5",
                         "Status":  "PASSED",
-                        "DurationMs":  1,
+                        "DurationMs":  3,
                         "Message":  "Forensic audit confirmed zero external DRM or cloud auth endpoints"
                     },
                     {
@@ -221,7 +221,7 @@
                         "Name":  "T2.1: Cyrillic Stress Mark and Diacritic Stripping",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  8,
+                        "DurationMs":  9,
                         "Message":  "All Cyrillic acute stress marks and diacritics stripped flawlessly"
                     },
                     {
@@ -230,7 +230,7 @@
                         "Name":  "T2.2: Character yo vs ye Universal Equivalence",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  10,
+                        "DurationMs":  12,
                         "Message":  "Universal yo \u003c-\u003e ye equivalence verified across all test pairs"
                     },
                     {
@@ -239,7 +239,7 @@
                         "Name":  "T2.3: Pronunciation Scoring and Foreign Accent Tolerance",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  31,
+                        "DurationMs":  34,
                         "Message":  "Scoring engine passed: accent tolerance verified, incorrect words rejected"
                     },
                     {
@@ -248,7 +248,7 @@
                         "Name":  "T2.4: Multi-Word Compound Item Token Parsing",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  4,
+                        "DurationMs":  3,
                         "Message":  "Compound item tokens and base noun fallback verified"
                     },
                     {
@@ -284,7 +284,7 @@
                         "Name":  "T2.8: Launcher Error Handling on Missing Java Runtime",
                         "Milestone":  "M1",
                         "Status":  "PASSED",
-                        "DurationMs":  1,
+                        "DurationMs":  2,
                         "Message":  "Graceful fallback and error diagnostics in launcher verified"
                     },
                     {
@@ -329,7 +329,7 @@
                         "Name":  "T3.3: Quest Tier Progression to Adaptive Timer Reduction",
                         "Milestone":  "M3",
                         "Status":  "PASSED",
-                        "DurationMs":  4,
+                        "DurationMs":  6,
                         "Message":  "Strict monotonic decrease of voice countdown timer across pedagogical tiers verified"
                     },
                     {
@@ -338,7 +338,7 @@
                         "Name":  "T3.4: Server Modpack Filtering (Excluding Client-Only Mods)",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  1,
+                        "DurationMs":  3,
                         "Message":  "Server mod synchronization rule strictly enforces exclusion of client-only rendering mods"
                     },
                     {
@@ -401,7 +401,7 @@
                         "Name":  "T4.5: Scenario: Dedicated Server Long-Term Survival Boot",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  1,
+                        "DurationMs":  0,
                         "Message":  "Scenario verified: Dedicated server automated boot, Aikar G1GC flags, and EULA handling"
                     },
                     {

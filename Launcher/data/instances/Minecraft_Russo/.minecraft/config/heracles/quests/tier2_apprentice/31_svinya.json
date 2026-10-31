@@ -1,4 +1,4 @@
-{
+﻿{
     "dependencies":  [
                          "23_svinina"
                      ],
@@ -7,12 +7,12 @@
                      "unlockable":  true
                  },
     "display":  {
-                    "title":  "Tier 2: Свинь́я (Porco)",
+                    "title":  "Tier 2: Свинья́ (Porco)",
                     "subtitle":  "Pronúncia: [sveen-YAH] | Porco • Feminino (ж.р.)",
                     "description":  [
                                         "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
                                         "",
-                                        "Item: \u003cgold\u003eСвинь́я\u003c/gold\u003e (Porco)",
+                                        "Item: \u003cgold\u003eСвинья́\u003c/gold\u003e (Porco)",
                                         "Gênero Gramatical: \u003caqua\u003eFeminino (ж.р.)\u003c/aqua\u003e",
                                         "Guia de Pronúncia: \u003cyellow\u003e[sveen-YAH]\u003c/yellow\u003e",
                                         "",
@@ -20,7 +20,7 @@
                                         "Uso do sinal brando separador (разделительный мягкий знак) antes da vogal \u0027я\u0027.",
                                         "",
                                         "§cDesafio de Voz (Mecânica Melty):§r",
-                                        "Segure o item na mão. Você tem \u003cgold\u003e12 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Свинь́я»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e12 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Свинья́»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
                                         "",
                                         "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
                                     ],
@@ -43,7 +43,7 @@
                                              "item":  "minecraft:pig_spawn_egg",
                                              "amount":  1,
                                              "collection":  "AUTOMATIC",
-                                             "title":  "Segure ou colete Свинь́я (Porco)"
+                                             "title":  "Segure ou colete Свинья́ (Porco)"
                                          }
               },
     "rewards":  {

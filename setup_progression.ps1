@@ -1,4 +1,4 @@
-﻿# setup_progression.ps1 - Automated Setup for Russian Pedagogical Progression & Font Stack (Fabric 1.20.1)
+# setup_progression.ps1 - Automated Setup for Russian Pedagogical Progression & Font Stack (Fabric 1.20.1)
 [CmdletBinding()]
 param (
     [string]$BaseDir = "F:\Jogos\Mine",
@@ -1344,13 +1344,13 @@ $kubeJsLines += ""
 $kubeJsLines += "    for (let id in ruCurriculum) {"
 $kubeJsLines += "        let e = ruCurriculum[id];"
 $kubeJsLines += "        event.addAdvanced(id, (item, advanced, text) => {"
-$kubeJsLines += "            text.add(1, Text.of(`[RU] ${e.ru}`).gold().bold(true));"
-$kubeJsLines += "            text.add(2, Text.of(`[Pronúncia] ${e.phon}`).yellow());"
-$kubeJsLines += "            text.add(3, Text.of(`[PT] ${e.pt} • ${e.gen}`).aqua());"
-$kubeJsLines += "            text.add(4, Text.of(`[Nível] Tier ${e.tier} (Fale em russo!)`).darkGreen().italic(true));"
-$kubeJsLines += "            if (e.note) {"
-$kubeJsLines += "                text.add(5, Text.of(`[Regra] ${e.note}`).gray());"
-$kubeJsLines += "            }"
+$kubeJsLines += '            text.add(1, Text.of("[RU] " + e.ru).gold().bold(true));'
+$kubeJsLines += '            text.add(2, Text.of("[Pronúncia] " + e.phon).yellow());'
+$kubeJsLines += '            text.add(3, Text.of("[PT] " + e.pt + " • " + e.gen).aqua());'
+$kubeJsLines += '            text.add(4, Text.of("[Nível] Tier " + e.tier + " (Fale em russo!)").darkGreen().italic(true));'
+$kubeJsLines += '            if (e.note) {'
+$kubeJsLines += '                text.add(5, Text.of("[Regra] " + e.note).gray());'
+$kubeJsLines += '            }'
 $kubeJsLines += "        });"
 $kubeJsLines += "    }"
 $kubeJsLines += "});"

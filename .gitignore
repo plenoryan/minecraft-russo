@@ -10,6 +10,8 @@ screenshots/
 .fabric/
 .cache/
 cache/
+Servidor_Dedicado/libraries/
+Servidor_Dedicado/versions/
 usercache.json
 usernamecache.json
 session.lock

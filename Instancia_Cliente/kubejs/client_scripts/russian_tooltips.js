@@ -552,12 +552,12 @@ ItemEvents.tooltip(event => {
     for (let id in ruCurriculum) {
         let e = ruCurriculum[id];
         event.addAdvanced(id, (item, advanced, text) => {
-            text.add(1, Text.of([RU] ).gold().bold(true));
-            text.add(2, Text.of([Pronúncia] ).yellow());
-            text.add(3, Text.of([PT]  • ).aqua());
-            text.add(4, Text.of([Nível] Tier  (Fale em russo!)).darkGreen().italic(true));
+            text.add(1, Text.of("[RU] " + e.ru).gold().bold(true));
+            text.add(2, Text.of("[Pronúncia] " + e.phon).yellow());
+            text.add(3, Text.of("[PT] " + e.pt + " • " + e.gen).aqua());
+            text.add(4, Text.of("[Nível] Tier " + e.tier + " (Fale em russo!)").darkGreen().italic(true));
             if (e.note) {
-                text.add(5, Text.of([Regra] ).gray());
+                text.add(5, Text.of("[Regra] " + e.note).gray());
             }
         });
     }

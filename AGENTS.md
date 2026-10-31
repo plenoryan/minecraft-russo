@@ -110,3 +110,24 @@
 - **Armadilha:** Mods de otimização de renderização gráfica e aceleração de fontes (como Sodium, Modern UI, ImmediatelyFast e CustomSkinLoader) contêm mixins exclusivos do ambiente cliente (`environment: client`). Incluí-los na pasta `mods` do servidor dedicado causa `ClassNotFoundException` e encerramento abrupto na inicialização.
 - **Solução:** O script de provisionamento (`setup_multiplayer.ps1`) filtra estritamente a pasta `Servidor_Dedicado\mods\`, mantendo apenas mods universais (`fabric-api`, `sayit`, `lithium`, `ferritecore`, `fabrictailor`).
 
+### L14. Compatibilidade Estrita entre Fabric Loader e Fabric API no Servidor Dedicado
+- **Armadilha:** `fabric-api-0.92.12+1.20.1` exige expressamente `fabricloader >= 0.16.10`. Inicializar o servidor dedicado com o JAR padrão bundling Fabric Loader `0.15.11` dispara `net.fabricmc.loader.impl.FormattedException: Some of your mods are incompatible with the game` e aborta o servidor com código de saída 1.
+- **Solução:** Atualizar o launcher de servidor para `0.16.14` via API Meta da Fabric (`https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.16.14/1.0.1/server/jar`) e sincronizar todos os manifestos `mmc-pack.json` para `"version": "0.16.14"`.
+
+### L15. Sintaxe de Regex em Java vs .NET (\p{IsBasicLatin} vs [a-zA-Z])
+- **Armadilha:** A propriedade de bloco Unicode `\p{IsBasicLatin}` é aceita pelo motor de regex do .NET/C#, mas inexiste na JVM (Java `PatternSyntaxException: Unknown character property name {IsBasicLatin}`). Quando invocada em `VoskEngine.normalizeCyrillic`, quebrava o processamento de áudio do jogo no primeiro caractere processado.
+- **Solução:** Utilizar a classe posix/ascii padrão `[a-zA-Z]` em substituições cirílicas: `replaceAll("[^\\p{IsCyrillic}a-zA-Z\\s]", "")`.
+
+### L16. Rejeição de Facadas em Testes Automatizados (Zero-Tautology Verification)
+- **Armadilha:** Testes que validam variáveis locais declaradas no próprio script de teste (como `$serverAction = "DROP_ITEM_ENTITY"` ou `$eulaState = "eula=true"`) criam fachadas autovalidantes que mascaram falhas graves de arquivos de configuração em disco e quebras de subprocessos.
+- **Solução:** Todos os testes E2E devem inspecionar arquivos reais em disco (`sayit.json`, `server.properties`, `eula.txt`, `ru_ru.json`) e invocar dry-runs reais dos executáveis do jogo (`java.exe -jar fabric-server-launch.jar --help`).
+
+### L17. Discriminação Fonética de Palavras Curtas (3 Letras) e Eliminação de Exploit de Grunhidos
+- **Armadilha:** Palavras cirílicas de 3 letras com 1 substituição (como "лук" vs "люк") atingem score Levenshtein $1.0 - (1/3) = 0.6667$, ultrapassando o limiar padrão de 0.65 e aceitando falsos-amigos fonêmicos. Além disso, verificações ingênuas de `contains` permitiam emitir uma única letra (ex: "а" ou "к") para ganhar o desafio de "алмаз" ou "яблоко".
+- **Solução:** Para palavras com comprimento $\le 3$, exigir distância Levenshtein estritamente 0 ($dist == 0$). Para correspondência de substrings, restringir a tokens inteiros de no mínimo 4 caracteres.
+
+### L18. Injeção de BOM no Pipeline do PowerShell 5.1 para Processos CLI Nativos
+- **Armadilha:** No Windows PowerShell 5.1, o encadeamento via pipe (`$script | & jshell.exe`) insere bytes de preâmbulo/BOM no fluxo de entrada padrão (STDIN), fazendo com que utilitários nativos como o JShell falhem com `illegal character: '\ufeff'` ou `illegal character: '\u00bb'`.
+- **Solução:** Escrever o script em arquivo temporário sem BOM (`[System.Text.UTF8Encoding]::new($false)`) e passá-lo como argumento direto (`jshell.exe -s "$tempFile"`).
+
+

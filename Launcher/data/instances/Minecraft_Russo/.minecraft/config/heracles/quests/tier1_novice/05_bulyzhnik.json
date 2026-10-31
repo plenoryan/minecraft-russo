@@ -1,4 +1,4 @@
-{
+﻿{
     "dependencies":  [
                          "04_kamen"
                      ],
@@ -7,12 +7,12 @@
                      "unlockable":  true
                  },
     "display":  {
-                    "title":  "Tier 1: Булӹжник (Pedregulho)",
+                    "title":  "Tier 1: Булы́жник (Pedregulho)",
                     "subtitle":  "Pronúncia: [boo-LIZH-neek] | Pedregulho • Masculino (м.р.)",
                     "description":  [
                                         "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
                                         "",
-                                        "Item: \u003cgold\u003eБулӹжник\u003c/gold\u003e (Pedregulho)",
+                                        "Item: \u003cgold\u003eБулы́жник\u003c/gold\u003e (Pedregulho)",
                                         "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
                                         "Guia de Pronúncia: \u003cyellow\u003e[boo-LIZH-neek]\u003c/yellow\u003e",
                                         "",
@@ -20,7 +20,7 @@
                                         "Contém a vogal gutural posterior dura \u0027ы\u0027. A sílaba tônica é -лы-.",
                                         "",
                                         "§cDesafio de Voz (Mecânica Melty):§r",
-                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Булӹжник»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Булы́жник»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
                                         "",
                                         "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
                                     ],
@@ -43,7 +43,7 @@
                                                 "item":  "minecraft:cobblestone",
                                                 "amount":  1,
                                                 "collection":  "AUTOMATIC",
-                                                "title":  "Segure ou colete Булӹжник (Pedregulho)"
+                                                "title":  "Segure ou colete Булы́жник (Pedregulho)"
                                             }
               },
     "rewards":  {

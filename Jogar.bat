@@ -24,16 +24,16 @@ if not exist "%LAUNCHER_EXE%" (
     exit /b 1
 )
 
-:: 3. Verificar Java 17
+:: 3. Verificar Java 17 (FIXED: Usando if errorlevel 1 para avaliacao correta em tempo de execucao)
 if exist "%BUNDLED_JAVA%" (
     echo [OK] Java 17 portatil detectado com sucesso em Java17\bin\javaw.exe.
 ) else (
     where javaw >nul 2>&1
-    if %errorlevel% neq 0 (
+    if errorlevel 1 (
         echo [AVISO] Java 17 portatil nao encontrado na pasta local Java17\.
         echo         Tentando usar o Java instalado no sistema...
         where java >nul 2>&1
-        if %errorlevel% neq 0 (
+        if errorlevel 1 (
             echo.
             echo [ERRO CRITICO] O Java nao esta instalado no seu computador e nao foi
             echo               encontrado na pasta Java17.
@@ -48,7 +48,18 @@ if exist "%BUNDLED_JAVA%" (
     )
 )
 
-:: 4. Iniciar o Jogo
+:: 4. Auto-cura de juncoes NTFS portateis (garante portabilidade caso movido de drive)
+set "INST_DOT_MC=%BASE_DIR%Launcher\data\instances\Minecraft_Russo\.minecraft"
+if exist "%INST_DOT_MC%" (
+    if not exist "%INST_DOT_MC%\mods" (
+        mklink /J "%INST_DOT_MC%\mods" "%BASE_DIR%Instancia_Cliente\mods" >nul 2>&1
+    )
+    if not exist "%INST_DOT_MC%\config" (
+        mklink /J "%INST_DOT_MC%\config" "%BASE_DIR%Instancia_Cliente\config" >nul 2>&1
+    )
+)
+
+:: 5. Iniciar o Jogo
 echo.
 echo [INICIANDO] Abrindo o inicializador e carregando o modpack Minecraft_Russo...
 echo Bom jogo e bons estudos em russo!
