@@ -1,0 +1,68 @@
+{
+    "formatVersion": 1,
+    "name": "LWJGL 3",
+    "uid": "org.lwjgl3",
+    "versions": [
+        {
+            "conflicts": [
+                {
+                    "uid": "org.lwjgl"
+                }
+            ],
+            "releaseTime": "2022-04-20T14:37:07+00:00",
+            "sha256": "a35b32426642fd095aadc10e914f3c53c0064d23bc505e0636c4d748e44d46f0",
+            "type": "release",
+            "version": "3.3.1",
+            "volatile": true
+        },
+        {
+            "conflicts": [
+                {
+                    "uid": "org.lwjgl"
+                }
+            ],
+            "releaseTime": "2019-06-24T12:52:52+00:00",
+            "sha256": "306d752d469ad8fc2f5984c2adb5bde75a738a74a29353dee5f57d103c13595d",
+            "type": "release",
+            "version": "3.2.2",
+            "volatile": true
+        },
+        {
+            "conflicts": [
+                {
+                    "uid": "org.lwjgl"
+                }
+            ],
+            "releaseTime": "2019-04-10T14:24:16+00:00",
+            "sha256": "ed723e5ca0d8ccde1e9d3b0ba2a043b3be5b8d661358fcc555e34e34abdaee6c",
+            "type": "release",
+            "version": "3.2.1",
+            "volatile": true
+        },
+        {
+            "conflicts": [
+                {
+                    "uid": "org.lwjgl"
+                }
+            ],
+            "releaseTime": "2018-07-17T14:48:06+00:00",
+            "sha256": "6e3d30716ea3a751d69bff9c061bdf52e374bf0e0a2a3f76ce27f5ad49cf82e4",
+            "type": "release",
+            "version": "3.1.6",
+            "volatile": true
+        },
+        {
+            "conflicts": [
+                {
+                    "uid": "org.lwjgl"
+                }
+            ],
+            "recommended": true,
+            "releaseTime": "2018-06-04T15:17:34+00:00",
+            "sha256": "df0c3120ff7eb2c99606968c3e822d152a0154a0eaf0b9691cb5ec4eb01d4ac8",
+            "type": "release",
+            "version": "3.1.2",
+            "volatile": true
+        }
+    ]
+}
