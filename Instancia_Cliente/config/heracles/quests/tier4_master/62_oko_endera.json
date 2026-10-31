@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 4: О́ко Э́ндера (Olho do Ender)",
+                    "subtitle":  "Pronúncia: [O-ka EN-dye-ra] | Olho do Ender • Neutro (с.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eО́ко Э́ндера\u003c/gold\u003e (Olho do Ender)",
+                                        "Gênero Gramatical: \u003caqua\u003eNeutro (с.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[O-ka EN-dye-ra]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "\u0027Око\u0027 é o vocábulo poético eslavo arcaico para \u0027olho\u0027. \u0027Эндера\u0027 está no caso genitivo.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e5 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«О́ко Э́ндера»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:ender_eye"
+                             },
+                    "groups":  {
+                                   "tier4_master":  {
+                                                        "position":  [
+                                                                         0,
+                                                                         96
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_62_oko_endera":  {
+                                                 "type":  "heracles:item",
+                                                 "item":  "minecraft:ender_eye",
+                                                 "amount":  1,
+                                                 "collection":  "AUTOMATIC",
+                                                 "title":  "Segure ou colete О́ко Э́ндера (Olho do Ender)"
+                                             }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

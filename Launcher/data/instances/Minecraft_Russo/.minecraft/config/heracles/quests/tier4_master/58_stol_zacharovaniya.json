@@ -1,0 +1,57 @@
+{
+    "dependencies":  [
+                         "53_obsidian",
+                         "57_kniga"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 4: Стол зачаровáния (Mesa de Encantamentos)",
+                    "subtitle":  "Pronúncia: [Stol za-cha-ra-VAH-nee-ya] | Mesa de Encantamentos • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eСтол зачаровáния\u003c/gold\u003e (Mesa de Encantamentos)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[Stol za-cha-ra-VAH-nee-ya]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Regência do caso genitivo neutro: зачарование torna-se зачарования.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e5 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Стол зачаровáния»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:enchanting_table"
+                             },
+                    "groups":  {
+                                   "tier4_master":  {
+                                                        "position":  [
+                                                                         48,
+                                                                         48
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_58_stol_zacharovaniya":  {
+                                                         "type":  "heracles:item",
+                                                         "item":  "minecraft:enchanting_table",
+                                                         "amount":  1,
+                                                         "collection":  "AUTOMATIC",
+                                                         "title":  "Segure ou colete Стол зачаровáния (Mesa de Encantamentos)"
+                                                     }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

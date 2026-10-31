@@ -1,0 +1,57 @@
+{
+    "dependencies":  [
+                         "07_pesok",
+                         "13_pech"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 1: Стеклó (Vidro)",
+                    "subtitle":  "Pronúncia: [styek-LO] | Vidro • Neutro (с.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eСтеклó\u003c/gold\u003e (Vidro)",
+                                        "Gênero Gramatical: \u003caqua\u003eNeutro (с.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[styek-LO]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Oxítona neutra terminada em -о pleno. O encontro \u0027ст\u0027 é sonoro.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Стеклó»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:glass"
+                             },
+                    "groups":  {
+                                   "tier1_novice":  {
+                                                        "position":  [
+                                                                         192,
+                                                                         144
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_16_steklo":  {
+                                             "type":  "heracles:item",
+                                             "item":  "minecraft:glass",
+                                             "amount":  1,
+                                             "collection":  "AUTOMATIC",
+                                             "title":  "Segure ou colete Стеклó (Vidro)"
+                                         }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

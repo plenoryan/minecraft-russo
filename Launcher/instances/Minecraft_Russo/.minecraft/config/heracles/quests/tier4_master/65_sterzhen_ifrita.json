@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 4: Стержéнь ифрúта (Vara de Blaze (Ifrit))",
+                    "subtitle":  "Pronúncia: [styer-ZHEN\u0027 eef-REE-ta] | Vara de Blaze (Ifrit) • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eСтержéнь ифрúта\u003c/gold\u003e (Vara de Blaze (Ifrit))",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[styer-ZHEN\u0027 eef-REE-ta]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "No Minecraft em russo, o Blaze é oficialmente traduzido como \u0027Ифрит\u0027 (gênio do fogo).",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e5 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Стержéнь ифрúта»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:blaze_rod"
+                             },
+                    "groups":  {
+                                   "tier4_master":  {
+                                                        "position":  [
+                                                                         144,
+                                                                         96
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_65_sterzhen_ifrita":  {
+                                                      "type":  "heracles:item",
+                                                      "item":  "minecraft:blaze_rod",
+                                                      "amount":  1,
+                                                      "collection":  "AUTOMATIC",
+                                                      "title":  "Segure ou colete Стержéнь ифрúта (Vara de Blaze (Ifrit))"
+                                                  }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

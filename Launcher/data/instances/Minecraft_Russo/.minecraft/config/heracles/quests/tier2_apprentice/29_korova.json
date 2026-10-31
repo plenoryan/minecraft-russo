@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "21_myaso"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 2: Корóва (Vaca)",
+                    "subtitle":  "Pronúncia: [ka-RO-va] | Vaca • Feminino (ж.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eКорóва\u003c/gold\u003e (Vaca)",
+                                        "Gênero Gramatical: \u003caqua\u003eFeminino (ж.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[ka-RO-va]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Primeiro \u0027o\u0027 reduzido para [a]. Tônica na sílaba central -РО-.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e12 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Корóва»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:cow_spawn_egg"
+                             },
+                    "groups":  {
+                                   "tier2_apprentice":  {
+                                                            "position":  [
+                                                                             0,
+                                                                             144
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_29_korova":  {
+                                             "type":  "heracles:item",
+                                             "item":  "minecraft:cow_spawn_egg",
+                                             "amount":  1,
+                                             "collection":  "AUTOMATIC",
+                                             "title":  "Segure ou colete Корóва (Vaca)"
+                                         }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

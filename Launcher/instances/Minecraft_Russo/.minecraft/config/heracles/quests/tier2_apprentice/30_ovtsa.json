@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "25_sherst"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 2: Овцá (Ovelha)",
+                    "subtitle":  "Pronúncia: [af-TSAH] | Ovelha • Feminino (ж.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eОвцá\u003c/gold\u003e (Ovelha)",
+                                        "Gênero Gramatical: \u003caqua\u003eFeminino (ж.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[af-TSAH]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "\u0027О\u0027 inicial átono vira [a]. Letra \u0027ц\u0027 africada sonora [ts]. Tônica final.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e12 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Овцá»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:sheep_spawn_egg"
+                             },
+                    "groups":  {
+                                   "tier2_apprentice":  {
+                                                            "position":  [
+                                                                             48,
+                                                                             144
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_30_ovtsa":  {
+                                            "type":  "heracles:item",
+                                            "item":  "minecraft:sheep_spawn_egg",
+                                            "amount":  1,
+                                            "collection":  "AUTOMATIC",
+                                            "title":  "Segure ou colete Овцá (Ovelha)"
+                                        }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

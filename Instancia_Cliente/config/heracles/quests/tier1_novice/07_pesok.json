@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "06_zemlya"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 1: Песóк (Areia)",
+                    "subtitle":  "Pronúncia: [pye-SOK] | Areia • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eПесóк\u003c/gold\u003e (Areia)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[pye-SOK]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "A vogal \u0027e\u0027 inicial é branda [pye]. Acento oxítono no \u0027o\u0027 final.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Песóк»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:sand"
+                             },
+                    "groups":  {
+                                   "tier1_novice":  {
+                                                        "position":  [
+                                                                         144,
+                                                                         48
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_07_pesok":  {
+                                            "type":  "heracles:item",
+                                            "item":  "minecraft:sand",
+                                            "amount":  1,
+                                            "collection":  "AUTOMATIC",
+                                            "title":  "Segure ou colete Песóк (Areia)"
+                                        }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

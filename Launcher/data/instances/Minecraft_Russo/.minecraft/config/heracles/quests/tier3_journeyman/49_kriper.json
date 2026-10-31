@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "40_luk"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 3: Крúпер (Creeper / Pólvora)",
+                    "subtitle":  "Pronúncia: [KREE-pyer] | Creeper / Pólvora • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eКрúпер\u003c/gold\u003e (Creeper / Pólvora)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[KREE-pyer]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Adaptação fonética direta ao cirílico do monstro ícone do Minecraft.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e8 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Крúпер»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:gunpowder"
+                             },
+                    "groups":  {
+                                   "tier3_journeyman":  {
+                                                            "position":  [
+                                                                             144,
+                                                                             144
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_49_kriper":  {
+                                             "type":  "heracles:item",
+                                             "item":  "minecraft:gunpowder",
+                                             "amount":  1,
+                                             "collection":  "AUTOMATIC",
+                                             "title":  "Segure ou colete Крúпер (Creeper / Pólvora)"
+                                         }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

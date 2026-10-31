@@ -25,6 +25,18 @@
   ```powershell
   powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\verify_m1.ps1"
   ```
+- **Teste de Verificação M2 (Sistema de Voz SayIt + Vosk Russo):**
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\verify_m2.ps1"
+  ```
+- **Provisionamento de Reconhecimento de Voz:**
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\setup_voice_ai.ps1"
+  ```
+- **Teste de Verificação M3 (Progressão e Fontes Cirílicas):**
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\verify_m3.ps1"
+  ```
 - **Execução do Cliente:**
   - Clique duplo em `F:\Jogos\Mine\Jogar.bat`
 
@@ -51,3 +63,24 @@
 ### L5. Parsing de Caracteres Acentuados no PowerShell 5.1 (ANSI vs UTF-8)
 - **Armadilha:** Scripts `.ps1` salvos em UTF-8 sem BOM são lidos pelo interpretador padrão do PowerShell 5.1 usando a página de código local (ANSI / Windows-1252), corrompendo literais como `"Lições"` para `"LiÃ§Ãµes"`.
 - **Solução:** Em regexes e asserções de validação, utilizar padrões tolerantes (ex: `Li.*es Aprendidas`) ou salvar arquivos com BOM quando a execução estrita de literais for necessária.
+
+### L6. Quests do Heracles e Codificação UTF-8 de Caracteres Cirílicos
+- **Armadilha:** O motor Heracles Odyssey Quests armazena missões em arquivos JSON avulsos. Se os arquivos forem salvos com codificações heterogêneas no Windows, o parser Gson do Minecraft falha silenciosamente ou corrompe caracteres cirílicos em caixas de diálogo.
+- **Solução:** Gerar todos os arquivos JSON via `[System.IO.File]::WriteAllText($path, $json, (New-Object System.Text.UTF8Encoding($false)))` garantindo UTF-8 puro sem BOM, compatível com os mixins do Heracles e Resourceful Lib.
+
+### L7. Detecção de Mojibake vs Palavras Acentuadas em Português
+- **Armadilha:** Expressões regulares para detecção de mojibake que checam sequências de caracteres na faixa Latin-1 (`[\u00C0-\u00FF]{2,}`) geram falsos-positivos com palavras legítimas em português (ex: `redução`, `vocálica`, `pronúncia`), bloqueando a verificação automatizada.
+- **Solução:** O padrão assertivo para captura de decodificação cruzada UTF-8/Windows-1252 deve verificar prefixos específicos de corrupção: `[ÃÐÑâ][\x80-\xFF]|\uFFFD`.
+
+### L8. Mapeamento Biunívoco de Itens Pedagógicos em Dicionários
+- **Armadilha:** Quando substantivos compartilham entidades (ex: `vaca` e `bife`, `porco` e `carne de porco`), o uso do mesmo identificador de item (`minecraft:porkchop`) em tabelas hash provoca sobrescrita de chaves e quebra a contagem estrita de traduções em `ru_ru.json`.
+- **Solução:** Garantir identificadores exclusivos para cada item do currículo (ex: `minecraft:pig_spawn_egg` para a criatura 'Porco/Свинья' e `minecraft:porkchop` para o alimento 'Carne de Porco/Свинина').
+
+### L9. Precedência de Operadores em Test-Path com Condicionais (-and) no PowerShell
+- **Armadilha:** Em comandos condicionais como `if (Test-Path $a -and -not (Test-Path $b))`, o PowerShell interpreta `-and` como argumento posicional/parâmetro do cmdlet `Test-Path`, gerando `ParameterBindingException: Não é possível localizar um parâmetro que coincida com o nome 'and'`.
+- **Solução:** Sempre encapsular invocações de cmdlets em parênteses antes de operadores lógicos: `if ((Test-Path $a) -and (-not (Test-Path $b)))`.
+
+### L10. Divergência de Nomenclatura em Traduções Oficiais do ru_ru.json
+- **Armadilha:** Em especificações informais da comunidade, itens como Pérola do Fim são descritos como "Жемчуг Края". Porém, no asset oficial do Minecraft 1.20.1 (`ru_ru.json`), o valor canônico da chave `item.minecraft.ender_pearl` é `Эндер-жемчуг`.
+- **Solução:** Os testes de validação devem sempre extrair as strings oficiais diretamente de `assets/minecraft/lang/ru_ru.json` para assegurar fidelidade estrita à UI nativa do jogo.
+

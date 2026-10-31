@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "03_palka"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 1: Фáкел (Tocha)",
+                    "subtitle":  "Pronúncia: [FAH-kyel] | Tocha • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eФáкел\u003c/gold\u003e (Tocha)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[FAH-kyel]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Origem germânica integrada ao russo. Tônica em ФА-. O \u0027е\u0027 final é suave.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Фáкел»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:torch"
+                             },
+                    "groups":  {
+                                   "tier1_novice":  {
+                                                        "position":  [
+                                                                         144,
+                                                                         96
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_11_fakel":  {
+                                            "type":  "heracles:item",
+                                            "item":  "minecraft:torch",
+                                            "amount":  1,
+                                            "collection":  "AUTOMATIC",
+                                            "title":  "Segure ou colete Фáкел (Tocha)"
+                                        }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

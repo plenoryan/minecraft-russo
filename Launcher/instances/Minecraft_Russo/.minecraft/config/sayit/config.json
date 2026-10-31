@@ -1,0 +1,67 @@
+﻿{
+  "version": 1,
+  "language": {
+    "targetLanguage": "ru_ru",
+    "fallbackLanguage": "en_us",
+    "dictionarySource": "config/sayit/lang/ru_ru.json",
+    "normalizeYoToYe": true,
+    "stripDiacriticsAndAccents": true,
+    "fuzzyMatchThreshold": 0.65
+  },
+  "speechEngine": {
+    "engineType": "VOSK",
+    "offlineOnly": true,
+    "modelPath": "models/vosk/vosk-model-small-ru-0.22",
+    "sampleRate": 16000,
+    "channels": 1,
+    "bitDepth": 16,
+    "chunkSize": 4000,
+    "enableDynamicGrammar": true,
+    "dualRecognizerScoring": true
+  },
+  "mechanics": {
+    "triggerOnNewItemAcquisition": true,
+    "challengeQueue": "FIFO",
+    "maxConcurrentChallenges": 1,
+    "penaltyOnTimeout": "DROP",
+    "penaltyModes": {
+      "delete": false,
+      "drop": true,
+      "practice": false
+    },
+    "serverLatencyGracePeriodMs": 1500,
+    "adaptiveTimers": {
+      "enabled": true,
+      "tier1_novice_seconds": 18,
+      "tier2_apprentice_seconds": 14,
+      "tier3_journeyman_seconds": 9,
+      "tier4_master_seconds": 5
+    }
+  },
+  "hud": {
+    "renderVoiceOverlay": true,
+    "renderCountdownTimer": true,
+    "renderCyrillicTargetName": true,
+    "renderPhoneticTransliteration": true,
+    "renderAudioWaveform": true,
+    "renderMicVolumeMeter": true,
+    "renderPartialTranscript": true,
+    "hudPosition": "TOP_CENTER",
+    "timerColorGradient": {
+      "full": "#2ECC71",
+      "half": "#F1C40F",
+      "critical": "#E74C3C"
+    }
+  },
+  "accessibility": {
+    "keyboardFallbackEnabled": true,
+    "fallbackTriggerKey": "key.keyboard.y",
+    "transliterationLatinTypingAllowed": true
+  },
+  "pocketDictionary": {
+    "enabled": true,
+    "giveBookOnFirstJoin": true,
+    "saveProgressByOfflineUUID": true,
+    "dataPath": "config/sayit/dictionary/"
+  }
+}

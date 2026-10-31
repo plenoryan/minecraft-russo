@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 3: Лук (Arco)",
+                    "subtitle":  "Pronúncia: [Look] | Arco • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eЛук\u003c/gold\u003e (Arco)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[Look]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Monossílabo curto. Curiosidade: \u0027лук\u0027 também significa \u0027cebola\u0027 em russo!",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e8 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Лук»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:bow"
+                             },
+                    "groups":  {
+                                   "tier3_journeyman":  {
+                                                            "position":  [
+                                                                             96,
+                                                                             48
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_40_luk":  {
+                                          "type":  "heracles:item",
+                                          "item":  "minecraft:bow",
+                                          "amount":  1,
+                                          "collection":  "AUTOMATIC",
+                                          "title":  "Segure ou colete Лук (Arco)"
+                                      }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

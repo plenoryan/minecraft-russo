@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "35_zhelezo"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 3: Пóножи (Calças de Ferro)",
+                    "subtitle":  "Pronúncia: [PO-na-zhee] | Calças de Ferro • Plural (мн.ч.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eПóножи\u003c/gold\u003e (Calças de Ferro)",
+                                        "Gênero Gramatical: \u003caqua\u003ePlural (мн.ч.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[PO-na-zhee]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Termo de armadura clássica russa. \u0027Ж\u0027 sempre duro, sufixo plural em -и.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e8 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Пóножи»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:iron_leggings"
+                             },
+                    "groups":  {
+                                   "tier3_journeyman":  {
+                                                            "position":  [
+                                                                             96,
+                                                                             96
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_44_ponozhi":  {
+                                              "type":  "heracles:item",
+                                              "item":  "minecraft:iron_leggings",
+                                              "amount":  1,
+                                              "collection":  "AUTOMATIC",
+                                              "title":  "Segure ou colete Пóножи (Calças de Ferro)"
+                                          }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

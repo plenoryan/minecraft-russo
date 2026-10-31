@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "51_nit"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 3: Поводóк (Laço)",
+                    "subtitle":  "Pronúncia: [pa-va-DOK] | Laço • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eПоводóк\u003c/gold\u003e (Laço)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[pa-va-DOK]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Dupla redução vocálica: os dois primeiros \u0027o\u0027 átonos viram [a], restando o último tônico.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e8 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Поводóк»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:lead"
+                             },
+                    "groups":  {
+                                   "tier3_journeyman":  {
+                                                            "position":  [
+                                                                             288,
+                                                                             144
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_52_povodok":  {
+                                              "type":  "heracles:item",
+                                              "item":  "minecraft:lead",
+                                              "amount":  1,
+                                              "collection":  "AUTOMATIC",
+                                              "title":  "Segure ou colete Поводóк (Laço)"
+                                          }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

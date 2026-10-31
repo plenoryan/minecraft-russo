@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "35_zhelezo"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 3: Алмáз (Diamante)",
+                    "subtitle":  "Pronúncia: [ahl-MAHS] | Diamante • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eАлмáз\u003c/gold\u003e (Diamante)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[ahl-MAHS]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Dessonorização final: a consoante sonora \u0027з\u0027 em fim de palavra soa como o surdo [s].",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e8 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Алмáз»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:diamond"
+                             },
+                    "groups":  {
+                                   "tier3_journeyman":  {
+                                                            "position":  [
+                                                                             96,
+                                                                             0
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_37_almaz":  {
+                                            "type":  "heracles:item",
+                                            "item":  "minecraft:diamond",
+                                            "amount":  1,
+                                            "collection":  "AUTOMATIC",
+                                            "title":  "Segure ou colete Алмáз (Diamante)"
+                                        }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

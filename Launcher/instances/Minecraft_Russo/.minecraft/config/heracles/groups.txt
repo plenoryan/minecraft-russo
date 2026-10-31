@@ -1,0 +1,4 @@
+tier1_novice
+tier2_apprentice
+tier3_journeyman
+tier4_master

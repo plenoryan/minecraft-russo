@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "58_stol_zacharovaniya"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 4: Пузырёк óпыта (Frasco de Experiência)",
+                    "subtitle":  "Pronúncia: [poo-zy-RYOK O-py-ta] | Frasco de Experiência • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eПузырёк óпыта\u003c/gold\u003e (Frasco de Experiência)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[poo-zy-RYOK O-py-ta]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "A letra \u0027ё\u0027 é SEMPRE tônica em russo (пузы-РЁК). \u0027Опыта\u0027 é genitivo de опыт.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e5 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Пузырёк óпыта»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:experience_bottle"
+                             },
+                    "groups":  {
+                                   "tier4_master":  {
+                                                        "position":  [
+                                                                         48,
+                                                                         144
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_68_puzyryok_opyta":  {
+                                                     "type":  "heracles:item",
+                                                     "item":  "minecraft:experience_bottle",
+                                                     "amount":  1,
+                                                     "collection":  "AUTOMATIC",
+                                                     "title":  "Segure ou colete Пузырёк óпыта (Frasco de Experiência)"
+                                                 }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

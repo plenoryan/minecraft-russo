@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 1: Дéрево (Madeira / Árvore)",
+                    "subtitle":  "Pronúncia: [DYE-rye-va] | Madeira / Árvore • Neutro (с.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eДéрево\u003c/gold\u003e (Madeira / Árvore)",
+                                        "Gênero Gramatical: \u003caqua\u003eNeutro (с.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[DYE-rye-va]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "A primeira sílaba é tônica (ДЕ-ре-во). A vogal \u0027o\u0027 átona final sofre redução vocálica (ákanie), soando como [a].",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Дéрево»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:oak_log"
+                             },
+                    "groups":  {
+                                   "tier1_novice":  {
+                                                        "position":  [
+                                                                         0,
+                                                                         0
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_01_derevo":  {
+                                             "type":  "heracles:item",
+                                             "item":  "minecraft:oak_log",
+                                             "amount":  1,
+                                             "collection":  "AUTOMATIC",
+                                             "title":  "Segure ou colete Дéрево (Madeira / Árvore)"
+                                         }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

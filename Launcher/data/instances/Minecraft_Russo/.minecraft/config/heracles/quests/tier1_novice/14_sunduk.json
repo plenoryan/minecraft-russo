@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "02_doski"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 1: Сундýк (Baú)",
+                    "subtitle":  "Pronúncia: [soon-DOOK] | Baú • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eСундýк\u003c/gold\u003e (Baú)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[soon-DOOK]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Vogal posterior \u0027у\u0027 tônica na última sílaba. Consoante \u0027к\u0027 dura no final.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Сундýк»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:chest"
+                             },
+                    "groups":  {
+                                   "tier1_novice":  {
+                                                        "position":  [
+                                                                         96,
+                                                                         144
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_14_sunduk":  {
+                                             "type":  "heracles:item",
+                                             "item":  "minecraft:chest",
+                                             "amount":  1,
+                                             "collection":  "AUTOMATIC",
+                                             "title":  "Segure ou colete Сундýк (Baú)"
+                                         }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

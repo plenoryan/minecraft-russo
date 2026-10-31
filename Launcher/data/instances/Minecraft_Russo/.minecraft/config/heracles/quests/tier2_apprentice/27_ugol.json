@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 2: У́голь (Carvão)",
+                    "subtitle":  "Pronúncia: [OO-gahl\u0027] | Carvão • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eУ́голь\u003c/gold\u003e (Carvão)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[OO-gahl\u0027]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Tônica na primeira sílaba (У-голь). O \u0027л\u0027 é suavizado pelo sinal brando [l\u0027].",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e12 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«У́голь»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:coal"
+                             },
+                    "groups":  {
+                                   "tier2_apprentice":  {
+                                                            "position":  [
+                                                                             96,
+                                                                             96
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_27_ugol":  {
+                                           "type":  "heracles:item",
+                                           "item":  "minecraft:coal",
+                                           "amount":  1,
+                                           "collection":  "AUTOMATIC",
+                                           "title":  "Segure ou colete У́голь (Carvão)"
+                                       }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

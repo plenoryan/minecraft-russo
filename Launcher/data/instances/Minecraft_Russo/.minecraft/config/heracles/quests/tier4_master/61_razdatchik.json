@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "59_krasnyy_kamen"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 4: Раздáтчик (Ejetor / Distribuidor)",
+                    "subtitle":  "Pronúncia: [raz-DAHT-cheek] | Ejetor / Distribuidor • Masculino (м.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eРаздáтчик\u003c/gold\u003e (Ejetor / Distribuidor)",
+                                        "Gênero Gramatical: \u003caqua\u003eMasculino (м.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[raz-DAHT-cheek]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Prefixo raz- (indica dispersão/distribuição) + radical do verbo dвать (dar).",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e5 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Раздáтчик»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:dispenser"
+                             },
+                    "groups":  {
+                                   "tier4_master":  {
+                                                        "position":  [
+                                                                         192,
+                                                                         48
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_61_razdatchik":  {
+                                                 "type":  "heracles:item",
+                                                 "item":  "minecraft:dispenser",
+                                                 "amount":  1,
+                                                 "collection":  "AUTOMATIC",
+                                                 "title":  "Segure ou colete Раздáтчик (Ejetor / Distribuidor)"
+                                             }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

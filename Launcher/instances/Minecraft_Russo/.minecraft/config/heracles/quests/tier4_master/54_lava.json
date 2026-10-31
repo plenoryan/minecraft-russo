@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 4: Лáва (Balde de Lava / Lava)",
+                    "subtitle":  "Pronúncia: [LAH-va] | Balde de Lava / Lava • Feminino (ж.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eЛáва\u003c/gold\u003e (Balde de Lava / Lava)",
+                                        "Gênero Gramatical: \u003caqua\u003eFeminino (ж.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[LAH-va]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Paroxítona feminina suave. O primeiro \u0027а\u0027 é aberto e tônico.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e5 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Лáва»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:lava_bucket"
+                             },
+                    "groups":  {
+                                   "tier4_master":  {
+                                                        "position":  [
+                                                                         48,
+                                                                         0
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_54_lava":  {
+                                           "type":  "heracles:item",
+                                           "item":  "minecraft:lava_bucket",
+                                           "amount":  1,
+                                           "collection":  "AUTOMATIC",
+                                           "title":  "Segure ou colete Лáва (Balde de Lava / Lava)"
+                                       }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

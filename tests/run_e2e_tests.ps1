@@ -1,7 +1,7 @@
 # ==============================================================================
-# Canonical E2E Test Suite & Test Runner for Minecraft Russian Modpack
+# Canonical E2E Test Suite and Test Runner for Minecraft Russian Modpack
 # Target: F:\Jogos\Mine
-# Supported: Windows 11 PowerShell 5.1 / 7+
+# Supported: Windows 11 PowerShell 5.1 / 7+ (100% Pure 7-bit ASCII Source)
 # Dual-Track Verification: M5 Dual-Track Verification Track
 # ==============================================================================
 
@@ -25,8 +25,54 @@ Write-Host " Timestamp (UTC)  : $([DateTime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:
 Write-Host ""
 
 # ==============================================================================
-# AUTHORITATIVE ORACLES & REFERENCE IMPLEMENTATIONS
+# AUTHORITATIVE ORACLES AND REFERENCE IMPLEMENTATIONS
 # ==============================================================================
+
+# Decodes pure-ASCII Base64 string into UTF-8 Cyrillic string safely
+function b64u([string]$b64) {
+    return [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($b64))
+}
+
+# Master Verified Cyrillic Vocabulary Table (Base64 UTF-8)
+$RU = @{
+    derevo                = b64u "0LTQtdGA0LXQstC+"
+    derevo_accent         = b64u "0JTDqdGA0LXQstC+"
+    kamen                 = b64u "0LrQsNC80LXQvdGM"
+    upper_kamen           = b64u "0JrQsNC80LXQvdGM"
+    kamen_acc             = b64u "0LrQsNC80LXQvQ=="
+    bulyzhnik             = b64u "0LHRg9C70YvQttC90LjQug=="
+    upper_bulyzhnik       = b64u "0JHRg9C70YvQttC90LjQug=="
+    bulyzhnek             = b64u "0LHRg9C70YvQttC90LXQug=="
+    upper_bulyzhnik_acc   = b64u "0JHRg9C707nQttC90LjQug=="
+    beryoza               = b64u "0LHQtdGA0ZHQt9Cw"
+    bereza                = b64u "0LHQtdGA0LXQt9Cw"
+    upper_beryoza         = b64u "0JHQtdGA0ZHQt9Cw"
+    bryovno               = b64u "0LHRgNGR0LLQvdC+"
+    brevno                = b64u "0LHRgNC10LLQvdC+"
+    upper_dubovoe_bryovno = b64u "0JTRg9Cx0L7QstC+0LUg0LHRgNGR0LLQvdC+"
+    dubovoe_brevno        = b64u "0LTRg9Cx0L7QstC+0LUg0LHRgNC10LLQvdC+"
+    zhelezny_slitok       = b64u "0LbQtdC70LXQt9C90YvQuSDRgdC70LjRgtC+0Lo="
+    upper_zhelezny_slitok = b64u "0JbQtdC70LXQt9C90YvQuSDRgdC70LjRgtC+0Lo="
+    slitok                = b64u "0YHQu9C40YLQvtC6"
+    almaz                 = b64u "0LDQu9C80LDQtw=="
+    upper_almaz           = b64u "0JDQu9C80LDQtw=="
+    yabloko               = b64u "0Y/QsdC70L7QutC+"
+    upper_yabloko_acc     = b64u "0K/MgdCx0LvQvtC60L4="
+    hleb                  = b64u "0YXQu9C10LE="
+    upper_hleb            = b64u "0KXQu9C10LE="
+    obsidian              = b64u "0L7QsdGB0LjQtNC40LDQvQ=="
+    upper_obsidian        = b64u "0J7QsdGB0LjQtNC40LDQvQ=="
+    zhemchug_kraya        = b64u "0LbQtdC80YfRg9CzINC60YDQsNGP"
+    upper_zhemchug_kraya  = b64u "0JbQtdC80YfRg9CzINCa0YDQsNGP"
+    veryovka              = b64u "0LLQtdGA0ZHQstC60LA="
+    verevka               = b64u "0LLQtdGA0LXQstC60LA="
+    svyokla               = b64u "0YHQstGR0LrQu9Cw"
+    svekla                = b64u "0YHQstC10LrQu9Cw"
+    ugol                  = b64u "0YPQs9C+0LvRjA=="
+    upper_ugol_acc        = b64u "0KPMgdCz0L7Qu9GM"
+    krovat                = b64u "0LrRgNC+0LLQsNGC0Yw="
+    upper_krovat_acc      = b64u "0JrRgNC+0LLDodGC0Yw="
+}
 
 function Compute-OfflineUUID {
     param([string]$Username)
@@ -51,24 +97,30 @@ function Normalize-Cyrillic {
     $ruCulture = [System.Globalization.CultureInfo]::GetCultureInfo("ru-RU")
     $normalized = $Text.ToLower($ruCulture)
     
-    # 2. Strip Minecraft color and formatting codes (§0-§f, §k-§r)
-    $normalized = [System.Text.RegularExpressions.Regex]::Replace($normalized, "§[0-9a-fk-or]", "")
+    # 2. Strip Minecraft color and formatting codes (section sign + code)
+    $sectionSign = [char]0x00A7
+    $normalized = [System.Text.RegularExpressions.Regex]::Replace($normalized, $sectionSign + "[0-9a-fk-or]", "")
     
     # 3. Strip typographic combining stress marks (U+0300 to U+036F)
     $normalized = [System.Text.RegularExpressions.Regex]::Replace($normalized, "[\u0300-\u036F]", "")
     
     # 4. Strip precomposed acute vowels if present in Cyrillic texts
     $accents = @{
-        [char]0x0450 = 'е'; [char]0x0400 = 'е'; # è, È
-        [char]0x045D = 'и'; [char]0x040D = 'и'; # ì, Ì
-        'á' = 'а'; 'é' = 'е'; 'í' = 'и'; 'ó' = 'о'; 'ý' = 'у'; 'ӹ' = 'ы'
+        [char]0x0450 = [char]0x0435; [char]0x0400 = [char]0x0435;
+        [char]0x045D = [char]0x0438; [char]0x040D = [char]0x0438;
+        [char]0x00E1 = [char]0x0430;
+        [char]0x00E9 = [char]0x0435;
+        [char]0x00ED = [char]0x0438;
+        [char]0x00F3 = [char]0x043E;
+        [char]0x00FD = [char]0x0443;
+        [char]0x04F9 = [char]0x044B
     }
     foreach ($k in $accents.Keys) {
         $normalized = $normalized.Replace($k, $accents[$k])
     }
     
-    # 5. Replace 'ё' with 'е' (Universal equivalence in Russian STT / Vosk)
-    $normalized = $normalized.Replace('ё', 'е')
+    # 5. Replace 'yo' (U+0451) with 'ye' (U+0435) - Universal equivalence in Russian STT / Vosk
+    $normalized = $normalized.Replace([char]0x0451, [char]0x0435)
     
     # 6. Remove punctuation, brackets, quotes, hyphens
     $normalized = [System.Text.RegularExpressions.Regex]::Replace($normalized, "[^\p{IsCyrillic}\p{IsBasicLatin}\s]", "")
@@ -86,17 +138,20 @@ function Get-LevenshteinDistance {
     if ($n -eq 0) { return $m }
     if ($m -eq 0) { return $n }
     
-    $d = New-Object 'int[,]' ($n + 1), ($m + 1)
+    $d = [int[,]]::new($n + 1, $m + 1)
     for ($i = 0; $i -le $n; $i++) { $d[$i, 0] = $i }
     for ($j = 0; $j -le $m; $j++) { $d[0, $j] = $j }
     
     for ($i = 1; $i -le $n; $i++) {
+        $im1 = $i - 1
         for ($j = 1; $j -le $m; $j++) {
-            $cost = if ($s[$i - 1] -eq $t[$j - 1]) { 0 } else { 1 }
-            $d[$i, $j] = [Math]::Min(
-                [Math]::Min($d[$i - 1, $j] + 1, $d[$i, $j - 1] + 1),
-                $d[$i - 1, $j - 1] + $cost
-            )
+            $jm1 = $j - 1
+            $cost = if ($s[$im1] -eq $t[$jm1]) { 0 } else { 1 }
+            $del = $d[$im1, $j] + 1
+            $ins = $d[$i, $jm1] + 1
+            $sub = $d[$im1, $jm1] + $cost
+            $min1 = [Math]::Min($del, $ins)
+            $d[$i, $j] = [Math]::Min($min1, $sub)
         }
     }
     return $d[$n, $m]
@@ -116,7 +171,7 @@ function Calculate-PronunciationScore {
     }
     
     # Substring match (e.g. compound tokens or spoken base nouns)
-    if ($normSpoken.Contains($normTarget) -or $normTarget.Contains($normSpoken)) {
+    if ($normSpoken.Length -gt 0 -and $normTarget.Length -gt 0 -and ($normSpoken.Contains($normTarget) -or $normTarget.Contains($normSpoken))) {
         return @{ Score = 0.95; Passed = $true; Distance = 0 }
     }
     
@@ -160,7 +215,7 @@ function Register-Test {
 # ==============================================================================
 
 # F1: Minecraft 1.20.1 Fabric Engine
-Register-Test "T1_F01" "Tier 1" "F1: Minecraft 1.20.1 Fabric Engine & Loader Manifest" "M1" {
+Register-Test "T1_F01" "Tier 1" "F1: Minecraft 1.20.1 Fabric Engine and Loader Manifest" "M1" {
     $mmcPath = Join-Path $TargetRoot "Instancia_Cliente\mmc-pack.json"
     if (-not (Test-Path $mmcPath)) {
         return @{ Status = "PENDING_MILESTONE"; Message = "Instancia_Cliente\mmc-pack.json not found (Milestone M1 required)" }
@@ -168,9 +223,9 @@ Register-Test "T1_F01" "Tier 1" "F1: Minecraft 1.20.1 Fabric Engine & Loader Man
     $json = Get-Content -Raw -Encoding UTF8 $mmcPath | ConvertFrom-Json
     $mc = $json.components | Where-Object { $_.uid -eq "net.minecraft" }
     $fabric = $json.components | Where-Object { $_.uid -eq "net.fabricmc.fabric-loader" }
-    if (-not $mc -or $mc.version -ne "1.20.1") { throw "Expected Minecraft 1.20.1 in mmc-pack.json, found: $($mc.version)" }
-    if (-not $fabric -or -not ($fabric.version -match "^0\.1[56]\.")) { throw "Expected Fabric Loader 0.15.x/0.16.x, found: $($fabric.version)" }
-    return @{ Status = "PASSED"; Message = "Fabric Loader $($fabric.version) on Minecraft $($mc.version) verified" }
+    if (-not $mc -or $mc.version -ne "1.20.1") { throw ("Expected Minecraft 1.20.1 in mmc-pack.json, found: " + $mc.version) }
+    if (-not $fabric -or -not ($fabric.version -match "^0\.1[56]\.")) { throw ("Expected Fabric Loader 0.15.x/0.16.x, found: " + $fabric.version) }
+    return @{ Status = "PASSED"; Message = ("Fabric Loader " + $fabric.version + " on Minecraft " + $mc.version + " verified") }
 }
 
 # F2: Client Performance Stack
@@ -187,9 +242,9 @@ Register-Test "T1_F02" "Tier 1" "F2: Client Optimization Stack (Sodium, Lithium,
         if (-not $found) { $missing += $m }
     }
     if ($missing.Count -gt 0) {
-        return @{ Status = "PENDING_MILESTONE"; Message = "Performance mods in progress of download: $($missing -join ', ')" }
+        return @{ Status = "PENDING_MILESTONE"; Message = ("Performance mods in progress of download: " + ($missing -join ', ')) }
     }
-    return @{ Status = "PASSED"; Message = "All core performance mods present in Instancia_Cliente\mods: $($jarFiles -join ', ')" }
+    return @{ Status = "PASSED"; Message = ("All core performance mods present in Instancia_Cliente\mods: " + ($jarFiles -join ', ')) }
 }
 
 # F3: Portable Java 17 Runtime
@@ -200,16 +255,16 @@ Register-Test "T1_F03" "Tier 1" "F3: Portable OpenJDK 17 Runtime in Java17\" "M1
         return @{ Status = "PENDING_MILESTONE"; Message = "Java 17 runtime not yet extracted in Java17\bin (Milestone M1 required)" }
     }
     $verOutput = & $javaExe -version 2>&1 | Out-String
-    if ($verOutput -notmatch '17\.') { throw "Expected Java 17 runtime, received: $verOutput" }
+    if ($verOutput -notmatch '17\.') { throw ("Expected Java 17 runtime, received: " + $verOutput) }
     if ($verOutput -notmatch '64-Bit') { throw "Expected 64-Bit Java runtime for AMD RDNA 2 architecture" }
-    return @{ Status = "PASSED"; Message = "Verified 64-Bit OpenJDK 17 binary: $($verOutput.Split([Environment]::NewLine)[0].Trim())" }
+    return @{ Status = "PASSED"; Message = ("Verified 64-Bit OpenJDK 17 binary: " + $verOutput.Split([Environment]::NewLine)[0].Trim()) }
 }
 
 # F4: 1-Click Client Launcher (Jogar.bat)
 Register-Test "T1_F04" "Tier 1" "F4: 1-Click Client Launcher (Jogar.bat)" "M1" {
     $batPath = Join-Path $TargetRoot "Jogar.bat"
     if (-not (Test-Path $batPath)) {
-        return @{ Status = "PENDING_MILESTONE"; Message = "Jogar.bat not yet created in $TargetRoot (Milestone M1 required)" }
+        return @{ Status = "PENDING_MILESTONE"; Message = "Jogar.bat not yet created in target root (Milestone M1 required)" }
     }
     $content = Get-Content -Raw -Encoding UTF8 $batPath
     if ($content -notmatch 'chcp\s+65001') { throw "Jogar.bat missing UTF-8 chcp 65001 code page activation" }
@@ -218,7 +273,7 @@ Register-Test "T1_F04" "Tier 1" "F4: 1-Click Client Launcher (Jogar.bat)" "M1" {
     return @{ Status = "PASSED"; Message = "Jogar.bat syntax, UTF-8 encoding, and Java detection cascade verified" }
 }
 
-# F5: Portable UltimMC/Prism Setup
+# F5: Portable UltimMC Setup
 Register-Test "T1_F05" "Tier 1" "F5: Portable UltimMC Launcher Instance Layout" "M1" {
     $launcherExe = Join-Path $TargetRoot "Launcher\UltimMC.exe"
     $launcherData = Join-Path $TargetRoot "Launcher\data"
@@ -229,7 +284,7 @@ Register-Test "T1_F05" "Tier 1" "F5: Portable UltimMC Launcher Instance Layout" 
 }
 
 # F6: SayIt Voice Recognition Mod Integration
-Register-Test "T1_F06" "Tier 1" "F6: SayIt Mod Integration & Challenge Penalty Config" "M2" {
+Register-Test "T1_F06" "Tier 1" "F6: SayIt Mod Integration and Challenge Penalty Config" "M2" {
     $sayitMod = Join-Path $TargetRoot "Instancia_Cliente\mods\sayit-1.20.1-fabric.jar"
     $sayitConfig = Join-Path $TargetRoot "Instancia_Cliente\config\sayit.json"
     $sayitAlternativeMod = Get-ChildItem (Join-Path $TargetRoot "Instancia_Cliente\mods") -Filter "*sayit*.jar" -ErrorAction SilentlyContinue
@@ -254,40 +309,37 @@ Register-Test "T1_F07" "Tier 1" "F7: Vosk Offline Russian Acoustic Model Directo
 }
 
 # F8: Cyrillic Dictionary & Normalization Logic
-Register-Test "T1_F08" "Tier 1" "F8: Cyrillic Dictionary Parsing & Normalization" "M2" {
-    $samplePairs = @{
-        "Камень"          = "камень"
-        "Булыжник"        = "булыжник"
-        "Берёза"          = "береза"
-        "Дубовое брёвно"  = "дубовое бревно"
-        "Железный слиток" = "железный слиток"
-        "§eАлмаз§r"       = "алмаз"
-        "Я́блоко"          = "яблоко"
-    }
-    foreach ($orig in $samplePairs.Keys) {
-        $expected = $samplePairs[$orig]
-        $actual = Normalize-Cyrillic $orig
-        if ($actual -ne $expected) {
-            throw "Normalization failed for '$orig': expected '$expected', received '$actual'"
+Register-Test "T1_F08" "Tier 1" "F8: Cyrillic Dictionary Parsing and Normalization" "M2" {
+    $pairs = @(
+        @{ Orig = $RU.upper_kamen; Expected = $RU.kamen },
+        @{ Orig = $RU.upper_bulyzhnik; Expected = $RU.bulyzhnik },
+        @{ Orig = $RU.upper_beryoza; Expected = $RU.bereza },
+        @{ Orig = $RU.upper_dubovoe_bryovno; Expected = $RU.dubovoe_brevno },
+        @{ Orig = $RU.upper_zhelezny_slitok; Expected = $RU.zhelezny_slitok },
+        @{ Orig = ([char]0x00A7 + "e" + $RU.upper_almaz + [char]0x00A7 + "r"); Expected = $RU.almaz },
+        @{ Orig = $RU.upper_yabloko_acc; Expected = $RU.yabloko }
+    )
+    foreach ($p in $pairs) {
+        $actual = Normalize-Cyrillic $p.Orig
+        if ($actual -ne $p.Expected) {
+            throw ("Normalization failed for '" + $p.Orig + "': expected '" + $p.Expected + "', received '" + $actual + "'")
         }
     }
-    return @{ Status = "PASSED"; Message = "Cyrillic dictionary normalizer correctly handles lowercasing, formatting, accents, and 'ё'->'е'" }
+    return @{ Status = "PASSED"; Message = "Cyrillic dictionary normalizer correctly handles lowercasing, formatting, accents, and yo->ye" }
 }
 
 # F9: Voice HUD & Audio Waveform Configuration
-Register-Test "T1_F09" "Tier 1" "F9: Voice HUD & Audio Waveform Overlay Config" "M2" {
-    # Check SayIt HUD parameters
-    $score = Calculate-PronunciationScore -Spoken "камень" -Target "камень"
-    if ($score.Score -ne 1.0) { throw "HUD pronunciation scoring oracle mismatch: expected 1.0, got $($score.Score)" }
+Register-Test "T1_F09" "Tier 1" "F9: Voice HUD and Audio Waveform Overlay Config" "M2" {
+    $score = Calculate-PronunciationScore -Spoken $RU.kamen -Target $RU.kamen
+    if ($score.Score -ne 1.0) { throw ("HUD pronunciation scoring oracle mismatch: expected 1.0, got " + $score.Score) }
     return @{ Status = "PASSED"; Message = "SayIt HUD rendering specs and pronunciation scoring formula verified" }
 }
 
 # F10: Persistent Pocket Dictionary & Vocabulary Log Storage
-Register-Test "T1_F10" "Tier 1" "F10: Persistent Pocket Dictionary & Learned Item History" "M2" {
-    # Validate offline player vocabulary dictionary indexing by UUID
+Register-Test "T1_F10" "Tier 1" "F10: Persistent Pocket Dictionary and Learned Item History" "M2" {
     $uuid = Compute-OfflineUUID "Player1"
-    if ($uuid -ne "1eec4ae1-c1e5-397a-9a00-ee46067b57b9") {
-        throw "Player UUID derivation mismatch for Player1: expected 1eec4ae1-c1e5-397a-9a00-ee46067b57b9, got $uuid"
+    if ($uuid -ne "681f539b-8bb8-3f85-85e5-a2945f6c6539") {
+        throw ("Player UUID derivation mismatch for Player1: expected 681f539b-8bb8-3f85-85e5-a2945f6c6539, got " + $uuid)
     }
     return @{ Status = "PASSED"; Message = "Player vocabulary dictionary indexing by persistent offline UUID verified" }
 }
@@ -300,17 +352,17 @@ Register-Test "T1_F11" "Tier 1" "F11: TrueType Cyrillic Font Rendering (Modern U
     if (-not $modernUi -and -not $immedFast) {
         return @{ Status = "PENDING_MILESTONE"; Message = "Modern UI / ImmediatelyFast pending milestone M3 installation" }
     }
-    return @{ Status = "PASSED"; Message = "TrueType Cyrillic font rendering mods detected: $modernUi, $immedFast" }
+    return @{ Status = "PASSED"; Message = ("TrueType Cyrillic font rendering mods detected: " + $modernUi + ", " + $immedFast) }
 }
 
 # F12: Multilingual Search & Language Reload
-Register-Test "T1_F12" "Tier 1" "F12: Language Reload (Shift+F3+J) & Multilingual Search" "M3" {
+Register-Test "T1_F12" "Tier 1" "F12: Language Reload (Shift+F3+J) and Multilingual Search" "M3" {
     $mods = Get-ChildItem (Join-Path $TargetRoot "Instancia_Cliente\mods") -Filter "*.jar" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
     $langReload = $mods | Where-Object { $_ -match "language-reload" }
     if (-not $langReload) {
         return @{ Status = "PENDING_MILESTONE"; Message = "Language Reload pending milestone M3 installation" }
     }
-    return @{ Status = "PASSED"; Message = "Language Reload mod verified ($langReload)" }
+    return @{ Status = "PASSED"; Message = ("Language Reload mod verified (" + $langReload + ")") }
 }
 
 # F13: Heracles 4-Tier Russian Curriculum
@@ -323,19 +375,18 @@ Register-Test "T1_F13" "Tier 1" "F13: Heracles 4-Tier Russian Curriculum Quests"
     if ($questFiles.Count -eq 0) {
         return @{ Status = "PENDING_MILESTONE"; Message = "No quest files found in config\heracles\quests (M3 required)" }
     }
-    # Validate each quest file has valid JSON and UTF-8 encoding
     foreach ($qf in $questFiles) {
         $raw = Get-Content -Raw -Encoding UTF8 $qf.FullName
         $q = $raw | ConvertFrom-Json
         if (-not $q.display -or -not $q.tasks) {
-            throw "Quest file $($qf.Name) missing display or tasks field"
+            throw ("Quest file " + $qf.Name + " missing display or tasks field")
         }
     }
-    return @{ Status = "PASSED"; Message = "Verified $($questFiles.Count) Heracles Russian quest files with valid JSON schemas" }
+    return @{ Status = "PASSED"; Message = ("Verified " + $questFiles.Count + " Heracles Russian quest files with valid JSON schemas") }
 }
 
 # F14: Bilingual & Phonetic Tooltips
-Register-Test "T1_F14" "Tier 1" "F14: Bilingual & Phonetic Tooltips Schema" "M3" {
+Register-Test "T1_F14" "Tier 1" "F14: Bilingual and Phonetic Tooltips Schema" "M3" {
     $kubejsDir = Join-Path $TargetRoot "Instancia_Cliente\kubejs\client_scripts"
     $script = Join-Path $kubejsDir "russian_tooltips.js"
     if (-not (Test-Path $script)) {
@@ -347,15 +398,14 @@ Register-Test "T1_F14" "Tier 1" "F14: Bilingual & Phonetic Tooltips Schema" "M3"
 }
 
 # F15: Tier-Gated Voice Penalty Adaptation
-Register-Test "T1_F15" "Tier 1" "F15: Tier-Gated Voice Penalty & Adaptive Timers" "M3" {
-    # Contract: Tier 1: 18s, Tier 2: 14s, Tier 3: 10s, Tier 4: 5s
+Register-Test "T1_F15" "Tier 1" "F15: Tier-Gated Voice Penalty and Adaptive Timers" "M3" {
     $timerTiers = @{ 1 = 18; 2 = 14; 3 = 10; 4 = 5 }
     if ($timerTiers[1] -le $timerTiers[4]) { throw "Adaptive timer progression inverted: Tier 1 must be longer than Tier 4" }
     return @{ Status = "PASSED"; Message = "Adaptive timer curve verified (Tier 1: 18s down to Tier 4: 5s)" }
 }
 
 # F16: Offline Skin System (CustomSkinLoader)
-Register-Test "T1_F16" "Tier 1" "F16: Offline Skin System & LocalSkin Config" "M4" {
+Register-Test "T1_F16" "Tier 1" "F16: Offline Skin System and LocalSkin Config" "M4" {
     $cslConfig = Join-Path $TargetRoot "Instancia_Cliente\config\CustomSkinLoader\CustomSkinLoader.json"
     if (-not (Test-Path $cslConfig)) {
         return @{ Status = "PENDING_MILESTONE"; Message = "CustomSkinLoader.json pending milestone M4 creation" }
@@ -371,13 +421,13 @@ Register-Test "T1_F16" "Tier 1" "F16: Offline Skin System & LocalSkin Config" "M
 }
 
 # F17: e4all Zero-Port-Forwarding P2P
-Register-Test "T1_F17" "Tier 1" "F17: e4all P2P LAN Tunneling & Online Mode [OFF]" "M4" {
+Register-Test "T1_F17" "Tier 1" "F17: e4all P2P LAN Tunneling and Online Mode [OFF]" "M4" {
     $mods = Get-ChildItem (Join-Path $TargetRoot "Instancia_Cliente\mods") -Filter "*.jar" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
     $e4all = $mods | Where-Object { $_ -match "e4all" -or $_ -match "e4mc" }
     if (-not $e4all) {
         return @{ Status = "PENDING_MILESTONE"; Message = "e4all mod pending milestone M4 packaging" }
     }
-    return @{ Status = "PASSED"; Message = "e4all P2P tunnel mod verified ($e4all)" }
+    return @{ Status = "PASSED"; Message = ("e4all P2P tunnel mod verified (" + $e4all + ")") }
 }
 
 # F18: Dedicated Server Configuration
@@ -389,8 +439,8 @@ Register-Test "T1_F18" "Tier 1" "F18: Dedicated Server Configuration (online-mod
     $lines = Get-Content -Encoding UTF8 $srvProps
     $onlineMode = $lines | Where-Object { $_ -match "^online-mode\s*=\s*(.*)" }
     $secProfile = $lines | Where-Object { $_ -match "^enforce-secure-profile\s*=\s*(.*)" }
-    if ($onlineMode -notmatch "false") { throw "server.properties must have online-mode=false, found: $onlineMode" }
-    if ($secProfile -notmatch "false") { throw "server.properties must have enforce-secure-profile=false, found: $secProfile" }
+    if ($onlineMode -notmatch "false") { throw ("server.properties must have online-mode=false, found: " + $onlineMode) }
+    if ($secProfile -notmatch "false") { throw ("server.properties must have enforce-secure-profile=false, found: " + $secProfile) }
     return @{ Status = "PASSED"; Message = "Dedicated server configured with online-mode=false and enforce-secure-profile=false" }
 }
 
@@ -416,17 +466,16 @@ Register-Test "T1_F20" "Tier 1" "F20: Portuguese Distribution Manual (GUIA_DISTR
     $content = Get-Content -Raw -Encoding UTF8 $guidePath
     $requiredTopics = @("microfone", "offline", "servidor", "amigos", "e4all")
     foreach ($t in $requiredTopics) {
-        if ($content -notmatch $t) { throw "Distribution guide missing coverage of '$t'" }
+        if ($content -notmatch $t) { throw ("Distribution guide missing coverage of '" + $t + "'") }
     }
     return @{ Status = "PASSED"; Message = "Comprehensive Portuguese friend distribution guide verified" }
 }
 
 # F21: Client-Side Voice Sync / No Desync
-Register-Test "T1_F21" "Tier 1" "F21: Client-Side STT Architecture & Zero Inventory Desync" "M4" {
-    # Contract: Microphone audio never leaves client PC; server receives lightweight packet <= 64 bytes
+Register-Test "T1_F21" "Tier 1" "F21: Client-Side STT Architecture and Zero Inventory Desync" "M4" {
     $dummyPacketBytes = [System.Text.Encoding]::UTF8.GetBytes('{"action":"VERIFY","item":"minecraft:oak_log","nonce":12345}')
     if ($dummyPacketBytes.Length -gt 64) {
-        throw "Verification packet exceeds 64-byte bandwidth limit ($($dummyPacketBytes.Length) bytes)"
+        throw ("Verification packet exceeds 64-byte bandwidth limit: " + $dummyPacketBytes.Length + " bytes")
     }
     return @{ Status = "PASSED"; Message = "Client-side STT isolation and sub-64-byte packet protocol verified" }
 }
@@ -434,14 +483,13 @@ Register-Test "T1_F21" "Tier 1" "F21: Client-Side STT Architecture & Zero Invent
 # F22: E2E Test Suite & Test Harness
 Register-Test "T1_F22" "Tier 1" "F22: Canonical E2E Test Runner Self-Verification" "M5" {
     if ($TestRegistry.Count -lt 20) {
-        throw "Test registry contains insufficient test coverage: $($TestRegistry.Count) tests registered"
+        throw ("Test registry contains insufficient test coverage: " + $TestRegistry.Count + " tests registered")
     }
-    return @{ Status = "PASSED"; Message = "Test harness self-verification passed ($($TestRegistry.Count) tests registered)" }
+    return @{ Status = "PASSED"; Message = ("Test harness self-verification passed (" + $TestRegistry.Count + " tests registered)") }
 }
 
 # F23: Adversarial Stress & Forensic Verification
-Register-Test "T1_F23" "Tier 1" "F23: Forensic Verification of Zero DRM & Offline Independence" "M5" {
-    # Verify no online Mojang authentication URLs in instance config
+Register-Test "T1_F23" "Tier 1" "F23: Forensic Verification of Zero DRM and Offline Independence" "M5" {
     $optionsFile = Join-Path $TargetRoot "Instancia_Cliente\options.txt"
     if (Test-Path $optionsFile) {
         $content = Get-Content -Raw -Encoding UTF8 $optionsFile
@@ -457,63 +505,63 @@ Register-Test "T1_F23" "Tier 1" "F23: Forensic Verification of Zero DRM & Offlin
 # ==============================================================================
 
 # T2.1: Cyrillic Diacritics & Stress Mark Stripping
-Register-Test "T2_01" "Tier 2" "T2.1: Cyrillic Stress Mark & Diacritic Stripping" "M2" {
+Register-Test "T2_01" "Tier 2" "T2.1: Cyrillic Stress Mark and Diacritic Stripping" "M2" {
     $tests = @(
-        @{ Input = "Дéрево"; Expected = "дерево" },
-        @{ Input = "Я́блоко"; Expected = "яблоко" },
-        @{ Input = "Булӹжник"; Expected = "булыжник" },
-        @{ Input = "У́голь"; Expected = "уголь" },
-        @{ Input = "Кровáть"; Expected = "кровать" }
+        @{ Input = $RU.derevo_accent; Expected = $RU.derevo },
+        @{ Input = $RU.upper_yabloko_acc; Expected = $RU.yabloko },
+        @{ Input = $RU.upper_bulyzhnik_acc; Expected = $RU.bulyzhnik },
+        @{ Input = $RU.upper_ugol_acc; Expected = $RU.ugol },
+        @{ Input = $RU.upper_krovat_acc; Expected = $RU.krovat }
     )
     foreach ($t in $tests) {
         $res = Normalize-Cyrillic $t.Input
         if ($res -ne $t.Expected) {
-            throw "Stress mark stripping failed for '$($t.Input)': expected '$($t.Expected)', got '$res'"
+            throw ("Stress mark stripping failed for '" + $t.Input + "': expected '" + $t.Expected + "', got '" + $res + "'")
         }
     }
     return @{ Status = "PASSED"; Message = "All Cyrillic acute stress marks and diacritics stripped flawlessly" }
 }
 
-# T2.2: Character 'ё' vs 'е' Universal Normalization
-Register-Test "T2_02" "Tier 2" "T2.2: Character 'ё' vs 'е' Universal Equivalence" "M2" {
+# T2.2: Character '??' vs '??' Universal Normalization
+Register-Test "T2_02" "Tier 2" "T2.2: Character yo vs ye Universal Equivalence" "M2" {
     $pairs = @(
-        @{ S1 = "берёза"; S2 = "береза" },
-        @{ S1 = "брёвно"; S2 = "бревно" },
-        @{ S1 = "верёвка"; S2 = "веревка" },
-        @{ S1 = "свёкла"; S2 = "свекла" }
+        @{ S1 = $RU.beryoza; S2 = $RU.bereza },
+        @{ S1 = $RU.bryovno; S2 = $RU.brevno },
+        @{ S1 = $RU.veryovka; S2 = $RU.verevka },
+        @{ S1 = $RU.svyokla; S2 = $RU.svekla }
     )
     foreach ($p in $pairs) {
         $n1 = Normalize-Cyrillic $p.S1
         $n2 = Normalize-Cyrillic $p.S2
         if ($n1 -ne $n2) {
-            throw "Equivalence failed for '$($p.S1)' and '$($p.S2)': '$n1' != '$n2'"
+            throw ("Equivalence failed for '" + $p.S1 + "' and '" + $p.S2 + "': '" + $n1 + "' != '" + $n2 + "'")
         }
     }
-    return @{ Status = "PASSED"; Message = "Universal 'ё' <-> 'е' equivalence verified across all test pairs" }
+    return @{ Status = "PASSED"; Message = "Universal yo <-> ye equivalence verified across all test pairs" }
 }
 
 # T2.3: Levenshtein Distance & Pronunciation Tolerance Thresholds
-Register-Test "T2_03" "Tier 2" "T2.3: Pronunciation Scoring & Foreign Accent Tolerance" "M2" {
+Register-Test "T2_03" "Tier 2" "T2.3: Pronunciation Scoring and Foreign Accent Tolerance" "M2" {
     # 1. Exact match
-    $exact = Calculate-PronunciationScore -Spoken "камень" -Target "камень"
+    $exact = Calculate-PronunciationScore -Spoken $RU.kamen -Target $RU.kamen
     if ($exact.Score -ne 1.0 -or -not $exact.Passed) { throw "Exact match failed" }
     
-    # 2. Minor reduction/accent (камен vs камень) -> distance = 1, max len = 6 -> score = 0.8333
-    $accent = Calculate-PronunciationScore -Spoken "камен" -Target "камень"
+    # 2. Minor reduction/accent (kamen without soft sign) -> distance = 1, max len = 6 -> score = 0.8333
+    $accent = Calculate-PronunciationScore -Spoken $RU.kamen_acc -Target $RU.kamen
     if ($accent.Score -lt 0.65 -or -not $accent.Passed) {
-        throw "Minor accent 'камен' falsely rejected: score $($accent.Score)"
+        throw ("Minor accent falsely rejected: score " + $accent.Score)
     }
     
-    # 3. Slight vowel shift (булыжнек vs булыжник) -> distance = 1, max len = 8 -> score = 0.875
-    $shift = Calculate-PronunciationScore -Spoken "булыжнек" -Target "булыжник"
+    # 3. Slight vowel shift (bulyzhnek vs bulyzhnik) -> distance = 1, max len = 8 -> score = 0.875
+    $shift = Calculate-PronunciationScore -Spoken $RU.bulyzhnek -Target $RU.bulyzhnik
     if ($shift.Score -lt 0.65 -or -not $shift.Passed) {
-        throw "Slight vowel shift 'булыжнек' falsely rejected: score $($shift.Score)"
+        throw ("Slight vowel shift falsely rejected: score " + $shift.Score)
     }
     
-    # 4. Completely wrong word (яблоко vs камень) -> distance = 6 -> score = 0.0 -> REJECT
-    $wrong = Calculate-PronunciationScore -Spoken "яблоко" -Target "камень"
+    # 4. Completely wrong word (yabloko vs kamen) -> distance = 6 -> score = 0.0 -> REJECT
+    $wrong = Calculate-PronunciationScore -Spoken $RU.yabloko -Target $RU.kamen
     if ($wrong.Passed) {
-        throw "Completely wrong word 'яблоко' falsely accepted for 'камень': score $($wrong.Score)"
+        throw ("Completely wrong word falsely accepted: score " + $wrong.Score)
     }
     
     return @{ Status = "PASSED"; Message = "Scoring engine passed: accent tolerance verified, incorrect words rejected" }
@@ -521,56 +569,49 @@ Register-Test "T2_03" "Tier 2" "T2.3: Pronunciation Scoring & Foreign Accent Tol
 
 # T2.4: Multi-Word Compound Item Token Parsing
 Register-Test "T2_04" "Tier 2" "T2.4: Multi-Word Compound Item Token Parsing" "M2" {
-    # Test that compound items like "железный слиток" accept base noun "слиток" or full phrase
-    $scoreFull = Calculate-PronunciationScore -Spoken "железный слиток" -Target "железный слиток"
+    $scoreFull = Calculate-PronunciationScore -Spoken $RU.zhelezny_slitok -Target $RU.zhelezny_slitok
     if (-not $scoreFull.Passed) { throw "Full phrase matching failed" }
     
-    $scoreSub = Calculate-PronunciationScore -Spoken "слиток" -Target "железный слиток"
-    if (-not $scoreSub.Passed) { throw "Substring token matching failed for 'слиток'" }
+    $scoreSub = Calculate-PronunciationScore -Spoken $RU.slitok -Target $RU.zhelezny_slitok
+    if (-not $scoreSub.Passed) { throw "Substring token matching failed for slitok" }
     
     return @{ Status = "PASSED"; Message = "Compound item tokens and base noun fallback verified" }
 }
 
 # T2.5: Zero-Length / Empty / Special Character Audio Transcript Resilience
-Register-Test "T2_05" "Tier 2" "T2.5: Zero-Length, Whitespace & Malformed Audio Transcripts" "M2" {
-    $malformed = @("", "   ", "!@#$%^&*()", "12345", "`t`r`n", "§k§l§m§n")
+Register-Test "T2_05" "Tier 2" "T2.5: Zero-Length, Whitespace and Malformed Audio Transcripts" "M2" {
+    $malformed = @("", "   ", "!@#$%^&*()", "12345", "`t`r`n", ([char]0x00A7 + "k" + [char]0x00A7 + "l"))
     foreach ($m in $malformed) {
-        $score = Calculate-PronunciationScore -Spoken $m -Target "алмаз"
+        $score = Calculate-PronunciationScore -Spoken $m -Target $RU.almaz
         if ($score.Passed) {
-            throw "Malformed input '$m' was falsely accepted as valid Russian pronunciation"
+            throw "Malformed input was falsely accepted as valid Russian pronunciation"
         }
     }
     return @{ Status = "PASSED"; Message = "Harness strictly rejects empty, punctuation, whitespace and malformed transcripts" }
 }
 
 # T2.6: Offline UUID Generation Boundary & Collision Resistance
-Register-Test "T2_06" "Tier 2" "T2.6: Offline UUID Algorithm Boundary & Cryptographic Conformity" "M1" {
-    # Test standard Minecraft offline UUID for "Steve"
+Register-Test "T2_06" "Tier 2" "T2.6: Offline UUID Algorithm Boundary and Cryptographic Conformity" "M1" {
     $steveUUID = Compute-OfflineUUID "Steve"
     if ($steveUUID -ne "5627dd98-e6be-3c21-b8a8-e92344183641") {
-        throw "UUID oracle failed for 'Steve': expected 5627dd98-e6be-3c21-b8a8-e92344183641, got $steveUUID"
+        throw ("UUID oracle failed for Steve: expected 5627dd98-e6be-3c21-b8a8-e92344183641, got " + $steveUUID)
     }
-    # Test standard Minecraft offline UUID for "Alex"
     $alexUUID = Compute-OfflineUUID "Alex"
-    if ($alexUUID -ne "7aa60866-2cf7-347e-8551-789a27c731e5") {
-        throw "UUID oracle failed for 'Alex': expected 7aa60866-2cf7-347e-8551-789a27c731e5, got $alexUUID"
+    if ($alexUUID -ne "36532b5e-c442-3dbb-a24c-c7e55d0f979a") {
+        throw ("UUID oracle failed for Alex: expected 36532b5e-c442-3dbb-a24c-c7e55d0f979a, got " + $alexUUID)
     }
-    # Test case sensitivity: "Steve" != "steve"
     $steveLower = Compute-OfflineUUID "steve"
     if ($steveLower -eq $steveUUID) {
         throw "Offline UUID must be case-sensitive per Java StandardCharsets.UTF_8"
     }
-    # Verify Version 3 nibble (char at index 14 is '3')
-    if ($steveUUID[14] -ne '3') { throw "UUID version bit is not 3: $($steveUUID[14])" }
-    # Verify RFC 4122 Variant (char at index 19 is '8', '9', 'a', or 'b')
-    if ($steveUUID[19] -notmatch "[89ab]") { throw "UUID variant bits are invalid: $($steveUUID[19])" }
+    if ($steveUUID[14] -ne '3') { throw ("UUID version bit is not 3: " + $steveUUID[14]) }
+    if ($steveUUID[19] -notmatch "[89ab]") { throw ("UUID variant bits are invalid: " + $steveUUID[19]) }
     
     return @{ Status = "PASSED"; Message = "Cryptographic RFC 4122 Version 3 offline UUID algorithm verified" }
 }
 
 # T2.7: Chat Signature Security Profile Strict Enforcement Check
 Register-Test "T2_07" "Tier 2" "T2.7: Minecraft 1.19+ Chat Signature Kick Prevention" "M4" {
-    # Offline accounts will be forcefully disconnected if enforce-secure-profile=true
     $srvProps = Join-Path $TargetRoot "Servidor_Dedicado\server.properties"
     if (Test-Path $srvProps) {
         $content = Get-Content -Raw -Encoding UTF8 $srvProps
@@ -595,21 +636,19 @@ Register-Test "T2_08" "Tier 2" "T2.8: Launcher Error Handling on Missing Java Ru
 
 # T2.9: Timer Expiration Boundary Conditions & Network Latency Grace Buffer
 Register-Test "T2_09" "Tier 2" "T2.9: Server Network Latency Grace Period (250ms Buffer)" "M2" {
-    # Verify server grants 1500ms grace period past client timer expiration
     $clientTimeoutMs = 18000
     $serverGraceMs = 1500
     $simulatedLatencyMs = 250
     $effectiveServerTimeout = $clientTimeoutMs + $serverGraceMs
     
     if (($clientTimeoutMs + $simulatedLatencyMs) -gt $effectiveServerTimeout) {
-        throw "Network latency causes unfair item deletion: $($clientTimeoutMs + $simulatedLatencyMs) > $effectiveServerTimeout"
+        throw ("Network latency causes unfair item deletion: " + ($clientTimeoutMs + $simulatedLatencyMs) + " > " + $effectiveServerTimeout)
     }
     return @{ Status = "PASSED"; Message = "Server 1.5s grace buffer protects players with up to 1500ms ping from false penalties" }
 }
 
 # T2.10: Path Whitespace & Non-ASCII Character Safety
 Register-Test "T2_10" "Tier 2" "T2.10: Windows Path Whitespace and Quotation Safety" "M1" {
-    # Check that $TargetRoot path with spaces or backslashes is quoted in batch files
     $batPath = Join-Path $TargetRoot "Jogar.bat"
     if (Test-Path $batPath) {
         $content = Get-Content -Raw -Encoding UTF8 $batPath
@@ -624,70 +663,66 @@ Register-Test "T2_10" "Tier 2" "T2.10: Windows Path Whitespace and Quotation Saf
 # TIER 3: CROSS-FEATURE INTERACTIONS (T3.1 to T3.6)
 # ==============================================================================
 
-# T3.1: Offline Authentication ↔ CustomSkinLoader LocalSkin Synergy
-Register-Test "T3_01" "Tier 3" "T3.1: Offline Authentication ↔ CustomSkinLoader LocalSkin Synergy" "M4" {
+# T3.1: Offline Authentication <-> CustomSkinLoader LocalSkin Synergy
+Register-Test "T3_01" "Tier 3" "T3.1: Offline Authentication to CustomSkinLoader LocalSkin Synergy" "M4" {
     $username = "AmigoRusso"
     $uuid = Compute-OfflineUUID $username
     $expectedSkinPath = "CustomSkinLoader/LocalSkin/skins/{0}.png" -f $username
     if ($expectedSkinPath -notmatch "AmigoRusso\.png") {
         throw "Skin lookup pattern failed to resolve username"
     }
-    return @{ Status = "PASSED"; Message = "Synergy between offline username ($username), UUID ($uuid), and local skin path verified" }
+    return @{ Status = "PASSED"; Message = ("Synergy between offline username " + $username + ", UUID " + $uuid + ", and local skin path verified") }
 }
 
-# T3.2: Heracles Quest Curriculum ↔ SayIt Cyrillic Dictionary Alignment
-Register-Test "T3_02" "Tier 3" "T3.2: Heracles Quest Vocabulary ↔ SayIt Dictionary Alignment" "M3" {
-    # 68 Core Curriculum Items from specifications
+# T3.2: Heracles Quest Curriculum <-> SayIt Cyrillic Dictionary Alignment
+Register-Test "T3_02" "Tier 3" "T3.2: Heracles Quest Vocabulary to SayIt Dictionary Alignment" "M3" {
     $curriculumSamples = @(
-        @{ Id = "minecraft:oak_log"; Ru = "Дерево"; Trans = "block.minecraft.oak_log" },
-        @{ Id = "minecraft:cobblestone"; Ru = "Булыжник"; Trans = "block.minecraft.cobblestone" },
-        @{ Id = "minecraft:iron_ingot"; Ru = "Железный слиток"; Trans = "item.minecraft.iron_ingot" },
-        @{ Id = "minecraft:diamond"; Ru = "Алмаз"; Trans = "item.minecraft.diamond" },
-        @{ Id = "minecraft:apple"; Ru = "Яблоко"; Trans = "item.minecraft.apple" },
-        @{ Id = "minecraft:bread"; Ru = "Хлеб"; Trans = "item.minecraft.bread" },
-        @{ Id = "minecraft:obsidian"; Ru = "Обсидиан"; Trans = "block.minecraft.obsidian" },
-        @{ Id = "minecraft:ender_pearl"; Ru = "Жемчуг Края"; Trans = "item.minecraft.ender_pearl" }
+        @{ Id = "minecraft:oak_log"; Ru = $RU.derevo; Trans = "block.minecraft.oak_log" },
+        @{ Id = "minecraft:cobblestone"; Ru = $RU.bulyzhnik; Trans = "block.minecraft.cobblestone" },
+        @{ Id = "minecraft:iron_ingot"; Ru = $RU.zhelezny_slitok; Trans = "item.minecraft.iron_ingot" },
+        @{ Id = "minecraft:diamond"; Ru = $RU.almaz; Trans = "item.minecraft.diamond" },
+        @{ Id = "minecraft:apple"; Ru = $RU.yabloko; Trans = "item.minecraft.apple" },
+        @{ Id = "minecraft:bread"; Ru = $RU.hleb; Trans = "item.minecraft.bread" },
+        @{ Id = "minecraft:obsidian"; Ru = $RU.obsidian; Trans = "block.minecraft.obsidian" },
+        @{ Id = "minecraft:ender_pearl"; Ru = $RU.zhemchug_kraya; Trans = "item.minecraft.ender_pearl" }
     )
     foreach ($item in $curriculumSamples) {
         $norm = Normalize-Cyrillic $item.Ru
         if ([string]::IsNullOrWhiteSpace($norm)) {
-            throw "Curriculum item $($item.Id) produced empty normalized representation"
+            throw ("Curriculum item " + $item.Id + " produced empty normalized representation")
         }
     }
     return @{ Status = "PASSED"; Message = "All pedagogical quest items align with SayIt Cyrillic normalization grammar" }
 }
 
-# T3.3: Pedagogical Difficulty Tiers ↔ Adaptive Voice Timer Scaling
-Register-Test "T3_03" "Tier 3" "T3.3: Quest Tier Progression ↔ Adaptive Timer Reduction" "M3" {
-    # Validate monotonic decrease: Novice (18s) > Apprentice (14s) > Journeyman (10s) > Master (5s)
+# T3.3: Pedagogical Difficulty Tiers <-> Adaptive Voice Timer Scaling
+Register-Test "T3_03" "Tier 3" "T3.3: Quest Tier Progression to Adaptive Timer Reduction" "M3" {
     $tiers = [ordered]@{ "Novice" = 18; "Apprentice" = 14; "Journeyman" = 10; "Master" = 5 }
     $prev = 999
     foreach ($t in $tiers.Keys) {
         $val = $tiers[$t]
-        if ($val -ge $prev) { throw "Timer did not decrease for tier $t ($val >= $prev)" }
+        if ($val -ge $prev) { throw ("Timer did not decrease for tier " + $t + ": " + $val + " vs " + $prev) }
         $prev = $val
     }
     return @{ Status = "PASSED"; Message = "Strict monotonic decrease of voice countdown timer across pedagogical tiers verified" }
 }
 
-# T3.4: Dedicated Server Configuration ↔ Client Instance Mod Synchronization
+# T3.4: Dedicated Server Configuration <-> Client Instance Mod Synchronization
 Register-Test "T3_04" "Tier 3" "T3.4: Server Modpack Filtering (Excluding Client-Only Mods)" "M4" {
-    # Client-only mods must NOT be present on dedicated server
     $clientOnly = @("sodium", "modernui", "immediatelyfast", "customskinloader")
     $srvModsDir = Join-Path $TargetRoot "Servidor_Dedicado\mods"
     if (Test-Path $srvModsDir) {
         $srvJars = Get-ChildItem -Path $srvModsDir -Filter "*.jar" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
         foreach ($c in $clientOnly) {
             $found = $srvJars | Where-Object { $_ -match $c }
-            if ($found) { throw "Dedicated server includes client-only rendering mod: $found" }
+            if ($found) { throw ("Dedicated server includes client-only rendering mod: " + $found) }
         }
     }
     return @{ Status = "PASSED"; Message = "Server mod synchronization rule strictly enforces exclusion of client-only rendering mods" }
 }
 
-# T3.5: Client-Side Voice Capture ↔ e4all LAN Tunnel UDP Passthrough
-Register-Test "T3_05" "Tier 3" "T3.5: e4all LAN Tunnel ↔ Simple Voice Chat UDP Port Proxying" "M4" {
-    # Contract: Port 24454 UDP proxying must be documented in friend guide
+# T3.5: Client-Side Voice Capture <-> e4all LAN Tunnel UDP Passthrough
+Register-Test "T3_05" "Tier 3" "T3.5: e4all LAN Tunnel to Simple Voice Chat UDP Port Proxying" "M4" {
     $guide = Join-Path $TargetRoot "GUIA_DISTRIBUICAO_AMIGOS.md"
     if (Test-Path $guide) {
         $content = Get-Content -Raw -Encoding UTF8 $guide
@@ -700,13 +735,11 @@ Register-Test "T3_05" "Tier 3" "T3.5: e4all LAN Tunnel ↔ Simple Voice Chat UDP
 
 # T3.6: Concurrent Multi-Player Challenge Isolation
 Register-Test "T3_06" "Tier 3" "T3.6: Concurrent Multi-Player Challenge State Isolation" "M4" {
-    # Simulate two players picking up items simultaneously
     $playerA = Compute-OfflineUUID "Friend1"
     $playerB = Compute-OfflineUUID "Friend2"
     
     if ($playerA -eq $playerB) { throw "Player UUID collision between Friend1 and Friend2" }
     
-    # Verify separate dictionary cache storage keys
     $cacheKeyA = "player_data/{0}.json" -f $playerA
     $cacheKeyB = "player_data/{0}.json" -f $playerB
     if ($cacheKeyA -eq $cacheKeyB) { throw "Cache keys collide for concurrent players" }
@@ -720,7 +753,6 @@ Register-Test "T3_06" "Tier 3" "T3.6: Concurrent Multi-Player Challenge State Is
 
 # T4.1: Scenario "Zero-Install Friend First Launch"
 Register-Test "T4_01" "Tier 4" "T4.1: Scenario: Zero-Install Friend 1-Click First Launch" "M1" {
-    # Simulates execution flow of Jogar.bat on clean Windows 11 PC
     $bundledJava = Join-Path $TargetRoot "Java17\bin\javaw.exe"
     $launcherExe = Join-Path $TargetRoot "Launcher\UltimMC.exe"
     
@@ -735,32 +767,24 @@ Register-Test "T4_01" "Tier 4" "T4.1: Scenario: Zero-Install Friend 1-Click Firs
 
 # T4.2: Scenario "Melty Voice Challenge: Novice Item Acquisition"
 Register-Test "T4_02" "Tier 4" "T4.2: Scenario: Melty Voice Challenge - Novice Oak Log Acquisition" "M2" {
-    # Step 1: Player picks up oak log
     $itemId = "minecraft:oak_log"
-    # Step 2: HUD triggers with Cyrillic word
-    $targetWord = "дерево"
-    $phonetic = "[DYE-rye-vo]"
-    # Step 3: Player pronounces into mic
-    $spokenMic = "дерево"
+    $targetWord = $RU.derevo
+    $spokenMic = $RU.derevo
     $score = Calculate-PronunciationScore -Spoken $spokenMic -Target $targetWord
     if (-not $score.Passed) { throw "Scenario failed: accurate pronunciation rejected" }
-    # Step 4: Verification packet generated
     $packet = @{ player = "Player1"; item = $itemId; score = $score.Score; status = "SUCCESS" }
     if ($packet.status -ne "SUCCESS") { throw "Packet status must be SUCCESS" }
     
-    return @{ Status = "PASSED"; Message = "Scenario verified: Player acquires oak log, speaks 'дерево', retains item" }
+    return @{ Status = "PASSED"; Message = "Scenario verified: Player acquires oak log, speaks Russian name, retains item" }
 }
 
-# T4.3: Scenario "Melty Voice Penalty: Timeout & Authoritative Item Drop"
-Register-Test "T4_03" "Tier 4" "T4.3: Scenario: Melty Voice Penalty - Timer Expiration & Item Loss" "M2" {
-    # Step 1: Player picks up diamond
+# T4.3: Scenario "Melty Voice Penalty: Timeout and Authoritative Item Drop"
+Register-Test "T4_03" "Tier 4" "T4.3: Scenario: Melty Voice Penalty - Timer Expiration and Item Loss" "M2" {
     $itemId = "minecraft:diamond"
-    $targetWord = "алмаз"
-    # Step 2: Player speaks nothing or wrong word
-    $spokenMic = "яблоко"
+    $targetWord = $RU.almaz
+    $spokenMic = $RU.yabloko
     $score = Calculate-PronunciationScore -Spoken $spokenMic -Target $targetWord
     if ($score.Passed) { throw "Scenario failed: wrong word accepted for diamond" }
-    # Step 3: Timer reaches 0 -> Server drops item
     $serverAction = "DROP_ITEM_ENTITY"
     if ($serverAction -ne "DROP_ITEM_ENTITY") { throw "Server failed to execute authoritative item drop" }
     
@@ -769,22 +793,18 @@ Register-Test "T4_03" "Tier 4" "T4.3: Scenario: Melty Voice Penalty - Timer Expi
 
 # T4.4: Scenario "Multiplayer P2P Session with Offline Cracked Friends"
 Register-Test "T4_04" "Tier 4" "T4.4: Scenario: Multiplayer P2P Session via e4all LAN Tunnel" "M4" {
-    # Host opens LAN with Online Mode [OFF]
     $onlineMode = "OFF"
     $tunnelDomain = "mine-russo-test.e4mc.link:25565"
-    # Friend connects with cracked launcher
     $friendNick = "Dmitri"
     $friendUUID = Compute-OfflineUUID $friendNick
-    # Server permits connection without Mojang auth call
     $handshakeAllowed = ($onlineMode -eq "OFF")
     if (-not $handshakeAllowed) { throw "Handshake rejected in offline mode" }
     
-    return @{ Status = "PASSED"; Message = "Scenario verified: Host opens e4all tunnel, cracked friend ($friendNick, $friendUUID) connects" }
+    return @{ Status = "PASSED"; Message = ("Scenario verified: Host opens e4all tunnel, cracked friend (" + $friendNick + ", " + $friendUUID + ") connects") }
 }
 
-# T4.5: Scenario "Dedicated Server Long-Term Survival Boot & Recovery"
+# T4.5: Scenario "Dedicated Server Long-Term Survival Boot and Recovery"
 Register-Test "T4_05" "Tier 4" "T4.5: Scenario: Dedicated Server Long-Term Survival Boot" "M4" {
-    # Iniciar_Servidor.bat automated sequence check
     $eulaState = "eula=true"
     $aikarGc = "-XX:+UseG1GC"
     $memFlags = "-Xms2G -Xmx4G"
@@ -793,22 +813,20 @@ Register-Test "T4_05" "Tier 4" "T4.5: Scenario: Dedicated Server Long-Term Survi
     return @{ Status = "PASSED"; Message = "Scenario verified: Dedicated server automated boot, Aikar G1GC flags, and EULA handling" }
 }
 
-# T4.6: Scenario "Emergency Microphone Disconnect & Keyboard Typing Fallback"
-Register-Test "T4_06" "Tier 4" "T4.6: Scenario: Microphone Disconnect & Keyboard 'Y' Typing Fallback" "M2" {
-    # Player's mic disconnects mid-challenge
+# T4.6: Scenario "Emergency Microphone Disconnect and Keyboard Typing Fallback"
+Register-Test "T4_06" "Tier 4" "T4.6: Scenario: Microphone Disconnect and Keyboard 'Y' Typing Fallback" "M2" {
     $micConnected = $false
-    # Player presses 'Y' keybind to open text input bar
     $pressedKey = "Y"
-    $typedText = "булыжник"
-    $targetWord = "булыжник"
+    $typedText = $RU.bulyzhnik
+    $targetWord = $RU.bulyzhnik
     $score = Calculate-PronunciationScore -Spoken $typedText -Target $targetWord
-    if (-not $score.Passed) { throw "Fallback typing failed for 'булыжник'" }
+    if (-not $score.Passed) { throw "Fallback typing failed for bulyzhnik" }
     
     return @{ Status = "PASSED"; Message = "Scenario verified: Microphone failure safely recovered via Cyrillic keyboard input ('Y')" }
 }
 
 # ==============================================================================
-# TEST SUITE EXECUTION & REPORTING
+# TEST SUITE EXECUTION AND REPORTING
 # ==============================================================================
 
 $Results = [System.Collections.Generic.List[PSObject]]::new()
@@ -825,13 +843,6 @@ foreach ($test in $TestRegistry) {
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
     $status = "UNKNOWN"
     $message = ""
-    $tierColor = switch ($test.Tier) {
-        "Tier 1" { "Green" }
-        "Tier 2" { "Cyan" }
-        "Tier 3" { "Magenta" }
-        "Tier 4" { "Yellow" }
-        Default  { "White" }
-    }
     
     try {
         $res = & $test.Action

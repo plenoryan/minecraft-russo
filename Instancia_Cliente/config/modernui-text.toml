@@ -1,0 +1,50 @@
+# Modern UI Text Engine Configuration (TrueType / DirectWrite Cyrillic Support)
+[text]
+    # Allow text renderer to drop shadow, setting to false can improve performance.
+    allowShadow = true
+    # Fix resolution level at 2.
+    fixedResolution = false
+    # Base font size for layout calculation.
+    baseFontSize = 12.0
+    # Baseline shift
+    baselineShift = 0.0
+    # Shadow offset
+    shadowOffset = 0.75
+    # Outline offset
+    outlineOffset = 0.75
+    # Bitmap offset
+    bitmapOffset = 0.0
+    # Cache lifespan
+    cacheLifespan = 60
+    # Text direction: "DEFAULT", "LTR", "RTL"
+    textDirection = "DEFAULT"
+    # Use text shaders in world
+    useTextShadersInWorld = true
+    # Default font behavior: "ALL" forces TrueType vector rendering for all texts including Cyrillic
+    defaultFontBehavior = "ALL"
+    # Default font rule set
+    defaultFontRuleSet = ["^minecraft:font\\/(nonlatin_european|accented|ascii|element_ideographs|cjk_punctuations|ellipsis|2em_dash)\\.png$", "^minecraft:include\\/space \\/ minecraft:space$", "^minecraft:font\\/(mcsans|emoji)_05_00\\d.png$"]
+    # Use component cache
+    useComponentCache = true
+    # Allow async layout
+    allowAsyncLayout = true
+    # Line break style: "NORMAL", "LOOSE", "STRICT"
+    lineBreakStyle = "NORMAL"
+    # Line break word style: "NORMAL", "PHRASE"
+    lineBreakWordStyle = "NORMAL"
+    # Smart Signed Distance Field (SDF) shaders
+    smartSDFShaders = true
+    # Compute device font size
+    computeDeviceFontSize = true
+    # Allow SDF text in 2D interfaces
+    allowSDFTextIn2D = true
+    # Tweak experience text
+    tweakExperienceText = true
+    # Subpixel anti-aliasing for smooth Cyrillic letters
+    antiAliasing = true
+    # Linear metrics for clear proportional text
+    linearMetrics = true
+    # Minimum pixel density for SDF
+    minPixelDensityForSDF = 4
+    # Linear sampling A8 atlas
+    linearSamplingA8Atlas = false

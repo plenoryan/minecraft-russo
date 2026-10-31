@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "55_zelye"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 4: Вáрочная стóйка (Suporte de Poções)",
+                    "subtitle":  "Pronúncia: [VAH-rach-na-ya STOY-ka] | Suporte de Poções • Feminino (ж.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eВáрочная стóйка\u003c/gold\u003e (Suporte de Poções)",
+                                        "Gênero Gramatical: \u003caqua\u003eFeminino (ж.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[VAH-rach-na-ya STOY-ka]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Expressão composta com concordância de adjetivo feminino terminado em -ая.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e5 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Вáрочная стóйка»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:brewing_stand"
+                             },
+                    "groups":  {
+                                   "tier4_master":  {
+                                                        "position":  [
+                                                                         144,
+                                                                         0
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_56_varochnaya_stoyka":  {
+                                                        "type":  "heracles:item",
+                                                        "item":  "minecraft:brewing_stand",
+                                                        "amount":  1,
+                                                        "collection":  "AUTOMATIC",
+                                                        "title":  "Segure ou colete Вáрочная стóйка (Suporte de Poções)"
+                                                    }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

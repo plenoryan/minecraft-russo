@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "17_khleb"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 2: Пшенúца (Trigo)",
+                    "subtitle":  "Pronúncia: [pshe-NEE-tsa] | Trigo • Feminino (ж.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eПшенúца\u003c/gold\u003e (Trigo)",
+                                        "Gênero Gramatical: \u003caqua\u003eFeminino (ж.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[pshe-NEE-tsa]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Encontro consonantal \u0027пш\u0027 duro. A letra \u0027ц\u0027 soa como [ts].",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e12 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Пшенúца»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:wheat"
+                             },
+                    "groups":  {
+                                   "tier2_apprentice":  {
+                                                            "position":  [
+                                                                             0,
+                                                                             48
+                                                                         ]
+                                                        }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_20_pshenitsa":  {
+                                                "type":  "heracles:item",
+                                                "item":  "minecraft:wheat",
+                                                "amount":  1,
+                                                "collection":  "AUTOMATIC",
+                                                "title":  "Segure ou colete Пшенúца (Trigo)"
+                                            }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

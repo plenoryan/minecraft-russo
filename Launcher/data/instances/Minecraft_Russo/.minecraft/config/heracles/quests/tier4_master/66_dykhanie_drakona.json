@@ -1,0 +1,56 @@
+{
+    "dependencies":  [
+                         "62_oko_endera"
+                     ],
+    "settings":  {
+                     "hidden":  false,
+                     "unlockable":  true
+                 },
+    "display":  {
+                    "title":  "Tier 4: Дыхáние дракона (Bafo de Dragão)",
+                    "subtitle":  "Pronúncia: [dy-KHAH-nee-ye dra-KO-na] | Bafo de Dragão • Neutro (с.р.)",
+                    "description":  [
+                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "",
+                                        "Item: \u003cgold\u003eДыхáние дракона\u003c/gold\u003e (Bafo de Dragão)",
+                                        "Gênero Gramatical: \u003caqua\u003eNeutro (с.р.)\u003c/aqua\u003e",
+                                        "Guia de Pronúncia: \u003cyellow\u003e[dy-KHAH-nee-ye dra-KO-na]\u003c/yellow\u003e",
+                                        "",
+                                        "§eRegra Fonética \u0026 Gramática:§r",
+                                        "Substantivo neutro abstrato terminado em -ие. \u0027Дракона\u0027 é genitivo de Дракон.",
+                                        "",
+                                        "§cDesafio de Voz (Mecânica Melty):§r",
+                                        "Segure o item na mão. Você tem \u003cgold\u003e5 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Дыхáние дракона»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "",
+                                        "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
+                                    ],
+                    "icon":  {
+                                 "type":  "heracles:item",
+                                 "item":  "minecraft:dragon_breath"
+                             },
+                    "groups":  {
+                                   "tier4_master":  {
+                                                        "position":  [
+                                                                         192,
+                                                                         96
+                                                                     ]
+                                                    }
+                               }
+                },
+    "tasks":  {
+                  "adquirir_66_dykhanie_drakona":  {
+                                                       "type":  "heracles:item",
+                                                       "item":  "minecraft:dragon_breath",
+                                                       "amount":  1,
+                                                       "collection":  "AUTOMATIC",
+                                                       "title":  "Segure ou colete Дыхáние дракона (Bafo de Dragão)"
+                                                   }
+              },
+    "rewards":  {
+                    "xp_recompensa":  {
+                                          "type":  "heracles:xp",
+                                          "xptype":  "POINTS",
+                                          "amount":  25
+                                      }
+                }
+}

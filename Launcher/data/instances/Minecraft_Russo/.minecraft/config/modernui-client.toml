@@ -1,0 +1,16 @@
+# Modern UI Client Interface Configuration
+[client]
+    # Primary font family for Cyrillic and Latin text rendering
+    firstFontFamily = "Segoe UI"
+    # Fallback font families in order of priority
+    fallbackFontFamilyList = ["Segoe UI", "Inter", "Arial", "sans-serif"]
+    # Font scale (1.0 = standard)
+    fontScale = 1.0
+    # Enable linear metrics
+    linearMetrics = true
+    # Tooltip improvements
+    tooltip = true
+    roundedTooltip = true
+    tooltipLineWrapping = true
+    centerTooltipTitle = false
+    adaptiveTooltipColors = true
