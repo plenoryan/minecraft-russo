@@ -40,8 +40,8 @@ ao:2
 prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:true
-resourcePacks:[]
-incompatibleResourcePacks:[]
+resourcePacks:["vanilla","file/Russian_Bilingual_Educational_Pack"]
+incompatibleresourcePacks:["vanilla","file/Russian_Bilingual_Educational_Pack"]
 lastServer:
 lang:ru_ru
 soundCategory_master:1.0

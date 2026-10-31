@@ -1,4 +1,4 @@
-# setup_progression.ps1 - Automated Setup for Russian Pedagogical Progression & Font Stack (Fabric 1.20.1)
+﻿# setup_progression.ps1 - Automated Setup for Russian Pedagogical Progression & Font Stack (Fabric 1.20.1)
 [CmdletBinding()]
 param (
     [string]$BaseDir = "F:\Jogos\Mine",
@@ -1440,9 +1440,6 @@ foreach ($lDir in $launcherInstanceDirs) {
         robocopy (Join-Path $instanceDir "config") (Join-Path $lDir "config") /E /NFL /NDL /NJH /NJS | Out-Null
         robocopy (Join-Path $instanceDir "kubejs") (Join-Path $lDir "kubejs") /E /NFL /NDL /NJH /NJS | Out-Null
         robocopy (Join-Path $instanceDir "resourcepacks") (Join-Path $lDir "resourcepacks") /E /NFL /NDL /NJH /NJS | Out-Null
-        if (Test-Path (Join-Path $instanceDir "options.txt")) {
-            Copy-Item -Path (Join-Path $instanceDir "options.txt") -Destination (Join-Path $lDir "options.txt") -Force | Out-Null
-        }
         Write-Host "  [OK] Sincronizado com Launcher: $lDir" -ForegroundColor Green
     }
 }
@@ -1453,4 +1450,6 @@ Write-Host " - 10 Mods Educacionais e Font Engine em mods\" -ForegroundColor Gre
 Write-Host " - 68 Quests do Heracles em UTF-8 nos 4 Tiers" -ForegroundColor Green
 Write-Host " - Modern UI com DirectWrite / FreeType / Segoe UI" -ForegroundColor Green
 Write-Host " - Tooltips Bilingues no KubeJS e Resource Pack" -ForegroundColor Green
-Write-Host "======================================================================" -Fo
+Write-Host "======================================================================" -ForegroundColor Green
+
+exit 0
