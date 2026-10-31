@@ -37,8 +37,22 @@
   ```powershell
   powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\verify_m3.ps1"
   ```
+- **Teste de Verificação M4 (Multiplayer, Skins Offline e Empacotamento):**
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\verify_m4.ps1"
+  ```
+- **Provisionamento Multiplayer e Servidor Dedicado (M4):**
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\setup_multiplayer.ps1"
+  ```
+- **Bateria Canônica de Testes E2E (Modo Estrito):**
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\tests\run_e2e_tests.ps1" -Strict
+  ```
 - **Execução do Cliente:**
   - Clique duplo em `F:\Jogos\Mine\Jogar.bat`
+- **Execução do Servidor Dedicado:**
+  - Clique duplo em `F:\Jogos\Mine\Iniciar_Servidor.bat`
 
 ---
 
@@ -83,4 +97,16 @@
 ### L10. Divergência de Nomenclatura em Traduções Oficiais do ru_ru.json
 - **Armadilha:** Em especificações informais da comunidade, itens como Pérola do Fim são descritos como "Жемчуг Края". Porém, no asset oficial do Minecraft 1.20.1 (`ru_ru.json`), o valor canônico da chave `item.minecraft.ender_pearl` é `Эндер-жемчуг`.
 - **Solução:** Os testes de validação devem sempre extrair as strings oficiais diretamente de `assets/minecraft/lang/ru_ru.json` para assegurar fidelidade estrita à UI nativa do jogo.
+
+### L11. NTFS Junctions e Conflito de Cópia Circular (IOException)
+- **Armadilha:** A pasta `Launcher\instances\Minecraft_Russo\.minecraft\mods` e `config` são junctions NTFS que apontam diretamente para `Instancia_Cliente\mods` e `config`. Ao tentar copiar arquivos entre cliente e lançador em scripts de setup, o PowerShell tenta sobrescrever o arquivo sobre si mesmo gerando `IOException: O processo não pode acessar o arquivo porque ele está sendo usado por outro processo`.
+- **Solução:** Detectar previamente se o diretório de destino é uma Junction (`(Get-Item $dir).LinkType -eq 'Junction'`) e ignorar a cópia redundante.
+
+### L12. Dependência de Versão do Fabric em Forks do e4mc (e4all)
+- **Armadilha:** Builds mais recentes (2.2.0/2.3.0) do mod `e4all` introduziram dependências de runtime do Minecraft 1.21+ (`>=26.1-`), gerando falhas de resolução de mixins e bloqueio de boot em instâncias 1.20.1 Fabric.
+- **Solução:** Utilizar a versão estável e canônica `e4all-fabric-1.6.4.jar`, que declara compatibilidade nativa com Minecraft `>=1.18` e Fabric Loader `>=0.14.0`, mantendo o switch de `Online Mode: [OFF]` e o proxying UDP de voz para Simple Voice Chat.
+
+### L13. Segregação Estrita de Mods Client-Only em Servidores Dedicados Fabric
+- **Armadilha:** Mods de otimização de renderização gráfica e aceleração de fontes (como Sodium, Modern UI, ImmediatelyFast e CustomSkinLoader) contêm mixins exclusivos do ambiente cliente (`environment: client`). Incluí-los na pasta `mods` do servidor dedicado causa `ClassNotFoundException` e encerramento abrupto na inicialização.
+- **Solução:** O script de provisionamento (`setup_multiplayer.ps1`) filtra estritamente a pasta `Servidor_Dedicado\mods\`, mantendo apenas mods universais (`fabric-api`, `sayit`, `lithium`, `ferritecore`, `fabrictailor`).
 

@@ -1,0 +1,26 @@
+﻿{
+  "version": "14.18",
+  "skinLoading": {
+    "loadList": [
+      {
+        "name": "LocalSkin",
+        "type": "Local",
+        "skin": "CustomSkinLoader/LocalSkin/skins/{USERNAME}.png",
+        "cape": "CustomSkinLoader/LocalSkin/capes/{USERNAME}.png",
+        "elytra": "CustomSkinLoader/LocalSkin/elytras/{USERNAME}.png"
+      },
+      {
+        "name": "ElyBy",
+        "type": "ElyByAPI",
+        "root": "https://ely.by/"
+      },
+      {
+        "name": "Mojang",
+        "type": "MojangAPI"
+      }
+    ]
+  },
+  "enableSkull": true,
+  "enableDynamicSkull": true,
+  "cacheExpiry": 2592000
+}
