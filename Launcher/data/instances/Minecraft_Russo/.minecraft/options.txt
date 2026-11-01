@@ -1,4 +1,4 @@
-version:3465
+﻿version:3465
 autoJump:false
 operatorItemsTab:false
 autoSuggestions:true
@@ -42,7 +42,7 @@ ao:true
 prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:"true"
-resourcePacks:["vanilla","file/Russian_Bilingual_Educational_Pack","fabric"]
+resourcePacks:["vanilla","fabric"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:pt_br
