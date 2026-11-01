@@ -498,7 +498,7 @@
         },
         {
             "base": "meta",
-            "etag": "\"dmjw7cywdhsi1bn-gzip\"",
+            "etag": "\"dmjw7cywdhsi1bn\"",
             "last_changed_timestamp": 1793538683965,
             "md5sum": "00b51d341477766b676d15ecf9be4659",
             "path": "index.json",
@@ -506,7 +506,7 @@
         },
         {
             "base": "meta",
-            "etag": "\"dmjw7d0d7p2a2cb-gzip\"",
+            "etag": "\"dmjw7d0d7p2a2cb\"",
             "last_changed_timestamp": 1793538684036,
             "md5sum": "36fc8b6464e74e02e85a3da56c2e4237",
             "path": "net.fabricmc.fabric-loader/0.16.14.json",
@@ -514,7 +514,7 @@
         },
         {
             "base": "meta",
-            "etag": "\"dmjw7d14mkuvl6-gzip\"",
+            "etag": "\"dmjw7d14mkuvl6\"",
             "last_changed_timestamp": 1793538684069,
             "md5sum": "805215a1ea696139574edf3f6bd3f4c9",
             "path": "net.fabricmc.intermediary/1.20.1.json",
@@ -522,7 +522,7 @@
         },
         {
             "base": "meta",
-            "etag": "\"dmjw7d1zcvgtdks-gzip\"",
+            "etag": "\"dmjw7d1zcvgtdks\"",
             "last_changed_timestamp": 1793538684010,
             "md5sum": "bad4407cad849ea16cc042f952ddb219",
             "path": "net.minecraft/1.20.1.json",
@@ -530,7 +530,7 @@
         },
         {
             "base": "meta",
-            "etag": "\"dmjw7ds39u7haha-gzip\"",
+            "etag": "\"dmjw7ds39u7haha\"",
             "last_changed_timestamp": 1793538683993,
             "md5sum": "b4581d4939208a6232554e76a0eb8657",
             "path": "org.lwjgl3/3.3.1.json",

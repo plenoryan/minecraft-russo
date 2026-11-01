@@ -157,4 +157,13 @@
   2. Em `assets/minecraft/lang/ru_ru.json` (idioma alvo avaliado pelo `inTarget` do SayIt), definir estritamente a palavra russa pura em cirílico limpo: `"block.minecraft.oak_log": "Дерево"`.
   Dessa forma, o SayIt extrai unicamente a palavra russa, gera a fonética latina `[derevo]` e o Vosk pontua 100% ao ouvir a palavra russa falada, enquanto a interface do jogo mantém a tradução bilíngue lado a lado.
 
+### L25. Sistema de Fixação de 3 Níveis, Repetição Espaçada e Perda Cirúrgica de 1 Item
+- **Armadilha:** Por padrão, o mod SayIt marca o item como dominado permanentemente logo após a primeira tentativa bem-sucedida (`pr.words().put(id, score)`), sem qualquer curva de retenção nem repetição espaçada. Além disso, se o jogador errar uma única pronúncia, a função padrão `takeAll()` varre todo o inventário e remove pilhas inteiras (64 itens) de uma só vez, gerando frustração extrema.
+- **Solução:**
+  1. **Níveis de Fixação (1 a 3):** Reutilizar o mapa `pr.words()` (que armazena `Map<String, Integer>`) para guardar o nível de fixação do vocábulo (`1`, `2` ou `3`). O `scanInventory` só ignora permanentemente itens cujo nível for $\ge 3$.
+  2. **Repetição Espaçada:** Ao acertar o nível 1, aplicar um cooldown de 3 minutos (3600 ticks) antes de reexigir o vocábulo. Ao acertar o nível 2, aplicar um cooldown de 5 minutos (6000 ticks) para consolidar a fixação final no nível 3.
+  3. **Penalidade Cirúrgica e Regressão:** Em caso de erro, regredir o nível de fixação em 1 (ex: de 2/3 para 1/3; de 1/3 para 0/3) e remover estritamente **1 único item** (`takeOne`/`dropOne` decrementando 1 item do cursor ou inventário com `method_7933(1)`), com um cooldown de carência de 30 segundos para evitar loops imediatos de falha.
+  4. **Feedback Visual:** Exibir o progresso tanto nas mensagens de chat (`§e★ [Fixação X/3]`) quanto na interface do Dicionário (`★★★ [3/3]`) e nos tooltips KubeJS (`§a[Fixação] ★★★ (3/3 - Fixado!)`).
+
+
 
