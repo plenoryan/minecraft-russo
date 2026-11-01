@@ -1,0 +1,19 @@
+{
+  "penalty": "delete",
+  "wordSeconds": 12,
+  "sentenceSeconds": 16,
+  "passScore": 70,
+  "sentences": true,
+  "sentenceCooldown": 120,
+  "sentenceXp": 7,
+  "giveDictionary": true,
+  "exempt": [
+    "minecraft:air"
+  ],
+  "engine": "vosk",
+  "mode": "read",
+  "microphone": "",
+  "groqKey": "",
+  "groqModel": "whisper-large-v3-turbo",
+  "voskModelBase": "https://alphacephei.com/vosk/models/"
+}

@@ -1,26 +1,15 @@
-﻿{
-  "version": "14.18",
-  "skinLoading": {
-    "loadList": [
-      {
-        "name": "LocalSkin",
-        "type": "Local",
-        "skin": "CustomSkinLoader/LocalSkin/skins/{USERNAME}.png",
-        "cape": "CustomSkinLoader/LocalSkin/capes/{USERNAME}.png",
-        "elytra": "CustomSkinLoader/LocalSkin/elytras/{USERNAME}.png"
-      },
-      {
-        "name": "ElyBy",
-        "type": "ElyByAPI",
-        "root": "https://ely.by/"
-      },
-      {
-        "name": "Mojang",
-        "type": "MojangAPI"
-      }
-    ]
-  },
-  "enableSkull": true,
-  "enableDynamicSkull": true,
-  "cacheExpiry": 2592000
+{
+  "version": "15.1",
+  "buildNumber": 41,
+  "loadlist": [],
+  "enableTransparentSkin": true,
+  "forceLoadAllTextures": true,
+  "enableCape": true,
+  "threadPoolSize": 8,
+  "enableLogStdOut": false,
+  "cacheExpiry": 2592000,
+  "forceUpdateSkull": false,
+  "enableLocalProfileCache": false,
+  "enableCacheAutoClean": false,
+  "forceDisableCache": false
 }
