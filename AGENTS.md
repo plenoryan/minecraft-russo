@@ -150,4 +150,11 @@
 - **Armadilha:** Ao tentar injetar fonética e tradução em português (`Madeira / Árvore [RU: Дéрево [DYE-rye-va]]`) diretamente nas chaves `item.*` e `block.*` do arquivo `lang/ru_ru.json` e `lang/pt_br.json` através de um resource pack, o mod SayIt lê essa string inteira poluída como o nome alvo a ser pronunciado. Como resultado, o HUD pedia para pronunciar `Derevo Dye-re-va pt-br...` e o modelo acústico Vosk nunca reconhecia as palavras estrangeiras, forçando a perda inevitável do item com baixa correspondência (12%).
 - **Solução:** Nunca poluir as strings de nome de item nos arquivos `lang/`. O SayIt deve ler o nome limpo padrão em cirílico (`Дубовое бревно`, `Камень`, etc.), pois ele já possui um transliterador interno nativo (`Romanizer.class`) que gera automaticamente a leitura latina abaixo do cirílico e envia o vocábulo puro para o Vosk. Detalhes pedagógicos (fonética, gênero gramatical e regras) devem ser providos exclusivamente nos tooltips via script KubeJS (`ItemEvents.tooltip`), mantendo os nomes dos itens 100% canônicos.
 
+### L24. Separação Estrita de Idiomas para Nomes Bilíngues com Reconhecimento de Voz Limpo
+- **Armadilha:** Usuários desejam visualizar ambos os nomes lado a lado ao selecionar o item na hotbar ou inventário (`Madeira [RU: Дерево]`), mas se a mesma string composta for colocada em `ru_ru.json`, o SayIt extrai a string composta como alvo de fala do microfone.
+- **Solução:** Aplicar a separação assimétrica de traduções:
+  1. Em `assets/minecraft/lang/pt_br.json` (idioma do cliente do jogador), definir o nome bilíngue: `"block.minecraft.oak_log": "Madeira [RU: Дерево]"`. Isso garante que na hotbar, no inventário e nas dicas o jogador sempre veja ambos os nomes lado a lado.
+  2. Em `assets/minecraft/lang/ru_ru.json` (idioma alvo avaliado pelo `inTarget` do SayIt), definir estritamente a palavra russa pura em cirílico limpo: `"block.minecraft.oak_log": "Дерево"`.
+  Dessa forma, o SayIt extrai unicamente a palavra russa, gera a fonética latina `[derevo]` e o Vosk pontua 100% ao ouvir a palavra russa falada, enquanto a interface do jogo mantém a tradução bilíngue lado a lado.
+
 
