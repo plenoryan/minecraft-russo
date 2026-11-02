@@ -166,5 +166,17 @@
   4. **Penalidade Cirúrgica e Carência de Inventário:** Em caso de erro, regredir 1 nível e remover estritamente **1 único item** (`takeOne`/`dropOne` decrementando o stack com `method_7933(1)`). Manter 30 segundos de carência no inventário para que itens restantes na mesma pilha não sejam consumidos em loop contínuo enquanto o jogador respira. Se o jogador não possuir mais o item, nenhuma remoção ocorre e o jogo aguarda uma nova coleta.
   5. **Feedback Visual Completo:** Exibição consistente em 5 estrelas no Chat, nos Tooltips KubeJS (`§a[Fixação] ★★★★★ (5/5 - Mestre!)`) e no menu visual do Dicionário (`★★★★★ [5/5 - Mestre]`).
 
+### L26. Requisitos de Versão do Fabric Loader em Mods Recentes (Farmer's Delight 2.1.1 vs 2.5.x e Naturalist 4.0.3 vs 2.0.9)
+- **Armadilha:** Builds lançadas recentemente para Minecraft 1.20.1 (ex: Farmer's Delight 2.5.7 e Naturalist 2.0.9) impõem dependências rígidas de `fabricloader >= 0.18.2` ou `>= 0.19.5` no `fabric.mod.json`. Como o modpack utiliza Fabric Loader 0.16.14 (padrão estável amplamente compatível com Sodium 0.5.13 e Lithium 0.11.4), a inicialização do jogo ou servidor dedicado falha imediatamente com `net.fabricmc.loader.impl.FormattedException: Incompatible mods found!`.
+- **Solução:** Em modpacks consolidados 1.20.1 com loader 0.16.x, utilizar as versões canônicas e comprovadas dos mods: `FarmersDelight-1.20.1-2.1.1+refabricated.jar` (compatível com `fabric: *`) e `naturalist-fabric-4.0.3-1.20.1.jar` (compatível com `geckolib >= 4.0.0` e `fabric: *`). Sempre validar as dependências declaradas no manifesto antes da implantação.
+
+### L27. Expansão de Vocabulário Prático, Vida Selvagem e Imersão Doméstica
+- **Armadilha:** Mods de conteúdo adicional introduzem centenas de blocos, animais e itens que não possuem traduções pedagógicas nos arquivos de idioma, resultando em visualizações genéricas em inglês ou quebras na extração de fala do SayIt. Além disso, mods de renderização/som colocados no servidor dedicado causam poluição e potenciais falhas de inicialização headless.
+- **Solução:**
+  1. **Separação Cliente vs Servidor:** Mods de conteúdo com blocos/entidades (`FarmersDelight`, `naturalist`, `geckolib`, `handcrafted`, `resourcefullib`) são instalados no cliente e no servidor. Mods estritamente sonoros/visuais de imersão (`PresenceFootsteps`, `AmbientSounds`, `CreativeCore`) são restritos às instâncias do cliente.
+  2. **Bilingual Resource Pack Namespaces:** Registrar os namespaces específicos (`assets/farmersdelight/lang/`, `assets/naturalist/lang/`, `assets/handcrafted/lang/`) com separação de nomes limpos em `ru_ru.json` e bilíngues em `pt_br.json`.
+  3. **KubeJS Pedagogical Tooltips:** Mapear os itens de maior frequência cotidiana (facas, frigideiras, panelas, cebola, tomate, repolho, arroz, torta de maçã, carnes de caça, peles, cascos de tartaruga) com notas fonéticas, gênero gramatical e contexto cultural eslavo.
+
+
 
 
