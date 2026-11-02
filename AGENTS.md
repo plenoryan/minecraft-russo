@@ -157,13 +157,14 @@
   2. Em `assets/minecraft/lang/ru_ru.json` (idioma alvo avaliado pelo `inTarget` do SayIt), definir estritamente a palavra russa pura em cirílico limpo: `"block.minecraft.oak_log": "Дерево"`.
   Dessa forma, o SayIt extrai unicamente a palavra russa, gera a fonética latina `[derevo]` e o Vosk pontua 100% ao ouvir a palavra russa falada, enquanto a interface do jogo mantém a tradução bilíngue lado a lado.
 
-### L25. Sistema de Fixação de 3 Níveis, Repetição Espaçada e Perda Cirúrgica de 1 Item
-- **Armadilha:** Por padrão, o mod SayIt marca o item como dominado permanentemente logo após a primeira tentativa bem-sucedida (`pr.words().put(id, score)`), sem qualquer curva de retenção nem repetição espaçada. Além disso, se o jogador errar uma única pronúncia, a função padrão `takeAll()` varre todo o inventário e remove pilhas inteiras (64 itens) de uma só vez, gerando frustração extrema.
+### L25. Sistema de Fixação em 5 Níveis, Repetição Espaçada, Curva do Esquecimento (Decay) e Perda Cirúrgica
+- **Armadilha:** Por padrão, o mod SayIt marca o item como dominado permanentemente logo após a primeira tentativa bem-sucedida (`pr.words().put(id, score)`), sem qualquer curva de retenção nem repetição espaçada. Além disso, se o jogador errar uma única pronúncia, a função padrão `takeAll()` varre todo o inventário e remove pilhas inteiras (64 itens) de uma só vez. Por outro lado, imunidade eterna com poucos níveis não reflete o aprendizado real de uma língua, permitindo que vocábulos sejam esquecidos após dias sem uso.
 - **Solução:**
-  1. **Níveis de Fixação (1 a 3):** Reutilizar o mapa `pr.words()` (que armazena `Map<String, Integer>`) para guardar o nível de fixação do vocábulo (`1`, `2` ou `3`). O `scanInventory` só ignora permanentemente itens cujo nível for $\ge 3$.
-  2. **Repetição Espaçada:** Ao acertar o nível 1, aplicar um cooldown de 3 minutos (3600 ticks) antes de reexigir o vocábulo. Ao acertar o nível 2, aplicar um cooldown de 5 minutos (6000 ticks) para consolidar a fixação final no nível 3.
-  3. **Penalidade Cirúrgica e Regressão:** Em caso de erro, regredir o nível de fixação em 1 (ex: de 2/3 para 1/3; de 1/3 para 0/3) e remover estritamente **1 único item** (`takeOne`/`dropOne` decrementando 1 item do cursor ou inventário com `method_7933(1)`), com um cooldown de carência de 30 segundos para evitar loops imediatos de falha.
-  4. **Feedback Visual:** Exibir o progresso tanto nas mensagens de chat (`§e★ [Fixação X/3]`) quanto na interface do Dicionário (`★★★ [3/3]`) e nos tooltips KubeJS (`§a[Fixação] ★★★ (3/3 - Fixado!)`).
+  1. **Níveis de Fixação (1 a 5):** Reutilizar o mapa `pr.words()` para representar a escala pedagógica: 1/5 (Iniciante), 2/5 (Básico), 3/5 (Intermediário), 4/5 (Avançado) e 5/5 (Mestre).
+  2. **Repetição Espaçada em Jogo Ativo:** Intervalos progressivos entre desafios de um mesmo item: 2 min (L1), 5 min (L2), 12 min (L3) e 25 min (L4). Ao atingir o nível 5 (Mestre), o item nunca é silenciado para sempre: ele entra em modo de revisão periódica a cada 60 minutos de jogo ativo.
+  3. **Curva do Esquecimento (Decay Temporal Real):** Campo persistente `timestamps` gravado no JSON do jogador (`saves/<Mundo>/sayitenglish/<UUID>.json`). Se o jogador passar dias sem jogar ou sem praticar o item (48h para L5, 24h para L4, 16h para L3, 8h para L2, 4h para L1), a fixação regride gradualmente e o jogo notifica o jogador no chat (`§6⚠ [Curva do Esquecimento]`) para falar novamente e recuperar a maestria.
+  4. **Penalidade Cirúrgica e Carência de Inventário:** Em caso de erro, regredir 1 nível e remover estritamente **1 único item** (`takeOne`/`dropOne` decrementando o stack com `method_7933(1)`). Manter 30 segundos de carência no inventário para que itens restantes na mesma pilha não sejam consumidos em loop contínuo enquanto o jogador respira. Se o jogador não possuir mais o item, nenhuma remoção ocorre e o jogo aguarda uma nova coleta.
+  5. **Feedback Visual Completo:** Exibição consistente em 5 estrelas no Chat, nos Tooltips KubeJS (`§a[Fixação] ★★★★★ (5/5 - Mestre!)`) e no menu visual do Dicionário (`★★★★★ [5/5 - Mestre]`).
 
 
 

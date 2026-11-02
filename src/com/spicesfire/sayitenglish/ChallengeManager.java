@@ -149,9 +149,53 @@ public final class ChallengeManager {
         }
     }
 
+    private static int checkDecay(class_3222 player, Progress pr, String id, long nowMs) {
+        Integer lvl = pr.words().get(id);
+        if (lvl == null || lvl <= 0) return 0;
+        Long lastMs = pr.timestamps().get(id);
+        if (lastMs == null || lastMs <= 0) {
+            pr.timestamps().put(id, nowMs);
+            return lvl;
+        }
+        long elapsedHours = (nowMs - lastMs) / (1000L * 3600L);
+        int regressed = lvl;
+
+        // Ebbinghaus Forgetting Curve Thresholds:
+        if (lvl == 5 && elapsedHours >= 48) {
+            regressed = 4;
+            pr.timestamps().put(id, nowMs - (24L * 3600L * 1000L));
+        } else if (lvl == 4 && elapsedHours >= 24) {
+            regressed = 3;
+            pr.timestamps().put(id, nowMs - (16L * 3600L * 1000L));
+        } else if (lvl == 3 && elapsedHours >= 16) {
+            regressed = 2;
+            pr.timestamps().put(id, nowMs - (8L * 3600L * 1000L));
+        } else if (lvl == 2 && elapsedHours >= 8) {
+            regressed = 1;
+            pr.timestamps().put(id, nowMs - (4L * 3600L * 1000L));
+        } else if (lvl == 1 && elapsedHours >= 4) {
+            regressed = 0;
+            pr.timestamps().remove(id);
+        }
+
+        if (regressed != lvl) {
+            if (regressed > 0) {
+                pr.words().put(id, regressed);
+            } else {
+                pr.words().remove(id);
+            }
+            player.method_43496((class_2561)class_2561.method_43470("§6⚠ [Curva do Esquecimento] Faz " + elapsedHours + "h sem praticar! Fixação regrediu de " + lvl + "/5 para " + regressed + "/5."));
+            pr.save(ChallengeManager.server(player), player.method_5667());
+            ChallengeManager.sync(player);
+        }
+        return regressed;
+    }
+
     private static void scanInventory(class_3222 player, State s, long now) {
         class_1661 inv = player.method_31548();
         List exempt = Config.get().exempt;
+        long nowMs = System.currentTimeMillis();
+
         if (s.progress.starterDictionary && SayIt.DICTIONARY != null && ChallengeManager.count(player, SayIt.DICTIONARY) == 0) {
             s.progress.starterDictionary = false;
             s.progress.save(ChallengeManager.server(player), player.method_5667());
@@ -162,13 +206,10 @@ public final class ChallengeManager {
             if (st.method_7960() || (s.progress.starterDictionary && st.method_31574(SayIt.DICTIONARY))) continue;
             String id = ChallengeManager.itemId(st.method_7909());
 
-            // Retention Rule A1: Skip if already mastered (level >= 3)
-            Integer lvl = s.progress.words().get(id);
-            if (lvl != null && lvl >= 3) {
-                continue;
-            }
+            // 1. Check & apply Ebbinghaus forgetting decay
+            ChallengeManager.checkDecay(player, s.progress, id, nowMs);
 
-            // Retention Rule A2: Check spaced repetition cooldown
+            // 2. Check spaced repetition cooldown
             until = s.cooldown.get(id);
             if (until != null && until > now) {
                 continue;
@@ -287,25 +328,34 @@ public final class ChallengeManager {
                 int currentLevel = pr.words().getOrDefault(c.subject(), 0);
 
                 if (passed || cfg.penalty.equals("none")) {
-                    int nextLevel = Math.min(3, currentLevel + 1);
+                    int nextLevel = Math.min(5, currentLevel + 1);
                     pr.words().put(c.subject(), nextLevel);
+                    pr.timestamps().put(c.subject(), System.currentTimeMillis());
 
-                    if (nextLevel >= 3) {
-                        s.cooldown.put(c.subject(), Long.MAX_VALUE);
-                        player.method_43496((class_2561)class_2561.method_43470("§a✔ [FIXADO 3/3] Dominado! Você aprendeu este item permanentemente."));
+                    if (nextLevel >= 5) {
+                        // Master Level 5/5: 60 minutes maintenance review
+                        s.cooldown.put(c.subject(), now + 72000L);
+                        player.method_43496((class_2561)class_2561.method_43470("§a✔ [MESTRE 5/5] Dominado com Maestria! Próxima revisão em 1 hora de jogo."));
                     } else {
-                        // Spaced repetition cooldown: 3 min (3600 ticks) after lvl 1, 5 min (6000 ticks) after lvl 2
-                        long cdTicks = (nextLevel == 1 ? 3600L : 6000L);
+                        // Spaced repetition progression: 2m (lvl 1), 5m (lvl 2), 12m (lvl 3), 25m (lvl 4)
+                        long cdTicks;
+                        switch (nextLevel) {
+                            case 1: cdTicks = 2400L; break;
+                            case 2: cdTicks = 6000L; break;
+                            case 3: cdTicks = 14400L; break;
+                            case 4: cdTicks = 30000L; break;
+                            default: cdTicks = 6000L; break;
+                        }
                         s.cooldown.put(c.subject(), now + cdTicks);
-                        int remaining = 3 - nextLevel;
-                        player.method_43496((class_2561)class_2561.method_43470("§e★ [Fixação " + nextLevel + "/3] Correto (" + score + "%)! Pratique mais " + remaining + " vez(es) em intervalos espaçados para fixar."));
+                        int remaining = 5 - nextLevel;
+                        player.method_43496((class_2561)class_2561.method_43470("§e★ [Fixação " + nextLevel + "/5] Correto (" + score + "%)! Faltam " + remaining + " etapa(s) para o nível Mestre."));
                     }
                     break;
                 }
 
                 if (item == null) break;
 
-                // Decision A3: On fail, do NOT wipe inventory. Delete ONLY 1 item.
+                // Decision A3: On fail, take ONLY 1 item (never wipe whole inventory)
                 int n = cfg.penalty.equals("drop") ? ChallengeManager.dropOne(player, item) : ChallengeManager.takeOne(player, item);
                 pr.lost += n;
 
@@ -316,11 +366,12 @@ public final class ChallengeManager {
                 } else {
                     pr.words().remove(c.subject());
                 }
+                pr.timestamps().put(c.subject(), System.currentTimeMillis());
 
-                // Grace cooldown: 30 seconds (600 ticks) to avoid instant loop
+                // Grace cooldown: 30 seconds (600 ticks) so player is not spammed on remaining items in inventory
                 s.cooldown.put(c.subject(), now + 600L);
 
-                player.method_43496((class_2561)class_2561.method_43470("§c✖ [Fixação " + regressed + "/3] Pronúncia não reconhecida (" + score + "%). 1 item foi removido."));
+                player.method_43496((class_2561)class_2561.method_43470("§c✖ [Fixação " + regressed + "/5] Pronúncia não reconhecida (" + score + "%). 1 item foi removido."));
                 break;
             }
             case "sentence": {
@@ -332,13 +383,14 @@ public final class ChallengeManager {
             case "practice": {
                 if (!passed) break;
                 int currentLevel = pr.words().getOrDefault(c.subject(), 0);
-                int nextLevel = Math.min(3, currentLevel + 1);
+                int nextLevel = Math.min(5, currentLevel + 1);
                 pr.words().put(c.subject(), nextLevel);
+                pr.timestamps().put(c.subject(), System.currentTimeMillis());
                 player.method_7255(Math.max(1, cfg.sentenceXp / 3));
-                if (nextLevel >= 3) {
-                    player.method_43496((class_2561)class_2561.method_43470("§a✔ [FIXADO 3/3] Dominado na prática!"));
+                if (nextLevel >= 5) {
+                    player.method_43496((class_2561)class_2561.method_43470("§a✔ [MESTRE 5/5] Dominado com Maestria na prática!"));
                 } else {
-                    player.method_43496((class_2561)class_2561.method_43470("§e★ [Fixação " + nextLevel + "/3] Treino concluído com sucesso!"));
+                    player.method_43496((class_2561)class_2561.method_43470("§e★ [Fixação " + nextLevel + "/5] Treino concluído com sucesso!"));
                 }
                 break;
             }
@@ -465,6 +517,7 @@ public final class ChallengeManager {
     public static void reset(class_3222 player) {
         State s = ChallengeManager.state(player);
         s.progress.words().clear();
+        s.progress.timestamps().clear();
         s.progress.sentences = 0;
         s.progress.lost = 0;
         s.queue.clear();

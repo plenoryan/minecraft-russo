@@ -549,7 +549,7 @@ ItemEvents.tooltip(event => {
         },
     };
 
-        for (let id in ruCurriculum) {
+            for (let id in ruCurriculum) {
         let e = ruCurriculum[id];
         event.addAdvanced(id, (item, advanced, text) => {
             text.add(1, Text.of("[RU] " + e.ru).gold().bold(true));
@@ -557,19 +557,23 @@ ItemEvents.tooltip(event => {
             text.add(3, Text.of("[PT] " + e.pt + " • " + e.gen).aqua());
             text.add(4, Text.of("[Nível] Tier " + e.tier + " (Fale em russo!)").darkGreen().italic(true));
 
-            let fixText = "§7[Fixação] ☆☆☆ (0/3 - Não iniciado)";
+            let fixText = "§7[Fixação] ☆☆☆☆☆ (0/5 - Não iniciado)";
             try {
                 let ChallengeSession = Java.loadClass('com.spicesfire.sayitenglish.client.ChallengeSession');
                 if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
                     let idx = ChallengeSession.words.indexOf(id);
                     if (idx >= 0 && idx < ChallengeSession.scores.size()) {
                         let lvl = ChallengeSession.scores.get(idx);
-                        if (lvl >= 3) {
-                            fixText = "§a[Fixação] ★★★ (3/3 - Fixado!)";
+                        if (lvl >= 5) {
+                            fixText = "§a[Fixação] ★★★★★ (5/5 - Mestre!)";
+                        } else if (lvl === 4) {
+                            fixText = "§b[Fixação] ★★★★☆ (4/5 - Avançado)";
+                        } else if (lvl === 3) {
+                            fixText = "§e[Fixação] ★★★☆☆ (3/5 - Intermediário)";
                         } else if (lvl === 2) {
-                            fixText = "§e[Fixação] ★★☆ (2/3 - Em fixação)";
+                            fixText = "§e[Fixação] ★★☆☆☆ (2/5 - Básico)";
                         } else if (lvl === 1) {
-                            fixText = "§6[Fixação] ★☆☆ (1/3 - Iniciado)";
+                            fixText = "§6[Fixação] ★☆☆☆☆ (1/5 - Iniciante)";
                         }
                     }
                 }

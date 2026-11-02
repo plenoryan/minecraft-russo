@@ -108,16 +108,28 @@ extends class_437 {
             int score = ChallengeSession.scores.get(idx);
             String s;
             int color;
-            if (score <= 3) {
-                if (score >= 3) {
-                    s = "★★★ [3/3]";
-                    color = -10755203;
-                } else if (score == 2) {
-                    s = "★★☆ [2/3]";
-                    color = -14006;
-                } else {
-                    s = "★☆☆ [1/3]";
-                    color = -30118;
+            if (score <= 5) {
+                switch (score) {
+                    case 5:
+                        s = "★★★★★ [5/5 - Mestre]";
+                        color = -10755203;
+                        break;
+                    case 4:
+                        s = "★★★★☆ [4/5]";
+                        color = -11141121;
+                        break;
+                    case 3:
+                        s = "★★★☆☆ [3/5]";
+                        color = -14006;
+                        break;
+                    case 2:
+                        s = "★★☆☆☆ [2/5]";
+                        color = -26368;
+                        break;
+                    default:
+                        s = "★☆☆☆☆ [1/5]";
+                        color = -30118;
+                        break;
                 }
             } else {
                 s = score + "%";
