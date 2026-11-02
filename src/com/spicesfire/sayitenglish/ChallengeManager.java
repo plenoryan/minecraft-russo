@@ -333,22 +333,23 @@ public final class ChallengeManager {
                     pr.timestamps().put(c.subject(), System.currentTimeMillis());
 
                     if (nextLevel >= 5) {
-                        // Master Level 5/5: 60 minutes maintenance review
-                        s.cooldown.put(c.subject(), now + 72000L);
-                        player.method_43496((class_2561)class_2561.method_43470("§a✔ [MESTRE 5/5] Dominado com Maestria! Próxima revisão em 1 hora de jogo."));
+                        // Master Level 5/5: 30 minutes maintenance review (36000 ticks)
+                        s.cooldown.put(c.subject(), now + 36000L);
+                        player.method_43496((class_2561)class_2561.method_43470("§a✔ [MESTRE 5/5] Dominado com Maestria! Próxima revisão em 30 minutos de jogo."));
                     } else {
-                        // Spaced repetition progression: 2m (lvl 1), 5m (lvl 2), 12m (lvl 3), 25m (lvl 4)
+                        // Quick reinforcement intervals: 2s (lvl 1), 3s (lvl 2), 4s (lvl 3), 5s (lvl 4)
                         long cdTicks;
                         switch (nextLevel) {
-                            case 1: cdTicks = 2400L; break;
-                            case 2: cdTicks = 6000L; break;
-                            case 3: cdTicks = 14400L; break;
-                            case 4: cdTicks = 30000L; break;
-                            default: cdTicks = 6000L; break;
+                            case 1: cdTicks = 40L; break;   // 2s
+                            case 2: cdTicks = 60L; break;   // 3s
+                            case 3: cdTicks = 80L; break;   // 4s
+                            case 4: cdTicks = 100L; break;  // 5s
+                            default: cdTicks = 40L; break;
                         }
                         s.cooldown.put(c.subject(), now + cdTicks);
                         int remaining = 5 - nextLevel;
-                        player.method_43496((class_2561)class_2561.method_43470("§e★ [Fixação " + nextLevel + "/5] Correto (" + score + "%)! Faltam " + remaining + " etapa(s) para o nível Mestre."));
+                        int nextSec = (int)(cdTicks / 20L);
+                        player.method_43496((class_2561)class_2561.method_43470("§e★ [Fixação " + nextLevel + "/5] Correto (" + score + "%)! Próxima repetição em " + nextSec + "s (" + remaining + " etapa(s) restante(s))."));
                     }
                     break;
                 }
@@ -368,8 +369,8 @@ public final class ChallengeManager {
                 }
                 pr.timestamps().put(c.subject(), System.currentTimeMillis());
 
-                // Grace cooldown: 30 seconds (600 ticks) so player is not spammed on remaining items in inventory
-                s.cooldown.put(c.subject(), now + 600L);
+                // Grace cooldown: 5 seconds (100 ticks) to breathe and speak again
+                s.cooldown.put(c.subject(), now + 100L);
 
                 player.method_43496((class_2561)class_2561.method_43470("§c✖ [Fixação " + regressed + "/5] Pronúncia não reconhecida (" + score + "%). 1 item foi removido."));
                 break;

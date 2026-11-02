@@ -101,11 +101,11 @@ ItemEvents.tooltip(event => {
         },
         'minecraft:furnace': {
             ru: 'Печь',
-            phon: '[Pyech\']',
+            phon: '[pyech\']',
             pt: 'Fornalha',
             gen: 'Feminino (ж.р.)',
             tier: 1,
-            note: 'Substantivo da 3ª declinação feminina terminado em sinal brando (ь). \'Ч\' é sempre suave.'
+            note: 'Substantivo feminino da 3ª declinação terminado em sinal brando (ь). Som palatal suave [ch\'].'
         },
         'minecraft:chest': {
             ru: 'Сундýк',
@@ -113,15 +113,15 @@ ItemEvents.tooltip(event => {
             pt: 'Baú',
             gen: 'Masculino (м.р.)',
             tier: 1,
-            note: 'Vogal posterior \'у\' tônica na última sílaba. Consoante \'к\' dura no final.'
+            note: 'Origem túrquica eslavizada. Tônica oxítona fechada em -ДУК.'
         },
         'minecraft:oak_door': {
             ru: 'Дверь',
-            phon: '[Dvyer\']',
-            pt: 'Porta',
+            phon: '[dvyer\']',
+            pt: 'Porta de Carvalho',
             gen: 'Feminino (ж.р.)',
             tier: 1,
-            note: 'Monossílabo feminino com \'р\' palatizado pelo sinal brando final.'
+            note: 'Monossílabo com encontro consonantal inicial [dv] e consoante palatizada final [r\'].'
         },
         'minecraft:glass': {
             ru: 'Стеклó',
@@ -129,23 +129,23 @@ ItemEvents.tooltip(event => {
             pt: 'Vidro',
             gen: 'Neutro (с.р.)',
             tier: 1,
-            note: 'Oxítona neutra terminada em -о pleno. O encontro \'ст\' é sonoro.'
+            note: 'Terminação regular neutra em -о. Acento oxítono no -ЛО final.'
         },
         'minecraft:bread': {
             ru: 'Хлеб',
-            phon: '[Khlyep]',
+            phon: '[khlyep]',
             pt: 'Pão',
             gen: 'Masculino (м.р.)',
             tier: 2,
-            note: 'Dessonorização da consoante final em russo: a letra \'б\' em fim de palavra soa como [p].'
+            note: 'Desvozeamento da consoante final russa: o \'б\' soa como [p] no final da palavra.'
         },
         'minecraft:water_bucket': {
             ru: 'Водá',
             phon: '[va-DAH]',
-            pt: 'Balde com Água / Água',
+            pt: 'Balde de Água',
             gen: 'Feminino (ж.р.)',
             tier: 2,
-            note: 'Exemplo supremo de redução vocálica (ákanie): o \'о\' átono vira [a], a tônica é no -ДА.'
+            note: 'Redução vocálica (ákanie): o primeiro \'о\' átono soa como [a]. Tônica no -ДА.'
         },
         'minecraft:apple': {
             ru: 'Я́блоко',
@@ -153,63 +153,63 @@ ItemEvents.tooltip(event => {
             pt: 'Maçã',
             gen: 'Neutro (с.р.)',
             tier: 2,
-            note: 'Inicia com a vogal iotizada \'я\' [ya]. As duas letras \'о\' seguintes são reduzidas para som de [a].'
+            note: 'Acento proparoxítono no Я-. As duas vogais \'o\' seguintes reduzem para [a].'
         },
         'minecraft:wheat': {
             ru: 'Пшенúца',
-            phon: '[pshe-NEE-tsa]',
+            phon: '[pshye-NEE-tsa]',
             pt: 'Trigo',
             gen: 'Feminino (ж.р.)',
             tier: 2,
-            note: 'Encontro consonantal \'пш\' duro. A letra \'ц\' soa como [ts].'
+            note: 'Encontro consonantal inicial complexo [psh]. Consoante \'ц\' é sempre dura em russo.'
         },
         'minecraft:beef': {
             ru: 'Мя́со',
             phon: '[MYAH-sa]',
-            pt: 'Carne Crua',
+            pt: 'Bife Cru / Carne',
             gen: 'Neutro (с.р.)',
             tier: 2,
-            note: 'Substantivo neutro. \'М\' palatizado por \'я\'. O \'о\' final reduz para [a].'
+            note: 'Substantivo neutro paroxítono. O \'о\' final reduz para som aberto [a].'
         },
         'minecraft:cooked_beef': {
             ru: 'Говя́дина',
-            phon: '[ga-VYA-dee-na]',
-            pt: 'Carne Bovina / Bife',
+            phon: '[ga-VYAH-dee-na]',
+            pt: 'Bife Cozido',
             gen: 'Feminino (ж.р.)',
             tier: 2,
-            note: 'Sufixo de carne animal -ина. \'О\' inicial reduzido para [a], tônica em -ВЯ-.'
+            note: 'Refere-se especificamente à carne bovina. Primeira sílaba reduz para [ga].'
         },
         'minecraft:porkchop': {
             ru: 'Свинúна',
             phon: '[svee-NEE-na]',
-            pt: 'Carne de Porco',
+            pt: 'Costeleta de Porco',
             gen: 'Feminino (ж.р.)',
             tier: 2,
-            note: 'Derivado de свинья (porco) com o sufixo -ина. Tônica em -НИ-.'
+            note: 'Sufixo produtivo -ина denotando tipo de carne animal. Tônica em -НИ-.'
         },
         'minecraft:cod': {
-            ru: 'Р́ыба',
+            ru: 'Рӹба',
             phon: '[RY-ba]',
-            pt: 'Peixe',
+            pt: 'Bacalhau Cru / Peixe',
             gen: 'Feminino (ж.р.)',
             tier: 2,
-            note: 'A vogal dura \'ы\' requer posicionamento posterior da língua. Tônica em РЫ-.'
+            note: 'Vogal central fechada posterior \'ы\'. Requer tensão muscular recuada da língua.'
         },
         'minecraft:white_wool': {
             ru: 'Шерсть',
-            phon: '[Sherst\']',
-            pt: 'Lã',
+            phon: '[shyerst\']',
+            pt: 'Lã Branca',
             gen: 'Feminino (ж.р.)',
             tier: 2,
-            note: 'A consoante \'ш\' é sempre dura no russo. O sinal brando final suaviza o \'т\'.'
+            note: 'A consoante \'ш\' é sempre dura, enquanto o final -ть é suave palatizado.'
         },
         'minecraft:white_bed': {
             ru: 'Кровáть',
             phon: '[kra-VAHT\']',
-            pt: 'Cama',
+            pt: 'Cama Branca',
             gen: 'Feminino (ж.р.)',
             tier: 2,
-            note: 'Substantivo feminino da 3ª declinação. \'О\' átono vira [a], \'т\' palatizado no fim.'
+            note: 'Substantivo feminino em sinal brando (ь). O primeiro \'o\' reduz para [a].'
         },
         'minecraft:coal': {
             ru: 'У́голь',
@@ -217,7 +217,7 @@ ItemEvents.tooltip(event => {
             pt: 'Carvão',
             gen: 'Masculino (м.р.)',
             tier: 2,
-            note: 'Tônica na primeira sílaba (У-голь). O \'л\' é suavizado pelo sinal brando [l\'].'
+            note: 'Tônica na primeira sílaba У-. O \'ль\' final é um \'l\' palatizado brando.'
         },
         'minecraft:bucket': {
             ru: 'Ведрó',
@@ -225,47 +225,15 @@ ItemEvents.tooltip(event => {
             pt: 'Balde',
             gen: 'Neutro (с.р.)',
             tier: 2,
-            note: 'Substantivo neutro oxítono terminado em -о pleno. Primeira sílaba suave [vye].'
-        },
-        'minecraft:cow_spawn_egg': {
-            ru: 'Корóва',
-            phon: '[ka-RO-va]',
-            pt: 'Vaca',
-            gen: 'Feminino (ж.р.)',
-            tier: 2,
-            note: 'Primeiro \'o\' reduzido para [a]. Tônica na sílaba central -РО-.'
-        },
-        'minecraft:sheep_spawn_egg': {
-            ru: 'Овцá',
-            phon: '[af-TSAH]',
-            pt: 'Ovelha',
-            gen: 'Feminino (ж.р.)',
-            tier: 2,
-            note: '\'О\' inicial átono vira [a]. Letra \'ц\' africada sonora [ts]. Tônica final.'
-        },
-        'minecraft:pig_spawn_egg': {
-            ru: 'Свинь́я',
-            phon: '[sveen-YAH]',
-            pt: 'Porco',
-            gen: 'Feminino (ж.р.)',
-            tier: 2,
-            note: 'Uso do sinal brando separador (разделительный мягкий знак) antes da vogal \'я\'.'
-        },
-        'minecraft:chicken': {
-            ru: 'Кýрица',
-            phon: '[KOO-ree-tsa]',
-            pt: 'Frango / Galinha',
-            gen: 'Feminino (ж.р.)',
-            tier: 2,
-            note: 'Terminação típica russa em -ица para fêmeas de animais. Tônica na primeira sílaba.'
+            note: 'Terminação neutra em -о com tônica oxítona. No plural torna-se вёдра (VYOD-ra).'
         },
         'minecraft:carrot': {
             ru: 'Моркóвь',
-            phon: '[mar-KOF\']',
+            phon: '[mar-KOV\']',
             pt: 'Cenoura',
             gen: 'Feminino (ж.р.)',
             tier: 2,
-            note: 'Dessonorização da consoante \'в\' final diante de sinal brando, soando como [f\'].'
+            note: 'Substantivo feminino singular coletivo. Terminação labiodental branda [v\'].'
         },
         'minecraft:potato': {
             ru: 'Картóфель',
@@ -273,7 +241,39 @@ ItemEvents.tooltip(event => {
             pt: 'Batata',
             gen: 'Masculino (м.р.)',
             tier: 2,
-            note: 'Substantivo coletivo masculino derivado do alemão. Tônica em -ТО-. \'Л\' brando final.'
+            note: 'Origem alemã (Kartoffel). Masculino singular coletivo com tônica paroxítona em -TO-.'
+        },
+        'minecraft:turtle_egg': {
+            ru: 'Яйцó черепáхи',
+            phon: '[yay-TSO chye-rye-PAH-khee]',
+            pt: 'Ovo de Tartaruga',
+            gen: 'Neutro (с.р.)',
+            tier: 2,
+            note: '\'Яйцо\' (ovo) é neutro com acento oxítono na sílaba final -ЦО. \'Черепахи\' está no caso genitivo feminino singular.'
+        },
+        'minecraft:turtle_spawn_egg': {
+            ru: 'Черепáха',
+            phon: '[chye-rye-PAH-kha]',
+            pt: 'Tartaruga',
+            gen: 'Feminino (ж.р.)',
+            tier: 2,
+            note: 'Acento tônico em -ПА- (чере-ПА-ха). Terminação feminina regular em -а.'
+        },
+        'minecraft:scute': {
+            ru: 'Щитóк черепáхи',
+            phon: '[shchee-TOK chye-rye-PAH-khee]',
+            pt: 'Escudo / Casco de Tartaruga',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Diminutivo de \'щит\' (escudo). A consoante inicial \'щ\' soa como [shch].'
+        },
+        'minecraft:turtle_helmet': {
+            ru: 'Черепáший пáнцирь',
+            phon: '[chye-rye-PAH-sheey PAN-tseer\']',
+            pt: 'Casco de Tartaruga (Elmo)',
+            gen: 'Masculino (м.р.)',
+            tier: 3,
+            note: 'Adjetivo possessivo \'черепаший\' concordando com o substantivo masculino \'панцирь\'.'
         },
         'minecraft:iron_ingot': {
             ru: 'Желéзо',
@@ -281,7 +281,7 @@ ItemEvents.tooltip(event => {
             pt: 'Barra de Ferro',
             gen: 'Neutro (с.р.)',
             tier: 3,
-            note: 'A consoante \'ж\' é sempre dura. O \'е\' seguinte é brando [lye], e o \'о\' final reduz.'
+            note: 'A consoante \'ж\' é sempre dura. Acento na segunda sílaba -ЛЕ-.'
         },
         'minecraft:gold_ingot': {
             ru: 'Зóлото',
@@ -289,39 +289,47 @@ ItemEvents.tooltip(event => {
             pt: 'Barra de Ouro',
             gen: 'Neutro (с.р.)',
             tier: 3,
-            note: 'Três letras \'о\', mas apenas a primeira é tônica! As duas últimas reduzem para som de [a].'
+            note: 'Pleofonia eslava (ol/olo). Tônica na primeira sílaba com dupla redução vocálica.'
         },
         'minecraft:diamond': {
             ru: 'Алмáз',
-            phon: '[ahl-MAHS]',
+            phon: '[al-MAHS]',
             pt: 'Diamante',
             gen: 'Masculino (м.р.)',
             tier: 3,
-            note: 'Dessonorização final: a consoante sonora \'з\' em fim de palavra soa como o surdo [s].'
+            note: 'Desvozeamento final: a consoante sonora \'з\' soa como [s] no final da palavra.'
+        },
+        'minecraft:wooden_sword': {
+            ru: 'Меч',
+            phon: '[myech\']',
+            pt: 'Espada de Madeira',
+            gen: 'Masculino (м.р.)',
+            tier: 3,
+            note: 'Substantivo masculino monossilábico terminado na consoante suave \'ч\'.'
         },
         'minecraft:iron_sword': {
             ru: 'Меч',
-            phon: '[Myech]',
+            phon: '[myech\']',
             pt: 'Espada de Ferro',
             gen: 'Masculino (м.р.)',
             tier: 3,
-            note: 'Monossílabo masculino forte. A letra \'ч\' é pronunciada com suavidade inerente.'
+            note: 'No SayIt pedagógico, mantém o vocábulo base \'Меч\' para consolidação lexical.'
         },
         'minecraft:shield': {
             ru: 'Щит',
-            phon: '[Shcheet]',
+            phon: '[shcheet]',
             pt: 'Escudo',
             gen: 'Masculino (м.р.)',
             tier: 3,
-            note: 'A letra russa \'щ\' representa uma consoante fricativa palatal longa [ɕː] (shch suave).'
+            note: 'Inicia com a consoante palatal fricativa longa \'щ\' [shch].'
         },
         'minecraft:bow': {
             ru: 'Лук',
-            phon: '[Look]',
+            phon: '[look]',
             pt: 'Arco',
             gen: 'Masculino (м.р.)',
             tier: 3,
-            note: 'Monossílabo curto. Curiosidade: \'лук\' também significa \'cebola\' em russo!'
+            note: 'Vogal fechada posterior \'у\'. \'Л\' velar duro sem palatização.'
         },
         'minecraft:arrow': {
             ru: 'Стрелá',
@@ -329,15 +337,15 @@ ItemEvents.tooltip(event => {
             pt: 'Flecha',
             gen: 'Feminino (ж.р.)',
             tier: 3,
-            note: 'Oxítona feminina. Encontro consonantal \'стр\' dinâmico e tônica em -ЛА.'
+            note: 'Acento oxítono final no -ЛА. O cluster inicial [str] requer dicção precisa.'
         },
         'minecraft:iron_helmet': {
             ru: 'Шлем',
-            phon: '[Shlyem]',
-            pt: 'Capacete de Ferro',
+            phon: '[shlyem]',
+            pt: 'Elmo de Ferro',
             gen: 'Masculino (м.р.)',
             tier: 3,
-            note: '\'Ш\' sempre duro seguido de \'л\' suavizado por \'е\'.'
+            note: 'Monossílabo com transição de consoante dura \'ш\' para \'л\' palatizado [sh-lyem].'
         },
         'minecraft:iron_chestplate': {
             ru: 'Нагрýдник',
@@ -345,7 +353,7 @@ ItemEvents.tooltip(event => {
             pt: 'Peitoral de Ferro',
             gen: 'Masculino (м.р.)',
             tier: 3,
-            note: 'Formado pelo prefixo na- (sobre) + грудь (peito) + sufixo de objeto -ник.'
+            note: 'Prefixo na- (sobre) + radical грудь (peito) + sufixo nominalizador -ник.'
         },
         'minecraft:iron_leggings': {
             ru: 'Пóножи',
@@ -353,7 +361,7 @@ ItemEvents.tooltip(event => {
             pt: 'Calças de Ferro',
             gen: 'Plural (мн.ч.)',
             tier: 3,
-            note: 'Termo de armadura clássica russa. \'Ж\' sempre duro, sufixo plural em -и.'
+            note: 'Termo arcaico para grevas/perneiras de armadura. Tônica na primeira sílaba ПО-.'
         },
         'minecraft:iron_boots': {
             ru: 'Ботúнки',
@@ -361,63 +369,31 @@ ItemEvents.tooltip(event => {
             pt: 'Botas de Ferro',
             gen: 'Plural (мн.ч.)',
             tier: 3,
-            note: 'Substantivo plural regular para calçados de cano médio. Tônica em -ТИН-.'
-        },
-        'minecraft:zombie_head': {
-            ru: 'Зóмби',
-            phon: '[ZOM-bee]',
-            pt: 'Zumbi',
-            gen: 'Masculino (м.р.)',
-            tier: 3,
-            note: 'Substantivo de origem estrangeira indeclinável (несклоняемое существительное).'
-        },
-        'minecraft:skeleton_skull': {
-            ru: 'Скелéт',
-            phon: '[skye-LYET]',
-            pt: 'Esqueleto',
-            gen: 'Masculino (м.р.)',
-            tier: 3,
-            note: 'Oxítona terminada em dental dura \'т\'. Consoante \'л\' branda antes de \'е\'.'
-        },
-        'minecraft:spider_eye': {
-            ru: 'Паýк',
-            phon: '[pa-OOK]',
-            pt: 'Aranha / Olho de Aranha',
-            gen: 'Masculino (м.р.)',
-            tier: 3,
-            note: 'Hiato a-ú. A tônica recai com clareza sobre o \'у\'.'
-        },
-        'minecraft:gunpowder': {
-            ru: 'Крúпер',
-            phon: '[KREE-pyer]',
-            pt: 'Creeper / Pólvora',
-            gen: 'Masculino (м.р.)',
-            tier: 3,
-            note: 'Adaptação fonética direta ao cirílico do monstro ícone do Minecraft.'
+            note: 'Substantivo no plural com sufixo diminutivo -инки. A primeira sílaba reduz para [ba].'
         },
         'minecraft:bone': {
             ru: 'Кость',
-            phon: '[Kost\']',
+            phon: '[kost\']',
             pt: 'Osso',
             gen: 'Feminino (ж.р.)',
             tier: 3,
-            note: 'Encontro consonantal \'ст\' palatizado pelo sinal brando final. Substantivo feminino.'
+            note: 'Substantivo feminino terminado em consoante dental palatizada branda [t\'].'
         },
         'minecraft:string': {
             ru: 'Нить',
-            phon: '[Neet\']',
+            phon: '[neet\']',
             pt: 'Linha / Fio',
             gen: 'Feminino (ж.р.)',
             tier: 3,
-            note: 'Monossílabo com vogal \'и\' palatizante e sinal brando final.'
+            note: 'Primeira consoante dental branda [n\'] seguida de [ee] e final suave em -ть.'
         },
         'minecraft:lead': {
             ru: 'Поводóк',
             phon: '[pa-va-DOK]',
-            pt: 'Laço',
+            pt: 'Laço / Coleira',
             gen: 'Masculino (м.р.)',
             tier: 3,
-            note: 'Dupla redução vocálica: os dois primeiros \'o\' átonos viram [a], restando o último tônico.'
+            note: 'Dupla redução vocálica átona antes da tônica oxítona final [pa-va-DOK].'
         },
         'minecraft:obsidian': {
             ru: 'Обсидиáн',
@@ -425,15 +401,15 @@ ItemEvents.tooltip(event => {
             pt: 'Obsidiana',
             gen: 'Masculino (м.р.)',
             tier: 4,
-            note: 'Redução do \'о\' inicial átono para [a]. Tônica na penúltima sílaba -ДИАН.'
+            note: 'Desvozeamento assimilatório: o \'б\' antes de consoante surda \'с\' soa como [p].'
         },
         'minecraft:lava_bucket': {
             ru: 'Лáва',
             phon: '[LAH-va]',
-            pt: 'Balde de Lava / Lava',
+            pt: 'Balde de Lava',
             gen: 'Feminino (ж.р.)',
             tier: 4,
-            note: 'Paroxítona feminina suave. O primeiro \'а\' é aberto e tônico.'
+            note: 'Paroxítono clássico com \'л\' duro velarizado inicial.'
         },
         'minecraft:potion': {
             ru: 'Зéлье',
@@ -441,7 +417,7 @@ ItemEvents.tooltip(event => {
             pt: 'Poção',
             gen: 'Neutro (с.р.)',
             tier: 4,
-            note: 'Substantivo neutro com sinal brando separador (ь) antes da vogal \'е\'.'
+            note: 'O sinal brando separador (ь) introduz uma quebra palatal antes da vogal -е.'
         },
         'minecraft:brewing_stand': {
             ru: 'Вáрочная стóйка',
@@ -517,7 +493,7 @@ ItemEvents.tooltip(event => {
         },
         'minecraft:blaze_rod': {
             ru: 'Стержéнь ифрúта',
-            phon: '[styer-ZHEN\' eef-REE-ta]',
+            phon: '[styer-ZHEN\'] eef-REE-ta]',
             pt: 'Vara de Blaze (Ifrit)',
             gen: 'Masculino (м.р.)',
             tier: 4,
@@ -546,10 +522,10 @@ ItemEvents.tooltip(event => {
             gen: 'Masculino (м.р.)',
             tier: 4,
             note: 'A letra \'ё\' é SEMPRE tônica em russo (пузы-РЁК). \'Опыта\' é genitivo de опыт.'
-        },
+        }
     };
 
-            for (let id in ruCurriculum) {
+    for (let id in ruCurriculum) {
         let e = ruCurriculum[id];
         event.addAdvanced(id, (item, advanced, text) => {
             text.add(1, Text.of("[RU] " + e.ru).gold().bold(true));
