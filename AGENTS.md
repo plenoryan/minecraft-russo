@@ -217,24 +217,20 @@
   3. **Junções NTFS Globais no Launcher:** `resourcepacks`, `shaderpacks` e `kubejs` foram convertidos em junções automáticas vinculadas à `Instancia_Cliente`, garantindo sincronismo atômico entre cliente e inicializador.
 
 ### L31. Progressão de Fixação por Estrelas (Sub-Repetições, Delays Expandidos e Proteção de Itens Raros)
-- **Armadilha:**
-  1. No modelo anterior, cada teste bem-sucedido aumentava 1 nível linear imediato até o nível 5 em poucos segundos. Não havia diferenciação entre "descobrir a palavra" e "fixação profunda", e o intervalo entre os níveis era excessivamente curto, sobrecarregando o jogador durante o gameplay ativo.
-  2. Penalidades cegas de perda de item (`deleteOne`) puniam severamente itens raros de difícil obtenção (ex: ovos de tartaruga, cascos, elmo de tartaruga, diamantes, netherita, élitros, maçãs douradas), frustrando a exploração.
-  3. No chat do agente, comandos que rodavam em sessões assíncronas com saídas longas podiam ficar em background como tarefas ativas.
+- **Armadilha:** No modelo anterior, cada teste aumentava 1 nível linear imediato até o nível 5 em poucos segundos. Não havia diferenciação entre "descobrir a palavra" e "fixação profunda", sobrecarregando o jogador.
 - **Solução:**
-  1. **Arquitetura de 5 Estrelas com Sub-Repetições:**
-     - **Estrela 1 (★☆☆☆☆ - Descoberta da Palavra):** Requer 5 testes rápidos iniciais (intervalos de 1s, 2s, 3s, 4s, 5s). Ao acertar o 5º teste, o jogador desbloqueia a 1ª Estrela e recebe um intervalo de descanso longo (~2.5 a 3 minutos) sem interrupções.
-     - **Estrelas 2, 3, 4 e 5 (Fixação Espaçada):** Cada estrela subsequente possui sua própria bateria de testes com intervalos graduais:
-       - Estrela 2 (★★☆☆☆): 4 testes (10s, 15s, 20s, 25s) -> descanso de 5 min.
-       - Estrela 3 (★★★☆☆): 3 testes (30s, 45s, 60s) -> descanso de 10 min.
-       - Estrela 4 (★★★★☆): 2 testes (60s, 90s) -> descanso de 20 min.
-       - Estrela 5 (★★★★★ - Domínio Mestre): 1 teste de maestria -> revisão periódica a cada 35 minutos.
-  2. **Adaptação para Itens Raros:**
-     - Identificação inteligente de itens valiosos (`diamond`, `netherite`, `emerald`, `turtle`, `scute`, `elytra`, `totem_of_undying`, `golden_apple`, etc.).
-     - **Requisitos Reduzidos:** Apenas 2 repetições por estrela (Star 1: 2 reps; Star 2: 2 reps; Star 3: 2 reps; Star 4: 1 rep; Star 5: 1 rep).
-     - **Escudo de Proteção contra Perda:** Ao errar a pronúncia de um item raro, o item **NUNCA** é excluído do inventário (`deleteOne` ignorado). O jogador recebe regresso de 1 repetição e carência de proteção de 15 segundos (`§6🛡 [Item Raro Protegido]`).
-  3. **Escaneamento Contínuo de Posse:** `scanInventory` inspeciona todos os 41 slots (incluindo mão secundária e armaduras como o Elmo de Tartaruga), permitindo treinar palavras de itens equipados sem precisar pegá-los repetidamente do chão.
-  4. **Eliminação de Tarefas Zumbis:** Execução e monitoramento de processos de terminal garantindo 0 tarefas ativas em segundo plano no chat do Antigravity.
+  1. **Arquitetura de 5 Estrelas:** Estrela 1 (5 testes rápidos com intervalos de 1s a 5s -> descanso de 2.5 min). Estrelas 2, 3, 4 e 5 possuem testes espaçados com pausas progressivas de 5, 10, 20 e 35 minutos.
+  2. **Escaneamento Contínuo de Posse:** `scanInventory` inspeciona os 41 slots (incluindo mão secundária e armaduras equipadas).
+
+### L32. Desafio Decisivo de Itens Raros: 7 Tentativas e Eliminação por Maioria (4 Erros)
+- **Armadilha:** Proteger itens raros com imunidade total contra perda reduzia a tensão pedagógica e o senso de conquista ao descobrir itens lendários (como ovos de tartaruga, diamantes ou élitros). Ao mesmo tempo, penalidades imediatas no primeiro erro eram desproporcionais para vocabulários complexos.
+- **Solução:**
+  1. **Bateria de 7 Tentativas na Descoberta (Estrela 1):** Para o primeiro estágio de qualquer item raro (`isRare(id) && currentStars == 0`), o jogador passa por uma bateria de até 7 tentativas.
+  2. **Regra de Eliminação por Maioria Simples:**
+     - Se o jogador acumular **4 erros** (a maioria de 7), o desafio é encerrado imediatamente e **1 item raro é excluído do inventário** (`deleteOne(player, item)`), com reset de progresso e mensagem de alerta.
+     - Se o jogador concluir as 7 tentativas com **menos de 4 erros** (portanto, alcançando 4 ou mais acertos, a maioria absoluta), a **Estrela 1 (★☆☆☆☆)** é conquistada com sucesso, liberando um intervalo de descanso de ~3 minutos.
+  3. **Persistência de Erros e Acertos:** Implementado mapa dedicado `errors` em `Progress.java` (`errors()`) espelhado em JSON, mantendo a contagem de acertos e falhas mesmo se o jogador deslogar ou fechar o jogo durante a bateria.
+  4. **Proteção Pós-Descoberta:** Uma vez que o item raro alcança a Estrela 1, as etapas subsequentes (Estrelas 2 a 5) reativam o escudo de proteção (`Item Raro Protegido`), evitando a perda acidental do item conquistado durante as revisões de longo prazo.
 
 
 

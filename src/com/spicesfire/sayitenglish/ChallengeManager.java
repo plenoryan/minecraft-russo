@@ -183,6 +183,7 @@ public final class ChallengeManager {
                 pr.words().put(id, regressed);
             } else {
                 pr.words().remove(id);
+                pr.errors().remove(id);
             }
             pr.reps().put(id, 0);
             player.method_43496((class_2561)class_2561.method_43470("\u00a76\u26a0 [Curva do Esquecimento] Faz " + elapsedHours + "h sem praticar! Fixa\u00e7\u00e3o regrediu de " + lvl + "/5 para " + regressed + "/5 estrelas."));
@@ -386,7 +387,7 @@ public final class ChallengeManager {
     public static int targetReps(int currentStars, boolean rare) {
         if (rare) {
             switch (currentStars) {
-                case 0: return 2;
+                case 0: return 7;
                 case 1: return 2;
                 case 2: return 2;
                 case 3: return 1;
@@ -407,7 +408,17 @@ public final class ChallengeManager {
 
     public static long repCooldownTicks(int currentStars, int repIndex, boolean rare) {
         if (rare) {
-            if (currentStars == 0) return 40L;  // 2s
+            if (currentStars == 0) {
+                switch (repIndex) {
+                    case 1: return 40L;  // 2s
+                    case 2: return 60L;  // 3s
+                    case 3: return 80L;  // 4s
+                    case 4: return 100L; // 5s
+                    case 5: return 100L; // 5s
+                    case 6: return 120L; // 6s
+                    default: return 120L; // 6s
+                }
+            }
             if (currentStars == 1) return 300L; // 15s
             if (currentStars == 2) return 900L; // 45s
             return 1200L; // 60s
@@ -473,9 +484,104 @@ public final class ChallengeManager {
             case "word": {
                 class_1792 item = ChallengeManager.item(c.subject());
                 int currentStars = pr.words().getOrDefault(c.subject(), 0);
-                int currentReps = pr.reps().getOrDefault(c.subject(), 0);
                 boolean rare = ChallengeManager.isRare(c.subject());
                 int neededReps = ChallengeManager.targetReps(currentStars, rare);
+
+                if (rare && currentStars == 0) {
+                    // RARE ITEM STAR 0 -> 1: 7 attempts trial. If player fails 4 times (majority), they lose the item!
+                    int successes = pr.reps().getOrDefault(c.subject(), 0);
+                    int errors = pr.errors().getOrDefault(c.subject(), 0);
+                    int attemptsDone = successes + errors;
+
+                    if (passed || cfg.penalty.equals("none")) {
+                        successes++;
+                        attemptsDone++;
+                        pr.reps().put(c.subject(), successes);
+                        pr.timestamps().put(c.subject(), System.currentTimeMillis());
+                        if (!pr.words().containsKey(c.subject())) {
+                            pr.words().put(c.subject(), 0);
+                        }
+
+                        if (attemptsDone >= 7) {
+                            // 7 attempts completed with errors < 4 (so successes >= 4)!
+                            pr.words().put(c.subject(), 1);
+                            pr.reps().put(c.subject(), 0);
+                            pr.errors().remove(c.subject());
+
+                            long cdTicks = ChallengeManager.starCooldownTicks(1, true);
+                            s.cooldown.put(c.subject(), now + cdTicks);
+                            int delayMin = Math.max(1, (int)(cdTicks / 1200L));
+
+                            player.method_43496((class_2561)class_2561.method_43470(
+                                "\u00a7a\u2605 [Estrela 1/5 Desbloqueada!] Item Raro dominado na maioria das tentativas (" + successes + "/7 acertos)! Pr\u00f3ximos testes em ~" + delayMin + " min."
+                            ));
+                        } else {
+                            long cdTicks = ChallengeManager.repCooldownTicks(0, attemptsDone, true);
+                            s.cooldown.put(c.subject(), now + cdTicks);
+                            int nextSec = Math.max(1, (int)(cdTicks / 20L));
+                            int remainingAttempts = 7 - attemptsDone;
+
+                            if (successes >= 4) {
+                                player.method_43496((class_2561)class_2561.method_43470(
+                                    "\u00a7e\u2606 [Item Raro - Tentativa " + attemptsDone + "/7] Correto (" + score + "%)! (" + successes + " acertos - maioria garantida!). Pr\u00f3ximo em " + nextSec + "s (" + remainingAttempts + " restante(s))."
+                                ));
+                            } else {
+                                player.method_43496((class_2561)class_2561.method_43470(
+                                    "\u00a7e\u2606 [Item Raro - Tentativa " + attemptsDone + "/7] Correto (" + score + "%)! (" + successes + " acertos, " + errors + " erros). Pr\u00f3ximo em " + nextSec + "s (" + remainingAttempts + " restante(s))."
+                                ));
+                            }
+                        }
+                        break;
+                    }
+
+                    // Failed pronunciation on rare item in Star 0:
+                    if (item == null) break;
+
+                    errors++;
+                    attemptsDone++;
+                    pr.errors().put(c.subject(), errors);
+                    pr.timestamps().put(c.subject(), System.currentTimeMillis());
+
+                    if (errors >= 4) {
+                        // 4 errors = majority of 7! ITEM IS LOST!
+                        int n = ChallengeManager.deleteOne(player, item);
+                        pr.lost += n;
+                        pr.words().remove(c.subject());
+                        pr.reps().remove(c.subject());
+                        pr.errors().remove(c.subject());
+
+                        s.cooldown.put(c.subject(), now + 300L); // 15s cooldown
+
+                        player.method_43496((class_2561)class_2561.method_43470(
+                            "\u00a7c\u2716 [Item Raro Perdido] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). Voc\u00ea errou 4 tentativas (maioria de 7)! 1 item foi exclu\u00eddo do invent\u00e1rio!"
+                        ));
+                    } else if (attemptsDone >= 7) {
+                        // 7 attempts completed with errors < 4 (so successes >= 4)!
+                        pr.words().put(c.subject(), 1);
+                        pr.reps().put(c.subject(), 0);
+                        pr.errors().remove(c.subject());
+
+                        long cdTicks = ChallengeManager.starCooldownTicks(1, true);
+                        s.cooldown.put(c.subject(), now + cdTicks);
+                        int delayMin = Math.max(1, (int)(cdTicks / 1200L));
+
+                        player.method_43496((class_2561)class_2561.method_43470(
+                            "\u00a7a\u2605 [Estrela 1/5 Desbloqueada!] 7 tentativas conclu\u00eddas com " + successes + " acertos e " + errors + " erros (maioria conquistada)! Pr\u00f3ximos testes em ~" + delayMin + " min."
+                        ));
+                    } else {
+                        // Not lost yet, warning with strikes remaining
+                        int remainingStrikes = 4 - errors;
+                        int remainingAttempts = 7 - attemptsDone;
+                        s.cooldown.put(c.subject(), now + 100L); // 5s grace interval
+
+                        player.method_43496((class_2561)class_2561.method_43470(
+                            "\u00a76\u26a0 [Item Raro - Tentativa " + attemptsDone + "/7] Pron\u00fancia incorreta (" + score + "%). Erro " + errors + "/4 (se errar mais " + remainingStrikes + ", perde o item!). Pr\u00f3xima em 5s (" + remainingAttempts + " restante(s))."
+                        ));
+                    }
+                    break;
+                }
+
+                int currentReps = pr.reps().getOrDefault(c.subject(), 0);
 
                 if (passed || cfg.penalty.equals("none")) {
                     int nextReps = currentReps + 1;
@@ -704,6 +810,7 @@ public final class ChallengeManager {
         State s = ChallengeManager.state(player);
         s.progress.words().clear();
         s.progress.reps().clear();
+        s.progress.errors().clear();
         s.progress.timestamps().clear();
         s.progress.sentences = 0;
         s.progress.lost = 0;
