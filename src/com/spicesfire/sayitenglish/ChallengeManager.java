@@ -184,7 +184,8 @@ public final class ChallengeManager {
             } else {
                 pr.words().remove(id);
             }
-            player.method_43496((class_2561)class_2561.method_43470("\u00a76\u26a0 [Curva do Esquecimento] Faz " + elapsedHours + "h sem praticar! Fixa\u00e7\u00e3o regrediu de " + lvl + "/5 para " + regressed + "/5."));
+            pr.reps().put(id, 0);
+            player.method_43496((class_2561)class_2561.method_43470("\u00a76\u26a0 [Curva do Esquecimento] Faz " + elapsedHours + "h sem praticar! Fixa\u00e7\u00e3o regrediu de " + lvl + "/5 para " + regressed + "/5 estrelas."));
             pr.save(ChallengeManager.server(player), player.method_5667());
             ChallengeManager.sync(player);
         }
@@ -351,6 +352,115 @@ public final class ChallengeManager {
         ChallengeManager.finish(player, s, Math.max(0, Math.min(100, r.score())), r.heard());
     }
 
+    public static boolean isRare(String id) {
+        if (id == null) return false;
+        String lower = id.toLowerCase();
+        return lower.contains("diamond")
+            || lower.contains("netherite")
+            || lower.contains("emerald")
+            || lower.contains("turtle")
+            || lower.contains("scute")
+            || lower.contains("golden_apple")
+            || lower.contains("enchanted_golden_apple")
+            || lower.contains("trident")
+            || lower.contains("elytra")
+            || lower.contains("totem_of_undying")
+            || lower.contains("nether_star")
+            || lower.contains("beacon")
+            || lower.contains("heart_of_the_sea")
+            || lower.contains("nautilus_shell")
+            || lower.contains("conduit")
+            || lower.contains("dragon_egg")
+            || lower.contains("dragon_breath")
+            || lower.contains("wither_skeleton_skull")
+            || lower.contains("shulker")
+            || lower.contains("saddle")
+            || lower.contains("name_tag")
+            || lower.contains("music_disc")
+            || lower.contains("echo_shard")
+            || lower.contains("recovery_compass")
+            || lower.contains("heavy_core")
+            || lower.contains("mace");
+    }
+
+    public static int targetReps(int currentStars, boolean rare) {
+        if (rare) {
+            switch (currentStars) {
+                case 0: return 2;
+                case 1: return 2;
+                case 2: return 2;
+                case 3: return 1;
+                case 4: return 1;
+                default: return 1;
+            }
+        } else {
+            switch (currentStars) {
+                case 0: return 5;
+                case 1: return 4;
+                case 2: return 3;
+                case 3: return 2;
+                case 4: return 1;
+                default: return 1;
+            }
+        }
+    }
+
+    public static long repCooldownTicks(int currentStars, int repIndex, boolean rare) {
+        if (rare) {
+            if (currentStars == 0) return 40L;  // 2s
+            if (currentStars == 1) return 300L; // 15s
+            if (currentStars == 2) return 900L; // 45s
+            return 1200L; // 60s
+        }
+        if (currentStars == 0) {
+            switch (repIndex) {
+                case 1: return 20L;  // 1s
+                case 2: return 40L;  // 2s
+                case 3: return 60L;  // 3s
+                case 4: return 80L;  // 4s
+                default: return 100L; // 5s
+            }
+        } else if (currentStars == 1) {
+            switch (repIndex) {
+                case 1: return 200L; // 10s
+                case 2: return 300L; // 15s
+                case 3: return 400L; // 20s
+                default: return 500L; // 25s
+            }
+        } else if (currentStars == 2) {
+            switch (repIndex) {
+                case 1: return 600L; // 30s
+                default: return 900L; // 45s
+            }
+        } else if (currentStars == 3) {
+            return 1200L; // 60s
+        } else {
+            return 1800L; // 90s
+        }
+    }
+
+    public static long starCooldownTicks(int newStars, boolean rare) {
+        if (rare) {
+            switch (newStars) {
+                case 1: return 3600L;  // 3 min
+                case 2: return 7200L;  // 6 min
+                case 3: return 14400L; // 12 min
+                case 4: return 30000L; // 25 min
+                case 5:
+                default: return 54000L; // 45 min
+            }
+        } else {
+            switch (newStars) {
+                case 1: return 3000L;  // 2.5 min
+                case 2: return 6000L;  // 5 min
+                case 3: return 12000L; // 10 min
+                case 4: return 24000L; // 20 min
+                case 5:
+                default: return 42000L; // 35 min
+            }
+        }
+    }
+
     private static void finish(class_3222 player, State s, int score, String heard) {
         Packets.Challenge c = s.active;
         s.active = null;
@@ -362,54 +472,98 @@ public final class ChallengeManager {
         switch (c.kind()) {
             case "word": {
                 class_1792 item = ChallengeManager.item(c.subject());
-                int currentLevel = pr.words().getOrDefault(c.subject(), 0);
+                int currentStars = pr.words().getOrDefault(c.subject(), 0);
+                int currentReps = pr.reps().getOrDefault(c.subject(), 0);
+                boolean rare = ChallengeManager.isRare(c.subject());
+                int neededReps = ChallengeManager.targetReps(currentStars, rare);
 
                 if (passed || cfg.penalty.equals("none")) {
-                    int nextLevel = Math.min(5, currentLevel + 1);
-                    pr.words().put(c.subject(), nextLevel);
+                    int nextReps = currentReps + 1;
                     pr.timestamps().put(c.subject(), System.currentTimeMillis());
 
-                    if (nextLevel >= 5) {
-                        // Master Level 5/5: 30 minutes maintenance review (36000 ticks)
-                        s.cooldown.put(c.subject(), now + 36000L);
-                        player.method_43496((class_2561)class_2561.method_43470("\u00a7a\u2714 [MESTRE 5/5] Dominado com Maestria! Pr\u00f3xima revis\u00e3o em 30 minutos de jogo."));
-                    } else {
-                        // Quick reinforcement intervals: 2s (lvl 1), 3s (lvl 2), 4s (lvl 3), 5s (lvl 4)
-                        long cdTicks;
-                        switch (nextLevel) {
-                            case 1: cdTicks = 40L; break;   // 2s
-                            case 2: cdTicks = 60L; break;   // 3s
-                            case 3: cdTicks = 80L; break;   // 4s
-                            case 4: cdTicks = 100L; break;  // 5s
-                            default: cdTicks = 40L; break;
-                        }
+                    if (nextReps >= neededReps) {
+                        int newStars = Math.min(5, currentStars + 1);
+                        pr.words().put(c.subject(), newStars);
+                        pr.reps().put(c.subject(), 0);
+
+                        long cdTicks = ChallengeManager.starCooldownTicks(newStars, rare);
                         s.cooldown.put(c.subject(), now + cdTicks);
-                        int remaining = 5 - nextLevel;
-                        int nextSec = (int)(cdTicks / 20L);
-                        player.method_43496((class_2561)class_2561.method_43470("\u00a7e\u2605 [Fixa\u00e7\u00e3o " + nextLevel + "/5] Correto (" + score + "%)! Pr\u00f3xima repeti\u00e7\u00e3o em " + nextSec + "s (" + remaining + " etapa(s) restante(s))."));
+                        int delayMin = Math.max(1, (int)(cdTicks / 1200L));
+
+                        if (newStars == 1) {
+                            player.method_43496((class_2561)class_2561.method_43470(
+                                "\u00a7a\u2605 [Estrela 1/5 Desbloqueada!] Palavra descoberta com sucesso! Pr\u00f3ximos testes de fixa\u00e7\u00e3o em ~" + delayMin + " min."
+                            ));
+                        } else if (newStars >= 5) {
+                            player.method_43496((class_2561)class_2561.method_43470(
+                                "\u00a76\u2605\u2605\u2605\u2605\u2605 [DOM\u00cdNIO MESTRE 5/5] Voc\u00ea memorizou completamente esta palavra! Revis\u00e3o peri\u00f3dica em ~" + delayMin + " min."
+                            ));
+                        } else {
+                            player.method_43496((class_2561)class_2561.method_43470(
+                                "\u00a7a\u2605 [Estrela " + newStars + "/5 Conquistada!] N\u00edvel avan\u00e7ado! Descanse; pr\u00f3xima etapa em ~" + delayMin + " min."
+                            ));
+                        }
+                    } else {
+                        pr.reps().put(c.subject(), nextReps);
+                        if (!pr.words().containsKey(c.subject())) {
+                            pr.words().put(c.subject(), 0);
+                        }
+                        long cdTicks = ChallengeManager.repCooldownTicks(currentStars, nextReps, rare);
+                        s.cooldown.put(c.subject(), now + cdTicks);
+                        int nextSec = Math.max(1, (int)(cdTicks / 20L));
+                        int remaining = neededReps - nextReps;
+                        int targetStar = currentStars + 1;
+
+                        if (currentStars == 0) {
+                            player.method_43496((class_2561)class_2561.method_43470(
+                                "\u00a7e\u2606 [Descoberta " + nextReps + "/" + neededReps + "] Correto (" + score + "%)! Pr\u00f3ximo teste em " + nextSec + "s (" + remaining + " para Estrela 1 \u2605)."
+                            ));
+                        } else {
+                            player.method_43496((class_2561)class_2561.method_43470(
+                                "\u00a7e\u2605 [Estrela " + currentStars + "/5 - Teste " + nextReps + "/" + neededReps + "] Correto (" + score + "%)! Pr\u00f3ximo em " + nextSec + "s (" + remaining + " para Estrela " + targetStar + ")."
+                            ));
+                        }
                     }
                     break;
                 }
 
                 if (item == null) break;
 
-                // Decision A3: On fail, take ONLY 1 item (never wipe whole inventory and never drop onto ground)
-                int n = ChallengeManager.deleteOne(player, item);
-                pr.lost += n;
+                if (rare) {
+                    int regressedReps = Math.max(0, currentReps - 1);
+                    pr.reps().put(c.subject(), regressedReps);
+                    pr.timestamps().put(c.subject(), System.currentTimeMillis());
+                    s.cooldown.put(c.subject(), now + 300L); // 15s grace cooldown
 
-                // Decision A3: Regress fixation level by 1
-                int regressed = Math.max(0, currentLevel - 1);
-                if (regressed > 0) {
-                    pr.words().put(c.subject(), regressed);
+                    player.method_43496((class_2561)class_2561.method_43470(
+                        "\u00a76\ud83d\udee1 [Item Raro Protegido] Pron\u00fancia n\u00e3o reconhecida (" + score + "%), mas o item foi preservado! Repeti\u00e7\u00e3o regredida (" + regressedReps + "/" + neededReps + "). Tente novamente em 15s."
+                    ));
                 } else {
-                    pr.words().remove(c.subject());
+                    int n = ChallengeManager.deleteOne(player, item);
+                    pr.lost += n;
+
+                    int regressedReps = currentReps - 1;
+                    int regressedStars = currentStars;
+                    if (regressedReps < 0) {
+                        if (regressedStars > 0) {
+                            regressedStars--;
+                            pr.words().put(c.subject(), regressedStars);
+                            regressedReps = Math.max(0, ChallengeManager.targetReps(regressedStars, false) - 1);
+                        } else {
+                            regressedReps = 0;
+                            pr.words().remove(c.subject());
+                        }
+                    }
+                    pr.reps().put(c.subject(), regressedReps);
+                    pr.timestamps().put(c.subject(), System.currentTimeMillis());
+
+                    // Grace cooldown: 5 seconds (100 ticks)
+                    s.cooldown.put(c.subject(), now + 100L);
+
+                    player.method_43496((class_2561)class_2561.method_43470(
+                        "\u00a7c\u2716 [\u2605 " + regressedStars + "/5 - Repeti\u00e7\u00e3o " + regressedReps + "] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). 1 item foi exclu\u00eddo do invent\u00e1rio!"
+                    ));
                 }
-                pr.timestamps().put(c.subject(), System.currentTimeMillis());
-
-                // Grace cooldown: 5 seconds (100 ticks) to breathe and speak again
-                s.cooldown.put(c.subject(), now + 100L);
-
-                player.method_43496((class_2561)class_2561.method_43470("\u00a7c\u2716 [Fixa\u00e7\u00e3o " + regressed + "/5] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). 1 item foi exclu\u00eddo do invent\u00e1rio!"));
                 break;
             }
             case "sentence": {
@@ -420,15 +574,16 @@ public final class ChallengeManager {
             }
             case "practice": {
                 if (!passed) break;
-                int currentLevel = pr.words().getOrDefault(c.subject(), 0);
-                int nextLevel = Math.min(5, currentLevel + 1);
-                pr.words().put(c.subject(), nextLevel);
+                int currentStars = pr.words().getOrDefault(c.subject(), 0);
+                int nextStars = Math.min(5, currentStars + 1);
+                pr.words().put(c.subject(), nextStars);
+                pr.reps().put(c.subject(), 0);
                 pr.timestamps().put(c.subject(), System.currentTimeMillis());
                 player.method_7255(Math.max(1, cfg.sentenceXp / 3));
-                if (nextLevel >= 5) {
+                if (nextStars >= 5) {
                     player.method_43496((class_2561)class_2561.method_43470("\u00a7a\u2714 [MESTRE 5/5] Dominado com Maestria na pr\u00e1tica!"));
                 } else {
-                    player.method_43496((class_2561)class_2561.method_43470("\u00a7e\u2605 [Fixa\u00e7\u00e3o " + nextLevel + "/5] Treino conclu\u00eddo com sucesso!"));
+                    player.method_43496((class_2561)class_2561.method_43470("\u00a7e\u2605 [Estrela " + nextStars + "/5] Treino conclu\u00eddo com sucesso!"));
                 }
                 break;
             }
@@ -548,6 +703,7 @@ public final class ChallengeManager {
     public static void reset(class_3222 player) {
         State s = ChallengeManager.state(player);
         s.progress.words().clear();
+        s.progress.reps().clear();
         s.progress.timestamps().clear();
         s.progress.sentences = 0;
         s.progress.lost = 0;

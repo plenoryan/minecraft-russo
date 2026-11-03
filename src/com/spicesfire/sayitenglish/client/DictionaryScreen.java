@@ -115,20 +115,24 @@ extends class_437 {
                         color = -10755203;
                         break;
                     case 4:
-                        s = "\u2605\u2605\u2605\u2605\u2606 [4/5]";
+                        s = "\u2605\u2605\u2605\u2605\u2606 [4/5 - Avan\u00e7ado]";
                         color = -11141121;
                         break;
                     case 3:
-                        s = "\u2605\u2605\u2605\u2606\u2606 [3/5]";
+                        s = "\u2605\u2605\u2605\u2606\u2606 [3/5 - Pr\u00e1tica]";
                         color = -14006;
                         break;
                     case 2:
-                        s = "\u2605\u2605\u2606\u2606\u2606 [2/5]";
+                        s = "\u2605\u2605\u2606\u2606\u2606 [2/5 - Fixa\u00e7\u00e3o]";
                         color = -26368;
                         break;
-                    default:
-                        s = "\u2605\u2606\u2606\u2606\u2606 [1/5]";
+                    case 1:
+                        s = "\u2605\u2606\u2606\u2606\u2606 [1/5 - Descoberta]";
                         color = -30118;
+                        break;
+                    default:
+                        s = "\u2606\u2606\u2606\u2606\u2606 [0/5 - Descoberta]";
+                        color = -7697766;
                         break;
                 }
             } else {

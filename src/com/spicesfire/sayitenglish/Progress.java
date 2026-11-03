@@ -19,6 +19,7 @@ public final class Progress {
     public String language;
     public Map<String, Map<String, Integer>> byLanguage = new LinkedHashMap<>();
     public Map<String, Map<String, Long>> timestamps = new LinkedHashMap<>();
+    public Map<String, Map<String, Integer>> reps = new LinkedHashMap<>();
     public Map<String, Integer> words;
     public int sentences;
     public int lost;
@@ -31,6 +32,14 @@ public final class Progress {
     public Map<String, Integer> words() {
         String lang = (this.language == null) ? "en" : this.language;
         return this.byLanguage.computeIfAbsent(lang, k -> new LinkedHashMap<>());
+    }
+
+    public Map<String, Integer> reps() {
+        if (this.reps == null) {
+            this.reps = new LinkedHashMap<>();
+        }
+        String lang = (this.language == null) ? "en" : this.language;
+        return this.reps.computeIfAbsent(lang, k -> new LinkedHashMap<>());
     }
 
     public Map<String, Long> timestamps() {
@@ -63,6 +72,9 @@ public final class Progress {
         }
         if (pr.timestamps == null) {
             pr.timestamps = new LinkedHashMap<>();
+        }
+        if (pr.reps == null) {
+            pr.reps = new LinkedHashMap<>();
         }
         if (pr.words != null && !pr.words.isEmpty()) {
             pr.byLanguage.computeIfAbsent("en", k -> new LinkedHashMap<>()).putAll(pr.words);
