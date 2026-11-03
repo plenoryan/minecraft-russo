@@ -386,14 +386,7 @@ public final class ChallengeManager {
 
     public static int targetReps(int currentStars, boolean rare) {
         if (rare) {
-            switch (currentStars) {
-                case 0: return 7;
-                case 1: return 2;
-                case 2: return 2;
-                case 3: return 1;
-                case 4: return 1;
-                default: return 1;
-            }
+            return 7;
         } else {
             switch (currentStars) {
                 case 0: return 5;
@@ -408,20 +401,15 @@ public final class ChallengeManager {
 
     public static long repCooldownTicks(int currentStars, int repIndex, boolean rare) {
         if (rare) {
-            if (currentStars == 0) {
-                switch (repIndex) {
-                    case 1: return 40L;  // 2s
-                    case 2: return 60L;  // 3s
-                    case 3: return 80L;  // 4s
-                    case 4: return 100L; // 5s
-                    case 5: return 100L; // 5s
-                    case 6: return 120L; // 6s
-                    default: return 120L; // 6s
-                }
+            switch (repIndex) {
+                case 1: return 40L;  // 2s
+                case 2: return 60L;  // 3s
+                case 3: return 80L;  // 4s
+                case 4: return 100L; // 5s
+                case 5: return 100L; // 5s
+                case 6: return 120L; // 6s
+                default: return 120L; // 6s
             }
-            if (currentStars == 1) return 300L; // 15s
-            if (currentStars == 2) return 900L; // 45s
-            return 1200L; // 60s
         }
         if (currentStars == 0) {
             switch (repIndex) {
@@ -487,11 +475,14 @@ public final class ChallengeManager {
                 boolean rare = ChallengeManager.isRare(c.subject());
                 int neededReps = ChallengeManager.targetReps(currentStars, rare);
 
-                if (rare && currentStars == 0) {
-                    // RARE ITEM STAR 0 -> 1: 7 attempts trial. If player fails 4 times (majority), they lose the item!
+                if (rare) {
+                    // RARE ITEM TRIAL (ALL STARS): 7 attempts battery.
+                    // If player fails 4 times (majority of 7), they lose 1 rare item!
+                    // ZERO loss protection across all stars.
                     int successes = pr.reps().getOrDefault(c.subject(), 0);
                     int errors = pr.errors().getOrDefault(c.subject(), 0);
                     int attemptsDone = successes + errors;
+                    int targetStar = Math.min(5, currentStars + 1);
 
                     if (passed || cfg.penalty.equals("none")) {
                         successes++;
@@ -503,38 +494,49 @@ public final class ChallengeManager {
                         }
 
                         if (attemptsDone >= 7) {
-                            // 7 attempts completed with errors < 4 (so successes >= 4)!
-                            pr.words().put(c.subject(), 1);
+                            // 7 attempts completed with errors < 4 (so successes >= 4, majority achieved)!
+                            int newStars = targetStar;
+                            pr.words().put(c.subject(), newStars);
                             pr.reps().put(c.subject(), 0);
                             pr.errors().remove(c.subject());
 
-                            long cdTicks = ChallengeManager.starCooldownTicks(1, true);
+                            long cdTicks = ChallengeManager.starCooldownTicks(newStars, true);
                             s.cooldown.put(c.subject(), now + cdTicks);
                             int delayMin = Math.max(1, (int)(cdTicks / 1200L));
 
-                            player.method_43496((class_2561)class_2561.method_43470(
-                                "\u00a7a\u2605 [Estrela 1/5 Desbloqueada!] Item Raro dominado na maioria das tentativas (" + successes + "/7 acertos)! Pr\u00f3ximos testes em ~" + delayMin + " min."
-                            ));
+                            if (newStars == 1) {
+                                player.method_43496((class_2561)class_2561.method_43470(
+                                    "\u00a7a\u2605 [Estrela 1/5 Desbloqueada!] Item Raro dominado na maioria das tentativas (" + successes + "/7 acertos)! Pr\u00f3ximos testes em ~" + delayMin + " min."
+                                ));
+                            } else if (newStars >= 5) {
+                                player.method_43496((class_2561)class_2561.method_43470(
+                                    "\u00a76\u2605\u2605\u2605\u2605\u2605 [DOM\u00cdNIO MESTRE 5/5] Item Raro dominado com perfei\u00e7\u00e3o na maioria das tentativas (" + successes + "/7 acertos)! Revis\u00e3o peri\u00f3dica em ~" + delayMin + " min."
+                                ));
+                            } else {
+                                player.method_43496((class_2561)class_2561.method_43470(
+                                    "\u00a7a\u2605 [Estrela " + newStars + "/5 Conquistada!] Item Raro superou o teste de reten\u00e7\u00e3o na maioria (" + successes + "/7 acertos)! Pr\u00f3xima etapa em ~" + delayMin + " min."
+                                ));
+                            }
                         } else {
-                            long cdTicks = ChallengeManager.repCooldownTicks(0, attemptsDone, true);
+                            long cdTicks = ChallengeManager.repCooldownTicks(currentStars, attemptsDone, true);
                             s.cooldown.put(c.subject(), now + cdTicks);
                             int nextSec = Math.max(1, (int)(cdTicks / 20L));
                             int remainingAttempts = 7 - attemptsDone;
 
                             if (successes >= 4) {
                                 player.method_43496((class_2561)class_2561.method_43470(
-                                    "\u00a7e\u2606 [Item Raro - Tentativa " + attemptsDone + "/7] Correto (" + score + "%)! (" + successes + " acertos - maioria garantida!). Pr\u00f3ximo em " + nextSec + "s (" + remainingAttempts + " restante(s))."
+                                    "\u00a7e\u2606 [Item Raro - Estrela " + targetStar + " - Tentativa " + attemptsDone + "/7] Correto (" + score + "%)! (" + successes + " acertos - maioria garantida!). Pr\u00f3ximo em " + nextSec + "s (" + remainingAttempts + " restante(s))."
                                 ));
                             } else {
                                 player.method_43496((class_2561)class_2561.method_43470(
-                                    "\u00a7e\u2606 [Item Raro - Tentativa " + attemptsDone + "/7] Correto (" + score + "%)! (" + successes + " acertos, " + errors + " erros). Pr\u00f3ximo em " + nextSec + "s (" + remainingAttempts + " restante(s))."
+                                    "\u00a7e\u2606 [Item Raro - Estrela " + targetStar + " - Tentativa " + attemptsDone + "/7] Correto (" + score + "%)! (" + successes + " acertos, " + errors + " erros). Pr\u00f3ximo em " + nextSec + "s (" + remainingAttempts + " restante(s))."
                                 ));
                             }
                         }
                         break;
                     }
 
-                    // Failed pronunciation on rare item in Star 0:
+                    // Failed pronunciation on rare item:
                     if (item == null) break;
 
                     errors++;
@@ -546,27 +548,38 @@ public final class ChallengeManager {
                         // 4 errors = majority of 7! ITEM IS LOST!
                         int n = ChallengeManager.deleteOne(player, item);
                         pr.lost += n;
-                        pr.words().remove(c.subject());
                         pr.reps().remove(c.subject());
                         pr.errors().remove(c.subject());
 
+                        int regressedStars = Math.max(0, currentStars - 1);
+                        if (regressedStars == 0) {
+                            pr.words().remove(c.subject());
+                        } else {
+                            pr.words().put(c.subject(), regressedStars);
+                        }
+
                         s.cooldown.put(c.subject(), now + 300L); // 15s cooldown
 
+                        String regrMsg = regressedStars == 0
+                            ? "Progresso da palavra zerado!"
+                            : "Regrediu para Estrela " + regressedStars + "/5.";
+
                         player.method_43496((class_2561)class_2561.method_43470(
-                            "\u00a7c\u2716 [Item Raro Perdido] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). Voc\u00ea errou 4 tentativas (maioria de 7)! 1 item foi exclu\u00eddo do invent\u00e1rio!"
+                            "\u00a7c\u2716 [Item Raro Perdido] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). Voc\u00ea errou 4 tentativas (maioria de 7)! 1 item foi exclu\u00eddo do invent\u00e1rio! " + regrMsg
                         ));
                     } else if (attemptsDone >= 7) {
-                        // 7 attempts completed with errors < 4 (so successes >= 4)!
-                        pr.words().put(c.subject(), 1);
+                        // 7 attempts completed with errors < 4 (so successes >= 4, majority achieved)!
+                        int newStars = targetStar;
+                        pr.words().put(c.subject(), newStars);
                         pr.reps().put(c.subject(), 0);
                         pr.errors().remove(c.subject());
 
-                        long cdTicks = ChallengeManager.starCooldownTicks(1, true);
+                        long cdTicks = ChallengeManager.starCooldownTicks(newStars, true);
                         s.cooldown.put(c.subject(), now + cdTicks);
                         int delayMin = Math.max(1, (int)(cdTicks / 1200L));
 
                         player.method_43496((class_2561)class_2561.method_43470(
-                            "\u00a7a\u2605 [Estrela 1/5 Desbloqueada!] 7 tentativas conclu\u00eddas com " + successes + " acertos e " + errors + " erros (maioria conquistada)! Pr\u00f3ximos testes em ~" + delayMin + " min."
+                            "\u00a7a\u2605 [Estrela " + newStars + "/5 Conquistada!] 7 tentativas conclu\u00eddas com " + successes + " acertos e " + errors + " erros (maioria conquistada)! Pr\u00f3ximos testes em ~" + delayMin + " min."
                         ));
                     } else {
                         // Not lost yet, warning with strikes remaining
@@ -575,7 +588,7 @@ public final class ChallengeManager {
                         s.cooldown.put(c.subject(), now + 100L); // 5s grace interval
 
                         player.method_43496((class_2561)class_2561.method_43470(
-                            "\u00a76\u26a0 [Item Raro - Tentativa " + attemptsDone + "/7] Pron\u00fancia incorreta (" + score + "%). Erro " + errors + "/4 (se errar mais " + remainingStrikes + ", perde o item!). Pr\u00f3xima em 5s (" + remainingAttempts + " restante(s))."
+                            "\u00a76\u26a0 [Item Raro - Estrela " + targetStar + " - Tentativa " + attemptsDone + "/7] Pron\u00fancia incorreta (" + score + "%). Erro " + errors + "/4 (se errar mais " + remainingStrikes + ", perde o item!). Pr\u00f3xima em 5s (" + remainingAttempts + " restante(s))."
                         ));
                     }
                     break;
@@ -635,41 +648,30 @@ public final class ChallengeManager {
 
                 if (item == null) break;
 
-                if (rare) {
-                    int regressedReps = Math.max(0, currentReps - 1);
-                    pr.reps().put(c.subject(), regressedReps);
-                    pr.timestamps().put(c.subject(), System.currentTimeMillis());
-                    s.cooldown.put(c.subject(), now + 300L); // 15s grace cooldown
+                int n = ChallengeManager.deleteOne(player, item);
+                pr.lost += n;
 
-                    player.method_43496((class_2561)class_2561.method_43470(
-                        "\u00a76\ud83d\udee1 [Item Raro Protegido] Pron\u00fancia n\u00e3o reconhecida (" + score + "%), mas o item foi preservado! Repeti\u00e7\u00e3o regredida (" + regressedReps + "/" + neededReps + "). Tente novamente em 15s."
-                    ));
-                } else {
-                    int n = ChallengeManager.deleteOne(player, item);
-                    pr.lost += n;
-
-                    int regressedReps = currentReps - 1;
-                    int regressedStars = currentStars;
-                    if (regressedReps < 0) {
-                        if (regressedStars > 0) {
-                            regressedStars--;
-                            pr.words().put(c.subject(), regressedStars);
-                            regressedReps = Math.max(0, ChallengeManager.targetReps(regressedStars, false) - 1);
-                        } else {
-                            regressedReps = 0;
-                            pr.words().remove(c.subject());
-                        }
+                int regressedReps = currentReps - 1;
+                int regressedStars = currentStars;
+                if (regressedReps < 0) {
+                    if (regressedStars > 0) {
+                        regressedStars--;
+                        pr.words().put(c.subject(), regressedStars);
+                        regressedReps = Math.max(0, ChallengeManager.targetReps(regressedStars, false) - 1);
+                    } else {
+                        regressedReps = 0;
+                        pr.words().remove(c.subject());
                     }
-                    pr.reps().put(c.subject(), regressedReps);
-                    pr.timestamps().put(c.subject(), System.currentTimeMillis());
-
-                    // Grace cooldown: 5 seconds (100 ticks)
-                    s.cooldown.put(c.subject(), now + 100L);
-
-                    player.method_43496((class_2561)class_2561.method_43470(
-                        "\u00a7c\u2716 [\u2605 " + regressedStars + "/5 - Repeti\u00e7\u00e3o " + regressedReps + "] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). 1 item foi exclu\u00eddo do invent\u00e1rio!"
-                    ));
                 }
+                pr.reps().put(c.subject(), regressedReps);
+                pr.timestamps().put(c.subject(), System.currentTimeMillis());
+
+                // Grace cooldown: 5 seconds (100 ticks)
+                s.cooldown.put(c.subject(), now + 100L);
+
+                player.method_43496((class_2561)class_2561.method_43470(
+                    "\u00a7c\u2716 [\u2605 " + regressedStars + "/5 - Repeti\u00e7\u00e3o " + regressedReps + "] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). 1 item foi exclu\u00eddo do invent\u00e1rio!"
+                ));
                 break;
             }
             case "sentence": {

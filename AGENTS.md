@@ -238,7 +238,16 @@
   2. **Incongruência Semântica (Дерево / Madeira vs Árvore):** Em russo, `Дерево` significa primariamente `Árvore` (planta) e secundariamente `Madeira` vegetal. A tradução isolada como "Madeira" fazia o SayIt exigir "Derevo" na fala enquanto a UI exibia apenas "Madeira", gerando dissonância pedagógica perceptível pelo usuário.
 - **Solução:**
   1. **Isolamento Funcional via `forEach`:** No `russian_tooltips.js`, a iteração foi refatorada para `Object.keys(ruCurriculum).forEach(function(itemId) { var entry = ruCurriculum[itemId]; ... })`. O `forEach` garante um novo quadro de pilha (activation record) na JVM/Rhino para cada chave, isolando permanentemente os dados de cada item. Validado diretamente com a engine Rhino embutida.
-  2. **Unificação Bilíngue "Árvore / Madeira":** Em todos os arquivos de linguagem (`kubejs/assets/minecraft/lang/pt_br.json`, `resourcepacks/.../pt_br.json`, `russian_tooltips.js` e na missão `01_derevo.json`), a nomenclatura de `oak_log` e variantes de madeira foi consolidada como `"Árvore / Madeira [RU: Дерево]"`. Agora, tanto a pronúncia falada (`Дерево`) quanto a legenda em português transmitem equivalência semântica exata.
+  2. **Unificação Bilíngue "Árvore / Madeira":** Em todos os arquivos de linguagem (`kubejs/assets/minecraft/lang/pt_br.json`, `resourcepacks/.../pt_br.json`, `russian_tooltips.js` e na missão `01_derevo.json`), a nomenclatura de `oak_log` e variantes de madeira foi consolidada como `"Árvore / Madeira [RU: Дереvo]"`. Agora, tanto a pronúncia falada (`Дерево`) quanto a legenda em português transmitem equivalência semântica exata.
+
+### L34. Regra da Maioria Contínua para Itens Raros (Sem Escudo de Proteção)
+- **Armadilha:**
+  1. Conceder imunidade ou "escudo de proteção permanente" a itens raros nas estrelas avançadas (2 a 5) remove o risco real e a tensão pedagógica de pronúncia do jogo.
+- **Solução:**
+  1. **Bateria de 7 Tentativas Unificada:** Em todas as etapas de fixação (Estrelas 0 a 5), itens raros operam com uma bateria contínua de 7 tentativas por nível.
+  2. **Perda por Maioria de Erros (4/7):** Se o jogador cometer 4 erros em qualquer nível de estrela, 1 item raro é imediatamente deletado do inventário (`deleteOne`) e o nível de estrelas regride (`currentStars - 1`). Não existe escudo protetor que impeça a perda.
+  3. **Avanço por Maioria de Acertos:** Ao concluir as 7 tentativas com menos de 4 erros (4 ou mais acertos), a próxima estrela é conquistada e o temporizador de descanso longo do nível é acionado.
+
 
 
 
