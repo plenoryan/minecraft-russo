@@ -256,6 +256,15 @@
   1. **Redução Atômica e Esvaziamento Explicito:** Em `deleteOne`, se `count <= 1`, o slot é esvaziado explicitamente com `class_1799.field_8037` (`ItemStack.EMPTY`). Se `count > 1`, o método `method_7939(count - 1)` reduz matematicamente a contagem em 1.
   2. **Tratamento de Penalidade `applyPenaltyOne`:** Suporta tanto exclusão pura (`"delete"`) quanto descarte no chão (`"drop"` via `dropOne`) de acordo com a configuração de `Config.get().penalty`.
 
+### L36. Cobertura Universal de Tooltips Bilíngues com SayIt e Romanizer (KubeJS)
+- **Armadilha:** O script `russian_tooltips.js` registrava apenas 37 itens no `ruCurriculum`. Qualquer outro item do jogo (ex: `minecraft:feather`, `minecraft:beef`, `minecraft:iron_sword`, itens de mods) que acionasse um desafio de voz do SayIt não possuía nenhum tooltip em russo no inventário, exibindo apenas o nome padrão em português.
+- **Solução:**
+  1. **Fallback Universal via `addAdvancedToAll`:** Implementado listener global de tooltips no KubeJS (`event.addAdvancedToAll`). Itens já registrados no `ruCurriculum` são ignorados no loop global para manter suas notas fonéticas e gramaticais artesanais intactas.
+  2. **Interrogação Dinâmica via `Words.word` e `Romanizer.of`:** Para qualquer outro item, o script consulta dinamicamente `com.spicesfire.sayitenglish.client.Words.word(itemId)` para extrair a tradução russa oficial e `Romanizer.of(ru, "ru")` para obter a transcrição fonética latina automática.
+  3. **Validação Cirílica e Cache em Memória:** Validação estrita por regex `[\u0400-\u04FF]` para assegurar que apenas itens com traduções russas genuínas recebam a tarja `★ Russo: <Palavra> [<Pronúncia>]`, com cache in-memory (`dynamicWordCache`) para garantir 60+ FPS sem overhead no inventário.
+  4. **Exibição Dinâmica de Estrelas de Maestria:** Tanto itens do currículo quanto itens descobertos dinamicamente consultam `ChallengeSession.words` e `scores`, exibindo a progressão real de estrelas do jogador (`★☆☆☆☆` a `★★★★★`) diretamente no tooltip do item.
+
+
 
 
 

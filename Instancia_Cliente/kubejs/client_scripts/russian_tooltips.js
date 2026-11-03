@@ -2,6 +2,27 @@
 // Executed client-side with zero multiplayer server impact.
 
 ItemEvents.tooltip(event => {
+    var Words = null;
+    var Romanizer = null;
+    var ChallengeSession = null;
+
+    try {
+        Words = Java.tryLoadClass('com.spicesfire.sayitenglish.client.Words');
+    } catch (e) {}
+
+    try {
+        Romanizer = Java.tryLoadClass('com.spicesfire.sayitenglish.client.Romanizer');
+    } catch (e) {}
+
+    try {
+        ChallengeSession = Java.tryLoadClass('com.spicesfire.sayitenglish.client.ChallengeSession');
+        if (ChallengeSession && (!ChallengeSession.language || ChallengeSession.language === 'en')) {
+            ChallengeSession.language = 'ru';
+        }
+    } catch (e) {}
+
+    var dynamicWordCache = {};
+
     const ruCurriculum = {
         'minecraft:oak_log': {
             ru: 'Дéрево',
@@ -363,6 +384,21 @@ ItemEvents.tooltip(event => {
             text.add(Text.gold('★ Russo: ').append(Text.white(entry.ru)).append(Text.gray(' ' + entry.phon)));
             text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
             text.add(Text.aqua('  Gênero: ').append(Text.white(entry.gen)).append(Text.gray(' | Nível ' + entry.tier)));
+
+            try {
+                if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
+                    var idx = ChallengeSession.words.indexOf(itemId);
+                    if (idx >= 0 && idx < ChallengeSession.scores.size()) {
+                        var stars = ChallengeSession.scores.get(idx);
+                        if (stars > 0) {
+                            var starsFilled = ''; for (var s = 0; s < stars; s++) starsFilled += '★';
+                            var starsEmpty = ''; for (var s = stars; s < 5; s++) starsEmpty += '☆';
+                            text.add(Text.gold('  Domínio: ').append(Text.yellow(starsFilled)).append(Text.darkGray(starsEmpty)).append(Text.gray(' (' + stars + '/5 estrelas)')));
+                        }
+                    }
+                }
+            } catch (e) {}
+
             if (event.shift) {
                 text.add(Text.green('  Nota Gramatical: ').append(Text.gray(entry.note)));
             } else {
@@ -370,4 +406,102 @@ ItemEvents.tooltip(event => {
             }
         });
     });
+
+    // Universal dynamic tooltip fallback for ALL other items prompted by SayIt
+    event.addAdvancedToAll(function(item, advanced, text) {
+        if (!item || !item.id) {
+            return;
+        }
+
+        var itemId = String(item.id);
+        if (ruCurriculum.hasOwnProperty(itemId)) {
+            return;
+        }
+
+        if (dynamicWordCache.hasOwnProperty(itemId)) {
+            var cached = dynamicWordCache[itemId];
+            if (cached) {
+                appendDynamicTooltip(text, cached, itemId);
+            }
+            return;
+        }
+
+        if (!Words) {
+            return;
+        }
+
+        try {
+            if (ChallengeSession && (!ChallengeSession.language || ChallengeSession.language === 'en')) {
+                ChallengeSession.language = 'ru';
+            }
+            var prompt = Words.word(itemId);
+            if (!prompt) {
+                dynamicWordCache[itemId] = null;
+                return;
+            }
+
+            var ru = prompt.target();
+            if (!ru || ru === itemId) {
+                dynamicWordCache[itemId] = null;
+                return;
+            }
+
+            // Ensure the translation contains Cyrillic characters (proof of valid Russian translation)
+            if (!/[\u0400-\u04FF]/.test(ru)) {
+                dynamicWordCache[itemId] = null;
+                return;
+            }
+
+            var phon = null;
+            if (Romanizer) {
+                try {
+                    phon = Romanizer.of(ru, 'ru');
+                } catch (e) {}
+            }
+
+            var pt = prompt.nativeText();
+            if (!pt || pt === itemId || pt.indexOf('item.') === 0 || pt.indexOf('block.') === 0) {
+                try {
+                    pt = item.name ? item.name.getString() : '';
+                } catch (e) {}
+            }
+
+            var entry = {
+                ru: String(ru),
+                phon: phon ? ('[' + phon + ']') : '',
+                pt: (pt && pt !== ru) ? String(pt) : ''
+            };
+
+            dynamicWordCache[itemId] = entry;
+            appendDynamicTooltip(text, entry, itemId);
+        } catch (e) {
+            dynamicWordCache[itemId] = null;
+        }
+    });
+
+    function appendDynamicTooltip(text, entry, itemId) {
+        var phonSuffix = entry.phon ? (' ' + entry.phon) : '';
+        text.add(Text.gold('★ Russo: ').append(Text.white(entry.ru)).append(Text.gray(phonSuffix)));
+        if (entry.pt) {
+            text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
+        }
+
+        try {
+            if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
+                var idx = ChallengeSession.words.indexOf(itemId);
+                if (idx >= 0 && idx < ChallengeSession.scores.size()) {
+                    var stars = ChallengeSession.scores.get(idx);
+                    if (stars > 0) {
+                        var starsFilled = ''; for (var s = 0; s < stars; s++) starsFilled += '★';
+                        var starsEmpty = ''; for (var s = stars; s < 5; s++) starsEmpty += '☆';
+                        text.add(Text.gold('  Domínio: ').append(Text.yellow(starsFilled)).append(Text.darkGray(starsEmpty)).append(Text.gray(' (' + stars + '/5 estrelas)')));
+                    }
+                }
+            }
+        } catch (e) {}
+
+        if (event.shift) {
+            text.add(Text.green('  Vocabulário SayIt: ').append(Text.gray('Pronúncia transliterada: ' + (entry.phon || '[Padrão]'))));
+        }
+    }
 });

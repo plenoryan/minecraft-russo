@@ -54,3 +54,5 @@ Launcher/data/instances/*/.minecraft/shaderpacks/
 Launcher/instances/*/.minecraft/kubejs/
 Launcher/instances/*/.minecraft/resourcepacks/
 Launcher/instances/*/.minecraft/shaderpacks/
+Launcher/data/instances/*/natives/
+Launcher/instances/*/natives/
