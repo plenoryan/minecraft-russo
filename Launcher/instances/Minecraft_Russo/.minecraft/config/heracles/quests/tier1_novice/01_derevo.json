@@ -7,20 +7,20 @@
                      "unlockable":  true
                  },
     "display":  {
-                    "title":  "Tier 1: Дéрево (Madeira / Árvore)",
-                    "subtitle":  "Pronúncia: [DYE-rye-va] | Madeira / Árvore • Neutro (с.р.)",
+                    "title":  "Tier 1: Дéрево (Árvore / Madeira)",
+                    "subtitle":  "Pronúncia: [DYE-rye-va] | Árvore / Madeira • Neutro (с.р.)",
                     "description":  [
-                                        "\u003c#55FF55\u003eДобро пожаловать в мир русского языка!\u003c/\u003e",
+                                        "<#55FF55>Добро пожаловать в мир русского языка!</>",
                                         "",
-                                        "Item: \u003cgold\u003eДéрево\u003c/gold\u003e (Madeira / Árvore)",
-                                        "Gênero Gramatical: \u003caqua\u003eNeutro (с.р.)\u003c/aqua\u003e",
-                                        "Guia de Pronúncia: \u003cyellow\u003e[DYE-rye-va]\u003c/yellow\u003e",
+                                        "Item: <gold>Дéрево</gold> (Árvore / Madeira)",
+                                        "Gênero Gramatical: <aqua>Neutro (с.р.)</aqua>",
+                                        "Guia de Pronúncia: <yellow>[DYE-rye-va]</yellow>",
                                         "",
-                                        "§eRegra Fonética \u0026 Gramática:§r",
-                                        "A primeira sílaba é tônica (ДЕ-ре-во). A vogal \u0027o\u0027 átona final sofre redução vocálica (ákanie), soando como [a].",
+                                        "§eRegra Fonética & Gramática:§r",
+                                        "Em russo, Дерево significa primariamente Árvore e também a matéria Madeira vegetal. A primeira sílaba é tônica (ДÉ-ре-во). A vogal 'o' átona final sofre redução vocálica (ákanie), soando como [a].",
                                         "",
                                         "§cDesafio de Voz (Mecânica Melty):§r",
-                                        "Segure o item na mão. Você tem \u003cgold\u003e18 segundos\u003c/gold\u003e para pronunciar \u003cyellow\u003e«Дéрево»\u003c/yellow\u003e no microfone para consolidar o vocabulário e não perder o item!",
+                                        "Segure o item na mão. Você tem <gold>18 segundos</gold> para pronunciar <yellow>«Дéрево»</yellow> no microfone para consolidar o vocabulário e não perder o item!",
                                         "",
                                         "§bRecompensa Educacional:§r +25 XP e registro no vocabulário pessoal."
                                     ],
@@ -43,7 +43,7 @@
                                              "item":  "minecraft:oak_log",
                                              "amount":  1,
                                              "collection":  "AUTOMATIC",
-                                             "title":  "Segure ou colete Дéрево (Madeira / Árvore)"
+                                             "title":  "Segure ou colete Дéрево (Árvore / Madeira)"
                                          }
               },
     "rewards":  {

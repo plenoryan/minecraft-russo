@@ -1,6 +1,10 @@
 {
   "block.minecraft.oak_log": "Дерево",
   "item.minecraft.oak_log": "Дерево",
+  "block.minecraft.oak_wood": "Дерево",
+  "item.minecraft.oak_wood": "Дерево",
+  "block.minecraft.stripped_oak_log": "Дерево",
+  "item.minecraft.stripped_oak_log": "Дерево",
   "block.minecraft.oak_planks": "Доски",
   "item.minecraft.oak_planks": "Доски",
   "item.minecraft.stick": "Палка",

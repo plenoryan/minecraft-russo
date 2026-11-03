@@ -6,10 +6,42 @@ ItemEvents.tooltip(event => {
         'minecraft:oak_log': {
             ru: 'Дéрево',
             phon: '[DYE-rye-va]',
-            pt: 'Madeira / Árvore',
+            pt: 'Árvore / Madeira',
             gen: 'Neutro (с.р.)',
             tier: 1,
-            note: 'A primeira sílaba é tônica (ДÉ-ре-во). A vogal \'o\' átona final sofre redução vocálica (ákanie), soando como [a].'
+            note: 'Significa primariamente Árvore e também Madeira vegetal. A primeira sílaba é tônica (ДÉ-ре-во). A vogal \'o\' átona final sofre redução vocálica (ákanie), soando como [a].'
+        },
+        'minecraft:oak_wood': {
+            ru: 'Дéрево',
+            phon: '[DYE-rye-va]',
+            pt: 'Árvore / Madeira',
+            gen: 'Neutro (с.р.)',
+            tier: 1,
+            note: 'Bloco de madeira vegetal. Mesma raiz de Дерево.'
+        },
+        'minecraft:stripped_oak_log': {
+            ru: 'Дéрево',
+            phon: '[DYE-rye-va]',
+            pt: 'Árvore / Madeira Descascada',
+            gen: 'Neutro (с.р.)',
+            tier: 1,
+            note: 'Tronco descascado com machado. Mesma raiz de Дерево.'
+        },
+        'minecraft:spruce_log': {
+            ru: 'Дéрево (Ель)',
+            phon: '[DYE-rye-va (YEL\')]',
+            pt: 'Árvore / Madeira (Pinheiro)',
+            gen: 'Neutro (с.р.)',
+            tier: 1,
+            note: 'Tronco/madeira de pinheiro (Ель).'
+        },
+        'minecraft:birch_log': {
+            ru: 'Дéрево (Берёза)',
+            phon: '[DYE-rye-va (bye-RYO-za)]',
+            pt: 'Árvore / Madeira (Bétula)',
+            gen: 'Neutro (с.р.)',
+            tier: 1,
+            note: 'Tronco/madeira de bétula/eucalipto (Берёза).'
         },
         'minecraft:oak_planks': {
             ru: 'Дóски',
@@ -325,16 +357,17 @@ ItemEvents.tooltip(event => {
         }
     };
 
-    for (const [id, data] of Object.entries(ruCurriculum)) {
-        event.addAdvanced(id, (item, advanced, text) => {
-            text.add(Text.gold('★ Russo: ').append(Text.white(data.ru)).append(Text.gray(' ' + data.phon)));
-            text.add(Text.yellow('  Português: ').append(Text.white(data.pt)));
-            text.add(Text.aqua('  Gênero: ').append(Text.white(data.gen)).append(Text.gray(' | Nível ' + data.tier)));
+    Object.keys(ruCurriculum).forEach(function(itemId) {
+        var entry = ruCurriculum[itemId];
+        event.addAdvanced(itemId, function(item, advanced, text) {
+            text.add(Text.gold('★ Russo: ').append(Text.white(entry.ru)).append(Text.gray(' ' + entry.phon)));
+            text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
+            text.add(Text.aqua('  Gênero: ').append(Text.white(entry.gen)).append(Text.gray(' | Nível ' + entry.tier)));
             if (event.shift) {
-                text.add(Text.green('  Nota Gramatical: ').append(Text.gray(data.note)));
+                text.add(Text.green('  Nota Gramatical: ').append(Text.gray(entry.note)));
             } else {
                 text.add(Text.darkGray('  [Segure SHIFT para nota fonética/gramatical]'));
             }
         });
-    }
+    });
 });

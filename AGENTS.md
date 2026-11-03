@@ -232,6 +232,14 @@
   3. **Persistência de Erros e Acertos:** Implementado mapa dedicado `errors` em `Progress.java` (`errors()`) espelhado em JSON, mantendo a contagem de acertos e falhas mesmo se o jogador deslogar ou fechar o jogo durante a bateria.
   4. **Proteção Pós-Descoberta:** Uma vez que o item raro alcança a Estrela 1, as etapas subsequentes (Estrelas 2 a 5) reativam o escudo de proteção (`Item Raro Protegido`), evitando a perda acidental do item conquistado durante as revisões de longo prazo.
 
+### L33. Vazamento de Escopo em Closures no Rhino (KubeJS) & Equivalência Semântica Árvore/Madeira
+- **Armadilha:**
+  1. **Vazamento de Variável de Closure no Rhino:** Laços do tipo `for (const [id, data] of Object.entries(dict))` no motor Rhino (utilizado pelo KubeJS) não criam ativação léxica isolada por iteração. Como consequência, todos os callbacks `event.addAdvanced` capturavam a referência mutável de `data`, fazendo com que TODOS os 25 itens do currículo exibissem os dados do último item registrado (`naturalist:antler` -> `Chifre de Veado`).
+  2. **Incongruência Semântica (Дерево / Madeira vs Árvore):** Em russo, `Дерево` significa primariamente `Árvore` (planta) e secundariamente `Madeira` vegetal. A tradução isolada como "Madeira" fazia o SayIt exigir "Derevo" na fala enquanto a UI exibia apenas "Madeira", gerando dissonância pedagógica perceptível pelo usuário.
+- **Solução:**
+  1. **Isolamento Funcional via `forEach`:** No `russian_tooltips.js`, a iteração foi refatorada para `Object.keys(ruCurriculum).forEach(function(itemId) { var entry = ruCurriculum[itemId]; ... })`. O `forEach` garante um novo quadro de pilha (activation record) na JVM/Rhino para cada chave, isolando permanentemente os dados de cada item. Validado diretamente com a engine Rhino embutida.
+  2. **Unificação Bilíngue "Árvore / Madeira":** Em todos os arquivos de linguagem (`kubejs/assets/minecraft/lang/pt_br.json`, `resourcepacks/.../pt_br.json`, `russian_tooltips.js` e na missão `01_derevo.json`), a nomenclatura de `oak_log` e variantes de madeira foi consolidada como `"Árvore / Madeira [RU: Дерево]"`. Agora, tanto a pronúncia falada (`Дерево`) quanto a legenda em português transmitem equivalência semântica exata.
+
 
 
 

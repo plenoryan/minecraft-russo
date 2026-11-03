@@ -1,6 +1,10 @@
 {
-  "block.minecraft.oak_log": "Madeira [RU: Дерево]",
-  "item.minecraft.oak_log": "Madeira [RU: Дерево]",
+  "block.minecraft.oak_log": "Árvore / Madeira [RU: Дерево]",
+  "item.minecraft.oak_log": "Árvore / Madeira [RU: Дерево]",
+  "block.minecraft.oak_wood": "Árvore / Madeira de Carvalho [RU: Дерево]",
+  "item.minecraft.oak_wood": "Árvore / Madeira de Carvalho [RU: Дерево]",
+  "block.minecraft.stripped_oak_log": "Árvore / Madeira Descascada [RU: Дерево]",
+  "item.minecraft.stripped_oak_log": "Árvore / Madeira Descascada [RU: Дерево]",
   "block.minecraft.oak_planks": "Tábuas de Carvalho [RU: Доски]",
   "item.minecraft.oak_planks": "Tábuas de Carvalho [RU: Доски]",
   "item.minecraft.stick": "Graveto [RU: Палка]",
