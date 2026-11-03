@@ -42,8 +42,8 @@ ao:true
 prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:"true"
-resourcePacks:["vanilla","file/Faithful 32x - 1.20.1.zip","file/Russian_Bilingual_Educational_Pack","fabric"]
-incompatibleresourcePacks:["vanilla","file/Faithful 32x - 1.20.1.zip","file/Russian_Bilingual_Educational_Pack","fabric"]
+resourcePacks:["vanilla","fabric","file/Faithful 32x - 1.20.1.zip","file/Fast Better Grass.zip","file/Better-Leaves-9.6.zip","file/Dramatic Skys.zip","file/Russian_Bilingual_Educational_Pack.zip"]
+incompatibleResourcePacks:[]
 lastServer:
 lang:pt_br
 soundDevice:""
@@ -129,6 +129,10 @@ key_key.presencefootsteps.settings:key.keyboard.f10
 key_key.presencefootsteps.toggle:key.keyboard.unknown
 key_key.sayitenglish.type:key.keyboard.y
 key_key.sayitenglish.settings:key.keyboard.u
+key_iris.keybind.reload:key.keyboard.r
+key_iris.keybind.toggleShaders:key.keyboard.k
+key_iris.keybind.shaderPackSelection:key.keyboard.o
+key_iris.keybind.wireframe:key.keyboard.unknown
 soundCategory_master:1.0
 soundCategory_music:1.0
 soundCategory_record:1.0
@@ -146,6 +150,3 @@ modelPart_right_sleeve:true
 modelPart_left_pants_leg:true
 modelPart_right_pants_leg:true
 modelPart_hat:true
-
-
-

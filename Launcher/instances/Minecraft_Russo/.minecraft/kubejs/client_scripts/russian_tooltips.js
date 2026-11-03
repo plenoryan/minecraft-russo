@@ -102,7 +102,7 @@ ItemEvents.tooltip(event => {
         'minecraft:wooden_axe': {
             ru: 'Топóр',
             phon: '[ta-POHR]',
-            pt: 'Machado',
+            pt: 'Machado de Madeira',
             gen: 'Masculino (м.р.)',
             tier: 1,
             note: 'O primeiro \'o\' átono soa como [a] (ákanie). Acento na última sílaba.'
@@ -110,7 +110,7 @@ ItemEvents.tooltip(event => {
         'minecraft:wooden_pickaxe': {
             ru: 'Ки́рка',
             phon: '[KEER-ka]',
-            pt: 'Picareta',
+            pt: 'Picareta de Madeira',
             gen: 'Feminino (ж.р.)',
             tier: 1,
             note: 'Substantivo feminino regular com acento na raiz.'
@@ -118,7 +118,7 @@ ItemEvents.tooltip(event => {
         'minecraft:wooden_shovel': {
             ru: 'Лопáта',
             phon: '[la-PAH-ta]',
-            pt: 'Pá',
+            pt: 'Pá de Madeira',
             gen: 'Feminino (ж.р.)',
             tier: 1,
             note: 'Substantivo feminino regular em -а. Acento na segunda sílaba.'
@@ -126,7 +126,7 @@ ItemEvents.tooltip(event => {
         'minecraft:wooden_sword': {
             ru: 'Меч',
             phon: '[MYECH]',
-            pt: 'Espada',
+            pt: 'Espada de Madeira',
             gen: 'Masculino (м.р.)',
             tier: 1,
             note: 'Palavra monossilábica. A consoante \'ч\' é sempre suave em russo.'

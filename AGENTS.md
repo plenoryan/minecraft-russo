@@ -194,6 +194,17 @@
      - Shaderpack `ComplementaryReimagined_r5.9.3.zip` ativado por padrão em `iris.properties` (`enableShaders=true`).
      - Pacote de texturas `Faithful 32x - 1.20.1.zip` posicionado abaixo do `Russian_Bilingual_Educational_Pack` no `options.txt`, mantendo a prioridade pedagógica bilíngue sobre os visuais em alta resolução.
 
+### L29. Validação Estrita de Frases Longas, Patch de Uniforms 1.20.1 Iris e Pacotes de Imersão Visual
+- **Armadilha:**
+  1. **Truncamento de Frases no STT:** Em desafios de sentenças longas (`sentence`), o mod SayIt calculava a pontuação média proporcional acumulada e definia `passed = true` assim que o score parcial atingia o limiar, antes de o jogador pronunciar todas as palavras da frase.
+  2. **Loop de Recarregamento e Congelamento dos Shaders:** O shaderpack `ComplementaryReimagined_r5.9.3` referenciava variáveis de biomas de versões futuras (Minecraft 1.21.4 `BIOME_PALE_GARDEN`, `BIOME_SULFUR_CAVES`) e `endFlashIntensity`. No Iris 1.7.6 em 1.20.1, a detecção de variável inexistente disparava `java.lang.RuntimeException: Unknown variable: BIOME_PALE_GARDEN` a cada mudança de câmera/bioma, destruindo e recriando o pipeline gráfico e travando o jogo.
+  3. **Inconsistência de Tradução e Tooltips:** Dicionários de tooltip em KubeJS continham traduções genéricas (ex: `'minecraft:wooden_pickaxe': { pt: 'Picareta' }`) que divergiam do nome completo do item em português ("Picareta de Madeira"). Além disso, resets no `options.txt` desativavam pacotes de textura externos.
+- **Solução:**
+  1. **Critério Rígido de Conclusão de Frase:** Em `ChallengeSession.java`, a aprovação de desafios do tipo `sentence` agora exige estritamente que a contagem de palavras pronunciadas seja igual ou superior ao tamanho da frase alvo (`heardWords.size() >= targetWords.size()`) juntamente com score `>= Math.max(current.passScore(), 85)`.
+  2. **Patch Cirúrgico de Uniforms no Shaderpack:** No arquivo interno `shaders/shaders.properties` de `ComplementaryReimagined_r5.9.3.zip`, as variáveis incompatíveis foram neutralizadas para `=0.0` (`inPaleGarden=0.0`, `inSulfurCaves=0.0`, `endFlashFactor0=0.0`, `endFlashFactor1=0.0`, `endFlashIntensityM=0.0`), eliminando 100% dos loops de recarregamento e crashes.
+  3. **Texturas Imersivas Leves (1.20.1):** Instalados `Dramatic Skys.zip` (céus HD realistas, estrelas e iluminação atmosférica), `Better-Leaves-9.6.zip` (folhagem 3D ultra-otimizada Motschen) e `Fast Better Grass.zip` (blocos de grama contínuos sem perda de FPS).
+  4. **Ativos Permanentes via KubeJS:** Espelhado todo o diretório de idiomas multilíngues em `kubejs/assets/`, garantindo que os nomes bilíngues sejam carregados de forma mandatória e incondicional no frame 1 mesmo em caso de regeneração do `options.txt`.
+
 
 
 

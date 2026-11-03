@@ -39,3 +39,8 @@ Thumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
+
+cfr.jar
+src/summary.txt
+
+*.class
