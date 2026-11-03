@@ -264,6 +264,15 @@
   3. **Validação Cirílica e Cache em Memória:** Validação estrita por regex `[\u0400-\u04FF]` para assegurar que apenas itens com traduções russas genuínas recebam a tarja `★ Russo: <Palavra> [<Pronúncia>]`, com cache in-memory (`dynamicWordCache`) para garantir 60+ FPS sem overhead no inventário.
   4. **Exibição Dinâmica de Estrelas de Maestria:** Tanto itens do currículo quanto itens descobertos dinamicamente consultam `ChallengeSession.words` e `scores`, exibindo a progressão real de estrelas do jogador (`★☆☆☆☆` a `★★★★★`) diretamente no tooltip do item.
 
+### L37. Pedagogia do Alfabeto Cirílico: Mnemônicas, Cartilha Heracles e Decomposição Luso-Cirílica
+- **Armadilha:** Exigir a leitura de palavras inteiras em cirílico sem um método mnemônico estruturado gera sobrecarga cognitiva, especialmente devido aos falsos amigos (В=V, Н=N, Р=R, С=S, У=U, Х=Kh) que induzem pronúncias errôneas no microfone e perda de itens.
+- **Solução:**
+  1. **Trilha Heracles `tier0_alfabeto` (Cartilha Cirílica Cardinal):** 5 missões lineares estruturadas por frequência e relevância cardinal (Gêmeas -> Falsos Amigos -> Construtores -> Chiantes -> Iodizadas/Sinais Ь/Ъ), concedendo XP e o Dicionário de Bolso logo na primeira lição.
+  2. **Decomposição "Soletrando" nos Tooltips (KubeJS):** Ao segurar SHIFT sobre qualquer item, o script decompõe a palavra russa letra por letra com seus fonemas individuais (`Д [d] • е [ye] • р [r] • е [ye] • в [v] • о [o]`).
+  3. **Alertas Mnemônicos Dinâmicos:** Se a palavra contiver letras de alto risco (falsos amigos), o tooltip emite alerta destacado (`В=V (vitória) | Р=R (roda)`).
+  4. **Ponte de Transição Luso-Cirílica (Substituição Suave):** Projeta a palavra em português com as letras cirílicas equivalentes inseridas gradualmente (`Áрворе / Мадеira`), ativando a associação visual direta entre os alfabetos.
+
+
 
 
 

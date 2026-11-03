@@ -1,0 +1,66 @@
+{
+    "dependencies": [
+        "01_alfabeto_gemeas"
+    ],
+    "settings": {
+        "hidden": false,
+        "unlockable": true
+    },
+    "display": {
+        "title": "Alfabeto II: Os Falsos Amigos (В, Н, Р, С, У, Х)",
+        "subtitle": "Alerta Cardinal: parece uma coisa, mas o som é outro!",
+        "description": [
+            "<#55FF55>O Teste de Fogo do Alfabeto Russo!</>",
+            "",
+            "§cMnemônicas Cardinais dos Falsos Amigos:§r",
+            "  • <gold>В, в</gold> = Som de <yellow>[V]</yellow> (Vitória! Cuidado: NÃO é B). Ex: <aqua>Вода</aqua> (Água).",
+            "  • <gold>Н, н</gold> = Som de <yellow>[N]</yellow> (Navio! Cuidado: NÃO é H). Ex: <aqua>Нос</aqua> (Nariz).",
+            "  • <gold>Р, р</gold> = Som de <yellow>[R]</yellow> (Roda! Cuidado: NÃO é P). Ex: <aqua>Рот</aqua> (Boca).",
+            "  • <gold>С, с</gold> = Som de <yellow>[S]</yellow> (Sol! Cuidado: NUNCA é C duro). Ex: <aqua>Сон</aqua> (Sono).",
+            "  • <gold>У, у</gold> = Som de <yellow>[U]</yellow> (Urso! Cuidado: NÃO é Y). Ex: <aqua>Уголь</aqua> (Carvão).",
+            "  • <gold>Х, х</gold> = Som de <yellow>[Kh]</yellow> (R forte aspirado / Xadrez). Ex: <aqua>Хлеб</aqua> (Pão).",
+            "",
+            "§bSubstituição Luso-Cirílica Progressiva:§r",
+            "  • Vento -> <yellow>Вento</yellow>",
+            "  • Navio -> <yellow>Наvio</yellow>",
+            "  • Roda  -> <yellow>Роda</yellow>",
+            "  • Sol   -> <yellow>Сол</yellow>",
+            "  • Urso  -> <yellow>Уrso</yellow>",
+            "",
+            "§aPalavras Russas Reais Formadas:§r",
+            "  • <gold>ВОДА</gold> = Água [Voda]",
+            "  • <gold>УХО</gold>  = Orelha [Ukho]",
+            "  • <gold>СЫР</gold>  = Queijo [Syr]",
+            "  • <gold>РАСА</gold> = Raça [Rasa]",
+            "",
+            "§cMissão Prática:§r Obtenha 1 Carvão (<gold>Уголь</gold>) para consolidar o <yellow>У</yellow>!",
+            "",
+            "§bRecompensa:§r +40 XP educacional."
+        ],
+        "icon": {
+            "type": "heracles:item",
+            "item": "minecraft:coal"
+        },
+        "groups": {
+            "tier0_alfabeto": {
+                "position": [48, 0]
+            }
+        }
+    },
+    "tasks": {
+        "adquirir_carvao": {
+            "type": "heracles:item",
+            "item": "minecraft:coal",
+            "amount": 1,
+            "collection": "AUTOMATIC",
+            "title": "Colete ou segure 1 Carvão (Уголь)"
+        }
+    },
+    "rewards": {
+        "xp_recompensa": {
+            "type": "heracles:xp",
+            "xptype": "POINTS",
+            "amount": 40
+        }
+    }
+}

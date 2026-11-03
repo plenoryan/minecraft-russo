@@ -1,0 +1,58 @@
+{
+    "dependencies": [
+        "04_alfabeto_chiantes"
+    ],
+    "settings": {
+        "hidden": false,
+        "unlockable": true
+    },
+    "display": {
+        "title": "Alfabeto V: Iodizadas e Modificadores (Я, Ю, Ё, Э, Ы, Ь, Ъ)",
+        "subtitle": "Parabéns: você completou as 33 letras do alfabeto cirílico!",
+        "description": [
+            "<#55FF55>A Conclusão Triunfal do Alfabeto Russo!</>",
+            "",
+            "§eAs Vogais Iodizadas e Modificadores de Som:§r",
+            "  • <gold>Я, я</gold> = Som de <yellow>[Ya / Ia]</yellow> (R espelhado olhando para trás; significa 'EU' em russo). Ex: <aqua>Яблоко</aqua> (Maçã).",
+            "  • <gold>Ю, ю</gold> = Som de <yellow>[Yu / Iu]</yellow> (Letras I e O de mãos dadas). Ex: <aqua>Юг</aqua> (Sul).",
+            "  • <gold>Ё, ё</gold> = Som de <yellow>[Yo / Iô]</yellow> (Letra E com dois olhos curiosos; SEMPRE tônica). Ex: <aqua>Берёза</aqua> (Bétula).",
+            "  • <gold>Э, э</gold> = Som de <yellow>[E]</yellow> (C invertido com língua; som de É aberto puro). Ex: <aqua>Этот</aqua> (Este).",
+            "  • <gold>Ы, ы</gold> = Som de <yellow>[Y gutural]</yellow> (Vogal profunda na garganta). Ex: <aqua>Булыжник</aqua> (Pedregulho).",
+            "  • <gold>Ь, ь</gold> = <yellow>Sinal Brando</yellow> (Мягкий знак). Não tem som! Amolece e suaviza a consoante anterior. Ex: <aqua>Камень</aqua> (Pedra), <aqua>Печь</aqua> (Fornalha).",
+            "  • <gold>Ъ, ъ</gold> = <yellow>Sinal Duro</yellow> (Твёрдый знак). Não tem som! Cria uma pausa firme separando prefixo e raiz.",
+            "",
+            "§bO Grande Feito:§r",
+            "Você agora domina a decodificação fonética das 33 letras russas!",
+            "Ao segurar <gold>SHIFT</gold> sobre qualquer item no inventário, examine a linha <yellow>Soletrando</yellow> para ver a decomposição letra por letra e a decodificação luso-cirílica em tempo real!",
+            "",
+            "§cMissão Prática:§r Obtenha 1 Maçã (<gold>Яблоко</gold>) para coroar seu aprendizado!",
+            "",
+            "§bRecompensa Educacional:§r +75 XP e a consagração como Leitor Cirílico."
+        ],
+        "icon": {
+            "type": "heracles:item",
+            "item": "minecraft:apple"
+        },
+        "groups": {
+            "tier0_alfabeto": {
+                "position": [192, 0]
+            }
+        }
+    },
+    "tasks": {
+        "adquirir_maca": {
+            "type": "heracles:item",
+            "item": "minecraft:apple",
+            "amount": 1,
+            "collection": "AUTOMATIC",
+            "title": "Colete ou segure 1 Maçã (Яблоко)"
+        }
+    },
+    "rewards": {
+        "xp_recompensa": {
+            "type": "heracles:xp",
+            "xptype": "POINTS",
+            "amount": 75
+        }
+    }
+}

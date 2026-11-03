@@ -23,6 +23,74 @@ ItemEvents.tooltip(event => {
 
     var dynamicWordCache = {};
 
+    var CYR_SPELL = {
+        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'ye', 'ё': 'yo',
+        'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
+        'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+        'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch',
+        'ъ': '-', 'ы': 'y', 'ь': '`', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+    };
+
+    var FALSE_FRIENDS = {
+        'в': 'В=V (vitória)',
+        'н': 'Н=N (navio)',
+        'р': 'Р=R (roda)',
+        'с': 'С=S (sol)',
+        'у': 'У=U (urso)',
+        'х': 'Х=Kh (aspirado)',
+        'ь': 'Ь=amolece a consoante',
+        'ъ': 'Ъ=pausa seca'
+    };
+
+    var LUSO_MAP = {
+        'v': 'в', 'V': 'В',
+        'n': 'н', 'N': 'Н',
+        'r': 'р', 'R': 'Р',
+        's': 'с', 'S': 'С',
+        'u': 'у', 'U': 'У',
+        'd': 'д', 'D': 'Д',
+        'p': 'п', 'P': 'П',
+        'm': 'м', 'M': 'М',
+        't': 'т', 'T': 'Т',
+        'a': 'а', 'A': 'А',
+        'o': 'о', 'O': 'О',
+        'e': 'е', 'E': 'Е'
+    };
+
+    function spellWord(w) {
+        if (!w) return { spelling: '', mnem: '' };
+        var clean = String(w).replace(/[\u0300-\u036f]/g, '');
+        var parts = [];
+        var mnems = {};
+        for (var i = 0; i < clean.length; i++) {
+            var ch = clean.charAt(i);
+            var low = ch.toLowerCase();
+            if (CYR_SPELL.hasOwnProperty(low)) {
+                parts.push(ch + ' [' + CYR_SPELL[low] + ']');
+                if (FALSE_FRIENDS.hasOwnProperty(low)) {
+                    mnems[FALSE_FRIENDS[low]] = true;
+                }
+            } else if (ch === ' ') {
+                parts.push(' ');
+            }
+        }
+        return {
+            spelling: parts.join(' • '),
+            mnem: Object.keys(mnems).join(' | ')
+        };
+    }
+
+    function lusoSub(pt) {
+        if (!pt) return '';
+        var out = '';
+        var s = String(pt);
+        for (var i = 0; i < s.length; i++) {
+            var c = s.charAt(i);
+            out += LUSO_MAP.hasOwnProperty(c) ? LUSO_MAP[c] : c;
+        }
+        return out;
+    }
+
     const ruCurriculum = {
         'minecraft:oak_log': {
             ru: 'Дéрево',
@@ -401,8 +469,19 @@ ItemEvents.tooltip(event => {
 
             if (event.shift) {
                 text.add(Text.green('  Nota Gramatical: ').append(Text.gray(entry.note)));
+                var spell = spellWord(entry.ru);
+                if (spell.spelling) {
+                    text.add(Text.gold('  Soletrando: ').append(Text.white(spell.spelling)));
+                }
+                if (spell.mnem) {
+                    text.add(Text.red('  Mnemônica: ').append(Text.yellow(spell.mnem)));
+                }
+                var sub = lusoSub(entry.pt);
+                if (sub && sub !== entry.pt) {
+                    text.add(Text.lightPurple('  Ponte Luso-Cirílica: ').append(Text.gray(sub)));
+                }
             } else {
-                text.add(Text.darkGray('  [Segure SHIFT para nota fonética/gramatical]'));
+                text.add(Text.darkGray('  [Segure SHIFT para decomposição do alfabeto e nota]'));
             }
         });
     });
@@ -501,7 +580,21 @@ ItemEvents.tooltip(event => {
         } catch (e) {}
 
         if (event.shift) {
-            text.add(Text.green('  Vocabulário SayIt: ').append(Text.gray('Pronúncia transliterada: ' + (entry.phon || '[Padrão]'))));
+            var spell = spellWord(entry.ru);
+            if (spell.spelling) {
+                text.add(Text.gold('  Soletrando: ').append(Text.white(spell.spelling)));
+            }
+            if (spell.mnem) {
+                text.add(Text.red('  Mnemônica: ').append(Text.yellow(spell.mnem)));
+            }
+            if (entry.pt) {
+                var sub = lusoSub(entry.pt);
+                if (sub && sub !== entry.pt) {
+                    text.add(Text.lightPurple('  Ponte Luso-Cirílica: ').append(Text.gray(sub)));
+                }
+            }
+        } else {
+            text.add(Text.darkGray('  [Segure SHIFT para decomposição do alfabeto]'));
         }
     }
 });

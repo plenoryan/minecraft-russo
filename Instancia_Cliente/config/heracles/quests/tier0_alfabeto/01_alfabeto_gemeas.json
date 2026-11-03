@@ -1,0 +1,71 @@
+{
+    "dependencies": [],
+    "settings": {
+        "hidden": false,
+        "unlockable": true
+    },
+    "display": {
+        "title": "Alfabeto I: Gêmeas Transparentes (А, О, Т, К, М, Е)",
+        "subtitle": "Você já sabe ler 18% do alfabeto cirílico sem esforço!",
+        "description": [
+            "<#55FF55>Bem-vindo à Cartilha do Alfabeto Cirílico!</>",
+            "",
+            "§eO Segredo das Gêmeas:§r",
+            "Estas 6 letras têm a mesma forma e o mesmo som que no português:",
+            "  • <gold>А, а</gold> = Som de <yellow>[A]</yellow> (como em Amigo)",
+            "  • <gold>О, о</gold> = Som de <yellow>[O]</yellow> (como em Olho)",
+            "  • <gold>Т, т</gold> = Som de <yellow>[T]</yellow> (como em Terra)",
+            "  • <gold>К, к</gold> = Som de <yellow>[K]</yellow> (como em Carvão)",
+            "  • <gold>М, м</gold> = Som de <yellow>[M]</yellow> (como em Madeira)",
+            "  • <gold>Е, е</gold> = Som de <yellow>[Ye / E]</yellow> (como em Erva)",
+            "",
+            "§bSubstituição Luso-Cirílica:§r",
+            "Veja como seu cérebro já decifra palavras trocando as letras aos poucos:",
+            "  • Madeira -> <yellow>Маdеirа</yellow>",
+            "  • Teto -> <yellow>Тето</yellow>",
+            "  • Cama -> <yellow>Каmа</yellow>",
+            "",
+            "§aPalavras Russas Reais que você já lê agora:§r",
+            "  • <gold>КОТ</gold> = Gato [Kot]",
+            "  • <gold>ТОМ</gold> = Tomo / Volume [Tom]",
+            "  • <gold>КТО</gold> = Quem [Kto]",
+            "  • <gold>ТАМ</gold> = Lá / Ali [Tam]",
+            "",
+            "§cMissão Prática:§r Colete 1 Graveto (<gold>Палка</gold>) para desbloquear seu Dicionário de Bolso!",
+            "",
+            "§bRecompensa:§r +35 XP e o Dicionário de Bolso (Pocket Dictionary)."
+        ],
+        "icon": {
+            "type": "heracles:item",
+            "item": "minecraft:stick"
+        },
+        "groups": {
+            "tier0_alfabeto": {
+                "position": [0, 0]
+            }
+        }
+    },
+    "tasks": {
+        "adquirir_graveto": {
+            "type": "heracles:item",
+            "item": "minecraft:stick",
+            "amount": 1,
+            "collection": "AUTOMATIC",
+            "title": "Colete ou segure 1 Graveto (Палка)"
+        }
+    },
+    "rewards": {
+        "xp_recompensa": {
+            "type": "heracles:xp",
+            "xptype": "POINTS",
+            "amount": 35
+        },
+        "item_dicionario": {
+            "type": "heracles:item",
+            "item": {
+                "id": "sayitenglish:pocket_dictionary",
+                "count": 1
+            }
+        }
+    }
+}

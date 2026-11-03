@@ -1,0 +1,59 @@
+{
+    "dependencies": [
+        "03_alfabeto_construtores"
+    ],
+    "settings": {
+        "hidden": false,
+        "unlockable": true
+    },
+    "display": {
+        "title": "Alfabeto IV: Chiantes Eslavos (Ж, З, Ч, Ш, Щ, Ц)",
+        "subtitle": "A sonoridade marcante e os símbolos únicos do russo!",
+        "description": [
+            "<#55FF55>O Segredo dos Sons Chiantes e Sibilantes!</>",
+            "",
+            "§eMnemônicas dos Sons Eslavos:§r",
+            "  • <gold>Ж, ж</gold> = Som de <yellow>[Zh / J]</yellow> (Desenho de um Besouro com patinhas abertas). Ex: <aqua>Железо</aqua> (Ferro).",
+            "  • <gold>З, з</gold> = Som de <yellow>[Z]</yellow> (Parece o número 3, som de Zebra). Ex: <aqua>Земля</aqua> (Terra), <aqua>Золото</aqua> (Ouro).",
+            "  • <gold>Ч, ч</gold> = Som de <yellow>[Ch]</yellow> (Parece o número 4 invertido; '4' em russo é Четыре; som de 'Tchê'). Ex: <aqua>Часы</aqua> (Relógio).",
+            "  • <gold>Ш, ш</gold> = Som de <yellow>[Sh]</yellow> (Garfo de 3 dentes retos, som de Show/Chá). Ex: <aqua>Шлем</aqua> (Elmo/Capacete).",
+            "  • <gold>Щ, щ</gold> = Som de <yellow>[Shch]</yellow> (Garfo de 3 dentes com cauda, som longo suave Shch). Ex: <aqua>Щит</aqua> (Escudo).",
+            "  • <gold>Ц, ц</gold> = Som de <yellow>[Ts]</yellow> (Letra U com perninha, som de PiTSa). Ex: <aqua>Цветок</aqua> (Flor).",
+            "",
+            "§bSubstituição Luso-Cirílica Progressiva:§r",
+            "  • Ferro -> <yellow>Жelêzo</yellow>",
+            "  • Terra -> <yellow>Зеmля</yellow>",
+            "  • Chave -> <yellow>Чаvе</yellow>",
+            "  • Piza  -> <yellow>Piца</yellow>",
+            "",
+            "§cMissão Prática:§r Colete 1 Bloco de Terra (<gold>Земля</gold>) para consolidar o <yellow>З</yellow>!",
+            "",
+            "§bRecompensa:§r +50 XP educacional."
+        ],
+        "icon": {
+            "type": "heracles:item",
+            "item": "minecraft:dirt"
+        },
+        "groups": {
+            "tier0_alfabeto": {
+                "position": [144, 0]
+            }
+        }
+    },
+    "tasks": {
+        "adquirir_terra": {
+            "type": "heracles:item",
+            "item": "minecraft:dirt",
+            "amount": 1,
+            "collection": "AUTOMATIC",
+            "title": "Colete ou segure 1 Terra (Земля)"
+        }
+    },
+    "rewards": {
+        "xp_recompensa": {
+            "type": "heracles:xp",
+            "xptype": "POINTS",
+            "amount": 50
+        }
+    }
+}
