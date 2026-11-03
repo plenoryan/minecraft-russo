@@ -111,23 +111,23 @@ extends class_437 {
             if (score <= 5) {
                 switch (score) {
                     case 5:
-                        s = "★★★★★ [5/5 - Mestre]";
+                        s = "\u2605\u2605\u2605\u2605\u2605 [5/5 - Mestre]";
                         color = -10755203;
                         break;
                     case 4:
-                        s = "★★★★☆ [4/5]";
+                        s = "\u2605\u2605\u2605\u2605\u2606 [4/5]";
                         color = -11141121;
                         break;
                     case 3:
-                        s = "★★★☆☆ [3/5]";
+                        s = "\u2605\u2605\u2605\u2606\u2606 [3/5]";
                         color = -14006;
                         break;
                     case 2:
-                        s = "★★☆☆☆ [2/5]";
+                        s = "\u2605\u2605\u2606\u2606\u2606 [2/5]";
                         color = -26368;
                         break;
                     default:
-                        s = "★☆☆☆☆ [1/5]";
+                        s = "\u2605\u2606\u2606\u2606\u2606 [1/5]";
                         color = -30118;
                         break;
                 }

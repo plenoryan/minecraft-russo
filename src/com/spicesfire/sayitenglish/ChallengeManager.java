@@ -184,7 +184,7 @@ public final class ChallengeManager {
             } else {
                 pr.words().remove(id);
             }
-            player.method_43496((class_2561)class_2561.method_43470("§6⚠ [Curva do Esquecimento] Faz " + elapsedHours + "h sem praticar! Fixação regrediu de " + lvl + "/5 para " + regressed + "/5."));
+            player.method_43496((class_2561)class_2561.method_43470("\u00a76\u26a0 [Curva do Esquecimento] Faz " + elapsedHours + "h sem praticar! Fixa\u00e7\u00e3o regrediu de " + lvl + "/5 para " + regressed + "/5."));
             pr.save(ChallengeManager.server(player), player.method_5667());
             ChallengeManager.sync(player);
         }
@@ -372,7 +372,7 @@ public final class ChallengeManager {
                     if (nextLevel >= 5) {
                         // Master Level 5/5: 30 minutes maintenance review (36000 ticks)
                         s.cooldown.put(c.subject(), now + 36000L);
-                        player.method_43496((class_2561)class_2561.method_43470("§a✔ [MESTRE 5/5] Dominado com Maestria! Próxima revisão em 30 minutos de jogo."));
+                        player.method_43496((class_2561)class_2561.method_43470("\u00a7a\u2714 [MESTRE 5/5] Dominado com Maestria! Pr\u00f3xima revis\u00e3o em 30 minutos de jogo."));
                     } else {
                         // Quick reinforcement intervals: 2s (lvl 1), 3s (lvl 2), 4s (lvl 3), 5s (lvl 4)
                         long cdTicks;
@@ -386,7 +386,7 @@ public final class ChallengeManager {
                         s.cooldown.put(c.subject(), now + cdTicks);
                         int remaining = 5 - nextLevel;
                         int nextSec = (int)(cdTicks / 20L);
-                        player.method_43496((class_2561)class_2561.method_43470("§e★ [Fixação " + nextLevel + "/5] Correto (" + score + "%)! Próxima repetição em " + nextSec + "s (" + remaining + " etapa(s) restante(s))."));
+                        player.method_43496((class_2561)class_2561.method_43470("\u00a7e\u2605 [Fixa\u00e7\u00e3o " + nextLevel + "/5] Correto (" + score + "%)! Pr\u00f3xima repeti\u00e7\u00e3o em " + nextSec + "s (" + remaining + " etapa(s) restante(s))."));
                     }
                     break;
                 }
@@ -409,7 +409,7 @@ public final class ChallengeManager {
                 // Grace cooldown: 5 seconds (100 ticks) to breathe and speak again
                 s.cooldown.put(c.subject(), now + 100L);
 
-                player.method_43496((class_2561)class_2561.method_43470("§c✖ [Fixação " + regressed + "/5] Pronúncia não reconhecida (" + score + "%). 1 item foi excluído do inventário!"));
+                player.method_43496((class_2561)class_2561.method_43470("\u00a7c\u2716 [Fixa\u00e7\u00e3o " + regressed + "/5] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). 1 item foi exclu\u00eddo do invent\u00e1rio!"));
                 break;
             }
             case "sentence": {
@@ -426,9 +426,9 @@ public final class ChallengeManager {
                 pr.timestamps().put(c.subject(), System.currentTimeMillis());
                 player.method_7255(Math.max(1, cfg.sentenceXp / 3));
                 if (nextLevel >= 5) {
-                    player.method_43496((class_2561)class_2561.method_43470("§a✔ [MESTRE 5/5] Dominado com Maestria na prática!"));
+                    player.method_43496((class_2561)class_2561.method_43470("\u00a7a\u2714 [MESTRE 5/5] Dominado com Maestria na pr\u00e1tica!"));
                 } else {
-                    player.method_43496((class_2561)class_2561.method_43470("§e★ [Fixação " + nextLevel + "/5] Treino concluído com sucesso!"));
+                    player.method_43496((class_2561)class_2561.method_43470("\u00a7e\u2605 [Fixa\u00e7\u00e3o " + nextLevel + "/5] Treino conclu\u00eddo com sucesso!"));
                 }
                 break;
             }

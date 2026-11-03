@@ -60,6 +60,15 @@ if exist "%INST_DOT_MC%" (
     if not exist "%INST_DOT_MC%\CustomSkinLoader" (
         mklink /J "%INST_DOT_MC%\CustomSkinLoader" "%BASE_DIR%Instancia_Cliente\CustomSkinLoader" >nul 2>&1
     )
+    if not exist "%INST_DOT_MC%\resourcepacks" (
+        mklink /J "%INST_DOT_MC%\resourcepacks" "%BASE_DIR%Instancia_Cliente\resourcepacks" >nul 2>&1
+    )
+    if not exist "%INST_DOT_MC%\shaderpacks" (
+        mklink /J "%INST_DOT_MC%\shaderpacks" "%BASE_DIR%Instancia_Cliente\shaderpacks" >nul 2>&1
+    )
+    if not exist "%INST_DOT_MC%\kubejs" (
+        mklink /J "%INST_DOT_MC%\kubejs" "%BASE_DIR%Instancia_Cliente\kubejs" >nul 2>&1
+    )
 )
 
 if not exist "%BASE_DIR%Launcher\Java17" (

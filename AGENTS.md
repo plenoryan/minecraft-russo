@@ -205,6 +205,17 @@
   3. **Texturas Imersivas Leves (1.20.1):** Instalados `Dramatic Skys.zip` (céus HD realistas, estrelas e iluminação atmosférica), `Better-Leaves-9.6.zip` (folhagem 3D ultra-otimizada Motschen) e `Fast Better Grass.zip` (blocos de grama contínuos sem perda de FPS).
   4. **Ativos Permanentes via KubeJS:** Espelhado todo o diretório de idiomas multilíngues em `kubejs/assets/`, garantindo que os nomes bilíngues sejam carregados de forma mandatória e incondicional no frame 1 mesmo em caso de regeneração do `options.txt`.
 
+### L30. Prevenção de Byte Order Mark (BOM) em .properties/.txt e Imunidade Unicode (\uXXXX) em Java
+- **Armadilha:**
+  1. Ao salvar arquivos de texto no PowerShell via `[System.Text.Encoding]::UTF8`, o .NET insere um preâmbulo UTF-8 Byte Order Mark (`0xEF 0xBB 0xBF`) no byte 0.
+  2. Em `options.txt`, a primeira linha `\uFEFFversion:3465` não é reconhecida como `version`, fazendo o Minecraft assumir versão 0 e rodar o DataFixer legacy `OptionsKeyLwjgl3Fix`, que quebra com `NumberFormatException: For input string: "key.mouse.right"` e reseta todo o `options.txt` para os padrões vanilla (desativando todos os resource packs).
+  3. No shaderpack Iris, o pré-processador C (`org.anarres.cpp`) trava em `Bad token [»@1,1]:"»"`, rejeitando `shaders.properties`, impedindo o registro de `voxel_sampler` e desligando os shaders completamente no mundo.
+  4. Strings literais compiladas pelo `javac` sem flag de encoding no Windows herdam Cp1252, gerando caracteres corrompidos (`Â§eâ˜…`, `FixaÃ§Ã£o`).
+- **Solução:**
+  1. **Zero BOM Obrigatório:** Salvar arquivos de propriedades e `options.txt` exclusivamente com `[System.Text.Encoding]::ASCII` ou `New-Object System.Text.UTF8Encoding($false)`.
+  2. **Escapes Unicode Nativos (`\uXXXX`):** Converter todas as strings das classes Java (`ChallengeManager`, `DictionaryScreen`) para escapes hexadecimais puros (`\u00a7`, `\u2605`, `\u2714`, `\u00e7`, `\u00e3`), tornando os binários 100% imunes a variações de charset da JVM host.
+  3. **Junções NTFS Globais no Launcher:** `resourcepacks`, `shaderpacks` e `kubejs` foram convertidos em junções automáticas vinculadas à `Instancia_Cliente`, garantindo sincronismo atômico entre cliente e inicializador.
+
 
 
 

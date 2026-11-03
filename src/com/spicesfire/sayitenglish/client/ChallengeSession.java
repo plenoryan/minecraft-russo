@@ -159,9 +159,9 @@ public final class ChallengeSession {
             bestHeard = text;
         }
         if (current != null) {
-            if (current.kind().equals("sentence")) {
-                List<String> targetWords = Scorer.words(target);
-                List<String> heardWords = Scorer.words(text);
+            List<String> targetWords = Scorer.words(target);
+            List<String> heardWords = Scorer.words(text);
+            if (targetWords.size() > 1 || "sentence".equals(current.kind())) {
                 if (heardWords.size() >= targetWords.size() && s >= Math.max(current.passScore(), 85)) {
                     passed = true;
                 }

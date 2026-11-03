@@ -44,3 +44,11 @@ cfr.jar
 src/summary.txt
 
 *.class
+
+# Launcher instance NTFS junctions (mirrored from Instancia_Cliente)
+Launcher/data/instances/*/.minecraft/kubejs/
+Launcher/data/instances/*/.minecraft/resourcepacks/
+Launcher/data/instances/*/.minecraft/shaderpacks/
+Launcher/instances/*/.minecraft/kubejs/
+Launcher/instances/*/.minecraft/resourcepacks/
+Launcher/instances/*/.minecraft/shaderpacks/
