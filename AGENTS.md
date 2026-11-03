@@ -248,6 +248,15 @@
   2. **Perda por Maioria de Erros (4/7):** Se o jogador cometer 4 erros em qualquer nível de estrela, 1 item raro é imediatamente deletado do inventário (`deleteOne`) e o nível de estrelas regride (`currentStars - 1`). Não existe escudo protetor que impeça a perda.
   3. **Avanço por Maioria de Acertos:** Ao concluir as 7 tentativas com menos de 4 erros (4 ou mais acertos), a próxima estrela é conquistada e o temporizador de descanso longo do nível é acionado.
 
+### L35. Armadilha de Mapeamento Intermediary: `method_7933` (Increment) vs `method_7934` (Decrement)
+- **Armadilha:**
+  1. Na classe `net.minecraft.class_1799` (ItemStack) do Fabric Intermediary 1.20.1, `method_7933(int)` realiza `iadd` (`this.count += amount`), ou seja, **INCREMENTA** o item. O método correspondente a decremento é `method_7934(int)` (`ineg + method_7933`), ou diretamente `method_7939(count - 1)` (`setCount`).
+  2. O código legado de `deleteOne` invocava `st.method_7933(1)`, duplicando e somando +1 item ao inventário toda vez que o jogador errava uma pronúncia, ao invés de excluí-lo.
+- **Solução:**
+  1. **Redução Atômica e Esvaziamento Explicito:** Em `deleteOne`, se `count <= 1`, o slot é esvaziado explicitamente com `class_1799.field_8037` (`ItemStack.EMPTY`). Se `count > 1`, o método `method_7939(count - 1)` reduz matematicamente a contagem em 1.
+  2. **Tratamento de Penalidade `applyPenaltyOne`:** Suporta tanto exclusão pura (`"delete"`) quanto descarte no chão (`"drop"` via `dropOne`) de acordo com a configuração de `Config.get().penalty`.
+
+
 
 
 

@@ -24,6 +24,8 @@ Launcher/cache/
 Launcher/instances/*/.minecraft/logs/
 Launcher/instances/*/.minecraft/crash-reports/
 Launcher/data/cache/
+Launcher/data/metacache
+Launcher/data/assets/
 Launcher/data/instances/*/.minecraft/logs/
 Launcher/data/instances/*/.minecraft/crash-reports/
 

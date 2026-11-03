@@ -546,7 +546,7 @@ public final class ChallengeManager {
 
                     if (errors >= 4) {
                         // 4 errors = majority of 7! ITEM IS LOST!
-                        int n = ChallengeManager.deleteOne(player, item);
+                        int n = ChallengeManager.applyPenaltyOne(player, item);
                         pr.lost += n;
                         pr.reps().remove(c.subject());
                         pr.errors().remove(c.subject());
@@ -564,8 +564,12 @@ public final class ChallengeManager {
                             ? "Progresso da palavra zerado!"
                             : "Regrediu para Estrela " + regressedStars + "/5.";
 
+                        String actionMsg = "drop".equalsIgnoreCase(cfg.penalty)
+                            ? "1 item foi dropado no ch\u00e3o!"
+                            : "1 item foi exclu\u00eddo do invent\u00e1rio!";
+
                         player.method_43496((class_2561)class_2561.method_43470(
-                            "\u00a7c\u2716 [Item Raro Perdido] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). Voc\u00ea errou 4 tentativas (maioria de 7)! 1 item foi exclu\u00eddo do invent\u00e1rio! " + regrMsg
+                            "\u00a7c\u2716 [Item Raro Perdido] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). Voc\u00ea errou 4 tentativas (maioria de 7)! " + actionMsg + " " + regrMsg
                         ));
                     } else if (attemptsDone >= 7) {
                         // 7 attempts completed with errors < 4 (so successes >= 4, majority achieved)!
@@ -648,7 +652,7 @@ public final class ChallengeManager {
 
                 if (item == null) break;
 
-                int n = ChallengeManager.deleteOne(player, item);
+                int n = ChallengeManager.applyPenaltyOne(player, item);
                 pr.lost += n;
 
                 int regressedReps = currentReps - 1;
@@ -669,8 +673,12 @@ public final class ChallengeManager {
                 // Grace cooldown: 5 seconds (100 ticks)
                 s.cooldown.put(c.subject(), now + 100L);
 
+                String actionMsg = "drop".equalsIgnoreCase(cfg.penalty)
+                    ? "1 item foi dropado no ch\u00e3o!"
+                    : "1 item foi exclu\u00eddo do invent\u00e1rio!";
+
                 player.method_43496((class_2561)class_2561.method_43470(
-                    "\u00a7c\u2716 [\u2605 " + regressedStars + "/5 - Repeti\u00e7\u00e3o " + regressedReps + "] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). 1 item foi exclu\u00eddo do invent\u00e1rio!"
+                    "\u00a7c\u2716 [\u2605 " + regressedStars + "/5 - Repeti\u00e7\u00e3o " + regressedReps + "] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). " + actionMsg
                 ));
                 break;
             }
@@ -711,37 +719,45 @@ public final class ChallengeManager {
     }
 
     private static int deleteOne(class_3222 player, class_1792 item) {
-        // 1. Check cursor
+        // 1. Check cursor stack
         class_1799 carried = player.field_7512.method_34255();
-        if (carried.method_31574(item) && !carried.method_7960()) {
-            carried.method_7933(1);
-            if (carried.method_7960()) {
+        if (carried != null && !carried.method_7960() && carried.method_31574(item)) {
+            int count = carried.method_7947();
+            if (count <= 1) {
                 player.field_7512.method_34254(class_1799.field_8037);
+            } else {
+                carried.method_7939(count - 1);
             }
             player.field_7512.method_7623();
             player.field_7498.method_7623();
             return 1;
         }
+
         class_1661 inv = player.method_31548();
-        // 2. Check active slot
+        // 2. Check active hotbar slot
         int sel = inv.field_7545;
         class_1799 selStack = inv.method_5438(sel);
-        if (selStack.method_31574(item) && !selStack.method_7960()) {
-            selStack.method_7933(1);
-            if (selStack.method_7960()) {
+        if (selStack != null && !selStack.method_7960() && selStack.method_31574(item)) {
+            int count = selStack.method_7947();
+            if (count <= 1) {
                 inv.method_5447(sel, class_1799.field_8037);
+            } else {
+                selStack.method_7939(count - 1);
             }
             player.field_7512.method_7623();
             player.field_7498.method_7623();
             return 1;
         }
-        // 3. Check entire inventory
+
+        // 3. Check entire inventory (including armor and offhand)
         for (int i = 0; i < inv.method_5439(); ++i) {
             class_1799 st = inv.method_5438(i);
-            if (st.method_31574(item) && !st.method_7960()) {
-                st.method_7933(1);
-                if (st.method_7960()) {
+            if (st != null && !st.method_7960() && st.method_31574(item)) {
+                int count = st.method_7947();
+                if (count <= 1) {
                     inv.method_5447(i, class_1799.field_8037);
+                } else {
+                    st.method_7939(count - 1);
                 }
                 player.field_7512.method_7623();
                 player.field_7498.method_7623();
@@ -756,6 +772,21 @@ public final class ChallengeManager {
     }
 
     private static int dropOne(class_3222 player, class_1792 item) {
+        int n = ChallengeManager.deleteOne(player, item);
+        if (n > 0) {
+            ChallengeManager.drop(player, new class_1799((class_1935)item, 1));
+        }
+        return n;
+    }
+
+    private static int applyPenaltyOne(class_3222 player, class_1792 item) {
+        Config cfg = Config.get();
+        if ("none".equalsIgnoreCase(cfg.penalty)) {
+            return 0;
+        }
+        if ("drop".equalsIgnoreCase(cfg.penalty)) {
+            return ChallengeManager.dropOne(player, item);
+        }
         return ChallengeManager.deleteOne(player, item);
     }
 
