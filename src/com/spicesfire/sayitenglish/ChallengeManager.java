@@ -269,6 +269,43 @@ public final class ChallengeManager {
             events.add(new Event("hurt", ""));
         }
         s.hurt = hurt;
+
+        boolean swimming = player.method_5799();
+        if (swimming && !s.swimming) {
+            events.add(new Event("swim", ""));
+        }
+        s.swimming = swimming;
+
+        boolean onFire = player.method_20802() > 0;
+        if (onFire && !s.onFire) {
+            events.add(new Event("fire", ""));
+        }
+        s.onFire = onFire;
+
+        boolean riding = player.method_5854() != null;
+        if (riding && !s.riding) {
+            events.add(new Event("ride", ""));
+        }
+        s.riding = riding;
+
+        boolean sneaking = player.method_5715();
+        if (sneaking && !s.sneaking) {
+            events.add(new Event("sneak", ""));
+        }
+        s.sneaking = sneaking;
+
+        boolean climbing = player.method_6101();
+        if (climbing && !s.climbing) {
+            events.add(new Event("climb", ""));
+        }
+        s.climbing = climbing;
+
+        boolean flying = player.method_6128();
+        if (flying && !s.flying) {
+            events.add(new Event("fly", ""));
+        }
+        s.flying = flying;
+
         if (s.pending != null) {
             events.add(s.pending);
             s.pending = null;
@@ -356,8 +393,8 @@ public final class ChallengeManager {
 
                 if (item == null) break;
 
-                // Decision A3: On fail, take ONLY 1 item (never wipe whole inventory)
-                int n = cfg.penalty.equals("drop") ? ChallengeManager.dropOne(player, item) : ChallengeManager.takeOne(player, item);
+                // Decision A3: On fail, take ONLY 1 item (never wipe whole inventory and never drop onto ground)
+                int n = ChallengeManager.deleteOne(player, item);
                 pr.lost += n;
 
                 // Decision A3: Regress fixation level by 1
@@ -372,7 +409,7 @@ public final class ChallengeManager {
                 // Grace cooldown: 5 seconds (100 ticks) to breathe and speak again
                 s.cooldown.put(c.subject(), now + 100L);
 
-                player.method_43496((class_2561)class_2561.method_43470("§c✖ [Fixação " + regressed + "/5] Pronúncia não reconhecida (" + score + "%). 1 item foi removido."));
+                player.method_43496((class_2561)class_2561.method_43470("§c✖ [Fixação " + regressed + "/5] Pronúncia não reconhecida (" + score + "%). 1 item foi excluído do inventário!"));
                 break;
             }
             case "sentence": {
@@ -410,21 +447,7 @@ public final class ChallengeManager {
         return n;
     }
 
-    private static int takeOne(class_3222 player, class_1792 item) {
-        class_1799 taken = ChallengeManager.extractOne(player, item);
-        return taken.method_7960() ? 0 : 1;
-    }
-
-    private static int dropOne(class_3222 player, class_1792 item) {
-        class_1799 taken = ChallengeManager.extractOne(player, item);
-        if (!taken.method_7960()) {
-            ChallengeManager.drop(player, taken);
-            return 1;
-        }
-        return 0;
-    }
-
-    private static class_1799 extractOne(class_3222 player, class_1792 item) {
+    private static int deleteOne(class_3222 player, class_1792 item) {
         // 1. Check cursor
         class_1799 carried = player.field_7512.method_34255();
         if (carried.method_31574(item) && !carried.method_7960()) {
@@ -433,7 +456,8 @@ public final class ChallengeManager {
                 player.field_7512.method_34254(class_1799.field_8037);
             }
             player.field_7512.method_7623();
-            return new class_1799((class_1935)item, 1);
+            player.field_7498.method_7623();
+            return 1;
         }
         class_1661 inv = player.method_31548();
         // 2. Check active slot
@@ -445,7 +469,8 @@ public final class ChallengeManager {
                 inv.method_5447(sel, class_1799.field_8037);
             }
             player.field_7512.method_7623();
-            return new class_1799((class_1935)item, 1);
+            player.field_7498.method_7623();
+            return 1;
         }
         // 3. Check entire inventory
         for (int i = 0; i < inv.method_5439(); ++i) {
@@ -456,10 +481,19 @@ public final class ChallengeManager {
                     inv.method_5447(i, class_1799.field_8037);
                 }
                 player.field_7512.method_7623();
-                return new class_1799((class_1935)item, 1);
+                player.field_7498.method_7623();
+                return 1;
             }
         }
-        return class_1799.field_8037;
+        return 0;
+    }
+
+    private static int takeOne(class_3222 player, class_1792 item) {
+        return ChallengeManager.deleteOne(player, item);
+    }
+
+    private static int dropOne(class_3222 player, class_1792 item) {
+        return ChallengeManager.deleteOne(player, item);
     }
 
     private static int deleteAll(class_3222 player, class_1792 item) {
@@ -471,12 +505,7 @@ public final class ChallengeManager {
     }
 
     private static int dropAll(class_3222 player, class_1792 item) {
-        int n = 0;
-        for (class_1799 st : ChallengeManager.takeAll(player, item)) {
-            n += st.method_7947();
-            ChallengeManager.drop(player, st);
-        }
-        return n;
+        return ChallengeManager.deleteAll(player, item);
     }
 
     private static List<class_1799> takeAll(class_3222 player, class_1792 item) {
@@ -493,6 +522,7 @@ public final class ChallengeManager {
             player.field_7512.method_34254(class_1799.field_8037);
         }
         player.field_7512.method_7623();
+        player.field_7498.method_7623();
         return taken;
     }
 
@@ -547,6 +577,12 @@ public final class ChallengeManager {
         int[] custom;
         class_5321<class_1937> dimension;
         boolean hurt;
+        boolean swimming;
+        boolean onFire;
+        boolean riding;
+        boolean sneaking;
+        boolean climbing;
+        boolean flying;
         Event pending;
         long quietSince;
 

@@ -177,6 +177,23 @@
   2. **Bilingual Resource Pack Namespaces:** Registrar os namespaces específicos (`assets/farmersdelight/lang/`, `assets/naturalist/lang/`, `assets/handcrafted/lang/`) com separação de nomes limpos em `ru_ru.json` e bilíngues em `pt_br.json`.
   3. **KubeJS Pedagogical Tooltips:** Mapear os itens de maior frequência cotidiana (facas, frigideiras, panelas, cebola, tomate, repolho, arroz, torta de maçã, carnes de caça, peles, cascos de tartaruga) com notas fonéticas, gênero gramatical e contexto cultural eslavo.
 
+### L28. Exclusão Cirúrgica de Itens sem Duplicação, Novas Interações Criativas e Shaders Imersivos Iris
+- **Armadilha:** Na implementação anterior da penalidade por erro no SayIt, a função `dropOne` instanciava uma `ItemEntity` no chão aos pés do jogador (`new class_1542(...)`) com 40 ticks de atraso para coleta. Como os contêineres de inventário do cliente (`playerScreenHandler`) não recebiam atualização imediata (`method_7623()`), o cliente mantinha a exibição do item na hotbar enquanto o jogador, ao se mover, pegava automaticamente a entidade dropada do chão após 2 segundos, resultando na criação de +1 item (duplicação) ao invés da exclusão.
+- **Solução:**
+  1. **Exclusão Atômica e Imutável (`deleteOne`):** Substituir toda lógica de drop por `deleteOne(player, item)`. O item é decrementado diretamente do cursor, do slot ativo da hotbar ou do inventário geral sem NUNCA criar uma entidade no mundo (`ItemEntity`). Chamar explicitamente `sendContentUpdates()` (`method_7623()`) tanto em `currentScreenHandler` (`field_7512`) quanto em `playerScreenHandler` (`field_7498`), forçando sincronização instantânea do pacote de slot para a UI do cliente.
+  2. **Interações Criativas Situacionais (Russo & Português):** O motor de observação (`watch`) agora detecta 6 novos estados comportamentais dinâmicos do jogador em tempo real:
+     - Natação/Mergulho (`swim`): `player.method_5799()` ("Я плыву в воде." / "Estou nadando na água.")
+     - Em Chamas (`fire`): `player.method_20802() > 0` ("Я горю, мне нужна вода!" / "Estou pegando fogo, preciso de água!")
+     - Montaria/Veículo (`ride`): `player.method_5854() != null` ("Я еду верхом." / "Estou cavalgando.")
+     - Furtividade/Agachamento (`sneak`): `player.method_5715()` ("Я крадусь бесшумно." / "Estou andando agachado em silêncio.")
+     - Escalada (`climb`): `player.method_6101()` ("Я лезу наверх." / "Estou subindo.")
+     - Voo com Élitros (`fly`): `player.method_6128()` ("Я лечу как птица." / "Estou voando como um pássaro.")
+     Todas as frases possuem frases correspondentes em cirílico (`ru_ru.json`) e português (`pt_br.json`) sincronizadas no JAR e no Resource Pack.
+  3. **Shaders Leves e Pacote HD de Texturas:**
+     - `iris-1.7.6+mc1.20.1.jar` integrado exclusivamente no cliente com aceleração Sodium, compatível com a GPU AMD Radeon RX 6750 XT.
+     - Shaderpack `ComplementaryReimagined_r5.9.3.zip` ativado por padrão em `iris.properties` (`enableShaders=true`).
+     - Pacote de texturas `Faithful 32x - 1.20.1.zip` posicionado abaixo do `Russian_Bilingual_Educational_Pack` no `options.txt`, mantendo a prioridade pedagógica bilíngue sobre os visuais em alta resolução.
+
 
 
 
