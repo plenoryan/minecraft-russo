@@ -188,7 +188,7 @@ public final class ChallengeManager {
                 pr.errors().remove(id);
             }
             pr.reps().put(id, 0);
-            player.method_43496((class_2561)class_2561.method_43470("\u00a76\u26a0 [Curva do Esquecimento] Faz " + elapsedHours + "h sem praticar! Fixa\u00e7\u00e3o regrediu de " + lvl + "/5 para " + regressed + "/5 estrelas."));
+            player.method_43496((class_2561)class_2561.method_43470("\u00a76[Revis\u00e3o] Inativo: " + elapsedHours + "h. Fixa\u00e7\u00e3o ajustada: " + lvl + "/5 -> " + regressed + "/5."));
             pr.save(ChallengeManager.server(player), player.method_5667());
             ChallengeManager.sync(player);
         }
@@ -510,32 +510,24 @@ public final class ChallengeManager {
 
                             if (newStars == 1) {
                                 player.method_43496((class_2561)class_2561.method_43470(
-                                    "\u00a7a\u2605 [Estrela 1/5 Desbloqueada!] Item Raro dominado na maioria das tentativas (" + successes + "/7 acertos)! Pr\u00f3ximos testes em ~" + delayMin + " min."
+                                    "\u00a7a[Progresso] Item Raro: Estrela 1/5 (" + successes + "/7 acertos). Pr\u00f3ximo teste em " + delayMin + " min."
                                 ));
                             } else if (newStars >= 5) {
                                 player.method_43496((class_2561)class_2561.method_43470(
-                                    "\u00a76\u2605\u2605\u2605\u2605\u2605 [DOM\u00cdNIO MESTRE 5/5] Item Raro dominado com perfei\u00e7\u00e3o na maioria das tentativas (" + successes + "/7 acertos)! Revis\u00e3o peri\u00f3dica em ~" + delayMin + " min."
+                                    "\u00a76[Progresso] Item Raro: Estrela 5/5 (" + successes + "/7 acertos). Revis\u00e3o em " + delayMin + " min."
                                 ));
                             } else {
                                 player.method_43496((class_2561)class_2561.method_43470(
-                                    "\u00a7a\u2605 [Estrela " + newStars + "/5 Conquistada!] Item Raro superou o teste de reten\u00e7\u00e3o na maioria (" + successes + "/7 acertos)! Pr\u00f3xima etapa em ~" + delayMin + " min."
+                                    "\u00a7a[Progresso] Item Raro: Estrela " + newStars + "/5 (" + successes + "/7 acertos). Pr\u00f3ximo teste em " + delayMin + " min."
                                 ));
                             }
                         } else {
                             long cdTicks = ChallengeManager.repCooldownTicks(currentStars, attemptsDone, true);
                             s.cooldown.put(c.subject(), now + cdTicks);
                             int nextSec = Math.max(1, (int)(cdTicks / 20L));
-                            int remainingAttempts = 7 - attemptsDone;
-
-                            if (successes >= 4) {
-                                player.method_43496((class_2561)class_2561.method_43470(
-                                    "\u00a7e\u2606 [Item Raro - Estrela " + targetStar + " - Tentativa " + attemptsDone + "/7] Correto (" + score + "%)! (" + successes + " acertos - maioria garantida!). Pr\u00f3ximo em " + nextSec + "s (" + remainingAttempts + " restante(s))."
-                                ));
-                            } else {
-                                player.method_43496((class_2561)class_2561.method_43470(
-                                    "\u00a7e\u2606 [Item Raro - Estrela " + targetStar + " - Tentativa " + attemptsDone + "/7] Correto (" + score + "%)! (" + successes + " acertos, " + errors + " erros). Pr\u00f3ximo em " + nextSec + "s (" + remainingAttempts + " restante(s))."
-                                ));
-                            }
+                            player.method_7353((class_2561)class_2561.method_43470(
+                                "\u00a7e[Item Raro " + attemptsDone + "/7] Correto (" + score + "%) \u2022 Acertos: " + successes + " \u2022 Pr\u00f3ximo em " + nextSec + "s"
+                            ), true);
                         }
                         break;
                     }
@@ -565,15 +557,15 @@ public final class ChallengeManager {
                         s.cooldown.put(c.subject(), now + 300L); // 15s cooldown
 
                         String regrMsg = regressedStars == 0
-                            ? "Progresso da palavra zerado!"
-                            : "Regrediu para Estrela " + regressedStars + "/5.";
+                            ? "Progresso zerado."
+                            : "Fixa\u00e7\u00e3o: Estrela " + regressedStars + "/5.";
 
                         String actionMsg = "drop".equalsIgnoreCase(cfg.penalty)
-                            ? "1 item foi dropado no ch\u00e3o!"
-                            : "1 item foi exclu\u00eddo do invent\u00e1rio!";
+                            ? "1 item dropado."
+                            : "1 item removido.";
 
                         player.method_43496((class_2561)class_2561.method_43470(
-                            "\u00a7c\u2716 [Item Raro Perdido] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). Voc\u00ea errou 4 tentativas (maioria de 7)! " + actionMsg + " " + regrMsg
+                            "\u00a7c[Falha] Item Raro: 4 erros atingidos (" + score + "%). " + actionMsg + " " + regrMsg
                         ));
                     } else if (attemptsDone >= 7) {
                         // 7 attempts completed with errors < 4 (so successes >= 4, majority achieved)!
@@ -587,17 +579,14 @@ public final class ChallengeManager {
                         int delayMin = Math.max(1, (int)(cdTicks / 1200L));
 
                         player.method_43496((class_2561)class_2561.method_43470(
-                            "\u00a7a\u2605 [Estrela " + newStars + "/5 Conquistada!] 7 tentativas conclu\u00eddas com " + successes + " acertos e " + errors + " erros (maioria conquistada)! Pr\u00f3ximos testes em ~" + delayMin + " min."
+                            "\u00a7a[Progresso] Item Raro: Estrela " + newStars + "/5 (" + successes + "/7 acertos). Pr\u00f3ximo teste em " + delayMin + " min."
                         ));
                     } else {
                         // Not lost yet, warning with strikes remaining
-                        int remainingStrikes = 4 - errors;
-                        int remainingAttempts = 7 - attemptsDone;
                         s.cooldown.put(c.subject(), now + 100L); // 5s grace interval
-
-                        player.method_43496((class_2561)class_2561.method_43470(
-                            "\u00a76\u26a0 [Item Raro - Estrela " + targetStar + " - Tentativa " + attemptsDone + "/7] Pron\u00fancia incorreta (" + score + "%). Erro " + errors + "/4 (se errar mais " + remainingStrikes + ", perde o item!). Pr\u00f3xima em 5s (" + remainingAttempts + " restante(s))."
-                        ));
+                        player.method_7353((class_2561)class_2561.method_43470(
+                            "\u00a76[Item Raro " + attemptsDone + "/7] Erro (" + score + "%) \u2022 Falhas: " + errors + "/4 \u2022 Pr\u00f3ximo em 5s"
+                        ), true);
                     }
                     break;
                 }
@@ -619,15 +608,15 @@ public final class ChallengeManager {
 
                         if (newStars == 1) {
                             player.method_43496((class_2561)class_2561.method_43470(
-                                "\u00a7a\u2605 [Estrela 1/5 Desbloqueada!] Palavra descoberta com sucesso! Pr\u00f3ximos testes de fixa\u00e7\u00e3o em ~" + delayMin + " min."
+                                "\u00a7a[Progresso] Estrela 1/5 conclu\u00edda. Pr\u00f3ximo teste em " + delayMin + " min."
                             ));
                         } else if (newStars >= 5) {
                             player.method_43496((class_2561)class_2561.method_43470(
-                                "\u00a76\u2605\u2605\u2605\u2605\u2605 [DOM\u00cdNIO MESTRE 5/5] Voc\u00ea memorizou completamente esta palavra! Revis\u00e3o peri\u00f3dica em ~" + delayMin + " min."
+                                "\u00a76[Progresso] Estrela 5/5 (Dom\u00ednio). Revis\u00e3o em " + delayMin + " min."
                             ));
                         } else {
                             player.method_43496((class_2561)class_2561.method_43470(
-                                "\u00a7a\u2605 [Estrela " + newStars + "/5 Conquistada!] N\u00edvel avan\u00e7ado! Descanse; pr\u00f3xima etapa em ~" + delayMin + " min."
+                                "\u00a7a[Progresso] Estrela " + newStars + "/5 conclu\u00edda. Pr\u00f3ximo teste em " + delayMin + " min."
                             ));
                         }
                     } else {
@@ -638,18 +627,9 @@ public final class ChallengeManager {
                         long cdTicks = ChallengeManager.repCooldownTicks(currentStars, nextReps, rare);
                         s.cooldown.put(c.subject(), now + cdTicks);
                         int nextSec = Math.max(1, (int)(cdTicks / 20L));
-                        int remaining = neededReps - nextReps;
-                        int targetStar = currentStars + 1;
-
-                        if (currentStars == 0) {
-                            player.method_43496((class_2561)class_2561.method_43470(
-                                "\u00a7e\u2606 [Descoberta " + nextReps + "/" + neededReps + "] Correto (" + score + "%)! Pr\u00f3ximo teste em " + nextSec + "s (" + remaining + " para Estrela 1 \u2605)."
-                            ));
-                        } else {
-                            player.method_43496((class_2561)class_2561.method_43470(
-                                "\u00a7e\u2605 [Estrela " + currentStars + "/5 - Teste " + nextReps + "/" + neededReps + "] Correto (" + score + "%)! Pr\u00f3ximo em " + nextSec + "s (" + remaining + " para Estrela " + targetStar + ")."
-                            ));
-                        }
+                        player.method_7353((class_2561)class_2561.method_43470(
+                            "\u00a7e[Teste " + nextReps + "/" + neededReps + "] Correto (" + score + "%) \u2022 Pr\u00f3ximo em " + nextSec + "s"
+                        ), true);
                     }
                     break;
                 }
@@ -678,11 +658,11 @@ public final class ChallengeManager {
                 s.cooldown.put(c.subject(), now + 100L);
 
                 String actionMsg = "drop".equalsIgnoreCase(cfg.penalty)
-                    ? "1 item foi dropado no ch\u00e3o!"
-                    : "1 item foi exclu\u00eddo do invent\u00e1rio!";
+                    ? "1 item dropado."
+                    : "1 item removido.";
 
                 player.method_43496((class_2561)class_2561.method_43470(
-                    "\u00a7c\u2716 [\u2605 " + regressedStars + "/5 - Repeti\u00e7\u00e3o " + regressedReps + "] Pron\u00fancia n\u00e3o reconhecida (" + score + "%). " + actionMsg
+                    "\u00a7c[Falha] Pron\u00fancia: " + score + "% (meta: " + c.passScore() + "%). " + actionMsg + " Fixa\u00e7\u00e3o: Estrela " + regressedStars + "/5."
                 ));
                 break;
             }
@@ -700,11 +680,9 @@ public final class ChallengeManager {
                 pr.reps().put(c.subject(), 0);
                 pr.timestamps().put(c.subject(), System.currentTimeMillis());
                 player.method_7255(Math.max(1, cfg.sentenceXp / 3));
-                if (nextStars >= 5) {
-                    player.method_43496((class_2561)class_2561.method_43470("\u00a7a\u2714 [MESTRE 5/5] Dominado com Maestria na pr\u00e1tica!"));
-                } else {
-                    player.method_43496((class_2561)class_2561.method_43470("\u00a7e\u2605 [Estrela " + nextStars + "/5] Treino conclu\u00eddo com sucesso!"));
-                }
+                player.method_7353((class_2561)class_2561.method_43470(
+                    "\u00a7a[Pr\u00e1tica] Estrela " + nextStars + "/5 (+XP)"
+                ), true);
                 break;
             }
         }
@@ -722,8 +700,7 @@ public final class ChallengeManager {
                     String name = Alphabet.LEVEL_NAME[lvl];
                     String mnem = Alphabet.LEVEL_MNEM[lvl];
                     player.method_43496((class_2561)class_2561.method_43470(
-                        "\u00a76\u2605 [DESBLOQUEIO INTELIGENTE] Nova Letra Cir\u00edlica Assimilada: \u00a7e" + name + "\n" +
-                        "\u00a7aMnem\u00f4nica: \u00a77" + mnem + " \u00a7a\u2022 \u00a7e(Agora ativa em todas as palavras!)"
+                        "\u00a76[Alfabeto] Letra ativa: \u00a7e" + name + " \u00a77\u2022 " + mnem
                     ));
                 }
             }

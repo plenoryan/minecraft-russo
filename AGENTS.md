@@ -314,3 +314,15 @@
   1. **Plugin Nativo de Jade (`SayItJadePlugin.java` via `@WailaPlugin`):** Registrado entrypoint `jade` em `fabric.mod.json`. O Jade agora inspeciona blocos, fluidos, plantas e entidades na mira e adiciona dinamicamente a linha educacional `★ Russo: <Palavra> [<Pronúncia>]` (ex: `Água` -> `★ Russo: Вода [Voda]`), mantendo o nome principal 100% limpo em português.
   2. **Diferenciação Cromática & Alerta de Falsos Amigos (`toSmartHybrid` com `formatCodes=true`):** Todas as letras cirílicas assimiladas são formatadas em **Dourado (`§6`)**, enquanto as letras latinas provisórias permanecem em **Branco (`§f`)**. No HUD, alertas contextuais ativos informam os falsos amigos (`§6Р§7=som de §eR§7 (Roda)`). A ambiguidade é 100% eliminada: `P` branco é /p/, `Р` dourado é /r/!
   3. **Quadro Lateral Persistente "O Que Eu Disse" (`SpeechFeedback`):** Ao concluir qualquer desafio (em especial sentenças), um painel dedicado é fixado no canto superior direito por **6 segundos**, exibindo a transcrição reconhecida em russo, a pontuação de precisão e a tradução correspondente em português.
+
+### L42. Aplicação de ASD-STE100 em Mensagens e Despoluição Visual via Action Bar
+- **Armadilha:**
+  1. O chat do jogo ficava sobrecarregado com mensagens a cada repetição fonética individual (`[Descoberta 2/5] Correto!`, `[Tentativa 3/7] Correto!`), poluindo a janela de log com rolagem constante e distraindo o jogador.
+  2. Notificações de letras cirílicas desbloqueadas geravam blocos de texto de 2 a 3 linhas por caractere (`[DESBLOQUEIO INTELIGENTE] Nova Letra Cirílica Assimilada... \n Mnemônica... \n (Agora ativa em todas as palavras!)`), repletos de elogios redundantes e poluição visual.
+- **Solução:**
+  1. **Separação Arquitetural de Feedback (Action Bar vs Chat):**
+     - Feedback efêmero de repetições intermediárias de treino (`[Teste 2/5] Correto (85%) • Próximo em 3s` ou `[Item Raro 3/7] Erro (40%) • Falhas: 1/4 • Próximo em 5s`) foi redirecionado para a **Action Bar** via `player.method_7353(component, true)`. O texto é exibido diretamente acima da barra de vida/itens e desaparece suavemente após 2 segundos, gerando **zero acúmulo de mensagens no chat**.
+     - Eventos canônicos de estado (conquista de estrelas, desbloqueio de letras, perdas de itens e curva de esquecimento) permanecem no Chat (`player.method_43496`), garantindo registro duradouro de conquistas essenciais.
+  2. **Padronização Estrita ASD-STE100 (Simplified Technical English):**
+     - Todas as mensagens foram condensadas em uma única linha factual, sem quebras de linha (`\n`), sem elogios vazios ou excesso de exclamações.
+     - Formato padrão estruturado: `[CATEGORIA] Objeto: Status (Métricas)` (ex: `§6[Alfabeto] Letra ativa: §eО, о [O] §7• Idêntica ao português`, `§a[Progresso] Estrela 1/5 concluída. Próximo teste em 2 min.`, `§c[Falha] Item Raro: 4 erros atingidos (45%). 1 item dropado. Progresso zerado.`).
