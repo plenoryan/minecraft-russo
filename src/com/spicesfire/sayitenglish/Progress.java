@@ -30,6 +30,14 @@ public final class Progress {
     public boolean gotDictionary;
     public boolean starterDictionary;
 
+    // Cooperative progression fields (Requirement R1)
+    public int coopScore = 0;
+    public int coopCompletedChallenges = 0;
+    public int coopCompleted = 0;
+    public int coopPhrases = 0;
+    public int coopDialogues = 0;
+    public long lastCoopTimestamp = 0L;
+
     public Progress() {
     }
 
@@ -91,6 +99,79 @@ public final class Progress {
         return this.timestamps.computeIfAbsent(lang, k -> new LinkedHashMap<>());
     }
 
+    // =========================================================================
+    // COOPERATIVE METHODS & 5-TIER RANK HIERARCHY (Requirement R1)
+    // =========================================================================
+
+    public int coopRankTier() {
+        if (this.coopScore >= 1000) return 5;
+        if (this.coopScore >= 600) return 4;
+        if (this.coopScore >= 300) return 3;
+        if (this.coopScore >= 100) return 2;
+        return 1;
+    }
+
+    public int getCoopRank() {
+        return coopRankTier();
+    }
+
+    public String coopRankTitle() {
+        switch (coopRankTier()) {
+            case 5: return "\u00a76\u041b\u0435\u0433\u0435\u043d\u0434\u0430"; // Легенда
+            case 4: return "\u00a7d\u041c\u0430\u0441\u0442\u0435\u0440 \u041a\u043e\u043c\u0430\u043d\u0434\u044b"; // Мастер Команды
+            case 3: return "\u00a7b\u0421\u043b\u0435\u0434\u043e\u043f\u044b\u0442"; // Следопыт
+            case 2: return "\u00a7a\u0422\u043e\u0432\u0430\u0440\u0438\u0449"; // Товарищ
+            default: return "\u00a77\u041d\u043e\u0432\u0438\u0447\u043e\u043a"; // Новичок
+        }
+    }
+
+    public String coopRankNameRaw() {
+        switch (coopRankTier()) {
+            case 5: return "\u041b\u0435\u0433\u0435\u043d\u0434\u0430";
+            case 4: return "\u041c\u0430\u0441\u0442\u0435\u0440 \u041a\u043e\u043c\u0430\u043d\u0434\u044b";
+            case 3: return "\u0421\u043b\u0435\u0434\u043e\u043f\u044b\u0442";
+            case 2: return "\u0422\u043e\u0432\u0430\u0440\u0438\u0449";
+            default: return "\u041d\u043e\u0432\u0438\u0447\u043e\u043a";
+        }
+    }
+
+    public String nextRankTitle() {
+        switch (coopRankTier()) {
+            case 1: return "\u00a7a\u0422\u043e\u0432\u0430\u0440\u0438\u0449";
+            case 2: return "\u00a7b\u0421\u043b\u0435\u0434\u043e\u043f\u044b\u0442";
+            case 3: return "\u00a7d\u041c\u0430\u0441\u0442\u0435\u0440 \u041a\u043e\u043c\u0430\u043d\u0434\u044b";
+            case 4: return "\u00a76\u041b\u0435\u0433\u0435\u043d\u0434\u0430";
+            default: return "\u00a76\u041b\u0435\u0433\u0435\u043d\u0434\u0430 (\u00a7fM\u00e1ximo\u00a76)";
+        }
+    }
+
+    public int nextRankThreshold() {
+        switch (coopRankTier()) {
+            case 1: return 100;
+            case 2: return 300;
+            case 3: return 600;
+            case 4: return 1000;
+            default: return 1000;
+        }
+    }
+
+    public int pointsToNextRank() {
+        int next = nextRankThreshold();
+        return Math.max(0, next - this.coopScore);
+    }
+
+    public void addCoopScore(int points) {
+        if (points <= 0) return;
+        this.coopScore += points;
+        this.lastCoopTimestamp = System.currentTimeMillis();
+    }
+
+    public void incrementCoopCompleted() {
+        this.coopCompletedChallenges++;
+        this.coopCompleted = this.coopCompletedChallenges;
+        this.lastCoopTimestamp = System.currentTimeMillis();
+    }
+
     private static Path file(MinecraftServer server, UUID uuid) {
         return server.method_27050(class_5218.field_24188).resolve("sayitenglish").resolve(uuid.toString() + ".json");
     }
@@ -129,6 +210,11 @@ public final class Progress {
         }
         if (pr.language != null && !Languages.known(pr.language)) {
             pr.language = null;
+        }
+        if (pr.coopCompletedChallenges == 0 && pr.coopCompleted > 0) {
+            pr.coopCompletedChallenges = pr.coopCompleted;
+        } else if (pr.coopCompleted == 0 && pr.coopCompletedChallenges > 0) {
+            pr.coopCompleted = pr.coopCompletedChallenges;
         }
         return pr;
     }

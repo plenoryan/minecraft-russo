@@ -326,3 +326,23 @@
   2. **Padronização Estrita ASD-STE100 (Simplified Technical English):**
      - Todas as mensagens foram condensadas em uma única linha factual, sem quebras de linha (`\n`), sem elogios vazios ou excesso de exclamações.
      - Formato padrão estruturado: `[CATEGORIA] Objeto: Status (Métricas)` (ex: `§6[Alfabeto] Letra ativa: §eО, о [O] §7• Idêntica ao português`, `§a[Progresso] Estrela 1/5 concluída. Próximo teste em 2 min.`, `§c[Falha] Item Raro: 4 erros atingidos (45%). 1 item dropado. Progresso zerado.`).
+
+### L43. Mecânicas Cooperativas Multiplayer, Minidesafios Dinâmicos, Compactação do HUD e Progressão de Alfabeto em Dois Eixos
+- **Armadilha:**
+  1. Em sessões multiplayer, os jogadores agiam de forma isolada, focados apenas nas próprias tarefas e itens.
+  2. A caixa de fala ("o que eu disse") aparecia para qualquer palavra solta, ocupando espaço desnecessário e poluindo o HUD com textos longos.
+  3. Coletar apenas um bloco de madeira no início do jogo desbloqueava letras cirílicas não-idênticas precocemente, substituindo caracteres antes do tempo.
+  4. Falta de dinamismo no gameplay vanilla sem sobrecarregar a memória com mods pesados de conteúdo.
+- **Solução:**
+  1. **Mecânicas Cooperativas (`CoopManager` & `Packets`):**
+     - Invocação de frases práticas entre jogadores (`CoopInvoke`): pedidos de socorro, madeira, comida, seguir e apontar alvos, com envio de pistas compreensíveis para o parceiro (`CoopCue`).
+     - Minidesafios dinâmicos/kamikaze (ex: "O chão é lava"): qualquer jogador pode acionar livremente o evento, exigindo sobrevivência coordenada.
+     - Sistema de ranking de cooperação em 5 patamares pedagógicos (`Новичок`, `Товарищ`, `Следопыт`, `Мастер Команды`, `Легенда`), persistido em JSON no servidor.
+  2. **Compactação Estrita do HUD de Fala:**
+     - Caixa de feedback suprimida completamente para itens de palavra única (`speechFeedback = null`).
+     - Ativação exclusiva para sentenças/frases completas, com dimensões compactadas (150px) e cabeçalho `"disse: "`.
+  3. **Progressão Cirílica em Dois Eixos (`Alphabet.java`):**
+     - Letras transparentes/idênticas (`А, О, Е, Т, К, М`) continuam com substituição fluida.
+     - Letras não-idênticas ao alfabeto latino agora exigem maturidade de estágio global e domínio da palavra (mínimo de estrelas e repetições) para evitar substituição precoce.
+  4. **Stack de Mods QoL e Desempenho:**
+     - Integrados 6 mods Fabric 1.20.1 leves: `Omnimovement` (movimentação ágil/sprint), `Inventory Sorting` (organização de baús e inventário com um clique), `Stack to Nearby Chests` (depósito rápido em contêineres próximos), `Entity Culling`, `Krypton` e `AppleSkin`. Segregação rígida cliente/servidor mantida (zero mods de interface no servidor dedicado).

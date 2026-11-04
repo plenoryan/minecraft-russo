@@ -1,0 +1,50 @@
+﻿[
+    {
+        "Slug":  "omnimovement",
+        "Filename":  "omnimovement-fabric-1.0+mc1.20.1.jar",
+        "Url":  "https://cdn.modrinth.com/data/ZmKZ0vTP/versions/zDpV6cM8/omnimovement-fabric-1.0%2Bmc1.20.1.jar",
+        "Size":  29222,
+        "Sha512":  "a4e8b6ab705f146a7e059825edcc0da612335d6cf84734f5d4ed381cb4a0bac29389ba6b52a8d3c521dd3d676ed1f99e4f6a6561812cc57d32d8a39d3417325e",
+        "Sha1":  "0d9acd5cb61d5f03988c5a1b44e3807e40effc41"
+    },
+    {
+        "Slug":  "inventory-sorter",
+        "Filename":  "omnimovement-fabric-1.0+mc1.20.1.jar",
+        "Url":  "https://cdn.modrinth.com/data/ZmKZ0vTP/versions/zDpV6cM8/omnimovement-fabric-1.0%2Bmc1.20.1.jar",
+        "Size":  29222,
+        "Sha512":  "a4e8b6ab705f146a7e059825edcc0da612335d6cf84734f5d4ed381cb4a0bac29389ba6b52a8d3c521dd3d676ed1f99e4f6a6561812cc57d32d8a39d3417325e",
+        "Sha1":  "0d9acd5cb61d5f03988c5a1b44e3807e40effc41"
+    },
+    {
+        "Slug":  "stack-to-nearby-chests",
+        "Filename":  "stack-to-nearby-chests-mc1.20.1-0.5.10.jar",
+        "Url":  "https://cdn.modrinth.com/data/HtGckJVc/versions/wMJlsfCI/stack-to-nearby-chests-mc1.20.1-0.5.10.jar",
+        "Size":  559703,
+        "Sha512":  "6f2efa75879ac5f164d962fc321e77a418f05b0be3b0fa504be1ecd47ccb0b6e129841c1598415e09c67f796f4f830b560fee4cd6885e694909143978c11b1ec",
+        "Sha1":  "2256019d02c7f514b694269c3fb93a293ced4071"
+    },
+    {
+        "Slug":  "entityculling",
+        "Filename":  "entityculling-fabric-1.11.3-mc1.20.1.jar",
+        "Url":  "https://cdn.modrinth.com/data/NNAgCjsB/versions/xSrd3qsM/entityculling-fabric-1.11.3-mc1.20.1.jar",
+        "Size":  1516696,
+        "Sha512":  "6bb4af050ec3bb5f4e2f76b33abc2bb6e0096c94849ba728979200beddeed8b2c3a5a962ecbec9cf79f11a99ba996a847814f1aabdb8ffad54105800fc0fed72",
+        "Sha1":  "42d17e5455f5015fa9b9c918a9b599683ff83f1c"
+    },
+    {
+        "Slug":  "krypton",
+        "Filename":  "krypton-0.2.3.jar",
+        "Url":  "https://cdn.modrinth.com/data/fQEb0iXm/versions/jiDwS0W1/krypton-0.2.3.jar",
+        "Size":  185895,
+        "Sha512":  "92b73a70737cfc1daebca211bd1525de7684b554be392714ee29cbd558f2a27a8bdda22accbe9176d6e531d74f9bf77798c28c3e8559c970f607422b6038bc9e",
+        "Sha1":  "4d499819effd8afe811e5d93952fcc46765a00df"
+    },
+    {
+        "Slug":  "appleskin",
+        "Filename":  "appleskin-fabric-mc1.20.1-2.5.2.jar",
+        "Url":  "https://cdn.modrinth.com/data/EsAfCjCV/versions/N5XeV21r/appleskin-fabric-mc1.20.1-2.5.2.jar",
+        "Size":  1097240,
+        "Sha512":  "712ca0f86050ab3c6dbdbe62c5d9fabe77837d70529d1cd686f915a5f09d3a4f71ad4d3866984fbdded63ae2eb1c1ceedfb3386253510ee3a54857f77677e4f4",
+        "Sha1":  "f859bb13130788ae2dc2e76a9c80c89e4bbbef5f"
+    }
+]

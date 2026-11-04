@@ -1,0 +1,92 @@
+﻿{
+    "Suite":  "Adversarial Stress Test Suite (Requirement R1 \u0026 R4)",
+    "TargetDir":  "F:\\Jogos\\Mine",
+    "Timestamp":  "2026-11-04T13:31:08Z",
+    "DurationMs":  21347,
+    "Verdict":  "APPROVE",
+    "Summary":  {
+                    "Failed":  0,
+                    "Warnings":  0,
+                    "Total":  7,
+                    "Passed":  7
+                },
+    "Results":  [
+                    {
+                        "Id":  "R1-ADV-00",
+                        "Category":  "Toolchain",
+                        "Name":  "Adversarial Java Harness Compilation",
+                        "Status":  "PASS",
+                        "Details":  "AdversarialCoopNetworkingHarness compiled cleanly",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-04T13:30:47Z"
+                    },
+                    {
+                        "Id":  "R1-ADV-01",
+                        "Category":  "Multiplayer Networking",
+                        "Name":  "Coop Packets Roundtrip, Null Safety \u0026 Buffer Underflow",
+                        "Status":  "PASS",
+                        "Details":  "All 23 packet stress test assertions passed (CoopInvoke, CoopCue, CoopSync)",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-04T13:30:50Z"
+                    },
+                    {
+                        "Id":  "R1-ADV-02",
+                        "Category":  "Cooperative Progression",
+                        "Name":  "Progress Ranking Thresholds \u0026 Monotonicity",
+                        "Status":  "PASS",
+                        "Details":  "All 4 progression stress test assertions passed across 0..5000 score boundaries",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-04T13:30:50Z"
+                    },
+                    {
+                        "Id":  "R4-ADV-01",
+                        "Category":  "Mod Segregation",
+                        "Name":  "Zero Client-Only Mods in Servidor_Dedicado\\mods\\",
+                        "Status":  "PASS",
+                        "Details":  "Confirmed 0 client-only rendering/UI mods in dedicated server (AGENTS.md L13 satisfied)",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-04T13:30:50Z"
+                    },
+                    {
+                        "Id":  "R4-ADV-02",
+                        "Category":  "Mod Segregation",
+                        "Name":  "Server Mod Environment Metadata Verification",
+                        "Status":  "PASS",
+                        "Details":  "All 12 server JARs have valid environment tags (none declared client-only)",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-04T13:31:02Z"
+                    },
+                    {
+                        "Id":  "R4-ADV-03",
+                        "Category":  "Server Stability",
+                        "Name":  "Headless Dedicated Server Dry-Run (--help)",
+                        "Status":  "PASS",
+                        "Details":  "Server booted into Fabric Loader 0.16.14, initialized SpongePowered Mixin, and exited cleanly (code 0)",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-04T13:31:04Z"
+                    },
+                    {
+                        "Id":  "E2E-ADV-01",
+                        "Category":  "E2E Validation",
+                        "Name":  "Canonical E2E Test Suite Strict Execution",
+                        "Status":  "PASS",
+                        "Details":  "55/55 tests passed, 0 failures, 0 pending milestones (exit code 0)",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-04T13:31:08Z"
+                    }
+                ]
+}

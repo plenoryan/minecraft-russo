@@ -22,6 +22,7 @@ package com.spicesfire.sayitenglish.client;
 import com.spicesfire.sayitenglish.Alphabet;
 import com.spicesfire.sayitenglish.Config;
 import com.spicesfire.sayitenglish.Packets;
+import com.spicesfire.sayitenglish.Scorer;
 import com.spicesfire.sayitenglish.client.ChallengeSession;
 import com.spicesfire.sayitenglish.client.ClientCompat;
 import com.spicesfire.sayitenglish.client.Microphone;
@@ -78,7 +79,9 @@ public final class ChallengeHud {
         SpeechFeedback fb = speechFeedback;
         if (fb != null) {
             long age = System.currentTimeMillis() - fb.shownAt();
-            if (age > 6000L) { // 6 seconds on screen
+            boolean isSentence = "sentence".equals(fb.kind()) 
+                || (fb.target() != null && Scorer.words(fb.target()).size() > 1);
+            if (age > 4500L || !isSentence) {
                 speechFeedback = null;
             } else {
                 ChallengeHud.renderSpeechFeedback(g, mc, font, fb, age);
@@ -216,31 +219,38 @@ public final class ChallengeHud {
 
     private static void renderSpeechFeedback(class_332 g, class_310 mc, class_327 font, SpeechFeedback fb, long age) {
         int screenW = mc.method_22683().method_4486();
-        String title = (fb.success() ? "\u00a7a\u2714 O Que Eu Disse " : "\u00a7c\u2716 O Que Eu Disse ") + "\u00a7e(" + fb.score() + "%)";
-        String spoken = fb.heard().isEmpty() ? "\u00a77(sem \u00e1udio detectado)" : "\u00a7f\"" + fb.heard() + "\"";
-        String trans = fb.nativeTranslation().isEmpty() ? "" : "\u00a7eTradu\u00e7\u00e3o: \u00a7f" + fb.nativeTranslation();
-        String target = "\u00a7bAlvo: \u00a77" + fb.target();
 
-        int textW = Math.max(Math.max(font.method_1727(title), font.method_1727(spoken)), Math.max(font.method_1727(trans), font.method_1727(target)));
-        int w = Math.min(screenW - 20, Math.max(220, textW + 24));
+        // R2: Cabecalho estritamente "disse: " + badge de porcentagem
+        String header = "disse: ";
+        String scoreBadge = fb.score() + "%";
+        String spoken = fb.heard().isEmpty() ? "\u00a77(sem \u00e1udio)" : "\u00a7f\"" + fb.heard() + "\"";
+        String trans = fb.nativeTranslation().isEmpty() ? "" : "\u00a77" + fb.nativeTranslation();
+
+        int textW = Math.max(font.method_1727(header) + font.method_1727(scoreBadge) + 16, Math.max(font.method_1727(spoken), font.method_1727(trans)));
+        int w = Math.min(screenW - 16, Math.max(150, textW + 16));
         int x = screenW - w - 8;
         int y = 8;
-        int h = 48 + (trans.isEmpty() ? 0 : 12);
+        int h = 28 + (trans.isEmpty() ? 0 : 10);
 
-        // Semi-transparent background
+        // Fundo semitransparente escuro
         ClientCompat.fill((class_332)g, (int)x, (int)y, (int)(x + w), (int)(y + h), (int)-803726810);
-        // Right accent bar
-        ClientCompat.fill((class_332)g, (int)(x + w - 3), (int)y, (int)(x + w), (int)(y + h), (int)(fb.success() ? -10755203 : -42406));
+        // Borda lateral de status (Verde para sucesso, Vermelha para erro)
+        ClientCompat.fill((class_332)g, (int)(x + w - 2), (int)y, (int)(x + w), (int)(y + h), (int)(fb.success() ? -10755203 : -42406));
 
-        int curY = y + 5;
-        ClientCompat.text((class_332)g, (class_327)font, (String)title, (int)(x + 8), (int)curY, (int)-1);
-        curY += 12;
-        ClientCompat.text((class_332)g, (class_327)font, (String)spoken, (int)(x + 8), (int)curY, (int)-1);
-        curY += 12;
+        int curY = y + 4;
+        // Linha 1: "disse: " a esquerda e badge de pontuacao a direita
+        ClientCompat.text((class_332)g, (class_327)font, (String)header, (int)(x + 6), (int)curY, (int)-7697766);
+        int badgeW = font.method_1727(scoreBadge);
+        ClientCompat.text((class_332)g, (class_327)font, (String)scoreBadge, (int)(x + w - 6 - badgeW), (int)curY, (int)(fb.success() ? -10755203 : -42406));
+
+        curY += 10;
+        // Linha 2: Transcricao ouvida
+        ClientCompat.text((class_332)g, (class_327)font, (String)spoken, (int)(x + 6), (int)curY, (int)-1);
+
+        // Linha 3 (se presente): Traducao em portugues
         if (!trans.isEmpty()) {
-            ClientCompat.text((class_332)g, (class_327)font, (String)trans, (int)(x + 8), (int)curY, (int)-1);
-            curY += 12;
+            curY += 10;
+            ClientCompat.text((class_332)g, (class_327)font, (String)trans, (int)(x + 6), (int)curY, (int)-4671288);
         }
-        ClientCompat.text((class_332)g, (class_327)font, (String)target, (int)(x + 8), (int)curY, (int)-7697766);
     }
 }

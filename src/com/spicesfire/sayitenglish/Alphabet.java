@@ -167,8 +167,21 @@ public final class Alphabet {
         return itemIdOrWord;
     }
 
+    public static boolean isIdentical(char ch) {
+        Integer lvl = LETTER_LEVEL.get(Character.toLowerCase(ch));
+        return lvl != null && lvl <= 6;
+    }
+
     public static Set<Character> computeUnlockedLetters(Map<String, Integer> wordStars, Map<?, ?> heatMap) {
         Set<Character> unlocked = new HashSet<>();
+
+        int totalStars = 0;
+        if (wordStars != null) {
+            for (int s : wordStars.values()) {
+                totalStars += Math.max(0, s);
+            }
+        }
+        int globalLevel = calculateLevel(totalStars);
 
         // 1. Heatmap: letters seen often enough unlock automatically
         if (heatMap != null) {
@@ -187,9 +200,15 @@ public final class Alphabet {
                 if (val instanceof Number) {
                     count = ((Number) val).intValue();
                 }
-                if (count >= getHeatThreshold(ch)) {
-                    unlocked.add(ch);
-                    unlocked.add(Character.toUpperCase(ch));
+                int lvl = LETTER_LEVEL.getOrDefault(ch, 99);
+                int thresh = getHeatThreshold(ch);
+
+                // Caracteres identicos desbloqueiam no limiar; nao-identicos exigem maturidade de estagio
+                if (count >= thresh) {
+                    if (lvl <= 6 || globalLevel >= Math.max(1, lvl - 3) || count >= thresh * 2) {
+                        unlocked.add(ch);
+                        unlocked.add(Character.toUpperCase(ch));
+                    }
                 }
             }
         }
@@ -206,8 +225,19 @@ public final class Alphabet {
                 int unlockCount = (stars >= 5) ? wordLetters.size() : Math.min(stars, wordLetters.size());
                 for (int i = 0; i < unlockCount; i++) {
                     char c = wordLetters.get(i);
-                    unlocked.add(c);
-                    unlocked.add(Character.toUpperCase(c));
+                    int lvl = LETTER_LEVEL.getOrDefault(c, 99);
+
+                    if (isIdentical(c)) {
+                        // EIXO 1: Caracteres identicos (А, О, Т, К, М, Е) retem substituicao natural imediata
+                        unlocked.add(c);
+                        unlocked.add(Character.toUpperCase(c));
+                    } else {
+                        // EIXO 2: Caracteres nao-identicos exigem avanco gradual no estagio global e maestria da palavra
+                        if (globalLevel >= lvl && stars >= 3) {
+                            unlocked.add(c);
+                            unlocked.add(Character.toUpperCase(c));
+                        }
+                    }
                 }
             }
         }

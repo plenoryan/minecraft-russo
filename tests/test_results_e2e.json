@@ -1,12 +1,12 @@
 ﻿{
-    "timestamp_utc":  "2026-10-31T02:55:54.4103616Z",
+    "timestamp_utc":  "2026-11-04T13:14:55.4143673Z",
     "execution_mode":  "strict",
     "target_root":  "F:\\Jogos\\Mine",
-    "total_tests":  45,
-    "passed":  45,
+    "total_tests":  55,
+    "passed":  55,
     "pending_milestone":  0,
     "failed":  0,
-    "duration_ms":  2045,
+    "duration_ms":  3727,
     "results":  [
                     {
                         "Id":  "T1_F01",
@@ -14,7 +14,7 @@
                         "Name":  "F1: Minecraft 1.20.1 Fabric Engine and Loader Manifest",
                         "Milestone":  "M1",
                         "Status":  "PASSED",
-                        "DurationMs":  60,
+                        "DurationMs":  54,
                         "Message":  "Fabric Loader 0.16.14 on Minecraft 1.20.1 verified"
                     },
                     {
@@ -24,7 +24,7 @@
                         "Milestone":  "M1",
                         "Status":  "PASSED",
                         "DurationMs":  10,
-                        "Message":  "All core performance mods present in Instancia_Cliente\\mods: architectury-9.2.14-fabric.jar, CustomSkinLoader_Universal-15.1.jar, e4all-fabric-1.6.4.jar, fabric-api-0.92.12+1.20.1.jar, ferritecore-6.0.1-fabric.jar, ForgeConfigAPIPort-v8.0.3-1.20.1-Fabric.jar, Heracles-fabric-1.20.1-1.1.13.jar, heraclesbutton-1.0.0.jar, ImmediatelyFast-Fabric-1.5.5+1.20.4.jar, Jade-1.20-Fabric-11.13.3.jar, kubejs-fabric-2001.6.5-build.26.jar, language-reload-1.7.5+1.20.1.jar, lithium-fabric-mc1.20.1-0.11.4.jar, modernfix-fabric-5.25.2+mc1.20.1.jar, ModernUI-Fabric-1.20.1-3.12.0.1-universal.jar, resourcefullib-fabric-1.20.1-2.1.29.jar, rhino-fabric-2001.2.3-build.10.jar, sayit-1.20.1-fabric.jar, sodium-fabric-0.5.13+mc1.20.1.jar"
+                        "Message":  "All core performance mods present in Instancia_Cliente\\mods: AmbientSounds_FABRIC_v6.3.11_mc1.20.1.jar, appleskin-fabric-mc1.20.1-2.5.2.jar, architectury-9.2.14-fabric.jar, CreativeCore_FABRIC_v2.12.41_mc1.20.1.jar, CustomSkinLoader_Universal-15.1.jar, e4all-fabric-1.6.4.jar, entityculling-fabric-1.11.3-mc1.20.1.jar, fabric-api-0.92.12+1.20.1.jar, FarmersDelight-1.20.1-2.1.1+refabricated.jar, ferritecore-6.0.1-fabric.jar, ForgeConfigAPIPort-v8.0.3-1.20.1-Fabric.jar, geckolib-fabric-1.20.1-4.8.4.jar, handcrafted-fabric-1.20.1-3.0.6.jar, Heracles-fabric-1.20.1-1.1.13.jar, heraclesbutton-1.0.0.jar, ImmediatelyFast-Fabric-1.5.5+1.20.4.jar, InventorySorter-1.9.0-1.20.jar, iris-1.7.6+mc1.20.1.jar, Jade-1.20-Fabric-11.13.3.jar, krypton-0.2.3.jar, kubejs-fabric-2001.6.5-build.26.jar, language-reload-1.7.5+1.20.1.jar, lithium-fabric-mc1.20.1-0.11.4.jar, modernfix-fabric-5.25.2+mc1.20.1.jar, ModernUI-Fabric-1.20.1-3.12.0.1-universal.jar, naturalist-fabric-4.0.3-1.20.1.jar, omnimovement-fabric-1.0+mc1.20.1.jar, PresenceFootsteps-1.10.1+1.20.1.jar, resourcefullib-fabric-1.20.1-2.1.29.jar, rhino-fabric-2001.2.3-build.10.jar, sayitenglish-fabric-1.20.1-1.1.0.jar, sodium-fabric-0.5.13+mc1.20.1.jar, stack-to-nearby-chests-mc1.20.1-0.5.10.jar"
                     },
                     {
                         "Id":  "T1_F03",
@@ -32,7 +32,7 @@
                         "Name":  "F3: Portable OpenJDK 17 Runtime in Java17\\",
                         "Milestone":  "M1",
                         "Status":  "PASSED",
-                        "DurationMs":  77,
+                        "DurationMs":  67,
                         "Message":  "Verified 64-Bit OpenJDK 17 binary: java.exe : openjdk version \"17.0.20.1\" 2026-08-18"
                     },
                     {
@@ -77,7 +77,7 @@
                         "Name":  "F8: Cyrillic Dictionary Parsing and Normalization",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  37,
+                        "DurationMs":  34,
                         "Message":  "Cyrillic dictionary normalizer correctly handles lowercasing, formatting, accents, and yo-\u003eye"
                     },
                     {
@@ -86,7 +86,7 @@
                         "Name":  "F9: Voice HUD and Audio Waveform Overlay Config",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  13,
+                        "DurationMs":  11,
                         "Message":  "SayIt HUD rendering specs and pronunciation scoring formula verified"
                     },
                     {
@@ -95,7 +95,7 @@
                         "Name":  "F10: Persistent Pocket Dictionary and Learned Item History",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  15,
+                        "DurationMs":  14,
                         "Message":  "Player vocabulary dictionary indexing by persistent offline UUID verified"
                     },
                     {
@@ -113,7 +113,7 @@
                         "Name":  "F12: Language Reload (Shift+F3+J) and Multilingual Search",
                         "Milestone":  "M3",
                         "Status":  "PASSED",
-                        "DurationMs":  2,
+                        "DurationMs":  3,
                         "Message":  "Language Reload mod verified (language-reload-1.7.5+1.20.1.jar)"
                     },
                     {
@@ -122,8 +122,8 @@
                         "Name":  "F13: Heracles 4-Tier Russian Curriculum Quests",
                         "Milestone":  "M3",
                         "Status":  "PASSED",
-                        "DurationMs":  42,
-                        "Message":  "Verified 68 Heracles Russian quest files with valid JSON schemas"
+                        "DurationMs":  43,
+                        "Message":  "Verified 73 Heracles Russian quest files with valid JSON schemas"
                     },
                     {
                         "Id":  "T1_F14",
@@ -131,7 +131,7 @@
                         "Name":  "F14: Bilingual and Phonetic Tooltips Schema",
                         "Milestone":  "M3",
                         "Status":  "PASSED",
-                        "DurationMs":  2,
+                        "DurationMs":  1,
                         "Message":  "Pedagogical bilingual tooltips script verified"
                     },
                     {
@@ -140,7 +140,7 @@
                         "Name":  "F15: Tier-Gated Voice Penalty and Adaptive Timers",
                         "Milestone":  "M3",
                         "Status":  "PASSED",
-                        "DurationMs":  5,
+                        "DurationMs":  4,
                         "Message":  "Live sayit.json config verified: Tier 1 (18s) down to Tier 4 (5s)"
                     },
                     {
@@ -167,7 +167,7 @@
                         "Name":  "F18: Dedicated Server Configuration (online-mode=false)",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  3,
+                        "DurationMs":  4,
                         "Message":  "Dedicated server configured with online-mode=false and enforce-secure-profile=false"
                     },
                     {
@@ -194,7 +194,7 @@
                         "Name":  "F21: Client-Side STT Architecture and Zero Inventory Desync",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  20,
+                        "DurationMs":  16,
                         "Message":  "Client-side STT offline isolation (60 bytes packet) verified"
                     },
                     {
@@ -204,7 +204,7 @@
                         "Milestone":  "M5",
                         "Status":  "PASSED",
                         "DurationMs":  2,
-                        "Message":  "Test harness self-verification passed (45 tests registered)"
+                        "Message":  "Test harness self-verification passed (55 tests registered)"
                     },
                     {
                         "Id":  "T1_F23",
@@ -216,12 +216,93 @@
                         "Message":  "Forensic audit confirmed zero external DRM or cloud auth endpoints"
                     },
                     {
+                        "Id":  "T1_F24",
+                        "Tier":  "Tier 1",
+                        "Name":  "F24: Speech HUD Suppression on Single-Word and Item Challenges",
+                        "Milestone":  "M1",
+                        "Status":  "PASSED",
+                        "DurationMs":  8,
+                        "Message":  "Speech HUD suppression strictly verified: single-word item challenges suppress feedback box, sentences permitted"
+                    },
+                    {
+                        "Id":  "T1_F25",
+                        "Tier":  "Tier 1",
+                        "Name":  "F25: Speech HUD Compact Box and Strict Header Prefix (\u0027disse: \u0027)",
+                        "Milestone":  "M1",
+                        "Status":  "PASSED",
+                        "DurationMs":  1,
+                        "Message":  "Speech HUD visual compaction verified: strict header \u0027disse: \u0027, 150px min width, 28-38px compact height"
+                    },
+                    {
+                        "Id":  "T1_F26",
+                        "Tier":  "Tier 1",
+                        "Name":  "F26: Cyrillic Identical Letters Natural Substitution (A, O, E, T, K, M)",
+                        "Milestone":  "M1",
+                        "Status":  "PASSED",
+                        "DurationMs":  1,
+                        "Message":  "Cyrillic identical letters (A, O, E, T, K, M) natural substitution verified with isIdentical(ch) \u003c= 6"
+                    },
+                    {
+                        "Id":  "T1_F27",
+                        "Tier":  "Tier 1",
+                        "Name":  "F27: Cyrillic Non-Identical Letters Gradual Progression and Anti-Premature Locking",
+                        "Milestone":  "M1",
+                        "Status":  "PASSED",
+                        "DurationMs":  2,
+                        "Message":  "Gradual progression calibrated: non-identical letters (levels \u003e 6: Ð², Ñ€, Ð´) strictly protected against premature unlocking on early wood gathering"
+                    },
+                    {
+                        "Id":  "T1_F28",
+                        "Tier":  "Tier 1",
+                        "Name":  "F28: Cooperative Phrase Invocations and Bilingual Schema",
+                        "Milestone":  "M3",
+                        "Status":  "PASSED",
+                        "DurationMs":  12,
+                        "Message":  "Cooperative phrase schema verified across 5 practical phrases (follow, waypoint, request_wood, request_food, help) with bilingual Portuguese hints"
+                    },
+                    {
+                        "Id":  "T1_F29",
+                        "Tier":  "Tier 1",
+                        "Name":  "F29: Dynamic Kamikaze Mini-Challenges (The Floor is Lava)",
+                        "Milestone":  "M3",
+                        "Status":  "PASSED",
+                        "DurationMs":  4,
+                        "Message":  "Dynamic mini-challenge (\u0027The Floor is Lava\u0027) verified with Cyrillic trigger (\u0027Пол - это лава!\u0027), fail conditions and multiplayer broadcast"
+                    },
+                    {
+                        "Id":  "T1_F30",
+                        "Tier":  "Tier 1",
+                        "Name":  "F30: Cooperative Pedagogical Ranking and Scoring Hierarchy (5 Tiers)",
+                        "Milestone":  "M3",
+                        "Status":  "PASSED",
+                        "DurationMs":  7,
+                        "Message":  "Cooperative ranking hierarchy verified across 5 tiers (Новичок to Легенда) with monotonic scoring"
+                    },
+                    {
+                        "Id":  "T1_F31",
+                        "Tier":  "Tier 1",
+                        "Name":  "F31: QoL Modpack Manifest and Strict Client/Server Segregation (AGENTS.md L13)",
+                        "Milestone":  "M2",
+                        "Status":  "PASSED",
+                        "DurationMs":  13,
+                        "Message":  "All 6 QoL mods present in client (33 total); universal mods in server (12 total); 0 client-only mods contaminating dedicated server"
+                    },
+                    {
+                        "Id":  "T1_F32",
+                        "Tier":  "Tier 1",
+                        "Name":  "F32: Dedicated Server Dry-Run Clean Execution with QoL Stack",
+                        "Milestone":  "M2",
+                        "Status":  "PASSED",
+                        "DurationMs":  1524,
+                        "Message":  "Dedicated server dry-run executed cleanly with newly integrated QoL mods: 0 mixin collisions, 0 class loading errors, clean exit"
+                    },
+                    {
                         "Id":  "T2_01",
                         "Tier":  "Tier 2",
                         "Name":  "T2.1: Cyrillic Stress Mark and Diacritic Stripping",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  9,
+                        "DurationMs":  7,
                         "Message":  "All Cyrillic acute stress marks and diacritics stripped flawlessly"
                     },
                     {
@@ -230,7 +311,7 @@
                         "Name":  "T2.2: Character yo vs ye Universal Equivalence",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  10,
+                        "DurationMs":  8,
                         "Message":  "Universal yo \u003c-\u003e ye equivalence verified across all test pairs"
                     },
                     {
@@ -239,7 +320,7 @@
                         "Name":  "T2.3: Pronunciation Scoring and Foreign Accent Tolerance",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  30,
+                        "DurationMs":  28,
                         "Message":  "Scoring engine passed: accent tolerance verified, incorrect words rejected"
                     },
                     {
@@ -257,7 +338,7 @@
                         "Name":  "T2.5: Zero-Length, Whitespace and Malformed Audio Transcripts",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  3,
+                        "DurationMs":  2,
                         "Message":  "Harness strictly rejects empty, punctuation, whitespace and malformed transcripts"
                     },
                     {
@@ -275,7 +356,7 @@
                         "Name":  "T2.7: Minecraft 1.19+ Chat Signature Kick Prevention",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  2,
+                        "DurationMs":  1,
                         "Message":  "Chat signature kick prevention verified (enforce-secure-profile=false)"
                     },
                     {
@@ -311,7 +392,7 @@
                         "Name":  "T3.1: Offline Authentication to CustomSkinLoader LocalSkin Synergy",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  1,
+                        "DurationMs":  0,
                         "Message":  "Synergy between offline username AmigoRusso, UUID c705fe56-3283-3c28-a50c-360444790d19, and local skin path verified"
                     },
                     {
@@ -320,7 +401,7 @@
                         "Name":  "T3.2: Heracles Quest Vocabulary to SayIt Dictionary Alignment",
                         "Milestone":  "M3",
                         "Status":  "PASSED",
-                        "DurationMs":  5,
+                        "DurationMs":  3,
                         "Message":  "All pedagogical quest items align with SayIt Cyrillic normalization grammar"
                     },
                     {
@@ -356,7 +437,7 @@
                         "Name":  "T3.6: Concurrent Multi-Player Challenge State Isolation",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  1,
+                        "DurationMs":  0,
                         "Message":  "Multi-player challenge state isolation guaranteed by distinct offline UUIDs"
                     },
                     {
@@ -374,8 +455,8 @@
                         "Name":  "T4.2: Scenario: Melty Voice Challenge - Novice Oak Log Acquisition",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  50,
-                        "Message":  "Scenario verified: Acquisition trigger active, Russian dictionary loaded (Дубовое бревно), pronunciation scored 1.0"
+                        "DurationMs":  40,
+                        "Message":  "Scenario verified: Acquisition trigger active, Russian dictionary loaded (Дерево), pronunciation scored 1.0"
                     },
                     {
                         "Id":  "T4_03",
@@ -383,7 +464,7 @@
                         "Name":  "T4.3: Scenario: Melty Voice Penalty - Timer Expiration and Item Loss",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  48,
+                        "DurationMs":  43,
                         "Message":  "Scenario verified: Incorrect pronunciation (Яблоко vs Алмаз) rejected; sayit.json enforces penaltyOnTimeout: DROP"
                     },
                     {
@@ -401,7 +482,7 @@
                         "Name":  "T4.5: Scenario: Dedicated Server Long-Term Survival Boot",
                         "Milestone":  "M4",
                         "Status":  "PASSED",
-                        "DurationMs":  1434,
+                        "DurationMs":  1548,
                         "Message":  "Scenario verified: Dedicated server booted cleanly without mod resolution exceptions, EULA confirmed, Aikar flags verified"
                     },
                     {
@@ -410,8 +491,17 @@
                         "Name":  "T4.6: Scenario: Microphone Disconnect and Keyboard \u0027Y\u0027 Typing Fallback",
                         "Milestone":  "M2",
                         "Status":  "PASSED",
-                        "DurationMs":  30,
+                        "DurationMs":  35,
                         "Message":  "Scenario verified: sayit.json configures keyboard fallback on key \u0027Y\u0027, typed input scored 1"
+                    },
+                    {
+                        "Id":  "T4_07",
+                        "Tier":  "Tier 4",
+                        "Name":  "T4.7: Scenario: Cooperative Multiplayer Phrase Invocation, Cue Synchronization, and QoL Synergy",
+                        "Milestone":  "M3",
+                        "Status":  "PASSED",
+                        "DurationMs":  4,
+                        "Message":  "Scenario verified: Initiator spoken phrase scored 1.0, cue dispatched (141 bytes), ranking progressed to 50 pts (Ученик), QoL mods active"
                     }
                 ]
 }

@@ -1,0 +1,552 @@
+﻿[
+    {
+        "Id":  "ADV_BUILD_01",
+        "Suite":  "Build",
+        "Name":  "Compile AdversarialTester.java",
+        "Status":  "PASS",
+        "Details":  "Compiled cleanly with OpenJDK 17 javac",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_1",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 1 star unlocks ONLY \u0027o\u0027/\u0027O\u0027 (size=2)",
+        "Status":  "PASS",
+        "Details":  "Oak 1 star unlocks ONLY \u0027o\u0027/\u0027O\u0027 (size=2)",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_1_LOCK",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 1 star keeps d, v, r, e strictly locked",
+        "Status":  "PASS",
+        "Details":  "Oak 1 star keeps d, v, r, e strictly locked",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_2",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 2 stars unlocks ONLY identical letters \u0027o\u0027,\u0027e\u0027 (size=4)",
+        "Status":  "PASS",
+        "Details":  "Oak 2 stars unlocks ONLY identical letters \u0027o\u0027,\u0027e\u0027 (size=4)",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_2_LOCK",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 2 stars keeps non-identical d, v, r strictly locked",
+        "Status":  "PASS",
+        "Details":  "Oak 2 stars keeps non-identical d, v, r strictly locked",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_3",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 3 stars with zero global score unlocks ONLY \u0027o\u0027,\u0027e\u0027",
+        "Status":  "PASS",
+        "Details":  "Oak 3 stars with zero global score unlocks ONLY \u0027o\u0027,\u0027e\u0027",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_3_LOCK",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 3 stars with zero global score: non-identical d, v, r strictly locked",
+        "Status":  "PASS",
+        "Details":  "Oak 3 stars with zero global score: non-identical d, v, r strictly locked",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_4",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 4 stars with zero global score unlocks ONLY \u0027o\u0027,\u0027e\u0027",
+        "Status":  "PASS",
+        "Details":  "Oak 4 stars with zero global score unlocks ONLY \u0027o\u0027,\u0027e\u0027",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_4_LOCK",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 4 stars with zero global score: non-identical d, v, r strictly locked",
+        "Status":  "PASS",
+        "Details":  "Oak 4 stars with zero global score: non-identical d, v, r strictly locked",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_5",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 5 stars with zero global score unlocks ONLY \u0027o\u0027,\u0027e\u0027 (size=4)",
+        "Status":  "PASS",
+        "Details":  "Oak 5 stars with zero global score unlocks ONLY \u0027o\u0027,\u0027e\u0027 (size=4)",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_OAK_5_LOCK",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Oak 5 stars with zero global score: non-identical d, v, r remain strictly locked!",
+        "Status":  "PASS",
+        "Details":  "Oak 5 stars with zero global score: non-identical d, v, r remain strictly locked!",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_SINGLE_10",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Single word 10 stars: global level 5 still locks v(7), r(8), d(13)",
+        "Status":  "PASS",
+        "Details":  "Single word 10 stars: global level 5 still locks v(7), r(8), d(13)",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_SINGLE_20",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Single word 20 stars: v(7) and r(8) unlock at level 10, but d(13) stays locked",
+        "Status":  "PASS",
+        "Details":  "Single word 20 stars: v(7) and r(8) unlock at level 10, but d(13) stays locked",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_MULTI_30_STARS3",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Multi-word maturity (30 stars, level 15) with oak_log stars=3: v(7) unlocks, r(8) and d(13) require higher star count",
+        "Status":  "PASS",
+        "Details":  "Multi-word maturity (30 stars, level 15) with oak_log stars=3: v(7) unlocks, r(8) and d(13) require higher star count",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_MULTI_32_STARS5",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Multi-word maturity (32 stars, level 16) with oak_log stars=5: d(13), v(7), r(8) fully unlock!",
+        "Status":  "PASS",
+        "Details":  "Multi-word maturity (32 stars, level 16) with oak_log stars=5: d(13), v(7), r(8) fully unlock!",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_MULTI_MASTERY",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Multi-word maturity without individual word mastery (stars=2 \u003c 3): non-identical d,v,r stay locked",
+        "Status":  "PASS",
+        "Details":  "Multi-word maturity without individual word mastery (stars=2 \u003c 3): non-identical d,v,r stay locked",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_IS_IDENTICAL_POS",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Alphabet.isIdentical returns true for all ??, ??, ??, ??, ??, ?? (both cases)",
+        "Status":  "PASS",
+        "Details":  "Alphabet.isIdentical returns true for all ??, ??, ??, ??, ??, ?? (both cases)",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_IS_IDENTICAL_NEG",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Alphabet.isIdentical returns false for all 27 non-identical Cyrillic letters",
+        "Status":  "PASS",
+        "Details":  "Alphabet.isIdentical returns false for all 27 non-identical Cyrillic letters",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_IDENTICAL_UNREGRESSED",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Word \u0027??????\u0027 (all identical) unlocks all letters k, o, t immediately under zero global score",
+        "Status":  "PASS",
+        "Details":  "Word \u0027??????\u0027 (all identical) unlocks all letters k, o, t immediately under zero global score",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_HEAT_IDENTICAL",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Heatmap: identical letter \u0027o\u0027 unlocks at threshold 15 with zero global score",
+        "Status":  "PASS",
+        "Details":  "Heatmap: identical letter \u0027o\u0027 unlocks at threshold 15 with zero global score",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_HEAT_NONIDENT_LOCK",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Heatmap: non-identical letter \u0027v\u0027 at single threshold 25 with zero global score stays locked",
+        "Status":  "PASS",
+        "Details":  "Heatmap: non-identical letter \u0027v\u0027 at single threshold 25 with zero global score stays locked",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_HEAT_NONIDENT_DOUBLE",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Heatmap: non-identical letter \u0027v\u0027 unlocks when immersion reaches 2x threshold (50)",
+        "Status":  "PASS",
+        "Details":  "Heatmap: non-identical letter \u0027v\u0027 unlocks when immersion reaches 2x threshold (50)",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_NULL_SAFETY",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Null wordStars and null heatMap handled safely (empty set)",
+        "Status":  "PASS",
+        "Details":  "Null wordStars and null heatMap handled safely (empty set)",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_NEG_SAFETY",
+        "Suite":  "R3_Alphabet",
+        "Name":  "Negative star count produces empty unlocked set",
+        "Status":  "PASS",
+        "Details":  "Negative star count produces empty unlocked set",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_CALCULATE_LEVEL_CAP",
+        "Suite":  "R3_Alphabet",
+        "Name":  "calculateLevel caps gracefully at 32",
+        "Status":  "PASS",
+        "Details":  "calculateLevel caps gracefully at 32",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R3_CALCULATE_LEVEL_ZERO",
+        "Suite":  "R3_Alphabet",
+        "Name":  "calculateLevel handles 0 and negative cleanly",
+        "Status":  "PASS",
+        "Details":  "calculateLevel handles 0 and negative cleanly",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_ITEM_APPLE",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Single word \u0027apple\u0027 evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Single word \u0027apple\u0027 evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_ITEM_DEREVO",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Single Cyrillic word \u0027????????????\u0027 evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Single Cyrillic word \u0027????????????\u0027 evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_ITEM_KAMEN",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Item challenge \u0027????????????\u0027 evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Item challenge \u0027????????????\u0027 evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PRACTICE_ONE",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Practice challenge on single word \u0027bread\u0027 evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Practice challenge on single word \u0027bread\u0027 evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PRACTICE_HLEB",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Practice challenge on Cyrillic \u0027????????\u0027 evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Practice challenge on Cyrillic \u0027????????\u0027 evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_EMPTY_TARGET",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Empty target evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Empty target evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_WS_TARGET",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Whitespace target evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Whitespace target evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_NULL_TARGET",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Null target evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Null target evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PUNCT_ONLY",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Punctuation-only target evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Punctuation-only target evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PUNCT_WORD_EXCLAM",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Single word with exclamation \u0027apple!\u0027 evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Single word with exclamation \u0027apple!\u0027 evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PUNCT_WORD_COMMA",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Single word with comma \u0027apple,\u0027 evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Single word with comma \u0027apple,\u0027 evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PUNCT_WORD_DOTS",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Single word with ellipsis \u0027...wood...\u0027 evaluates isSentence=false",
+        "Status":  "PASS",
+        "Details":  "Single word with ellipsis \u0027...wood...\u0027 evaluates isSentence=false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_KIND_SENTENCE_1W",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Kind \u0027sentence\u0027 with 1 word evaluates isSentence=true",
+        "Status":  "PASS",
+        "Details":  "Kind \u0027sentence\u0027 with 1 word evaluates isSentence=true",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_KIND_SENTENCE_MW",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Kind \u0027sentence\u0027 with multi-word evaluates isSentence=true",
+        "Status":  "PASS",
+        "Details":  "Kind \u0027sentence\u0027 with multi-word evaluates isSentence=true",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PHRASE_2W",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "2-word phrase \u0027red apple\u0027 evaluates isSentence=true",
+        "Status":  "PASS",
+        "Details":  "2-word phrase \u0027red apple\u0027 evaluates isSentence=true",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PHRASE_3W_RU",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "3-word Cyrillic phrase \u0027?????? ?????? ????????????\u0027 evaluates isSentence=true",
+        "Status":  "PASS",
+        "Details":  "3-word Cyrillic phrase \u0027?????? ?????? ????????????\u0027 evaluates isSentence=true",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PHRASE_LAVA",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Cooperative phrase \u0027?????? ?????? ????????\u0027 evaluates isSentence=true",
+        "Status":  "PASS",
+        "Details":  "Cooperative phrase \u0027?????? ?????? ????????\u0027 evaluates isSentence=true",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "R2_PHRASE_FOLLOW",
+        "Suite":  "R2_SpeechHUD",
+        "Name":  "Cooperative phrase \u0027???????????? ???? ????????\u0027 evaluates isSentence=true",
+        "Status":  "PASS",
+        "Details":  "Cooperative phrase \u0027???????????? ???? ????????\u0027 evaluates isSentence=true",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "ADV_HUD_01",
+        "Suite":  "Bytecode_HUD",
+        "Name":  "Strict Header \u0027disse: \u0027 in ChallengeHud",
+        "Status":  "PASS",
+        "Details":  "Header constant \u0027disse: \u0027 verified in bytecode (no formatting prefixes)",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "ADV_HUD_02",
+        "Suite":  "Bytecode_HUD",
+        "Name":  "Minimum Box Width 150px in ChallengeHud",
+        "Status":  "PASS",
+        "Details":  "Bytecode contains sipush 150 and Math.max constraint",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "ADV_HUD_03",
+        "Suite":  "Bytecode_HUD",
+        "Name":  "Compact Box Height (28-38px) in ChallengeHud",
+        "Status":  "PASS",
+        "Details":  "Bytecode contains base height bipush 28 with dynamic 10px translation row",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "ADV_HUD_04",
+        "Suite":  "Bytecode_HUD",
+        "Name":  "HUD Feedback Age Cutoff (4500ms)",
+        "Status":  "PASS",
+        "Details":  "Bytecode enforces 4500ms display expiration cutoff",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:13Z"
+    },
+    {
+        "Id":  "ADV_HUD_05",
+        "Suite":  "Bytecode_Session",
+        "Name":  "Explicit speechFeedback=null on Single-Word Challenges",
+        "Status":  "PASS",
+        "Details":  "Bytecode confirms aconst_null putstatic speechFeedback when isSentence evaluates to false",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:14Z"
+    },
+    {
+        "Id":  "ADV_DEPLOY_01",
+        "Suite":  "Deployment",
+        "Name":  "Dual Deployment JAR Byte Parity",
+        "Status":  "PASS",
+        "Details":  "Client JAR: 30782039 bytes, Server JAR: 30782039 bytes",
+        "Evidence":  {
+
+                     },
+        "Timestamp":  "2026-11-04T13:31:14Z"
+    }
+]
