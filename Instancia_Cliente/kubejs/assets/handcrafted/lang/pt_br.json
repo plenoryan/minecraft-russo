@@ -1,10 +1,10 @@
 {
-  "block.handcrafted.chair": "Cadeira [RU: Стул]",
-  "block.handcrafted.table": "Mesa [RU: Стол]",
-  "block.handcrafted.bench": "Banco [RU: Скамейка]",
-  "block.handcrafted.couch": "Sofá [RU: Диван]",
-  "block.handcrafted.counter": "Balcão [RU: Столешница]",
-  "block.handcrafted.cupboard": "Armário [RU: Сервант]",
-  "block.handcrafted.drawer": "Gaveteiro [RU: Тумба]",
-  "block.handcrafted.shelf": "Prateleira [RU: Полка]"
+  "block.handcrafted.chair": "Cadeira",
+  "block.handcrafted.table": "Mesa",
+  "block.handcrafted.bench": "Banco",
+  "block.handcrafted.couch": "Sofá",
+  "block.handcrafted.counter": "Balcão",
+  "block.handcrafted.cupboard": "Armário",
+  "block.handcrafted.drawer": "Gaveteiro",
+  "block.handcrafted.shelf": "Prateleira"
 }

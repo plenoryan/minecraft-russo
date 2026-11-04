@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import net.minecraft.class_5218;
 import net.minecraft.server.MinecraftServer;
@@ -52,12 +54,13 @@ public final class Progress {
     }
 
     public void addHeat(String word, int amount) {
-        if (word == null || word.isEmpty()) return;
+        if (word == null || word.isEmpty() || amount <= 0) return;
         Map<String, Integer> heat = letterHeat();
         String clean = word.toLowerCase().replaceAll("[\u0300-\u036f]", "");
+        Set<Character> seen = new HashSet<>();
         for (int i = 0; i < clean.length(); i++) {
             char ch = clean.charAt(i);
-            if (Alphabet.LETTER_LEVEL.containsKey(ch)) {
+            if (Alphabet.LETTER_LEVEL.containsKey(ch) && seen.add(ch)) {
                 String k = String.valueOf(ch);
                 heat.put(k, heat.getOrDefault(k, 0) + amount);
             }

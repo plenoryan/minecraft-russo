@@ -476,10 +476,6 @@ ItemEvents.tooltip(event => {
     Object.keys(ruCurriculum).forEach(function(itemId) {
         var entry = ruCurriculum[itemId];
         event.addAdvanced(itemId, function(item, advanced, text) {
-            text.add(Text.gold('★ Russo: ').append(Text.white(entry.ru)).append(Text.gray(' ' + entry.phon)));
-            text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
-            text.add(Text.aqua('  Gênero: ').append(Text.white(entry.gen)).append(Text.gray(' | Nível ' + entry.tier)));
-
             var unlocked = getUnlockedLetters();
             var hybrid = Alphabet ? String(Alphabet.toSmartHybrid(entry.ru, unlocked, false)) : entry.ru;
             var wordLetters = Alphabet ? Alphabet.getLettersOrderedByDifficulty(entry.ru) : [];
@@ -487,23 +483,35 @@ ItemEvents.tooltip(event => {
             for (var i = 0; i < wordLetters.size(); i++) {
                 if (unlocked && unlocked.contains(wordLetters.get(i))) masteredCount++;
             }
-            text.add(Text.gold('  Texto Híbrido: ').append(Text.aqua(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
 
+            var stars = 0;
             try {
                 if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
                     var idx = ChallengeSession.words.indexOf(itemId);
                     if (idx >= 0 && idx < ChallengeSession.scores.size()) {
-                        var stars = ChallengeSession.scores.get(idx);
-                        if (stars > 0) {
-                            var starsFilled = ''; for (var s = 0; s < stars; s++) starsFilled += '★';
-                            var starsEmpty = ''; for (var s = stars; s < 5; s++) starsEmpty += '☆';
-                            text.add(Text.gold('  Domínio: ').append(Text.yellow(starsFilled)).append(Text.darkGray(starsEmpty)).append(Text.gray(' (' + stars + '/5 estrelas)')));
-                        }
+                        stars = ChallengeSession.scores.get(idx);
                     }
                 }
             } catch (e) {}
 
+            if (stars >= 5) {
+                text.add(Text.gold('★ Russo Fluente: ').append(Text.white(entry.ru)).append(Text.gray(' ' + entry.phon)));
+            } else {
+                text.add(Text.gold('★ Treino Russo: ').append(Text.aqua(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
+            }
+            text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
+            text.add(Text.aqua('  Gênero: ').append(Text.white(entry.gen)).append(Text.gray(' | Nível ' + entry.tier)));
+
+            if (stars > 0) {
+                var starsFilled = ''; for (var s = 0; s < stars; s++) starsFilled += '★';
+                var starsEmpty = ''; for (var s = stars; s < 5; s++) starsEmpty += '☆';
+                text.add(Text.gold('  Domínio: ').append(Text.yellow(starsFilled)).append(Text.darkGray(starsEmpty)).append(Text.gray(' (' + stars + '/5 estrelas)')));
+            }
+
             if (event.shift) {
+                if (stars < 5) {
+                    text.add(Text.gold('  Meta Fluente: ').append(Text.white(entry.ru)).append(Text.gray(' ' + entry.phon)));
+                }
                 if (wordLetters.size() > 0 && Alphabet) {
                     var heatParts = [];
                     for (var i = 0; i < wordLetters.size(); i++) {
@@ -607,11 +615,6 @@ ItemEvents.tooltip(event => {
 
     function appendDynamicTooltip(text, entry, itemId) {
         var phonSuffix = entry.phon ? (' ' + entry.phon) : '';
-        text.add(Text.gold('★ Russo: ').append(Text.white(entry.ru)).append(Text.gray(phonSuffix)));
-        if (entry.pt) {
-            text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
-        }
-
         var unlocked = getUnlockedLetters();
         var hybrid = Alphabet ? String(Alphabet.toSmartHybrid(entry.ru, unlocked, false)) : entry.ru;
         var wordLetters = Alphabet ? Alphabet.getLettersOrderedByDifficulty(entry.ru) : [];
@@ -619,23 +622,36 @@ ItemEvents.tooltip(event => {
         for (var i = 0; i < wordLetters.size(); i++) {
             if (unlocked && unlocked.contains(wordLetters.get(i))) masteredCount++;
         }
-        text.add(Text.gold('  Texto Híbrido: ').append(Text.aqua(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
 
+        var stars = 0;
         try {
             if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
                 var idx = ChallengeSession.words.indexOf(itemId);
                 if (idx >= 0 && idx < ChallengeSession.scores.size()) {
-                    var stars = ChallengeSession.scores.get(idx);
-                    if (stars > 0) {
-                        var starsFilled = ''; for (var s = 0; s < stars; s++) starsFilled += '★';
-                        var starsEmpty = ''; for (var s = stars; s < 5; s++) starsEmpty += '☆';
-                        text.add(Text.gold('  Domínio: ').append(Text.yellow(starsFilled)).append(Text.darkGray(starsEmpty)).append(Text.gray(' (' + stars + '/5 estrelas)')));
-                    }
+                    stars = ChallengeSession.scores.get(idx);
                 }
             }
         } catch (e) {}
 
+        if (stars >= 5) {
+            text.add(Text.gold('★ Russo Fluente: ').append(Text.white(entry.ru)).append(Text.gray(phonSuffix)));
+        } else {
+            text.add(Text.gold('★ Treino Russo: ').append(Text.aqua(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
+        }
+        if (entry.pt) {
+            text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
+        }
+
+        if (stars > 0) {
+            var starsFilled = ''; for (var s = 0; s < stars; s++) starsFilled += '★';
+            var starsEmpty = ''; for (var s = stars; s < 5; s++) starsEmpty += '☆';
+            text.add(Text.gold('  Domínio: ').append(Text.yellow(starsFilled)).append(Text.darkGray(starsEmpty)).append(Text.gray(' (' + stars + '/5 estrelas)')));
+        }
+
         if (event.shift) {
+            if (stars < 5) {
+                text.add(Text.gold('  Meta Fluente: ').append(Text.white(entry.ru)).append(Text.gray(phonSuffix)));
+            }
             if (wordLetters.size() > 0 && Alphabet) {
                 var heatParts = [];
                 for (var i = 0; i < wordLetters.size(); i++) {

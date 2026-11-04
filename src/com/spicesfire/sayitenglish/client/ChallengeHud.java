@@ -93,10 +93,6 @@ public final class ChallengeHud {
             }
         }
 
-        if (isRu && p != null && p.target() != null) {
-            Alphabet.recordExposure(p.target(), 1);
-        }
-
         Set<Character> unlocked = Alphabet.computeUnlockedLetters(wordStars, Alphabet.CLIENT_HEAT);
 
         String bigTarget = p.target();

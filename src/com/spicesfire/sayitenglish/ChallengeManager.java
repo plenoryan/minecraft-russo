@@ -710,7 +710,9 @@ public final class ChallengeManager {
         }
         if (isRu) {
             String ruSubject = Alphabet.getRuWord(c.subject());
-            pr.addHeat(ruSubject, passed ? 2 : 1);
+            if (passed) {
+                pr.addHeat(ruSubject, 1);
+            }
             Set<Character> newUnlocked = Alphabet.computeUnlockedLetters(pr.words(), pr.letterHeat());
 
             // Check if any brand new Cyrillic letters were unlocked

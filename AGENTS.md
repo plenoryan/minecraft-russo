@@ -291,3 +291,16 @@
   2. **Mapa de Calor de Exposição (`heatMap` / `CLIENT_HEAT`):** Letras ouvidas e vistas com frequência acumulam "calor" de exposição. Ao atingir o limiar pedagógico da categoria (Gêmeas: 3x, Falsos Amigos: 5x, Construtores: 7x, Chiantes: 9x, Iodizadas: 12x), a letra é assimilada e desbloqueada de forma orgânica.
   3. **Conhecimento Compartilhado:** Letras assimiladas em uma palavra são imediatamente reconhecidas em todas as outras palavras do jogo (ex: dominar `В`, `О` e `Д` em `Дерево` e assimilar `А` via mapa de calor faz com que `Вода` apareça instantaneamente 100% legível em cirílico).
   4. **Foco Pedagógico e Tooltips Vivos:** O HUD foca na próxima letra a ser dominada (`Em Foco: <Letra> • Calor: X/Yx`), e os tooltips do KubeJS (`russian_tooltips.js`) exibem a contagem exata de domínio (`X/Y letras`) e a análise de calor ao segurar SHIFT (`о: ✔ | е: 2/3x | в: 1/5x`).
+
+### L40. Prevenção de Poluição Linguística Global, Reset de Heatmap no Cliente e Isolamento Pedagógico Gradual
+- **Armadilha:**
+  1. Ao injetar tags `[RU: <palavra>]` nos arquivos `pt_br.json` (via resource packs e KubeJS), os nomes nativos de todos os itens e blocos do jogo eram permanentemente alterados em português. Como consequência, o Jade e a interface exibiam cirílico antes mesmo de o jogador iniciar o aprendizado ("tudo já está 100% russo").
+  2. Em `ChallengeHud.render`, a chamada `recordExposure(p.target(), 1)` executava a cada quadro gráfico (60 a 144 FPS). Em 0,2s, as letras do desafio atingiam o teto de calor, convertendo a palavra inteira em cirílico instantaneamente.
+  3. `Alphabet.CLIENT_HEAT` persistia na memória estática da JVM entre mundos, fazendo novos mundos herdarem letras já desbloqueadas em sessões anteriores.
+  4. Tooltips exibiam na primeira linha a palavra completa em cirílico (`★ Russo: Дéрево [DYE-rye-va]`), anulando o mistério e a transição gradual.
+- **Solução:**
+  1. **Purificação do Português:** Removidas todas as tags `[RU: ...]` de todos os arquivos `pt_br.json` em `kubejs/assets/` e no resource pack. Blocos e itens mantêm seus nomes limpos em português.
+  2. **Eliminação do Bug de 60 FPS:** Removido qualquer registro de calor de métodos de renderização de interface (`ChallengeHud.render`).
+  3. **Reset Atômico de Heatmap no Cliente:** `ChallengeSession.sync` invoca `Alphabet.CLIENT_HEAT.clear()` ao ingressar em qualquer mundo, garantindo estado zero em novos mundos.
+  4. **Rebalanceamento de Limiares:** Limiares elevados para acúmulo real e orgânico (Gêmeas: 15, Falsos Amigos: 25, Construtores: 40, Chiantes: 60, Iodizadas: 80), com adição de calor desduplicada por palavra.
+  5. **Tooltips Graduais:** Para palavras não dominadas (< 5 estrelas), a linha principal exibe `★ Treino Russo: <híbrido>` (ex: `Derevo (0/5 letras)`). A forma 100% russa e fonética completa só é revelada ao segurar SHIFT.

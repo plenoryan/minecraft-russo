@@ -22,6 +22,7 @@
  */
 package com.spicesfire.sayitenglish.client;
 
+import com.spicesfire.sayitenglish.Alphabet;
 import com.spicesfire.sayitenglish.Config;
 import com.spicesfire.sayitenglish.Packets;
 import com.spicesfire.sayitenglish.Scorer;
@@ -227,6 +228,7 @@ public final class ChallengeSession {
     }
 
     public static void sync(Packets.Sync s) {
+        Alphabet.CLIENT_HEAT.clear();
         if (!s.language().isEmpty()) {
             language = s.language();
         }

@@ -78,12 +78,12 @@ public final class Alphabet {
 
     public static int getHeatThreshold(char ch) {
         Integer lvl = LETTER_LEVEL.get(Character.toLowerCase(ch));
-        if (lvl == null) return 10;
-        if (lvl <= 6) return 3;    // Gemeas: 3 aparicoes
-        if (lvl <= 12) return 5;   // Falsos Amigos: 5 aparicoes
-        if (lvl <= 19) return 7;   // Construtores: 7 aparicoes
-        if (lvl <= 26) return 9;   // Chiantes: 9 aparicoes
-        return 12;                 // Iodizadas / Sinais: 12 aparicoes
+        if (lvl == null) return 20;
+        if (lvl <= 6) return 15;   // Gemeas: 15 aparicoes
+        if (lvl <= 12) return 25;  // Falsos Amigos: 25 aparicoes
+        if (lvl <= 19) return 40;  // Construtores: 40 aparicoes
+        if (lvl <= 26) return 60;  // Chiantes: 60 aparicoes
+        return 80;                 // Iodizadas / Sinais: 80 aparicoes
     }
 
     public static List<Character> getLettersOrderedByDifficulty(String ru) {
@@ -102,11 +102,12 @@ public final class Alphabet {
     }
 
     public static void recordExposure(String ru, int amount) {
-        if (ru == null || ru.isEmpty()) return;
+        if (ru == null || ru.isEmpty() || amount <= 0) return;
         String clean = ru.toLowerCase().replaceAll("[\u0300-\u036f]", "");
+        Set<Character> seen = new HashSet<>();
         for (int i = 0; i < clean.length(); i++) {
             char c = clean.charAt(i);
-            if (LETTER_LEVEL.containsKey(c)) {
+            if (LETTER_LEVEL.containsKey(c) && seen.add(c)) {
                 CLIENT_HEAT.merge(c, amount, Integer::sum);
             }
         }
