@@ -1,13 +1,24 @@
 package com.spicesfire.sayitenglish;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.Gson;
+import com.spicesfire.sayitenglish.platform.Platform;
+import java.io.BufferedReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class Alphabet {
     public static final Map<Character, Integer> LETTER_LEVEL = new HashMap<>();
     public static final Map<Character, String> LATIN_FALLBACK = new HashMap<>();
     public static final String[] LEVEL_NAME = new String[33];
     public static final String[] LEVEL_MNEM = new String[33];
+
+    // Real-time client exposure tracking (Heatmap)
+    public static final Map<Character, Integer> CLIENT_HEAT = new ConcurrentHashMap<>();
+
+    private static Map<String, String> RU_DICT = null;
 
     static {
         // Fase 1: Gemeas Transparentes (Niveis 1 a 6)
@@ -65,17 +76,189 @@ public final class Alphabet {
         }
     }
 
-    public static int calculateLevel(int totalStars) {
-        if (totalStars <= 0) {
-            return 0;
+    public static int getHeatThreshold(char ch) {
+        Integer lvl = LETTER_LEVEL.get(Character.toLowerCase(ch));
+        if (lvl == null) return 10;
+        if (lvl <= 6) return 3;    // Gemeas: 3 aparicoes
+        if (lvl <= 12) return 5;   // Falsos Amigos: 5 aparicoes
+        if (lvl <= 19) return 7;   // Construtores: 7 aparicoes
+        if (lvl <= 26) return 9;   // Chiantes: 9 aparicoes
+        return 12;                 // Iodizadas / Sinais: 12 aparicoes
+    }
+
+    public static List<Character> getLettersOrderedByDifficulty(String ru) {
+        if (ru == null || ru.isEmpty()) return Collections.emptyList();
+        String clean = ru.toLowerCase().replaceAll("[\u0300-\u036f]", "");
+        Set<Character> unique = new LinkedHashSet<>();
+        for (int i = 0; i < clean.length(); i++) {
+            char c = clean.charAt(i);
+            if (LETTER_LEVEL.containsKey(c)) {
+                unique.add(c);
+            }
         }
+        List<Character> list = new ArrayList<>(unique);
+        list.sort(Comparator.comparingInt(c -> LETTER_LEVEL.getOrDefault(c, 99)));
+        return list;
+    }
+
+    public static void recordExposure(String ru, int amount) {
+        if (ru == null || ru.isEmpty()) return;
+        String clean = ru.toLowerCase().replaceAll("[\u0300-\u036f]", "");
+        for (int i = 0; i < clean.length(); i++) {
+            char c = clean.charAt(i);
+            if (LETTER_LEVEL.containsKey(c)) {
+                CLIENT_HEAT.merge(c, amount, Integer::sum);
+            }
+        }
+    }
+
+    public static int getHeat(char c) {
+        return CLIENT_HEAT.getOrDefault(Character.toLowerCase(c), 0);
+    }
+
+    public static synchronized String getRuWord(String itemIdOrWord) {
+        if (itemIdOrWord == null || itemIdOrWord.isEmpty()) return "";
+        for (int i = 0; i < itemIdOrWord.length(); i++) {
+            char c = itemIdOrWord.charAt(i);
+            if (c >= '\u0400' && c <= '\u04ff') return itemIdOrWord;
+        }
+
+        if (RU_DICT == null) {
+            RU_DICT = new HashMap<>();
+            Path p = null;
+            try {
+                p = Platform.I.configDir().resolve("sayit/lang/ru_ru.json");
+            } catch (Throwable t) {
+                p = java.nio.file.Paths.get("config/sayit/lang/ru_ru.json");
+                if (!Files.exists(p)) {
+                    p = java.nio.file.Paths.get("Instancia_Cliente/config/sayit/lang/ru_ru.json");
+                }
+                if (!Files.exists(p)) {
+                    p = java.nio.file.Paths.get("Servidor_Dedicado/config/sayit/lang/ru_ru.json");
+                }
+            }
+            if (p != null && Files.exists(p)) {
+                try (BufferedReader r = Files.newBufferedReader(p, StandardCharsets.UTF_8)) {
+                    Map<?, ?> map = new Gson().fromJson(r, Map.class);
+                    for (Map.Entry<?, ?> e : map.entrySet()) {
+                        RU_DICT.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        String val = RU_DICT.get(itemIdOrWord);
+        if (val != null) return val;
+        String cleanId = itemIdOrWord.startsWith("minecraft:") ? itemIdOrWord.substring(10) : itemIdOrWord.replace(':', '.');
+        val = RU_DICT.get("block.minecraft." + cleanId);
+        if (val != null) return val;
+        val = RU_DICT.get("item.minecraft." + cleanId);
+        if (val != null) return val;
+        val = RU_DICT.get("block." + cleanId);
+        if (val != null) return val;
+        val = RU_DICT.get("item." + cleanId);
+        if (val != null) return val;
+        return itemIdOrWord;
+    }
+
+    public static Set<Character> computeUnlockedLetters(Map<String, Integer> wordStars, Map<?, ?> heatMap) {
+        Set<Character> unlocked = new HashSet<>();
+
+        // 1. Heatmap: letters seen often enough unlock automatically
+        if (heatMap != null) {
+            for (Map.Entry<?, ?> entry : heatMap.entrySet()) {
+                char ch;
+                Object key = entry.getKey();
+                if (key instanceof Character) {
+                    ch = Character.toLowerCase((Character) key);
+                } else {
+                    String s = String.valueOf(key);
+                    if (s.isEmpty()) continue;
+                    ch = Character.toLowerCase(s.charAt(0));
+                }
+                int count = 0;
+                Object val = entry.getValue();
+                if (val instanceof Number) {
+                    count = ((Number) val).intValue();
+                }
+                if (count >= getHeatThreshold(ch)) {
+                    unlocked.add(ch);
+                    unlocked.add(Character.toUpperCase(ch));
+                }
+            }
+        }
+
+        // 2. Individual word progress: stars on words unlock letters contained in those words
+        if (wordStars != null) {
+            for (Map.Entry<String, Integer> entry : wordStars.entrySet()) {
+                String wordOrId = entry.getKey();
+                int stars = entry.getValue();
+                if (stars <= 0) continue;
+
+                String ru = getRuWord(wordOrId);
+                List<Character> wordLetters = getLettersOrderedByDifficulty(ru);
+                int unlockCount = (stars >= 5) ? wordLetters.size() : Math.min(stars, wordLetters.size());
+                for (int i = 0; i < unlockCount; i++) {
+                    char c = wordLetters.get(i);
+                    unlocked.add(c);
+                    unlocked.add(Character.toUpperCase(c));
+                }
+            }
+        }
+
+        return unlocked;
+    }
+
+    public static String toSmartHybrid(String ru, Set<Character> unlocked, boolean formatCodes) {
+        if (ru == null || ru.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder();
+        String clean = ru.replaceAll("[\u0300-\u036f]", "");
+        for (int i = 0; i < clean.length(); i++) {
+            char ch = clean.charAt(i);
+            if (!LETTER_LEVEL.containsKey(Character.toLowerCase(ch))) {
+                sb.append(ch);
+                continue;
+            }
+            if (unlocked != null && unlocked.contains(ch)) {
+                if (formatCodes) sb.append("\u00a76");
+                sb.append(ch);
+                if (formatCodes) sb.append("\u00a7f");
+            } else {
+                String lat = LATIN_FALLBACK.get(ch);
+                sb.append(lat != null ? lat : ch);
+            }
+        }
+        return sb.toString();
+    }
+
+    public static Character getNextFocusLetter(String ru, Set<Character> unlocked) {
+        List<Character> list = getLettersOrderedByDifficulty(ru);
+        for (char c : list) {
+            if (unlocked == null || !unlocked.contains(c)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public static int getLetterCount(Set<Character> unlocked) {
+        if (unlocked == null || unlocked.isEmpty()) return 0;
+        int count = 0;
+        for (char c : unlocked) {
+            if (Character.isLowerCase(c)) count++;
+        }
+        return count;
+    }
+
+    // Legacy fallback compatibility
+    public static int calculateLevel(int totalStars) {
+        if (totalStars <= 0) return 0;
         return Math.min(32, (totalStars + 1) / 2);
     }
 
     public static String toHybrid(String ru, int playerLvl, boolean formatCodes) {
-        if (ru == null || ru.isEmpty()) {
-            return "";
-        }
+        if (ru == null || ru.isEmpty()) return "";
         StringBuilder sb = new StringBuilder();
         String clean = ru.replaceAll("[\u0300-\u036f]", "");
         for (int i = 0; i < clean.length(); i++) {
@@ -86,13 +269,9 @@ public final class Alphabet {
                 continue;
             }
             if (lvl <= playerLvl) {
-                if (formatCodes) {
-                    sb.append("\u00a76");
-                }
+                if (formatCodes) sb.append("\u00a76");
                 sb.append(ch);
-                if (formatCodes) {
-                    sb.append("\u00a7f");
-                }
+                if (formatCodes) sb.append("\u00a7f");
             } else {
                 String lat = LATIN_FALLBACK.get(ch);
                 sb.append(lat != null ? lat : ch);

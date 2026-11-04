@@ -21,6 +21,7 @@ public final class Progress {
     public Map<String, Map<String, Long>> timestamps = new LinkedHashMap<>();
     public Map<String, Map<String, Integer>> reps = new LinkedHashMap<>();
     public Map<String, Map<String, Integer>> errors = new LinkedHashMap<>();
+    public Map<String, Integer> letterHeat = new LinkedHashMap<>();
     public Map<String, Integer> words;
     public int sentences;
     public int lost;
@@ -41,6 +42,26 @@ public final class Progress {
             sum += Math.max(0, stars);
         }
         return sum;
+    }
+
+    public Map<String, Integer> letterHeat() {
+        if (this.letterHeat == null) {
+            this.letterHeat = new LinkedHashMap<>();
+        }
+        return this.letterHeat;
+    }
+
+    public void addHeat(String word, int amount) {
+        if (word == null || word.isEmpty()) return;
+        Map<String, Integer> heat = letterHeat();
+        String clean = word.toLowerCase().replaceAll("[\u0300-\u036f]", "");
+        for (int i = 0; i < clean.length(); i++) {
+            char ch = clean.charAt(i);
+            if (Alphabet.LETTER_LEVEL.containsKey(ch)) {
+                String k = String.valueOf(ch);
+                heat.put(k, heat.getOrDefault(k, 0) + amount);
+            }
+        }
     }
 
     public Map<String, Integer> reps() {

@@ -9,11 +9,13 @@ import com.spicesfire.sayitenglish.platform.ModPacket;
 import com.spicesfire.sayitenglish.platform.Platform;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import net.minecraft.class_1297;
 import net.minecraft.class_1299;
@@ -466,7 +468,8 @@ public final class ChallengeManager {
         Config cfg = Config.get();
         boolean passed = score >= c.passScore();
         Progress pr = s.progress;
-        int prevTotalStars = pr.totalStars();
+        boolean isRu = "ru".equals(pr.language);
+        Set<Character> oldUnlocked = isRu ? Alphabet.computeUnlockedLetters(pr.words(), pr.letterHeat()) : Collections.emptySet();
         long now = ChallengeManager.server(player).method_3780();
 
         switch (c.kind()) {
@@ -705,35 +708,44 @@ public final class ChallengeManager {
                 break;
             }
         }
-        int newTotalStars = pr.totalStars();
-        if (newTotalStars > prevTotalStars && "ru".equals(pr.language)) {
-            int oldLvl = Alphabet.calculateLevel(prevTotalStars);
-            int newLvl = Alphabet.calculateLevel(newTotalStars);
-            if (newLvl > oldLvl && newLvl <= 32) {
-                String letterInfo = Alphabet.LEVEL_NAME[newLvl];
-                String mnem = Alphabet.LEVEL_MNEM[newLvl];
-                player.method_43496((class_2561)class_2561.method_43470(
-                    "\u00a76\u2605\u2605 [ALFABETO CIR\u00cdLICO] Parab\u00e9ns! N\u00edvel " + newLvl + "/32 Desbloqueado! \u2605\u2605\n" +
-                    "\u00a7aNova letra ativa: \u00a7e" + letterInfo + " \u00a7a\u2022 \u00a77" + mnem
-                ));
+        if (isRu) {
+            String ruSubject = Alphabet.getRuWord(c.subject());
+            pr.addHeat(ruSubject, passed ? 2 : 1);
+            Set<Character> newUnlocked = Alphabet.computeUnlockedLetters(pr.words(), pr.letterHeat());
 
+            // Check if any brand new Cyrillic letters were unlocked
+            for (char ch : newUnlocked) {
+                if (Character.isLowerCase(ch) && !oldUnlocked.contains(ch)) {
+                    int lvl = Alphabet.LETTER_LEVEL.getOrDefault(ch, 1);
+                    String name = Alphabet.LEVEL_NAME[lvl];
+                    String mnem = Alphabet.LEVEL_MNEM[lvl];
+                    player.method_43496((class_2561)class_2561.method_43470(
+                        "\u00a76\u2605 [DESBLOQUEIO INTELIGENTE] Nova Letra Cir\u00edlica Assimilada: \u00a7e" + name + "\n" +
+                        "\u00a7aMnem\u00f4nica: \u00a77" + mnem + " \u00a7a\u2022 \u00a7e(Agora ativa em todas as palavras!)"
+                    ));
+                }
+            }
+
+            int oldCount = Alphabet.getLetterCount(oldUnlocked);
+            int newCount = Alphabet.getLetterCount(newUnlocked);
+            if (newCount > oldCount) {
                 try {
                     MinecraftServer srv = ChallengeManager.server(player);
                     if (srv != null) {
                         String pName = player.method_5477().getString();
-                        if (newLvl >= 6 && oldLvl < 6) {
+                        if (newCount >= 6 && oldCount < 6) {
                             srv.method_3734().method_44252(srv.method_3739(), "heracles complete 01_alfabeto_gemeas " + pName);
                         }
-                        if (newLvl >= 12 && oldLvl < 12) {
+                        if (newCount >= 12 && oldCount < 12) {
                             srv.method_3734().method_44252(srv.method_3739(), "heracles complete 02_alfabeto_falsos_amigos " + pName);
                         }
-                        if (newLvl >= 19 && oldLvl < 19) {
+                        if (newCount >= 19 && oldCount < 19) {
                             srv.method_3734().method_44252(srv.method_3739(), "heracles complete 03_alfabeto_construtores " + pName);
                         }
-                        if (newLvl >= 26 && oldLvl < 26) {
+                        if (newCount >= 26 && oldCount < 26) {
                             srv.method_3734().method_44252(srv.method_3739(), "heracles complete 04_alfabeto_chiantes " + pName);
                         }
-                        if (newLvl >= 32 && oldLvl < 32) {
+                        if (newCount >= 32 && oldCount < 32) {
                             srv.method_3734().method_44252(srv.method_3739(), "heracles complete 05_alfabeto_iodizadas_sinais " + pName);
                         }
                     }

@@ -37,6 +37,17 @@ ItemEvents.tooltip(event => {
         return Alphabet.calculateLevel(totalStars);
     }
 
+    function getUnlockedLetters() {
+        if (!Alphabet) return null;
+        var wordScores = {};
+        if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
+            for (var i = 0; i < ChallengeSession.words.size() && i < ChallengeSession.scores.size(); i++) {
+                wordScores[ChallengeSession.words.get(i)] = ChallengeSession.scores.get(i);
+            }
+        }
+        return Alphabet.computeUnlockedLetters(wordScores, Alphabet.CLIENT_HEAT);
+    }
+
     var dynamicWordCache = {};
 
     var CYR_SPELL = {
@@ -469,11 +480,14 @@ ItemEvents.tooltip(event => {
             text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
             text.add(Text.aqua('  Gênero: ').append(Text.white(entry.gen)).append(Text.gray(' | Nível ' + entry.tier)));
 
-            var alphaLvl = getPlayerAlphabetLevel();
-            var hybrid = Alphabet ? String(Alphabet.toHybrid(entry.ru, alphaLvl, false)) : '';
-            if (hybrid && alphaLvl < 32) {
-                text.add(Text.gold('  Texto Híbrido: ').append(Text.aqua(hybrid)).append(Text.darkGray(' (Nível ' + alphaLvl + '/32)')));
+            var unlocked = getUnlockedLetters();
+            var hybrid = Alphabet ? String(Alphabet.toSmartHybrid(entry.ru, unlocked, false)) : entry.ru;
+            var wordLetters = Alphabet ? Alphabet.getLettersOrderedByDifficulty(entry.ru) : [];
+            var masteredCount = 0;
+            for (var i = 0; i < wordLetters.size(); i++) {
+                if (unlocked && unlocked.contains(wordLetters.get(i))) masteredCount++;
             }
+            text.add(Text.gold('  Texto Híbrido: ').append(Text.aqua(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
 
             try {
                 if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
@@ -490,8 +504,16 @@ ItemEvents.tooltip(event => {
             } catch (e) {}
 
             if (event.shift) {
-                if (alphaLvl < 32 && Alphabet && Alphabet.LEVEL_NAME && Alphabet.LEVEL_NAME[alphaLvl]) {
-                    text.add(Text.yellow('  Alfabeto Nv ' + alphaLvl + ': ').append(Text.gold(Alphabet.LEVEL_NAME[alphaLvl])).append(Text.gray(' (' + Alphabet.LEVEL_MNEM[alphaLvl] + ')')));
+                if (wordLetters.size() > 0 && Alphabet) {
+                    var heatParts = [];
+                    for (var i = 0; i < wordLetters.size(); i++) {
+                        var c = wordLetters.get(i);
+                        var isAct = unlocked && unlocked.contains(c);
+                        var h = Alphabet.getHeat(c);
+                        var thresh = Alphabet.getHeatThreshold(c);
+                        heatParts.push(c + ': ' + (isAct ? '\u00a7a\u2714\u00a77' : '\u00a7e' + h + '/' + thresh + 'x\u00a77'));
+                    }
+                    text.add(Text.gold('  Calor das Letras: ').append(Text.gray(heatParts.join(' | '))));
                 }
                 text.add(Text.green('  Nota Gramatical: ').append(Text.gray(entry.note)));
                 var spell = spellWord(entry.ru);
@@ -590,11 +612,14 @@ ItemEvents.tooltip(event => {
             text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
         }
 
-        var alphaLvl = getPlayerAlphabetLevel();
-        var hybrid = Alphabet ? String(Alphabet.toHybrid(entry.ru, alphaLvl, false)) : '';
-        if (hybrid && alphaLvl < 32) {
-            text.add(Text.gold('  Texto Híbrido: ').append(Text.aqua(hybrid)).append(Text.darkGray(' (Nível ' + alphaLvl + '/32)')));
+        var unlocked = getUnlockedLetters();
+        var hybrid = Alphabet ? String(Alphabet.toSmartHybrid(entry.ru, unlocked, false)) : entry.ru;
+        var wordLetters = Alphabet ? Alphabet.getLettersOrderedByDifficulty(entry.ru) : [];
+        var masteredCount = 0;
+        for (var i = 0; i < wordLetters.size(); i++) {
+            if (unlocked && unlocked.contains(wordLetters.get(i))) masteredCount++;
         }
+        text.add(Text.gold('  Texto Híbrido: ').append(Text.aqua(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
 
         try {
             if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
@@ -611,8 +636,16 @@ ItemEvents.tooltip(event => {
         } catch (e) {}
 
         if (event.shift) {
-            if (alphaLvl < 32 && Alphabet && Alphabet.LEVEL_NAME && Alphabet.LEVEL_NAME[alphaLvl]) {
-                text.add(Text.yellow('  Alfabeto Nv ' + alphaLvl + ': ').append(Text.gold(Alphabet.LEVEL_NAME[alphaLvl])).append(Text.gray(' (' + Alphabet.LEVEL_MNEM[alphaLvl] + ')')));
+            if (wordLetters.size() > 0 && Alphabet) {
+                var heatParts = [];
+                for (var i = 0; i < wordLetters.size(); i++) {
+                    var c = wordLetters.get(i);
+                    var isAct = unlocked && unlocked.contains(c);
+                    var h = Alphabet.getHeat(c);
+                    var thresh = Alphabet.getHeatThreshold(c);
+                    heatParts.push(c + ': ' + (isAct ? '\u00a7a\u2714\u00a77' : '\u00a7e' + h + '/' + thresh + 'x\u00a77'));
+                }
+                text.add(Text.gold('  Calor das Letras: ').append(Text.gray(heatParts.join(' | '))));
             }
             var spell = spellWord(entry.ru);
             if (spell.spelling) {

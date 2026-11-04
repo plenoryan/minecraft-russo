@@ -29,7 +29,10 @@ import com.spicesfire.sayitenglish.client.Romanizer;
 import com.spicesfire.sayitenglish.client.SayItClient;
 import com.spicesfire.sayitenglish.client.SpeechEngine;
 import com.spicesfire.sayitenglish.client.Words;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.class_1074;
 import net.minecraft.class_1799;
 import net.minecraft.class_310;
@@ -81,28 +84,38 @@ public final class ChallengeHud {
         boolean recall = Config.get().mode.equals("recall") && !sameLanguage;
         boolean reveal = !recall || frac < 0.5f;
         boolean isRu = "ru".equals(Words.learning().code());
-        int totalStars = 0;
-        if (ChallengeSession.scores != null) {
-            for (int s : ChallengeSession.scores) {
-                totalStars += Math.max(0, s);
+        Map<String, Integer> wordStars = new HashMap<>();
+        if (ChallengeSession.words != null && ChallengeSession.scores != null) {
+            for (int i = 0; i < ChallengeSession.words.size() && i < ChallengeSession.scores.size(); i++) {
+                String id = ChallengeSession.words.get(i);
+                int sc = ChallengeSession.scores.get(i);
+                wordStars.put(id, sc);
             }
         }
-        int alphaLvl = Alphabet.calculateLevel(totalStars);
+
+        if (isRu && p != null && p.target() != null) {
+            Alphabet.recordExposure(p.target(), 1);
+        }
+
+        Set<Character> unlocked = Alphabet.computeUnlockedLetters(wordStars, Alphabet.CLIENT_HEAT);
 
         String bigTarget = p.target();
         if (isRu) {
-            bigTarget = Alphabet.toHybrid(p.target(), alphaLvl, false);
+            bigTarget = Alphabet.toSmartHybrid(p.target(), unlocked, false);
         }
         String big = reveal ? bigTarget : ChallengeHud.hint(bigTarget);
         String small = sameLanguage ? "" : p.nativeText();
 
         if (isRu) {
-            if (alphaLvl == 0) {
-                reading = "N\u00edvel 0/32 [Latim] \u2022 Conquiste 1 \u2605 para ativar \u0410";
-            } else if (alphaLvl >= 32) {
-                reading = "N\u00edvel 32/32 \u2022 100% Cir\u00edlico Fluente";
+            Character nextFocus = Alphabet.getNextFocusLetter(p.target(), unlocked);
+            int masteredCount = Alphabet.getLetterCount(unlocked);
+            if (nextFocus == null) {
+                reading = "Palavra 100% em Cir\u00edlico Fluente! \u2605\u2605\u2605\u2605\u2605 \u2022 (" + masteredCount + "/33 letras)";
             } else {
-                reading = "N\u00edvel " + alphaLvl + "/32 \u2022 " + Alphabet.LEVEL_NAME[alphaLvl] + " (" + Alphabet.LEVEL_MNEM[alphaLvl] + ")";
+                int lvl = Alphabet.LETTER_LEVEL.getOrDefault(nextFocus, 1);
+                int heat = Alphabet.getHeat(nextFocus);
+                int thresh = Alphabet.getHeatThreshold(nextFocus);
+                reading = "Em Foco: " + Alphabet.LEVEL_NAME[lvl] + " (" + Alphabet.LEVEL_MNEM[lvl] + ") \u2022 Calor: " + heat + "/" + thresh + "x";
             }
         } else {
             reading = reveal ? Romanizer.of((String)p.target(), (String)Words.learning().code()) : null;
