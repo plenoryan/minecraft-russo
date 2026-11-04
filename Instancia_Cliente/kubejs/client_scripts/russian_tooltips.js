@@ -477,7 +477,7 @@ ItemEvents.tooltip(event => {
         var entry = ruCurriculum[itemId];
         event.addAdvanced(itemId, function(item, advanced, text) {
             var unlocked = getUnlockedLetters();
-            var hybrid = Alphabet ? String(Alphabet.toSmartHybrid(entry.ru, unlocked, false)) : entry.ru;
+            var hybrid = Alphabet ? String(Alphabet.toSmartHybrid(entry.ru, unlocked, true)) : entry.ru;
             var wordLetters = Alphabet ? Alphabet.getLettersOrderedByDifficulty(entry.ru) : [];
             var masteredCount = 0;
             for (var i = 0; i < wordLetters.size(); i++) {
@@ -497,7 +497,8 @@ ItemEvents.tooltip(event => {
             if (stars >= 5) {
                 text.add(Text.gold('★ Russo Fluente: ').append(Text.white(entry.ru)).append(Text.gray(' ' + entry.phon)));
             } else {
-                text.add(Text.gold('★ Treino Russo: ').append(Text.aqua(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
+                text.add(Text.gold('★ Treino Russo: ').append(Text.of(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
+                text.add(Text.darkGray('  (Dourado = Russo | Branco = Português)'));
             }
             text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
             text.add(Text.aqua('  Gênero: ').append(Text.white(entry.gen)).append(Text.gray(' | Nível ' + entry.tier)));
@@ -616,7 +617,7 @@ ItemEvents.tooltip(event => {
     function appendDynamicTooltip(text, entry, itemId) {
         var phonSuffix = entry.phon ? (' ' + entry.phon) : '';
         var unlocked = getUnlockedLetters();
-        var hybrid = Alphabet ? String(Alphabet.toSmartHybrid(entry.ru, unlocked, false)) : entry.ru;
+        var hybrid = Alphabet ? String(Alphabet.toSmartHybrid(entry.ru, unlocked, true)) : entry.ru;
         var wordLetters = Alphabet ? Alphabet.getLettersOrderedByDifficulty(entry.ru) : [];
         var masteredCount = 0;
         for (var i = 0; i < wordLetters.size(); i++) {
@@ -636,7 +637,8 @@ ItemEvents.tooltip(event => {
         if (stars >= 5) {
             text.add(Text.gold('★ Russo Fluente: ').append(Text.white(entry.ru)).append(Text.gray(phonSuffix)));
         } else {
-            text.add(Text.gold('★ Treino Russo: ').append(Text.aqua(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
+            text.add(Text.gold('★ Treino Russo: ').append(Text.of(hybrid)).append(Text.gray(' (' + masteredCount + '/' + wordLetters.size() + ' letras)')));
+            text.add(Text.darkGray('  (Dourado = Russo | Branco = Português)'));
         }
         if (entry.pt) {
             text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));

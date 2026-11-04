@@ -304,3 +304,13 @@
   3. **Reset Atômico de Heatmap no Cliente:** `ChallengeSession.sync` invoca `Alphabet.CLIENT_HEAT.clear()` ao ingressar em qualquer mundo, garantindo estado zero em novos mundos.
   4. **Rebalanceamento de Limiares:** Limiares elevados para acúmulo real e orgânico (Gêmeas: 15, Falsos Amigos: 25, Construtores: 40, Chiantes: 60, Iodizadas: 80), com adição de calor desduplicada por palavra.
   5. **Tooltips Graduais:** Para palavras não dominadas (< 5 estrelas), a linha principal exibe `★ Treino Russo: <híbrido>` (ex: `Derevo (0/5 letras)`). A forma 100% russa e fonética completa só é revelada ao segurar SHIFT.
+
+### L41. Integração com Jade Overlay, Resolução de Ambiguidade de Falsos Amigos (Cores e Alertas) e Painel Persistente de Fala ("O Que Eu Disse")
+- **Armadilha:**
+  1. Ao remover as tags `[RU: ...]` de `pt_br.json` (L40), a mira do Jade voltou a exibir apenas o nome em português para blocos naturais no mundo (água, flores, grama, árvores), perdendo a oportunidade de aprendizado visual imersivo com pronúncia.
+  2. Na substituição híbrida gradual de letras, homóglifos e falsos amigos geram confusão visual intransponível: a letra `P` pode ser tanto o `P` latino (/p/) quanto o `Р` cirílico (/r/). Sem distinção visual, o jogador não sabe qual som pronunciar.
+  3. Ao emitir uma frase inteira no microfone em desafios do tipo `sentence`, o reconhecimento concluía e o HUD sumia instantaneamente no mesmo tick, impedindo o jogador de conferir o que o motor de voz ouviu e qual era a tradução da frase dita.
+- **Solução:**
+  1. **Plugin Nativo de Jade (`SayItJadePlugin.java` via `@WailaPlugin`):** Registrado entrypoint `jade` em `fabric.mod.json`. O Jade agora inspeciona blocos, fluidos, plantas e entidades na mira e adiciona dinamicamente a linha educacional `★ Russo: <Palavra> [<Pronúncia>]` (ex: `Água` -> `★ Russo: Вода [Voda]`), mantendo o nome principal 100% limpo em português.
+  2. **Diferenciação Cromática & Alerta de Falsos Amigos (`toSmartHybrid` com `formatCodes=true`):** Todas as letras cirílicas assimiladas são formatadas em **Dourado (`§6`)**, enquanto as letras latinas provisórias permanecem em **Branco (`§f`)**. No HUD, alertas contextuais ativos informam os falsos amigos (`§6Р§7=som de §eR§7 (Roda)`). A ambiguidade é 100% eliminada: `P` branco é /p/, `Р` dourado é /r/!
+  3. **Quadro Lateral Persistente "O Que Eu Disse" (`SpeechFeedback`):** Ao concluir qualquer desafio (em especial sentenças), um painel dedicado é fixado no canto superior direito por **6 segundos**, exibindo a transcrição reconhecida em russo, a pontuação de precisão e a tradução correspondente em português.

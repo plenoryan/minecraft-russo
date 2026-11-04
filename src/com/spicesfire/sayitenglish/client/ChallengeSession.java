@@ -213,6 +213,16 @@ public final class ChallengeSession {
         boolean ok = best >= c.passScore();
         ClientPlatform.I.sendToServer((ModPacket)new Packets.Result(c.id(), best, bestHeard.length() > 200 ? bestHeard.substring(0, 200) : bestHeard));
         banner = new Banner(prompt.target(), best, ok, c.kind(), System.currentTimeMillis());
+        String heardText = (bestHeard != null && !bestHeard.isEmpty()) ? bestHeard : (heard != null ? heard : "");
+        ChallengeHud.speechFeedback = new ChallengeHud.SpeechFeedback(
+            heardText,
+            prompt != null ? prompt.nativeText() : "",
+            prompt != null ? prompt.target() : "",
+            best,
+            ok,
+            c.kind(),
+            System.currentTimeMillis()
+        );
         class_310 mc = class_310.method_1551();
         if (mc.field_1724 != null) {
             mc.field_1724.method_5783((class_3414)(ok ? class_3417.field_14725 : class_3417.field_14624).comp_349(), 0.8f, ok ? 1.2f : 0.6f);

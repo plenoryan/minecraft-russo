@@ -49,6 +49,11 @@ public final class ChallengeHud {
     private static final int BAR_BG = -13881794;
     private static final int READING = -7351297;
 
+    public record SpeechFeedback(String heard, String nativeTranslation, String target, int score, boolean success, String kind, long shownAt) {
+    }
+
+    public static volatile SpeechFeedback speechFeedback = null;
+
     private ChallengeHud() {
     }
 
@@ -68,6 +73,15 @@ public final class ChallengeHud {
                 ChallengeSession.banner = null;
             } else {
                 ChallengeHud.banner(g, mc, font, b);
+            }
+        }
+        SpeechFeedback fb = speechFeedback;
+        if (fb != null) {
+            long age = System.currentTimeMillis() - fb.shownAt();
+            if (age > 6000L) { // 6 seconds on screen
+                speechFeedback = null;
+            } else {
+                ChallengeHud.renderSpeechFeedback(g, mc, font, fb, age);
             }
         }
     }
@@ -97,21 +111,26 @@ public final class ChallengeHud {
 
         String bigTarget = p.target();
         if (isRu) {
-            bigTarget = Alphabet.toSmartHybrid(p.target(), unlocked, false);
+            bigTarget = Alphabet.toSmartHybrid(p.target(), unlocked, true);
         }
         String big = reveal ? bigTarget : ChallengeHud.hint(bigTarget);
         String small = sameLanguage ? "" : p.nativeText();
+        if (isRu && !sameLanguage && !small.isEmpty()) {
+            small += " \u00a77[\u00a76Dourado=Russo\u00a77|\u00a7fBranco=Portugu\u00eas\u00a77]";
+        }
 
         if (isRu) {
             Character nextFocus = Alphabet.getNextFocusLetter(p.target(), unlocked);
             int masteredCount = Alphabet.getLetterCount(unlocked);
+            java.util.List<String> ffAlerts = Alphabet.getFalseFriendAlerts(p.target(), unlocked);
+            String ffSuffix = ffAlerts.isEmpty() ? "" : " \u2022 " + String.join(" | ", ffAlerts);
             if (nextFocus == null) {
-                reading = "Palavra 100% em Cir\u00edlico Fluente! \u2605\u2605\u2605\u2605\u2605 \u2022 (" + masteredCount + "/33 letras)";
+                reading = "Palavra 100% em Cir\u00edlico Fluente! \u2605\u2605\u2605\u2605\u2605 \u2022 (" + masteredCount + "/33 letras)" + ffSuffix;
             } else {
                 int lvl = Alphabet.LETTER_LEVEL.getOrDefault(nextFocus, 1);
                 int heat = Alphabet.getHeat(nextFocus);
                 int thresh = Alphabet.getHeatThreshold(nextFocus);
-                reading = "Em Foco: " + Alphabet.LEVEL_NAME[lvl] + " (" + Alphabet.LEVEL_MNEM[lvl] + ") \u2022 Calor: " + heat + "/" + thresh + "x";
+                reading = "Em Foco: " + Alphabet.LEVEL_NAME[lvl] + " (" + Alphabet.LEVEL_MNEM[lvl] + ") \u2022 Calor: " + heat + "/" + thresh + "x" + ffSuffix;
             }
         } else {
             reading = reveal ? Romanizer.of((String)p.target(), (String)Words.learning().code()) : null;
@@ -193,5 +212,35 @@ public final class ChallengeHud {
             first = true;
         }
         return b.toString();
+    }
+
+    private static void renderSpeechFeedback(class_332 g, class_310 mc, class_327 font, SpeechFeedback fb, long age) {
+        int screenW = mc.method_22683().method_4486();
+        String title = (fb.success() ? "\u00a7a\u2714 O Que Eu Disse " : "\u00a7c\u2716 O Que Eu Disse ") + "\u00a7e(" + fb.score() + "%)";
+        String spoken = fb.heard().isEmpty() ? "\u00a77(sem \u00e1udio detectado)" : "\u00a7f\"" + fb.heard() + "\"";
+        String trans = fb.nativeTranslation().isEmpty() ? "" : "\u00a7eTradu\u00e7\u00e3o: \u00a7f" + fb.nativeTranslation();
+        String target = "\u00a7bAlvo: \u00a77" + fb.target();
+
+        int textW = Math.max(Math.max(font.method_1727(title), font.method_1727(spoken)), Math.max(font.method_1727(trans), font.method_1727(target)));
+        int w = Math.min(screenW - 20, Math.max(220, textW + 24));
+        int x = screenW - w - 8;
+        int y = 8;
+        int h = 48 + (trans.isEmpty() ? 0 : 12);
+
+        // Semi-transparent background
+        ClientCompat.fill((class_332)g, (int)x, (int)y, (int)(x + w), (int)(y + h), (int)-803726810);
+        // Right accent bar
+        ClientCompat.fill((class_332)g, (int)(x + w - 3), (int)y, (int)(x + w), (int)(y + h), (int)(fb.success() ? -10755203 : -42406));
+
+        int curY = y + 5;
+        ClientCompat.text((class_332)g, (class_327)font, (String)title, (int)(x + 8), (int)curY, (int)-1);
+        curY += 12;
+        ClientCompat.text((class_332)g, (class_327)font, (String)spoken, (int)(x + 8), (int)curY, (int)-1);
+        curY += 12;
+        if (!trans.isEmpty()) {
+            ClientCompat.text((class_332)g, (class_327)font, (String)trans, (int)(x + 8), (int)curY, (int)-1);
+            curY += 12;
+        }
+        ClientCompat.text((class_332)g, (class_327)font, (String)target, (int)(x + 8), (int)curY, (int)-7697766);
     }
 }

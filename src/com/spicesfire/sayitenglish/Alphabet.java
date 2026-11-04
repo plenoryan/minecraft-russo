@@ -156,9 +156,13 @@ public final class Alphabet {
         if (val != null) return val;
         val = RU_DICT.get("item.minecraft." + cleanId);
         if (val != null) return val;
+        val = RU_DICT.get("entity.minecraft." + cleanId);
+        if (val != null) return val;
         val = RU_DICT.get("block." + cleanId);
         if (val != null) return val;
         val = RU_DICT.get("item." + cleanId);
+        if (val != null) return val;
+        val = RU_DICT.get("entity." + cleanId);
         if (val != null) return val;
         return itemIdOrWord;
     }
@@ -222,15 +226,38 @@ public final class Alphabet {
                 continue;
             }
             if (unlocked != null && unlocked.contains(ch)) {
-                if (formatCodes) sb.append("\u00a76");
+                if (formatCodes) sb.append("\u00a76"); // Gold = Cyrillic
                 sb.append(ch);
                 if (formatCodes) sb.append("\u00a7f");
             } else {
                 String lat = LATIN_FALLBACK.get(ch);
+                if (formatCodes) sb.append("\u00a7f"); // White = Latin (Portuguese provisional)
                 sb.append(lat != null ? lat : ch);
             }
         }
         return sb.toString();
+    }
+
+    public static List<String> getFalseFriendAlerts(String ru, Set<Character> unlocked) {
+        if (ru == null || ru.isEmpty()) return Collections.emptyList();
+        List<String> alerts = new ArrayList<>();
+        String clean = ru.toLowerCase().replaceAll("[\u0300-\u036f]", "");
+        Set<Character> seen = new HashSet<>();
+        for (int i = 0; i < clean.length(); i++) {
+            char c = clean.charAt(i);
+            if (!seen.add(c)) continue;
+            if (unlocked != null && (unlocked.contains(c) || unlocked.contains(Character.toUpperCase(c)))) {
+                switch (c) {
+                    case '\u0440': alerts.add("\u00a76\u0420\u00a77=som de \u00a7eR\u00a77 (Roda)"); break;
+                    case '\u0432': alerts.add("\u00a76\u0412\u00a77=som de \u00a7eV\u00a77 (Vit\u00f3ria)"); break;
+                    case '\u0441': alerts.add("\u00a76\u0421\u00a77=som de \u00a7eS\u00a77 (Sol)"); break;
+                    case '\u043d': alerts.add("\u00a76\u041d\u00a77=som de \u00a7eN\u00a77 (Navio)"); break;
+                    case '\u0443': alerts.add("\u00a76\u0423\u00a77=som de \u00a7eU\u00a77 (Urso)"); break;
+                    case '\u0445': alerts.add("\u00a76\u0425\u00a77=som de \u00a7eKh\u00a77 (Aspirado)"); break;
+                }
+            }
+        }
+        return alerts;
     }
 
     public static Character getNextFocusLetter(String ru, Set<Character> unlocked) {
