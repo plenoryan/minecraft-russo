@@ -354,3 +354,20 @@
 - **Solução:**
   - `krypton` é estritamente **proibido** e foi removido de todas as instâncias (cliente e servidor).
   - A otimização de rede pura do Krypton é dispensável, enquanto a capacidade do `e4all` de fornecer túnel multiplayer P2P sem portas é fundamental para o projeto. Modpack estabilizado com os 5 mods QoL restantes.
+
+### L45. Reconhecimento de Itens Compostos em Russo (Adjetivo + Substantivo), Relaxamento Fonético de Sinal Brando (ь) e Subtokens no Vosk
+- **Armadilha:**
+  - No Minecraft em russo, dezenas de itens essenciais são locuções nominais de 2 ou 3 palavras (ex: `item.minecraft.raw_copper` = `"Рудная медь"`, `copper_ore` = `"Медная руда"`, `raw_iron` = `"Необработанное железо"`).
+  - O motor original de pontuação (`Scorer.java`) comparava a fala ouvida apenas contra a concatenação total da frase alvo. Se o jogador dizia apenas o substantivo principal (`"медь"`), a similaridade Levenshtein ficava limitada a 4/10 = 40%, falhando a meta (70-80%) e dropando o item como penalidade.
+  - Além disso, a gramática restrita do Vosk continha apenas a frase inteira (`"рудная медь"`), e `ChallengeSession.offer` descartava qualquer palpite com `if (s < 95) return;`.
+  - Falantes nativos de português brasileiro frequentemente omitem a palatalização estrita do sinal brando russo (`ь` em `медь` -> `мед`), sofrendo rejeição acústica no modelo Vosk.
+- **Solução Implementada:**
+  1. **Scorer com Correspondência de Subtokens e Substantivo Principal (`Scorer.java`):**
+     - Alvos com $\ge 2$ palavras agora avaliam similaridade por palavras constituintes. Se o jogador pronuncia o substantivo principal com acurácia $\ge 75\%$, a pontuação recebe patamar de aprovação garantida (85% a 95%).
+  2. **Relaxamento de Sinal Brando (`ь`/`ъ`):**
+     - Em avaliações cirílicas, variantes fonéticas com ou sem sinal brando (`мед` vs `медь`) são tratadas com equivalência fonética, evitando bloqueios acústicos para não-nativos.
+  3. **Injeção de Subtokens na Gramática Restrita do Vosk (`ChallengeSession.java`):**
+     - Em `ChallengeSession.start`, subtokens (`медь`, `рудная`) e formas fonéticas (`мед`) são injetados automaticamente em `alternatives`, permitindo que o Vosk capture palavras isoladas com alta confiança.
+  4. **Filtro de Confiança e Conclusão Imediata:**
+     - Descarte restrito apenas a alternativas não relacionadas (`s < 60`), preservando palpites com correspondência real.
+     - Desafios de item (`kind = "word"`) concluem com aprovação imediata assim que `s >= passScore`.

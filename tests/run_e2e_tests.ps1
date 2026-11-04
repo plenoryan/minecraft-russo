@@ -54,6 +54,10 @@ $RU = @{
     zhelezny_slitok       = b64u "0LbQtdC70LXQt9C90YvQuSDRgdC70LjRgtC+0Lo="
     upper_zhelezny_slitok = b64u "0JbQtdC70LXQt9C90YvQuSDRgdC70LjRgtC+0Lo="
     slitok                = b64u "0YHQu9C40YLQvtC6"
+    rudnaya_med           = b64u "0YDRg9C00L3QsNGPINC80LXQtNGM"
+    med                   = b64u "0LzQtdC00Yw="
+    med_no_soft           = b64u "0LzQtdC0"
+    rudnaya               = b64u "0YDRg9C00L3QsNGP"
     almaz                 = b64u "0LDQu9C80LDQtw=="
     upper_almaz           = b64u "0JDQu9C80LDQtw=="
     yabloko               = b64u "0Y/QsdC70L7QutC+"
@@ -181,15 +185,13 @@ function Calculate-PronunciationScore {
         return @{ Score = 1.0; Passed = $true; Distance = 0 }
     }
     
-    # Token-level match constrained to >= 4 letters
-    if ($normSpoken.Length -ge 4 -and $normTarget.Length -ge 4) {
-        $shorter = if ($normSpoken.Length -le $normTarget.Length) { $normSpoken } else { $normTarget }
-        $longer = if ($normSpoken.Length -le $normTarget.Length) { $normTarget } else { $normSpoken }
-        $tokens = $longer.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
-        foreach ($tok in $tokens) {
-            if ($tok -eq $shorter) {
-                return @{ Score = 0.95; Passed = $true; Distance = 0 }
-            }
+    # Token-level match constrained to >= 2 letters with soft-sign relaxation
+    $spkNoSoft = ($normSpoken -replace [char]0x044c, "" -replace [char]0x044a, "").Trim()
+    $tokens = $normTarget.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
+    foreach ($tok in $tokens) {
+        $tokNoSoft = ($tok -replace [char]0x044c, "" -replace [char]0x044a, "").Trim()
+        if ($tok -eq $normSpoken -or ($spkNoSoft.Length -ge 2 -and $tokNoSoft -eq $spkNoSoft)) {
+            return @{ Score = 0.95; Passed = $true; Distance = 0 }
         }
     }
     
@@ -948,8 +950,21 @@ Register-Test "T2_04" "Tier 2" "T2.4: Multi-Word Compound Item Token Parsing" "M
     
     $scoreSub = Calculate-PronunciationScore -Spoken $RU.slitok -Target $RU.zhelezny_slitok
     if (-not $scoreSub.Passed) { throw "Substring token matching failed for slitok" }
+
+    # Raw Copper compound items & base noun matching
+    $scoreCopperFull = Calculate-PronunciationScore -Spoken $RU.rudnaya_med -Target $RU.rudnaya_med
+    if (-not $scoreCopperFull.Passed) { throw "Full phrase matching failed for rudnaya_med" }
+
+    $scoreCopperNoun = Calculate-PronunciationScore -Spoken $RU.med -Target $RU.rudnaya_med
+    if (-not $scoreCopperNoun.Passed) { throw "Base noun matching failed for med in rudnaya_med" }
+
+    $scoreCopperNoSoft = Calculate-PronunciationScore -Spoken $RU.med_no_soft -Target $RU.rudnaya_med
+    if (-not $scoreCopperNoSoft.Passed) { throw "Phonetic soft-sign relaxed matching failed for med_no_soft in rudnaya_med" }
+
+    $scoreCopperAdj = Calculate-PronunciationScore -Spoken $RU.rudnaya -Target $RU.rudnaya_med
+    if (-not $scoreCopperAdj.Passed) { throw "Adjective token matching failed for rudnaya in rudnaya_med" }
     
-    return @{ Status = "PASSED"; Message = "Compound item tokens and base noun fallback verified" }
+    return @{ Status = "PASSED"; Message = "Compound item tokens, base noun, and soft-sign relaxed fallback verified" }
 }
 
 # T2.5: Zero-Length / Empty / Special Character Audio Transcript Resilience

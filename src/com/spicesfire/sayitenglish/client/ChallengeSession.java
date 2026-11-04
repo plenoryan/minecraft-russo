@@ -82,6 +82,27 @@ public final class ChallengeSession {
         engine = SpeechEngine.forConfig((String)Config.get().engine, (String)language);
         engine.prepare(language);
         alternatives = c.kind().equals("sentence") ? Words.otherSentences((String)prompt.target()) : Words.otherWords((String)c.subject(), (int)40);
+        if (prompt != null && prompt.target() != null) {
+            ArrayList<String> alts = new ArrayList<>(alternatives);
+            String targetStr = prompt.target();
+            List<String> tWords = Scorer.words(targetStr);
+            if (tWords.size() > 1) {
+                for (String tw : tWords) {
+                    if (tw.length() >= 2 && !alts.contains(tw)) {
+                        alts.add(tw);
+                        String twNoSoft = tw.replace("\u044c", "").replace("\u044a", "");
+                        if (!twNoSoft.isEmpty() && !alts.contains(twNoSoft)) {
+                            alts.add(twNoSoft);
+                        }
+                    }
+                }
+            }
+            String targetNoSoft = targetStr.replace("\u044c", "").replace("\u044a", "");
+            if (!targetNoSoft.equals(targetStr) && !alts.contains(targetNoSoft)) {
+                alts.add(targetNoSoft);
+            }
+            alternatives = alts;
+        }
         micOk = false;
         micTried = false;
         micRequested = false;
@@ -146,28 +167,59 @@ public final class ChallengeSession {
 
     public static void offer(SpeechEngine.Guess guess, String target) {
         String text = guess.text();
+        if (text == null || text.trim().isEmpty()) {
+            return;
+        }
         boolean eng = Words.learning().english();
         int s = Scorer.score((String)text, (String)target, (boolean)eng);
+
+        // Cross-match against Romanized target and Romanized constituent words
+        String reading = Romanizer.plain((String)target, (String)language);
+        if (reading != null) {
+            s = Math.max(s, Scorer.score((String)text, (String)reading, (boolean)false));
+            List<String> tWords = Scorer.words(target);
+            if (tWords.size() > 1) {
+                for (String tw : tWords) {
+                    String twRom = Romanizer.plain((String)tw, (String)language);
+                    if (twRom != null && twRom.length() >= 2) {
+                        int rScore = Scorer.score((String)text, (String)twRom, (boolean)false);
+                        if (rScore >= 75) {
+                            s = Math.max(s, (int)Math.round(85.0 + (double)(rScore - 75) * 0.4));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Handle guesses from restricted recognizer
         if (guess.confidence() >= 0.0) {
-            if (s < 95) {
+            int passReq = current != null ? current.passScore() : 70;
+            // Only discard candidates from restricted recognizer if they completely fail to match target/keywords
+            if (s < 60 && s < passReq) {
                 return;
             }
-            s = (int)Math.round(Math.min(1.0, guess.confidence()) * 100.0);
+            int confScore = (int)Math.round(Math.min(1.0, guess.confidence()) * 100.0);
+            s = Math.max(s, confScore);
         }
+
         heard = text;
         if (s >= best) {
             best = s;
             bestHeard = text;
         }
         if (current != null) {
-            List<String> targetWords = Scorer.words(target);
-            List<String> heardWords = Scorer.words(text);
-            if (targetWords.size() > 1 || "sentence".equals(current.kind())) {
-                if (heardWords.size() >= targetWords.size() && s >= Math.max(current.passScore(), 85)) {
+            boolean isSentence = "sentence".equals(current.kind());
+            int passThreshold = current.passScore();
+            if (isSentence) {
+                List<String> targetWords = Scorer.words(target);
+                List<String> heardWords = Scorer.words(text);
+                if (heardWords.size() >= Math.max(1, targetWords.size() - 1) && s >= Math.max(passThreshold, 75)) {
                     passed = true;
                 }
-            } else if (s >= current.passScore()) {
-                passed = true;
+            } else {
+                if (s >= passThreshold) {
+                    passed = true;
+                }
             }
         }
     }

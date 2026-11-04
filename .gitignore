@@ -43,6 +43,7 @@ $RECYCLE.BIN/
 .DS_Store
 
 cfr.jar
+decompiled/
 src/summary.txt
 
 *.class
