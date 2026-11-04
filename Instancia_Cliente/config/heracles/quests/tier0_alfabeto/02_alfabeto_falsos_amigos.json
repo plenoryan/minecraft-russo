@@ -20,12 +20,13 @@
             "  • <gold>У, у</gold> = Som de <yellow>[U]</yellow> (Urso! Cuidado: NÃO é Y). Ex: <aqua>Уголь</aqua> (Carvão).",
             "  • <gold>Х, х</gold> = Som de <yellow>[Kh]</yellow> (R forte aspirado / Xadrez). Ex: <aqua>Хлеб</aqua> (Pão).",
             "",
-            "§bSubstituição Luso-Cirílica Progressiva:§r",
-            "  • Vento -> <yellow>Вento</yellow>",
-            "  • Navio -> <yellow>Наvio</yellow>",
-            "  • Roda  -> <yellow>Роda</yellow>",
-            "  • Sol   -> <yellow>Сол</yellow>",
-            "  • Urso  -> <yellow>Уrso</yellow>",
+            "§bProgressão Gradual (Níveis 7 a 12):§r",
+            "  • Nível 7 (13 estrelas): Ativa <gold>В, в</gold>",
+            "  • Nível 8 (15 estrelas): Ativa <gold>Р, р</gold>",
+            "  • Nível 9 (17 estrelas): Ativa <gold>С, с</gold>",
+            "  • Nível 10 (19 estrelas): Ativa <gold>Н, н</gold>",
+            "  • Nível 11 (21 estrelas): Ativa <gold>У, у</gold>",
+            "  • Nível 12 (23 estrelas): Ativa <gold>Х, х</gold>",
             "",
             "§aPalavras Russas Reais Formadas:§r",
             "  • <gold>ВОДА</gold> = Água [Voda]",
@@ -33,7 +34,7 @@
             "  • <gold>СЫР</gold>  = Queijo [Syr]",
             "  • <gold>РАСА</gold> = Raça [Rasa]",
             "",
-            "§cMissão Prática:§r Obtenha 1 Carvão (<gold>Уголь</gold>) para consolidar o <yellow>У</yellow>!",
+            "§cComo Avançar:§r Avance para o Nível 12 no Alfabeto Cirílico acumulando 23 estrelas de domínio em desafios de fala!",
             "",
             "§bRecompensa:§r +40 XP educacional."
         ],
@@ -48,12 +49,9 @@
         }
     },
     "tasks": {
-        "adquirir_carvao": {
-            "type": "heracles:item",
-            "item": "minecraft:coal",
-            "amount": 1,
-            "collection": "AUTOMATIC",
-            "title": "Colete ou segure 1 Carvão (Уголь)"
+        "concluir_etapa_falsos_amigos": {
+            "type": "heracles:check",
+            "title": "Alcançar Nível 12 no Alfabeto (Falsos Amigos: В, Р, С, Н, У, Х)"
         }
     },
     "rewards": {

@@ -7,7 +7,7 @@
         "unlockable": true
     },
     "display": {
-        "title": "Alfabeto III: Construtores (Д, П, Б, Г, Л, И)",
+        "title": "Alfabeto III: Construtores (Д, П, Б, Г, Л, И, Й)",
         "subtitle": "As letras que constroem as ferramentas básicas do jogo!",
         "description": [
             "<#55FF55>Decodificando os Símbolos Gregos e Estruturais!</>",
@@ -19,20 +19,24 @@
             "  • <gold>Г, г</gold> = Som de <yellow>[G]</yellow> (Gancho ou galho curvado, som de G gato). Ex: <aqua>Гравий</aqua> (Cascalho).",
             "  • <gold>Л, л</gold> = Som de <yellow>[L]</yellow> (Tenda de acampamento ou Lambda grego). Ex: <aqua>Лопата</aqua> (Pá).",
             "  • <gold>И, и</gold> = Som de <yellow>[I]</yellow> (O N invertido, som de I puro). Ex: <aqua>Кирка</aqua> (Picareta).",
+            "  • <gold>Й, й</gold> = Som de <yellow>[Y breve]</yellow> (I-kratkoye semivogal). Ex: <aqua>Чай</aqua> (Chá).",
             "",
-            "§bSubstituição Luso-Cirílica Progressiva:§r",
-            "  • Porta   -> <yellow>Порта</yellow>",
-            "  • Dia     -> <yellow>Диа</yellow>",
-            "  • Barco   -> <yellow>Бarсо</yellow>",
-            "  • Madeira -> <yellow>Мадеira</yellow>",
+            "§bProgressão Gradual (Níveis 13 a 19):§r",
+            "  • Nível 13 (25 estrelas): Ativa <gold>Д, д</gold>",
+            "  • Nível 14 (27 estrelas): Ativa <gold>П, п</gold>",
+            "  • Nível 15 (29 estrelas): Ativa <gold>Б, б</gold>",
+            "  • Nível 16 (31 estrelas): Ativa <gold>Г, г</gold>",
+            "  • Nível 17 (33 estrelas): Ativa <gold>Л, л</gold>",
+            "  • Nível 18 (35 estrelas): Ativa <gold>И, и</gold>",
+            "  • Nível 19 (37 estrelas): Ativa <gold>Й, й</gold>",
             "",
-            "§aItens do Minecraft que você agora lê por completo:§r",
+            "§aItens do Minecraft que você agora decifra por completo:§r",
             "  • <gold>ДЕРЕВО</gold>   = Árvore / Madeira [Derevo]",
             "  • <gold>ПАЛКА</gold>    = Graveto [Palka]",
             "  • <gold>КИРКА</gold>    = Picareta [Kirka]",
             "  • <gold>ЛОПАТА</gold>   = Pá [Lopata]",
             "",
-            "§cMissão Prática:§r Obtenha 1 Tronco de Árvore (<gold>Дерево</gold>) para fixar a letra <yellow>Д</yellow>!",
+            "§cComo Avançar:§r Alcance o Nível 19 no Alfabeto Cirílico acumulando 37 estrelas de domínio nos itens!",
             "",
             "§bRecompensa:§r +50 XP educacional."
         ],
@@ -47,12 +51,9 @@
         }
     },
     "tasks": {
-        "adquirir_madeira": {
-            "type": "heracles:item",
-            "item": "minecraft:oak_log",
-            "amount": 1,
-            "collection": "AUTOMATIC",
-            "title": "Colete ou segure 1 Madeira (Дерево)"
+        "concluir_etapa_construtores": {
+            "type": "heracles:check",
+            "title": "Alcançar Nível 19 no Alfabeto (Construtores: Д, П, Б, Г, Л, И, Й)"
         }
     },
     "rewards": {

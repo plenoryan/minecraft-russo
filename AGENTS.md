@@ -272,10 +272,12 @@
   3. **Alertas Mnemônicos Dinâmicos:** Se a palavra contiver letras de alto risco (falsos amigos), o tooltip emite alerta destacado (`В=V (vitória) | Р=R (roda)`).
   4. **Ponte de Transição Luso-Cirílica (Substituição Suave):** Projeta a palavra em português com as letras cirílicas equivalentes inseridas gradualmente (`Áрворе / Мадеira`), ativando a associação visual direta entre os alfabetos.
 
-
-
-
-
-
-
-
+### L38. Motor Híbrido Progressivo de 32 Estágios e Desacoplamento de Missões do Heracles
+- **Armadilha:**
+  1. **Bypass Visual pela Linha Fonética:** No HUD original do SayIt (ChallengeHud.java), a renderização simultânea da palavra em cirílico (Дерево) e da transcrição fonética latina logo abaixo ([DYE-rye-va]) criava um atalho cognitivo involuntário: sob pressão de tempo (5s a 18s), o cérebro ignorava 100% dos caracteres cirílicos e lia apenas a fonética latina, anulando o aprendizado do alfabeto.
+  2. **Conclusão Trivial por Coleta de Itens:** Nas missões da trilha tier0_alfabeto do Heracles, as tarefas utilizavam heracles:item associadas a itens genéricos (minecraft:stick, minecraft:coal, minecraft:oak_log). Como resultado, qualquer ação básica de sobrevivência (como quebrar folhas e pegar um graveto) completava instantaneamente a missão do alfabeto, declarando "18% do alfabeto dominado" sem que o jogador tivesse aprendido nenhuma letra.
+- **Solução:**
+  1. **Motor de Substituição Letra por Letra (Alphabet.java):** Criada a classe Alphabet implementando uma sequência canônica de 32 níveis pedagógicos dividida em 5 fases (Gêmeas Transparentes -> Falsos Amigos Cardinais -> Construtores/Gregas -> Chiantes/Sons Eslavos -> Iodizadas e Modificadores Ь/Ъ). Cada nível é desbloqueado a cada 2 estrelas de domínio acumuladas nos desafios (totalStars / 2), exigindo dezenas de itens para atingir a fluência completa.
+  2. **Renderização de Palavra Única no HUD (ChallengeHud.java):** A linha de trapaça fonética latina separada foi eliminada do HUD. A palavra alvo agora inicia 100% em letras latinas (Derevo) e se converte cirilicamente caractere por caractere conforme o nível de alfabeto do jogador (Derevо -> Dеrево -> Дерево). A linha inferior passa a exibir exclusivamente a mnemônica e instrução da letra ativa no nível atual (Nível 7/32 • Letra Ativa: В, в [V] (Parece B, mas tem som de V!)).
+  3. **Desacoplamento e Automação de Missões Heracles:** Substituídas as tarefas de itens das 5 missões de tier0_alfabeto por tarefas do tipo heracles:check. No servidor (ChallengeManager.java), quando o jogador atinge os marcos de nível (6, 12, 19, 26 e 32), o servidor executa atomicamente o comando heracles complete <quest_id> <player> além de emitir anúncio de celebração no chat, garantindo que as missões só progridam mediante avanço fonético autêntico no microfone.
+  4. **Sincronia com Tooltips KubeJS:** No russian_tooltips.js, itens inspecionam dinamicamente Alphabet.calculateLevel e Alphabet.toHybrid, exibindo a projeção do texto híbrido e a letra ativa no inventário em tempo real.

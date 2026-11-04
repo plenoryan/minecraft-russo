@@ -1,0 +1,66 @@
+{
+    "dependencies": [
+        "02_alfabeto_falsos_amigos"
+    ],
+    "settings": {
+        "hidden": false,
+        "unlockable": true
+    },
+    "display": {
+        "title": "Alfabeto III: Construtores (Д, П, Б, Г, Л, И, Й)",
+        "subtitle": "As letras que constroem as ferramentas básicas do jogo!",
+        "description": [
+            "<#55FF55>Decodificando os Símbolos Gregos e Estruturais!</>",
+            "",
+            "§eMnemônicas Visuais das Letras de Construção:§r",
+            "  • <gold>Д, д</gold> = Som de <yellow>[D]</yellow> (Desenho de um Domo ou cabana de madeira). Ex: <aqua>Дерево</aqua> (Árvore).",
+            "  • <gold>П, п</gold> = Som de <yellow>[P]</yellow> (Parece uma Porta ou Pórtico grego pi). Ex: <aqua>Палка</aqua> (Graveto).",
+            "  • <gold>Б, б</gold> = Som de <yellow>[B]</yellow> (O B com boné/haste reta superior). Ex: <aqua>Булыжник</aqua> (Pedregulho).",
+            "  • <gold>Г, г</gold> = Som de <yellow>[G]</yellow> (Gancho ou galho curvado, som de G gato). Ex: <aqua>Гравий</aqua> (Cascalho).",
+            "  • <gold>Л, л</gold> = Som de <yellow>[L]</yellow> (Tenda de acampamento ou Lambda grego). Ex: <aqua>Лопата</aqua> (Pá).",
+            "  • <gold>И, и</gold> = Som de <yellow>[I]</yellow> (O N invertido, som de I puro). Ex: <aqua>Кирка</aqua> (Picareta).",
+            "  • <gold>Й, й</gold> = Som de <yellow>[Y breve]</yellow> (I-kratkoye semivogal). Ex: <aqua>Чай</aqua> (Chá).",
+            "",
+            "§bProgressão Gradual (Níveis 13 a 19):§r",
+            "  • Nível 13 (25 estrelas): Ativa <gold>Д, д</gold>",
+            "  • Nível 14 (27 estrelas): Ativa <gold>П, п</gold>",
+            "  • Nível 15 (29 estrelas): Ativa <gold>Б, б</gold>",
+            "  • Nível 16 (31 estrelas): Ativa <gold>Г, г</gold>",
+            "  • Nível 17 (33 estrelas): Ativa <gold>Л, л</gold>",
+            "  • Nível 18 (35 estrelas): Ativa <gold>И, и</gold>",
+            "  • Nível 19 (37 estrelas): Ativa <gold>Й, й</gold>",
+            "",
+            "§aItens do Minecraft que você agora decifra por completo:§r",
+            "  • <gold>ДЕРЕВО</gold>   = Árvore / Madeira [Derevo]",
+            "  • <gold>ПАЛКА</gold>    = Graveto [Palka]",
+            "  • <gold>КИРКА</gold>    = Picareta [Kirka]",
+            "  • <gold>ЛОПАТА</gold>   = Pá [Lopata]",
+            "",
+            "§cComo Avançar:§r Alcance o Nível 19 no Alfabeto Cirílico acumulando 37 estrelas de domínio nos itens!",
+            "",
+            "§bRecompensa:§r +50 XP educacional."
+        ],
+        "icon": {
+            "type": "heracles:item",
+            "item": "minecraft:oak_log"
+        },
+        "groups": {
+            "tier0_alfabeto": {
+                "position": [96, 0]
+            }
+        }
+    },
+    "tasks": {
+        "concluir_etapa_construtores": {
+            "type": "heracles:check",
+            "title": "Alcançar Nível 19 no Alfabeto (Construtores: Д, П, Б, Г, Л, И, Й)"
+        }
+    },
+    "rewards": {
+        "xp_recompensa": {
+            "type": "heracles:xp",
+            "xptype": "POINTS",
+            "amount": 50
+        }
+    }
+}

@@ -466,6 +466,7 @@ public final class ChallengeManager {
         Config cfg = Config.get();
         boolean passed = score >= c.passScore();
         Progress pr = s.progress;
+        int prevTotalStars = pr.totalStars();
         long now = ChallengeManager.server(player).method_3780();
 
         switch (c.kind()) {
@@ -702,6 +703,42 @@ public final class ChallengeManager {
                     player.method_43496((class_2561)class_2561.method_43470("\u00a7e\u2605 [Estrela " + nextStars + "/5] Treino conclu\u00eddo com sucesso!"));
                 }
                 break;
+            }
+        }
+        int newTotalStars = pr.totalStars();
+        if (newTotalStars > prevTotalStars && "ru".equals(pr.language)) {
+            int oldLvl = Alphabet.calculateLevel(prevTotalStars);
+            int newLvl = Alphabet.calculateLevel(newTotalStars);
+            if (newLvl > oldLvl && newLvl <= 32) {
+                String letterInfo = Alphabet.LEVEL_NAME[newLvl];
+                String mnem = Alphabet.LEVEL_MNEM[newLvl];
+                player.method_43496((class_2561)class_2561.method_43470(
+                    "\u00a76\u2605\u2605 [ALFABETO CIR\u00cdLICO] Parab\u00e9ns! N\u00edvel " + newLvl + "/32 Desbloqueado! \u2605\u2605\n" +
+                    "\u00a7aNova letra ativa: \u00a7e" + letterInfo + " \u00a7a\u2022 \u00a77" + mnem
+                ));
+
+                try {
+                    MinecraftServer srv = ChallengeManager.server(player);
+                    if (srv != null) {
+                        String pName = player.method_5477().getString();
+                        if (newLvl >= 6 && oldLvl < 6) {
+                            srv.method_3734().method_44252(srv.method_3739(), "heracles complete 01_alfabeto_gemeas " + pName);
+                        }
+                        if (newLvl >= 12 && oldLvl < 12) {
+                            srv.method_3734().method_44252(srv.method_3739(), "heracles complete 02_alfabeto_falsos_amigos " + pName);
+                        }
+                        if (newLvl >= 19 && oldLvl < 19) {
+                            srv.method_3734().method_44252(srv.method_3739(), "heracles complete 03_alfabeto_construtores " + pName);
+                        }
+                        if (newLvl >= 26 && oldLvl < 26) {
+                            srv.method_3734().method_44252(srv.method_3739(), "heracles complete 04_alfabeto_chiantes " + pName);
+                        }
+                        if (newLvl >= 32 && oldLvl < 32) {
+                            srv.method_3734().method_44252(srv.method_3739(), "heracles complete 05_alfabeto_iodizadas_sinais " + pName);
+                        }
+                    }
+                } catch (Exception ignored) {
+                }
             }
         }
         pr.save(ChallengeManager.server(player), player.method_5667());

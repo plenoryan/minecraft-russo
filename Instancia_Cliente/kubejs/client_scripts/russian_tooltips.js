@@ -5,6 +5,11 @@ ItemEvents.tooltip(event => {
     var Words = null;
     var Romanizer = null;
     var ChallengeSession = null;
+    var Alphabet = null;
+
+    try {
+        Alphabet = Java.tryLoadClass('com.spicesfire.sayitenglish.Alphabet');
+    } catch (e) {}
 
     try {
         Words = Java.tryLoadClass('com.spicesfire.sayitenglish.client.Words');
@@ -20,6 +25,17 @@ ItemEvents.tooltip(event => {
             ChallengeSession.language = 'ru';
         }
     } catch (e) {}
+
+    function getPlayerAlphabetLevel() {
+        if (!Alphabet || !ChallengeSession || !ChallengeSession.scores) return 0;
+        var totalStars = 0;
+        var scoresList = ChallengeSession.scores;
+        for (var i = 0; i < scoresList.size(); i++) {
+            var s = scoresList.get(i);
+            if (s > 0) totalStars += s;
+        }
+        return Alphabet.calculateLevel(totalStars);
+    }
 
     var dynamicWordCache = {};
 
@@ -453,6 +469,12 @@ ItemEvents.tooltip(event => {
             text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
             text.add(Text.aqua('  Gênero: ').append(Text.white(entry.gen)).append(Text.gray(' | Nível ' + entry.tier)));
 
+            var alphaLvl = getPlayerAlphabetLevel();
+            var hybrid = Alphabet ? String(Alphabet.toHybrid(entry.ru, alphaLvl, false)) : '';
+            if (hybrid && alphaLvl < 32) {
+                text.add(Text.gold('  Texto Híbrido: ').append(Text.aqua(hybrid)).append(Text.darkGray(' (Nível ' + alphaLvl + '/32)')));
+            }
+
             try {
                 if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
                     var idx = ChallengeSession.words.indexOf(itemId);
@@ -468,6 +490,9 @@ ItemEvents.tooltip(event => {
             } catch (e) {}
 
             if (event.shift) {
+                if (alphaLvl < 32 && Alphabet && Alphabet.LEVEL_NAME && Alphabet.LEVEL_NAME[alphaLvl]) {
+                    text.add(Text.yellow('  Alfabeto Nv ' + alphaLvl + ': ').append(Text.gold(Alphabet.LEVEL_NAME[alphaLvl])).append(Text.gray(' (' + Alphabet.LEVEL_MNEM[alphaLvl] + ')')));
+                }
                 text.add(Text.green('  Nota Gramatical: ').append(Text.gray(entry.note)));
                 var spell = spellWord(entry.ru);
                 if (spell.spelling) {
@@ -565,6 +590,12 @@ ItemEvents.tooltip(event => {
             text.add(Text.yellow('  Português: ').append(Text.white(entry.pt)));
         }
 
+        var alphaLvl = getPlayerAlphabetLevel();
+        var hybrid = Alphabet ? String(Alphabet.toHybrid(entry.ru, alphaLvl, false)) : '';
+        if (hybrid && alphaLvl < 32) {
+            text.add(Text.gold('  Texto Híbrido: ').append(Text.aqua(hybrid)).append(Text.darkGray(' (Nível ' + alphaLvl + '/32)')));
+        }
+
         try {
             if (ChallengeSession && ChallengeSession.words && ChallengeSession.scores) {
                 var idx = ChallengeSession.words.indexOf(itemId);
@@ -580,6 +611,9 @@ ItemEvents.tooltip(event => {
         } catch (e) {}
 
         if (event.shift) {
+            if (alphaLvl < 32 && Alphabet && Alphabet.LEVEL_NAME && Alphabet.LEVEL_NAME[alphaLvl]) {
+                text.add(Text.yellow('  Alfabeto Nv ' + alphaLvl + ': ').append(Text.gold(Alphabet.LEVEL_NAME[alphaLvl])).append(Text.gray(' (' + Alphabet.LEVEL_MNEM[alphaLvl] + ')')));
+            }
             var spell = spellWord(entry.ru);
             if (spell.spelling) {
                 text.add(Text.gold('  Soletrando: ').append(Text.white(spell.spelling)));

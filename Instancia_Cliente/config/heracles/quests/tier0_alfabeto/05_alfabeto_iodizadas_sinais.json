@@ -7,7 +7,7 @@
         "unlockable": true
     },
     "display": {
-        "title": "Alfabeto V: Iodizadas e Modificadores (Я, Ю, Ё, Э, Ы, Ь, Ъ)",
+        "title": "Alfabeto V: Iodizadas e Modificadores (Я, Ю, Ё, Ы, Э, Ь, Ъ)",
         "subtitle": "Parabéns: você completou as 33 letras do alfabeto cirílico!",
         "description": [
             "<#55FF55>A Conclusão Triunfal do Alfabeto Russo!</>",
@@ -16,16 +16,20 @@
             "  • <gold>Я, я</gold> = Som de <yellow>[Ya / Ia]</yellow> (R espelhado olhando para trás; significa 'EU' em russo). Ex: <aqua>Яблоко</aqua> (Maçã).",
             "  • <gold>Ю, ю</gold> = Som de <yellow>[Yu / Iu]</yellow> (Letras I e O de mãos dadas). Ex: <aqua>Юг</aqua> (Sul).",
             "  • <gold>Ё, ё</gold> = Som de <yellow>[Yo / Iô]</yellow> (Letra E com dois olhos curiosos; SEMPRE tônica). Ex: <aqua>Берёза</aqua> (Bétula).",
-            "  • <gold>Э, э</gold> = Som de <yellow>[E]</yellow> (C invertido com língua; som de É aberto puro). Ex: <aqua>Этот</aqua> (Este).",
             "  • <gold>Ы, ы</gold> = Som de <yellow>[Y gutural]</yellow> (Vogal profunda na garganta). Ex: <aqua>Булыжник</aqua> (Pedregulho).",
-            "  • <gold>Ь, ь</gold> = <yellow>Sinal Brando</yellow> (Мягкий знак). Não tem som! Amolece e suaviza a consoante anterior. Ex: <aqua>Камень</aqua> (Pedra), <aqua>Печь</aqua> (Fornalha).",
+            "  • <gold>Э, э</gold> = Som de <yellow>[E]</yellow> (C invertido com língua; som de É aberto puro). Ex: <aqua>Этот</aqua> (Este).",
+            "  • <gold>Ь, ь</gold> = <yellow>Sinal Brando</yellow> (Мягкий знак). Não tem som! Amolece e suaviza a consoante anterior. Ex: <aqua>Камень</aqua> (Pedra).",
             "  • <gold>Ъ, ъ</gold> = <yellow>Sinal Duro</yellow> (Твёрдый знак). Não tem som! Cria uma pausa firme separando prefixo e raiz.",
             "",
-            "§bO Grande Feito:§r",
-            "Você agora domina a decodificação fonética das 33 letras russas!",
-            "Ao segurar <gold>SHIFT</gold> sobre qualquer item no inventário, examine a linha <yellow>Soletrando</yellow> para ver a decomposição letra por letra e a decodificação luso-cirílica em tempo real!",
+            "§bProgressão Final (Níveis 27 a 32):§r",
+            "  • Nível 27 (53 estrelas): Ativa <gold>Я, я</gold>",
+            "  • Nível 28 (55 estrelas): Ativa <gold>Ю, ю</gold>",
+            "  • Nível 29 (57 estrelas): Ativa <gold>Ё, ё</gold>",
+            "  • Nível 30 (59 estrelas): Ativa <gold>Ы, ы</gold>",
+            "  • Nível 31 (61 estrelas): Ativa <gold>Э, э</gold>",
+            "  • Nível 32 (63 estrelas): Ativa <gold>Ь, ь</gold> e <gold>Ъ, ъ</gold> (100% Cirílico Fluente!)",
             "",
-            "§cMissão Prática:§r Obtenha 1 Maçã (<gold>Яблоко</gold>) para coroar seu aprendizado!",
+            "§cComo Avançar:§r Atinja o Nível 32 (63 estrelas acumuladas) para dominar 100% das 33 letras e desbloquear a leitura cirílica pura!",
             "",
             "§bRecompensa Educacional:§r +75 XP e a consagração como Leitor Cirílico."
         ],
@@ -40,12 +44,9 @@
         }
     },
     "tasks": {
-        "adquirir_maca": {
-            "type": "heracles:item",
-            "item": "minecraft:apple",
-            "amount": 1,
-            "collection": "AUTOMATIC",
-            "title": "Colete ou segure 1 Maçã (Яблоко)"
+        "concluir_etapa_iodizadas": {
+            "type": "heracles:check",
+            "title": "Alcançar Nível 32 no Alfabeto (Fluência Cirílica Completa: 100% Dominado)"
         }
     },
     "rewards": {

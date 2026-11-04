@@ -1,0 +1,69 @@
+{
+    "dependencies": [],
+    "settings": {
+        "hidden": false,
+        "unlockable": true
+    },
+    "display": {
+        "title": "Alfabeto I: Gêmeas Transparentes (А, О, Т, К, М, Е)",
+        "subtitle": "Você já sabe ler 18% do alfabeto cirílico sem esforço!",
+        "description": [
+            "<#55FF55>Bem-vindo à Cartilha do Alfabeto Cirílico!</>",
+            "",
+            "§eO Segredo das Gêmeas:§r",
+            "Estas 6 letras têm a mesma forma e o mesmo som que no português:",
+            "  • <gold>А, а</gold> = Som de <yellow>[A]</yellow> (como em Amigo)",
+            "  • <gold>О, о</gold> = Som de <yellow>[O]</yellow> (como em Olho)",
+            "  • <gold>Т, т</gold> = Som de <yellow>[T]</yellow> (como em Terra)",
+            "  • <gold>К, к</gold> = Som de <yellow>[K]</yellow> (como em Carvão)",
+            "  • <gold>М, м</gold> = Som de <yellow>[M]</yellow> (como em Madeira)",
+            "  • <gold>Е, е</gold> = Som de <yellow>[Ye / E]</yellow> (como em Erva)",
+            "",
+            "§bMotor Híbrido Progressivo:§r",
+            "O mod SayIt substitui as letras latinas aos poucos à medida que você ganha estrelas de domínio:",
+            "  • 0 estrelas: 100% alfabeto latino (ex: Derevo, Palka)",
+            "  • 1-2 estrelas: Ativa letra <gold>А, а</gold>",
+            "  • 3-4 estrelas: Ativa letra <gold>О, о</gold>",
+            "  • 11-12 estrelas: Nível 6 desbloqueado (todas as 6 gêmeas ativas!)",
+            "",
+            "§aPalavras Russas Reais que você decifra:§r",
+            "  • <gold>КОТ</gold> = Gato [Kot]",
+            "  • <gold>ТОМ</gold> = Tomo / Volume [Tom]",
+            "  • <gold>КТО</gold> = Quem [Kto]",
+            "  • <gold>ТАМ</gold> = Lá / Ali [Tam]",
+            "",
+            "§cComo Avançar:§r Conquiste estrelas falando no microfone. Ao atingir o Nível 6 no Alfabeto (11-12 estrelas), a missão conclui automaticamente!",
+            "",
+            "§bRecompensa:§r +35 XP e o Dicionário de Bolso (Pocket Dictionary)."
+        ],
+        "icon": {
+            "type": "heracles:item",
+            "item": "sayitenglish:pocket_dictionary"
+        },
+        "groups": {
+            "tier0_alfabeto": {
+                "position": [0, 0]
+            }
+        }
+    },
+    "tasks": {
+        "concluir_etapa_gemeas": {
+            "type": "heracles:check",
+            "title": "Alcançar Nível 6 no Alfabeto (Gêmeas: А, О, Т, К, М, Е)"
+        }
+    },
+    "rewards": {
+        "xp_recompensa": {
+            "type": "heracles:xp",
+            "xptype": "POINTS",
+            "amount": 35
+        },
+        "item_dicionario": {
+            "type": "heracles:item",
+            "item": {
+                "id": "sayitenglish:pocket_dictionary",
+                "count": 1
+            }
+        }
+    }
+}

@@ -35,6 +35,14 @@ public final class Progress {
         return this.byLanguage.computeIfAbsent(lang, k -> new LinkedHashMap<>());
     }
 
+    public int totalStars() {
+        int sum = 0;
+        for (int stars : this.words().values()) {
+            sum += Math.max(0, stars);
+        }
+        return sum;
+    }
+
     public Map<String, Integer> reps() {
         if (this.reps == null) {
             this.reps = new LinkedHashMap<>();

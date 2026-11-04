@@ -1,0 +1,60 @@
+{
+    "dependencies": [
+        "03_alfabeto_construtores"
+    ],
+    "settings": {
+        "hidden": false,
+        "unlockable": true
+    },
+    "display": {
+        "title": "Alfabeto IV: Chiantes Eslavos (Ж, З, Ч, Ш, Щ, Ц, Ф)",
+        "subtitle": "A sonoridade marcante e os símbolos únicos do russo!",
+        "description": [
+            "<#55FF55>O Segredo dos Sons Chiantes e Sibilantes!</>",
+            "",
+            "§eMnemônicas dos Sons Eslavos:§r",
+            "  • <gold>Ж, ж</gold> = Som de <yellow>[Zh / J]</yellow> (Desenho de um Besouro com patinhas abertas). Ex: <aqua>Железо</aqua> (Ferro).",
+            "  • <gold>З, з</gold> = Som de <yellow>[Z]</yellow> (Parece o número 3, som de Zebra). Ex: <aqua>Земля</aqua> (Terra), <aqua>Золоto</aqua> (Ouro).",
+            "  • <gold>Ч, ч</gold> = Som de <yellow>[Ch]</yellow> (Parece o número 4 invertido, som de 'Tchê'). Ex: <aqua>Часы</aqua> (Relógio).",
+            "  • <gold>Ш, ш</gold> = Som de <yellow>[Sh]</yellow> (Garfo de 3 dentes retos, som de Show/Chá). Ex: <aqua>Шлем</aqua> (Elmo/Capacete).",
+            "  • <gold>Щ, щ</gold> = Som de <yellow>[Shch]</yellow> (Garfo de 3 dentes com cauda, som longo suave Shch). Ex: <aqua>Щит</aqua> (Escudo).",
+            "  • <gold>Ц, ц</gold> = Som de <yellow>[Ts]</yellow> (Letra U com perninha, som de PiTSa). Ex: <aqua>Цветок</aqua> (Flor).",
+            "  • <gold>Ф, ф</gold> = Som de <yellow>[F]</yellow> (Círculo cortado ao meio por um eixo vertical). Ex: <aqua>Факел</aqua> (Tocha).",
+            "",
+            "§bProgressão Gradual (Níveis 20 a 26):§r",
+            "  • Nível 20 (39 estrelas): Ativa <gold>Ж, ж</gold>",
+            "  • Nível 21 (41 estrelas): Ativa <gold>З, з</gold>",
+            "  • Nível 22 (43 estrelas): Ativa <gold>Ч, ч</gold>",
+            "  • Nível 23 (45 estrelas): Ativa <gold>Ш, ш</gold>",
+            "  • Nível 24 (47 estrelas): Ativa <gold>Щ, щ</gold>",
+            "  • Nível 25 (49 estrelas): Ativa <gold>Ц, ц</gold>",
+            "  • Nível 26 (51 estrelas): Ativa <gold>Ф, ф</gold>",
+            "",
+            "§cComo Avançar:§r Avance para o Nível 26 no Alfabeto Cirílico acumulando 51 estrelas de domínio!",
+            "",
+            "§bRecompensa:§r +50 XP educacional."
+        ],
+        "icon": {
+            "type": "heracles:item",
+            "item": "minecraft:iron_ingot"
+        },
+        "groups": {
+            "tier0_alfabeto": {
+                "position": [144, 0]
+            }
+        }
+    },
+    "tasks": {
+        "concluir_etapa_chiantes": {
+            "type": "heracles:check",
+            "title": "Alcançar Nível 26 no Alfabeto (Sons Eslavos e Chiantes: Ж, З, Ч, Ш, Щ, Ц, Ф)"
+        }
+    },
+    "rewards": {
+        "xp_recompensa": {
+            "type": "heracles:xp",
+            "xptype": "POINTS",
+            "amount": 50
+        }
+    }
+}
