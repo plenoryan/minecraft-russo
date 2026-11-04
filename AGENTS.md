@@ -345,4 +345,12 @@
      - Letras transparentes/idênticas (`А, О, Е, Т, К, М`) continuam com substituição fluida.
      - Letras não-idênticas ao alfabeto latino agora exigem maturidade de estágio global e domínio da palavra (mínimo de estrelas e repetições) para evitar substituição precoce.
   4. **Stack de Mods QoL e Desempenho:**
-     - Integrados 6 mods Fabric 1.20.1 leves: `Omnimovement` (movimentação ágil/sprint), `Inventory Sorting` (organização de baús e inventário com um clique), `Stack to Nearby Chests` (depósito rápido em contêineres próximos), `Entity Culling`, `Krypton` e `AppleSkin`. Segregação rígida cliente/servidor mantida (zero mods de interface no servidor dedicado).
+     - Integrados mods Fabric 1.20.1 leves: `Omnimovement` (movimentação ágil/sprint), `Inventory Sorting` (organização de baús e inventário com um clique), `Stack to Nearby Chests` (depósito rápido em contêineres próximos), `Entity Culling` e `AppleSkin`. Segregação rígida cliente/servidor mantida (zero mods de interface no servidor dedicado).
+
+### L44. Incompatibilidade Fatal entre Krypton e e4all no Pipeline de Criptografia do Login
+- **Armadilha:**
+  - O mod `krypton` tenta aplicar um `@Redirect` em `onKey$initializeVelocityCipher` dentro de `ServerLoginNetworkHandlerMixin`. No entanto, o mod `e4all` (essencial para túnel P2P LAN sem portas abertas) já aplica um `@Redirect` com a mesma prioridade (1000) no mesmo método (`getCipher`).
+  - O SpongePowered Mixin descarta o redirecionamento conflitante do Krypton, fazendo com que a checagem pós-injeção do Krypton falhe com `Critical injection failure: (0/1) succeeded`, derrubando o cliente Minecraft antes mesmo da tela de título.
+- **Solução:**
+  - `krypton` é estritamente **proibido** e foi removido de todas as instâncias (cliente e servidor).
+  - A otimização de rede pura do Krypton é dispensável, enquanto a capacidade do `e4all` de fornecer túnel multiplayer P2P sem portas é fundamental para o projeto. Modpack estabilizado com os 5 mods QoL restantes.

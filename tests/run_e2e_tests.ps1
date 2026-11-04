@@ -796,13 +796,12 @@ Register-Test "T1_F31" "Tier 1" "F31: QoL Modpack Manifest and Strict Client/Ser
     $clientJars = Get-ChildItem -Path $clientModsDir -Filter "*.jar" | Select-Object -ExpandProperty Name
     $serverJars = Get-ChildItem -Path $serverModsDir -Filter "*.jar" | Select-Object -ExpandProperty Name
 
-    # 1. Verify all 6 QoL mods exist in Instancia_Cliente\mods
+    # 1. Verify all 5 QoL mods exist in Instancia_Cliente\mods
     $expectedClientQoL = @(
         "omnimovement",
         "InventorySorter",
         "stack-to-nearby-chests",
         "entityculling",
-        "krypton",
         "appleskin"
     )
 
@@ -819,7 +818,7 @@ Register-Test "T1_F31" "Tier 1" "F31: QoL Modpack Manifest and Strict Client/Ser
     }
 
     # 2. Verify universal mods exist in Servidor_Dedicado\mods
-    $expectedServerQoL = @("InventorySorter", "krypton")
+    $expectedServerQoL = @("InventorySorter")
     foreach ($mod in $expectedServerQoL) {
         $found = @($serverJars | Where-Object { $_ -match $mod })
         if ($found.Count -eq 0) {
