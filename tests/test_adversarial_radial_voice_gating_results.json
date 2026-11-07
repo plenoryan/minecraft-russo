@@ -1,0 +1,105 @@
+﻿{
+    "timestamp_utc":  "2026-11-07T07:00:47.7276229Z",
+    "verdict":  "APPROVE",
+    "total_checks":  8,
+    "passed":  8,
+    "failed":  0,
+    "duration_ms":  2891,
+    "checks":  [
+                   {
+                       "Id":  "ADV-COMP-01",
+                       "Category":  "Toolchain",
+                       "Name":  "Java Harness Compilation",
+                       "Status":  "PASS",
+                       "Details":  "AdversarialRadialAndVoiceGatingHarness.java compiled cleanly (exit code 0)",
+                       "Evidence":  {
+
+                                    },
+                       "Timestamp":  "2026-11-07T07:00:45Z"
+                   },
+                   {
+                       "Id":  "ADV-JAVA-01",
+                       "Category":  "Java Harness",
+                       "Name":  "Adversarial Java Test Suite Execution",
+                       "Status":  "PASS",
+                       "Details":  "28/28 empirical tests passed with 100% success (exit code 0)",
+                       "Evidence":  {
+                                        "RawOutput":  "==============================================================================\r\n EMPIRICAL ADVERSARIAL STRESS TEST: RADIAL MENU \u0026 VOICE CHALLENGE GATING\r\n==============================================================================\r\n  [RAD-DZ-01: Exact Center Deadzone (dx=0, dy=0, dist=0)] -\u003e PASSED\r\n  [RAD-DZ-02: Micro-Deadzone Epsilon (dist=0.000001)] -\u003e PASSED\r\n  [RAD-DZ-03: Inner Deadzone Sweep across 8 Cardinal/Ordinal Directions] -\u003e PASSED\r\n  [RAD-DZ-04: Exact Inner Radius Knife-Edge (dist=22.0)] -\u003e PASSED\r\n  [RAD-DZ-05: Active Radial Ring Range (22.0 \u003c= dist \u003c= 150.0)] -\u003e PASSED\r\n  [RAD-DZ-06: Exact Outer Radius Knife-Edge (dist=150.0)] -\u003e PASSED\r\n  [RAD-DZ-07: Outer Range Knife-Edge Out-of-Bounds (dist \u003e 150.0)] -\u003e PASSED\r\n  [RAD-DZ-08: Extreme Integer \u0026 Float Coordinates (Overflow Resistance)] -\u003e PASSED\r\n  [RAD-ANG-01: Sector 0 Center at -90 deg (Top: wood)] -\u003e PASSED\r\n  [RAD-ANG-02: Sector 1 Center at -30 deg (Top-Right: food)] -\u003e PASSED\r\n  [RAD-ANG-03: Sector 2 Center at +30 deg (Bottom-Right: help)] -\u003e PASSED\r\n  [RAD-ANG-04: Sector 3 Center at +90 deg (Bottom: lava)] -\u003e PASSED\r\n  [RAD-ANG-05: Sector 4 Center at +150 deg (Bottom-Left: follow)] -\u003e PASSED\r\n  [RAD-ANG-06: Sector 5 Center at -150 deg (Top-Left: waypoint)] -\u003e PASSED\r\n  [RAD-ANG-07: All 6 Sector Boundary Knife-Edges and Epsilon Flips] -\u003e PASSED\r\n  [RAD-ANG-08: Dense 360-Degree Continuous Angle Sweep (36,000 steps)] -\u003e PASSED\r\n  [RAD-ANG-09: Sector Button Geometric Alignment Invariant] -\u003e PASSED\r\n  [RAD-SCR-01: Non-Pausing Screen Invariant (shouldPause == false)] -\u003e PASSED\r\n  [RAD-SCR-02: SectorDef Registry Completeness \u0026 Data Invariants] -\u003e PASSED\r\n  [RAD-SCR-03: SayItClient Key Binding \u0026 GLFW Keycode 86 (Key V)] -\u003e PASSED\r\n  [VCG-FAIL-01: Sub-threshold Speech Failure Mode (Score 0%) -\u003e 0 Packets] -\u003e PASSED\r\n  [VCG-FAIL-02: Sub-threshold Speech Failure Mode (Score 50%) -\u003e 0 Packets] -\u003e PASSED\r\n  [VCG-FAIL-03: Sub-threshold Speech Failure Mode (Score 74%) -\u003e 0 Packets] -\u003e PASSED\r\n  [VCG-FAIL-04: Knife-Edge Sub-threshold Failure Mode (Score 84%) -\u003e 0 Packets] -\u003e PASSED\r\n  [VCG-FAIL-05: Silence / Zero Speech Heard -\u003e 0 Packets] -\u003e PASSED\r\n  [VCG-FAIL-06: Session Timeout Expiration -\u003e 0 Packets] -\u003e PASSED\r\n  [VCG-FAIL-07: Cancellation via ESC / Abort (stop()) -\u003e 0 Packets] -\u003e PASSED\r\n  [VCG-FAIL-08: Negative Challenge ID Prevents Packets.Result Leakage] -\u003e PASSED\r\n  [VCG-PASS-01: Exact Pass Threshold Knife-Edge (Score 85 == 85) -\u003e Exactly 1 Packet] -\u003e PASSED\r\n  [VCG-PASS-02: High Score Pass (Score 95% and 100%) -\u003e Exactly 1 Packet] -\u003e PASSED\r\n  [VCG-PASS-03: Single-Emission Idempotency Under Multiple Ticks] -\u003e PASSED\r\n  [VCG-PASS-04: Single-Emission Idempotency Under Rapid Duplicate Guesses] -\u003e PASSED\r\n  [VCG-PASS-05: Re-entrant Session Preemption and Isolation] -\u003e PASSED\r\n  [LIVE-INV-01: ChallengeSession.pendingCoopAction Static Field Verification] -\u003e PASSED\r\n  [LIVE-INV-02: ChallengeSession.stop() Static Method Verification] -\u003e PASSED\r\n  [LIVE-INV-03: RadialMenuScreen.getHoveredSector() Method Verification] -\u003e PASSED\r\n==============================================================================\r\n RESULTS: Total=36, Passed=36, Failed=0\r\n STATUS: ALL 28 EMPIRICAL ADVERSARIAL STRESS TESTS PASSED (100% PASS)\r\n"
+                                    },
+                       "Timestamp":  "2026-11-07T07:00:46Z"
+                   },
+                   {
+                       "Id":  "ADV-RND-01",
+                       "Category":  "Property Testing",
+                       "Name":  "100,000 Randomized Coordinates Invariant",
+                       "Status":  "PASS",
+                       "Details":  "Zero partition violations across 100,000 points (Deadzone: 38, Active: 1706, Outer: 98256)",
+                       "Evidence":  {
+                                        "SectorHits":  [
+                                                           292,
+                                                           256,
+                                                           285,
+                                                           289,
+                                                           280,
+                                                           304
+                                                       ]
+                                    },
+                       "Timestamp":  "2026-11-07T07:00:47Z"
+                   },
+                   {
+                       "Id":  "ADV-BYTE-01",
+                       "Category":  "Bytecode",
+                       "Name":  "RadialMenuScreen shouldPause() Bytecode Verification",
+                       "Status":  "PASS",
+                       "Details":  "Bytecode strictly returns iconst_0 (false); zero singleplayer/LAN pauses",
+                       "Evidence":  {
+
+                                    },
+                       "Timestamp":  "2026-11-07T07:00:47Z"
+                   },
+                   {
+                       "Id":  "ADV-BYTE-02",
+                       "Category":  "Bytecode",
+                       "Name":  "ChallengeSession.finish() Strict Voice Gate Jump",
+                       "Status":  "PASS",
+                       "Details":  "Bytecode contains if_icmplt jump to false and ifeq jump skipping sendToServer when score is sub-threshold",
+                       "Evidence":  {
+
+                                    },
+                       "Timestamp":  "2026-11-07T07:00:47Z"
+                   },
+                   {
+                       "Id":  "ADV-BYTE-03",
+                       "Category":  "Bytecode",
+                       "Name":  "ChallengeSession.finish() Negative ID Protocol Isolation",
+                       "Status":  "PASS",
+                       "Details":  "Bytecode enforces \u0027ifle 125\u0027 ensuring client challenge IDs (\u003c 0) never emit Packets.Result",
+                       "Evidence":  {
+
+                                    },
+                       "Timestamp":  "2026-11-07T07:00:47Z"
+                   },
+                   {
+                       "Id":  "ADV-BYTE-04",
+                       "Category":  "Bytecode",
+                       "Name":  "ChallengeSession.stop() Immediate Nullification",
+                       "Status":  "PASS",
+                       "Details":  "ChallengeSession.stop() immediately writes aconst_null to pendingCoopAction before releasing resources",
+                       "Evidence":  {
+
+                                    },
+                       "Timestamp":  "2026-11-07T07:00:47Z"
+                   },
+                   {
+                       "Id":  "ADV-GAT-01",
+                       "Category":  "Voice Gating",
+                       "Name":  "11-Scenario Voice Gating Failure Mode Matrix",
+                       "Status":  "PASS",
+                       "Details":  "All 11 scenarios conformed strictly: 0 packets on score \u003c 85% or cancel, exactly 1 on pass",
+                       "Evidence":  {
+
+                                    },
+                       "Timestamp":  "2026-11-07T07:00:47Z"
+                   }
+               ]
+}

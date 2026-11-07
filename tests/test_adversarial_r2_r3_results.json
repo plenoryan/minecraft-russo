@@ -8,7 +8,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:40Z"
     },
     {
         "Id":  "R3_OAK_1",
@@ -19,7 +19,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_1_LOCK",
@@ -30,7 +30,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_2",
@@ -41,7 +41,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_2_LOCK",
@@ -52,7 +52,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_3",
@@ -63,7 +63,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_3_LOCK",
@@ -74,7 +74,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_4",
@@ -85,7 +85,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_4_LOCK",
@@ -96,7 +96,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_5",
@@ -107,7 +107,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_OAK_5_LOCK",
@@ -118,7 +118,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_SINGLE_10",
@@ -129,7 +129,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_SINGLE_20",
@@ -140,7 +140,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_MULTI_30_STARS3",
@@ -151,7 +151,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_MULTI_32_STARS5",
@@ -162,7 +162,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_MULTI_MASTERY",
@@ -173,7 +173,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_IS_IDENTICAL_POS",
@@ -184,7 +184,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_IS_IDENTICAL_NEG",
@@ -195,7 +195,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_IDENTICAL_UNREGRESSED",
@@ -206,7 +206,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_HEAT_IDENTICAL",
@@ -217,7 +217,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_HEAT_NONIDENT_LOCK",
@@ -228,7 +228,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_HEAT_NONIDENT_DOUBLE",
@@ -239,7 +239,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_NULL_SAFETY",
@@ -250,7 +250,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_NEG_SAFETY",
@@ -261,7 +261,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_CALCULATE_LEVEL_CAP",
@@ -272,7 +272,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R3_CALCULATE_LEVEL_ZERO",
@@ -283,7 +283,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_ITEM_APPLE",
@@ -294,7 +294,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_ITEM_DEREVO",
@@ -305,7 +305,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_ITEM_KAMEN",
@@ -316,7 +316,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PRACTICE_ONE",
@@ -327,7 +327,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PRACTICE_HLEB",
@@ -338,7 +338,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_EMPTY_TARGET",
@@ -349,7 +349,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_WS_TARGET",
@@ -360,7 +360,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_NULL_TARGET",
@@ -371,7 +371,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PUNCT_ONLY",
@@ -382,7 +382,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PUNCT_WORD_EXCLAM",
@@ -393,7 +393,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PUNCT_WORD_COMMA",
@@ -404,7 +404,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PUNCT_WORD_DOTS",
@@ -415,7 +415,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_KIND_SENTENCE_1W",
@@ -426,7 +426,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_KIND_SENTENCE_MW",
@@ -437,7 +437,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PHRASE_2W",
@@ -448,7 +448,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PHRASE_3W_RU",
@@ -459,7 +459,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PHRASE_LAVA",
@@ -470,7 +470,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "R2_PHRASE_FOLLOW",
@@ -481,7 +481,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "ADV_HUD_01",
@@ -492,7 +492,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "ADV_HUD_02",
@@ -503,7 +503,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "ADV_HUD_03",
@@ -514,7 +514,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "ADV_HUD_04",
@@ -525,7 +525,7 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:13Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "ADV_HUD_05",
@@ -536,17 +536,17 @@
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:14Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     },
     {
         "Id":  "ADV_DEPLOY_01",
         "Suite":  "Deployment",
         "Name":  "Dual Deployment JAR Byte Parity",
         "Status":  "PASS",
-        "Details":  "Client JAR: 30782039 bytes, Server JAR: 30782039 bytes",
+        "Details":  "Client JAR: 30791653 bytes, Server JAR: 30791653 bytes",
         "Evidence":  {
 
                      },
-        "Timestamp":  "2026-11-04T13:31:14Z"
+        "Timestamp":  "2026-11-07T06:50:41Z"
     }
 ]

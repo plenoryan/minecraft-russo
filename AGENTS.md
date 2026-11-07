@@ -371,3 +371,23 @@
   4. **Filtro de Confiança e Conclusão Imediata:**
      - Descarte restrito apenas a alternativas não relacionadas (`s < 60`), preservando palpites com correspondência real.
      - Desafios de item (`kind = "word"`) concluem com aprovação imediata assim que `s >= passScore`.
+
+
+### L46. Roda de Seleção Radial ('V'), Portão Pedagógico de Voz Estrito, HUD Visual no Parceiro e Desvinculação do Iris 'R'
+- **Armadilha:**
+  1. O mod Iris vinculava por padrão o recarregamento de shaders à tecla 'R' (`key_iris.keybind.reload:key.keyboard.r`), congelando o jogo ao acidentalmente pressionar a tecla durante movimentação ou bate-papo.
+  2. Modificar arquivos de configuração como `options.txt` com scripts que salvam arquivos em UTF-8 com BOM (`\uFEFF`) corrompe a leitura de opções do Minecraft, fazendo o jogo resetar todas as configurações para o padrão vanilla.
+  3. Enviar ações cooperativas diretamente pela interface sem praticar a pronúncia quebrava a premissa pedagógica de aprendizado imersivo de russo.
+  4. Avisos cooperativos puramente textuais no chat passavam despercebidos durante a exploração ou combate conjunto.
+- **Solução Implementada:**
+  1. **Desvinculação Segura do Atalho Iris 'R':**
+     - Em `options.txt` do cliente e nas instâncias do Launcher, a linha foi alterada para `key_iris.keybind.reload:key.keyboard.unknown` em ASCII puro estrito (Zero-BOM).
+     - Adicionado guard programático em `SayItClient` no startup para garantir que a tecla 'R' não reative o recarregamento de shaders.
+  2. **Roda de Seleção Radial ('V') com Portão de Voz Estrito (`RadialMenuScreen` & `ChallengeSession`):**
+     - Criada a `RadialMenuScreen` (sem pausa de jogo, permitindo multiplayer fluido) com 6 setores circulares mapeados trigonometricamente (`wood`, `food`, `help`, `lava`, `follow`, `waypoint`).
+     - A seleção da ação inicia obrigatoriamente a sessão de desafio de fala (`ChallengeSession.startCoopChallenge`). O pacote de rede `Packets.CoopInvoke` só é despachado se a pronúncia alcançar nota $\ge 85\%$. Em caso de cancelamento, silêncio ou nota insuficiente, nenhum pacote é enviado ao parceiro.
+  3. **HUD Visual no Receptor (`ChallengeHud`):**
+     - Ao receber `Packets.CoopCue`, o cliente renderiza uma notificação gráfica destacada contendo a cabeça/skin do jogador que solicitou via `PlayerFaceRenderer.method_44443` (com fallback offline seguro via `DefaultSkinHelper`), acompanhada do ícone do item solicitado e um ponto de interrogação `'?'` sobreposto via `DrawContext.method_51432`.
+  4. **Mods de Vida Cotidiana e Dicionário de Móveis:**
+     - Integrados simetricamente os mods *Farmer's Respite* (chaleira, café, chás) e *Comforts* (sacos de dormir e redes) no cliente e servidor dedicado.
+     - Adicionadas 109 chaves de tradução bilíngues (ru_ru e pt_br) em KubeJS e resourcepack, e registradas anotações fonéticas pedagógicas em `russian_tooltips.js`.

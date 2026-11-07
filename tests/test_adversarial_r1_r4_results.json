@@ -1,14 +1,14 @@
 ﻿{
     "Suite":  "Adversarial Stress Test Suite (Requirement R1 \u0026 R4)",
     "TargetDir":  "F:\\Jogos\\Mine",
-    "Timestamp":  "2026-11-04T13:31:08Z",
-    "DurationMs":  21347,
-    "Verdict":  "APPROVE",
+    "Timestamp":  "2026-11-07T06:51:11Z",
+    "DurationMs":  26393,
+    "Verdict":  "REQUEST_CHANGES",
     "Summary":  {
-                    "Failed":  0,
+                    "Failed":  1,
                     "Warnings":  0,
                     "Total":  7,
-                    "Passed":  7
+                    "Passed":  6
                 },
     "Results":  [
                     {
@@ -20,7 +20,7 @@
                         "Evidence":  {
 
                                      },
-                        "Timestamp":  "2026-11-04T13:30:47Z"
+                        "Timestamp":  "2026-11-07T06:50:47Z"
                     },
                     {
                         "Id":  "R1-ADV-01",
@@ -31,7 +31,7 @@
                         "Evidence":  {
 
                                      },
-                        "Timestamp":  "2026-11-04T13:30:50Z"
+                        "Timestamp":  "2026-11-07T06:50:49Z"
                     },
                     {
                         "Id":  "R1-ADV-02",
@@ -42,7 +42,7 @@
                         "Evidence":  {
 
                                      },
-                        "Timestamp":  "2026-11-04T13:30:50Z"
+                        "Timestamp":  "2026-11-07T06:50:49Z"
                     },
                     {
                         "Id":  "R4-ADV-01",
@@ -53,18 +53,18 @@
                         "Evidence":  {
 
                                      },
-                        "Timestamp":  "2026-11-04T13:30:50Z"
+                        "Timestamp":  "2026-11-07T06:50:49Z"
                     },
                     {
                         "Id":  "R4-ADV-02",
                         "Category":  "Mod Segregation",
                         "Name":  "Server Mod Environment Metadata Verification",
                         "Status":  "PASS",
-                        "Details":  "All 12 server JARs have valid environment tags (none declared client-only)",
+                        "Details":  "All 14 server JARs have valid environment tags (none declared client-only)",
                         "Evidence":  {
 
                                      },
-                        "Timestamp":  "2026-11-04T13:31:02Z"
+                        "Timestamp":  "2026-11-07T06:51:04Z"
                     },
                     {
                         "Id":  "R4-ADV-03",
@@ -75,18 +75,18 @@
                         "Evidence":  {
 
                                      },
-                        "Timestamp":  "2026-11-04T13:31:04Z"
+                        "Timestamp":  "2026-11-07T06:51:05Z"
                     },
                     {
                         "Id":  "E2E-ADV-01",
                         "Category":  "E2E Validation",
                         "Name":  "Canonical E2E Test Suite Strict Execution",
-                        "Status":  "PASS",
-                        "Details":  "55/55 tests passed, 0 failures, 0 pending milestones (exit code 0)",
+                        "Status":  "FAIL",
+                        "Details":  "E2E suite failed with exit code 0. Error: ",
                         "Evidence":  {
 
                                      },
-                        "Timestamp":  "2026-11-04T13:31:08Z"
+                        "Timestamp":  "2026-11-07T06:51:11Z"
                     }
                 ]
 }

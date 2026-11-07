@@ -1,0 +1,178 @@
+﻿{
+    "Suite":  "Adversarial Stress Test: HUD, Iris Decoupling \u0026 Mods Integration",
+    "TimestampUtc":  "2026-11-07T07:01:08Z",
+    "TotalDuration":  11.75,
+    "Summary":  {
+                    "Failed":  0,
+                    "Warning":  1,
+                    "Total":  14,
+                    "Passed":  13
+                },
+    "Results":  [
+                    {
+                        "Id":  "ADV-TOOL-01",
+                        "Category":  "Toolchain",
+                        "Name":  "Adversarial Java Harness Compilation",
+                        "Status":  "PASS",
+                        "Details":  "AdversarialHudAndModsHarness compiled cleanly",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-07T07:00:57Z"
+                    },
+                    {
+                        "Id":  "ADV-EXEC-01",
+                        "Category":  "Harness",
+                        "Name":  "Adversarial Java Execution (13 vectors)",
+                        "Status":  "PASS",
+                        "Details":  "All 13 Java stress vectors passed without exceptions",
+                        "Evidence":  {
+                                         "Output":  "==============================================================================\r\n ADVERSARIAL STRESS TEST: HUD NOTIFICATIONS, IRIS UNBIND \u0026 MODS (R2)\r\n==============================================================================\r\n[04:01:00] [main/INFO]: [STDOUT]:  [BOOTSTRAP] Minecraft SharedConstants \u0026 Registries initialized successfully.\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-01: onCoopCue Null Packet Defense] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-02: onCoopCue All-Null Fields Safe Defaults] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-03: onCoopCue Bilingual Pipe Fallback Parsing] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-04: onCoopCue 10,000-char Extreme Strings Fuzzing] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-05: onCoopCue Cyrillic, Emojis and Control Codes] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-06: onCoopCue Duration Ticks Boundaries (Negative, Zero, Max Int)] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-07: onCoopCue Expiration and Age Lifecycle Math] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-08: resolveActionStack Standard Sectors Resolution] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-09: resolveActionStack Unknown, Empty and Null Fallback to Paper] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-10: resolveActionStack Direct Item and Case Insensitivity] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-HUD-11: 50-Thread Concurrent Packet Storm (5000 packets)] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:       [Reflection] SayItClient.irisReloadUnbound = false\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-IRIS-01: SayItClient irisReloadUnbound Initial State] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]:       [Architectural Finding] SayItClient uses a one-shot latch: once irisReloadUnbound=true, unbindIrisReloadKey() is NEVER called again during session.\r\n[04:01:00] [main/INFO]: [STDOUT]:   [ADV-IRIS-02: SayItClient irisReloadUnbound One-Shot Latch Behavior] -\u003e PASSED\r\n[04:01:00] [main/INFO]: [STDOUT]: ==============================================================================\r\n[04:01:00] [main/INFO]: [STDOUT]:  RESULTS: Total=13, Passed=13, Failed=0\r\n[04:01:00] [main/INFO]: [STDOUT]:  [SUCCESS] All adversarial test vectors PASSED!\r\n"
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-IRIS-03",
+                        "Category":  "IrisUnbind",
+                        "Name":  "options.txt Zero-BOM Compliance",
+                        "Status":  "PASS",
+                        "Details":  "Zero-BOM verified (Header bytes: 76 65 72 73)",
+                        "Evidence":  {
+                                         "HeaderHex":  "76 65 72 73"
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-IRIS-04",
+                        "Category":  "IrisUnbind",
+                        "Name":  "options.txt key_iris.keybind.reload Unknown Key",
+                        "Status":  "PASS",
+                        "Details":  "Entry strictly mapped to \u0027key.keyboard.unknown\u0027",
+                        "Evidence":  {
+                                         "Line":  "key_iris.keybind.reload:key.keyboard.unknown"
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-IRIS-05",
+                        "Category":  "IrisUnbind",
+                        "Name":  "Forbidden \u0027R\u0027 Keybind Decoupling",
+                        "Status":  "PASS",
+                        "Details":  "Key \u0027R\u0027 is strictly decoupled from shader reload",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-IRIS-06",
+                        "Category":  "IrisUnbind",
+                        "Name":  "Runtime Guard Re-unbind on Post-Startup Tampering",
+                        "Status":  "WARNING",
+                        "Details":  "SayItClient uses a one-shot flag \u0027irisReloadUnbound = true\u0027. If options are modified/tampered after the initial client tick, SayItClient will NOT automatically re-unbind the key.",
+                        "Evidence":  {
+                                         "CodeSnippet":  "if (!irisReloadUnbound) { unbindIrisReloadKey(); irisReloadUnbound = true; }",
+                                         "Recommendation":  "Check unbindIrisReloadKey() periodically (e.g. every 20 ticks or when options are reloaded) instead of a one-time boolean guard.",
+                                         "Finding":  "One-shot boolean latch blocks subsequent calls to unbindIrisReloadKey()"
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-MOD-PAR-Farmersrespite-Fabric-3.0.2.jar",
+                        "Category":  "ModParity",
+                        "Name":  "Dual Parity: Farmersrespite-Fabric-3.0.2.jar",
+                        "Status":  "PASS",
+                        "Details":  "Client and server hashes strictly match (733624 bytes, SHA256: 6BC6A60D18DB2042...)",
+                        "Evidence":  {
+                                         "ServerHash":  "6BC6A60D18DB20428FA0500F9C6D94D91CFB04A77A154D0B18F8FA53B39588AE",
+                                         "ClientHash":  "6BC6A60D18DB20428FA0500F9C6D94D91CFB04A77A154D0B18F8FA53B39588AE",
+                                         "Size":  733624
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-MOD-PAR-comforts-fabric-6.4.0+1.20.1.jar",
+                        "Category":  "ModParity",
+                        "Name":  "Dual Parity: comforts-fabric-6.4.0+1.20.1.jar",
+                        "Status":  "PASS",
+                        "Details":  "Client and server hashes strictly match (693624 bytes, SHA256: F9852A749B5154CB...)",
+                        "Evidence":  {
+                                         "ServerHash":  "F9852A749B5154CBB0E97651CD0A1718382FCDFEBDEA86813BB118B16EE1096B",
+                                         "ClientHash":  "F9852A749B5154CBB0E97651CD0A1718382FCDFEBDEA86813BB118B16EE1096B",
+                                         "Size":  693624
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-MOD-ENV-Farmersrespite-Fabric-3.0.2.jar",
+                        "Category":  "ModMetadata",
+                        "Name":  "Universal Environment: farmersrespite",
+                        "Status":  "PASS",
+                        "Details":  "Mod \u0027farmersrespite\u0027 v3.0.2 explicitly targets universal environment (\u0027*\u0027)",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-MOD-ENV-comforts-fabric-6.4.0+1.20.1.jar",
+                        "Category":  "ModMetadata",
+                        "Name":  "Universal Environment: comforts",
+                        "Status":  "PASS",
+                        "Details":  "Mod \u0027comforts\u0027 v6.4.0+1.20.1 explicitly targets universal environment (\u0027*\u0027)",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-LANG-01",
+                        "Category":  "Curriculum",
+                        "Name":  "Bilingual Cyrillic Asset Coverage",
+                        "Status":  "PASS",
+                        "Details":  "Cyrillic translations and pedagogical tooltips verified for kettle, tea, coffee, hammock, and sleeping bag",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:00Z"
+                    },
+                    {
+                        "Id":  "ADV-SRV-01",
+                        "Category":  "ServerStress",
+                        "Name":  "Headless Server Boot \u0026 93-Mod Resolution",
+                        "Status":  "PASS",
+                        "Details":  "Dedicated server booted cleanly; verified comforts, farmersrespite, and sayitenglish registered with 0 errors",
+                        "Evidence":  {
+                                         "ExitCode":  0,
+                                         "ModsVerified":  [
+                                                              "comforts 6.4.0",
+                                                              "farmersrespite 3.0.2",
+                                                              "sayitenglish 1.1.0"
+                                                          ]
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:01Z"
+                    },
+                    {
+                        "Id":  "ADV-SRV-02",
+                        "Category":  "ServerStress",
+                        "Name":  "Server Mod Config Resolution (--initSettings)",
+                        "Status":  "PASS",
+                        "Details":  "Full server configuration \u0026 NightConfig resolution completed cleanly with ExitCode 0",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:08Z"
+                    },
+                    {
+                        "Id":  "ADV-SRV-03",
+                        "Category":  "ServerStress",
+                        "Name":  "Zero Crash Reports Verification",
+                        "Status":  "PASS",
+                        "Details":  "Dedicated server generated 0 crash reports under stress boot cycles",
+                        "Evidence":  {
+
+                                     },
+                        "Timestamp":  "2026-11-07T07:01:08Z"
+                    }
+                ]
+}

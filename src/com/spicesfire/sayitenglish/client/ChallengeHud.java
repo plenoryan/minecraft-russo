@@ -20,6 +20,7 @@
 package com.spicesfire.sayitenglish.client;
 
 import com.spicesfire.sayitenglish.Alphabet;
+import com.spicesfire.sayitenglish.ChallengeManager;
 import com.spicesfire.sayitenglish.Config;
 import com.spicesfire.sayitenglish.Packets;
 import com.spicesfire.sayitenglish.Scorer;
@@ -30,15 +31,24 @@ import com.spicesfire.sayitenglish.client.Romanizer;
 import com.spicesfire.sayitenglish.client.SayItClient;
 import com.spicesfire.sayitenglish.client.SpeechEngine;
 import com.spicesfire.sayitenglish.client.Words;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import net.minecraft.class_1068;
 import net.minecraft.class_1074;
+import net.minecraft.class_1792;
 import net.minecraft.class_1799;
+import net.minecraft.class_1935;
+import net.minecraft.class_2960;
 import net.minecraft.class_310;
 import net.minecraft.class_327;
 import net.minecraft.class_332;
+import net.minecraft.class_640;
+import net.minecraft.class_7532;
+import net.minecraft.class_7923;
 
 public final class ChallengeHud {
     private static final int GOLD = -14006;
@@ -54,6 +64,48 @@ public final class ChallengeHud {
     }
 
     public static volatile SpeechFeedback speechFeedback = null;
+
+    public record CoopCueNotification(
+        String initiatorName,
+        String action,
+        String ruText,
+        String phonetic,
+        String ptText,
+        String objective,
+        long receivedAt,
+        long durationMs
+    ) {
+    }
+
+    public static volatile CoopCueNotification activeCoopCue = null;
+
+    public static void onCoopCue(Packets.CoopCue cue) {
+        if (cue == null) {
+            return;
+        }
+        long durationMs = cue.durationTicks() > 0 ? (long)cue.durationTicks() * 50L : 10000L;
+        String initiator = cue.initiatorName() != null && !cue.initiatorName().isEmpty() ? cue.initiatorName() : "Aliado";
+        String action = cue.cueType() != null && !cue.cueType().isEmpty() ? cue.cueType() : "help";
+        String ru = cue.ruText() != null ? cue.ruText() : "";
+        String pt = cue.ptText() != null ? cue.ptText() : "";
+        if (ru.isEmpty() && cue.messageBilingual() != null && !cue.messageBilingual().isEmpty()) {
+            String[] parts = cue.messageBilingual().split("\\|", 2);
+            ru = parts[0].trim();
+            if (pt.isEmpty() && parts.length > 1) {
+                pt = parts[1].trim();
+            }
+        }
+        activeCoopCue = new CoopCueNotification(
+            initiator,
+            action,
+            ru,
+            cue.phonetic() != null ? cue.phonetic() : "",
+            pt,
+            cue.objective() != null ? cue.objective() : "",
+            System.currentTimeMillis(),
+            durationMs
+        );
+    }
 
     private ChallengeHud() {
     }
@@ -85,6 +137,15 @@ public final class ChallengeHud {
                 speechFeedback = null;
             } else {
                 ChallengeHud.renderSpeechFeedback(g, mc, font, fb, age);
+            }
+        }
+        CoopCueNotification cue = activeCoopCue;
+        if (cue != null) {
+            long age = System.currentTimeMillis() - cue.receivedAt();
+            if (age > cue.durationMs()) {
+                activeCoopCue = null;
+            } else {
+                ChallengeHud.renderCoopCueNotification(g, mc, font, cue, age);
             }
         }
     }
@@ -252,5 +313,104 @@ public final class ChallengeHud {
             curY += 10;
             ClientCompat.text((class_332)g, (class_327)font, (String)trans, (int)(x + 6), (int)curY, (int)-4671288);
         }
+    }
+
+    public static class_1799 resolveActionStack(String action) {
+        if (action == null) {
+            return new class_1799((class_1935)class_7923.field_41178.method_10223(new class_2960("minecraft:paper")));
+        }
+        String act = action.toLowerCase();
+        String itemId;
+        if (act.contains("wood")) {
+            itemId = "minecraft:oak_log";
+        } else if (act.contains("food")) {
+            itemId = "minecraft:bread";
+        } else if (act.contains("help")) {
+            itemId = "minecraft:golden_apple";
+        } else if (act.contains("lava")) {
+            itemId = "minecraft:lava_bucket";
+        } else if (act.contains("follow")) {
+            itemId = "minecraft:compass";
+        } else if (act.contains("waypoint") || act.contains("point") || act.contains("spyglass") || act.contains("recovery")) {
+            itemId = "minecraft:spyglass";
+        } else {
+            class_1792 direct = ChallengeManager.item(action);
+            if (direct != null) {
+                return new class_1799((class_1935)direct);
+            }
+            itemId = "minecraft:paper";
+        }
+        class_1792 it = ChallengeManager.item(itemId);
+        if (it != null) {
+            return new class_1799((class_1935)it);
+        }
+        return new class_1799((class_1935)class_7923.field_41178.method_10223(new class_2960(itemId)));
+    }
+
+    private static void renderCoopCueNotification(
+        class_332 g,
+        class_310 mc,
+        class_327 font,
+        CoopCueNotification cue,
+        long age
+    ) {
+        int screenW = mc.method_22683().method_4486();
+        int baseW = 240;
+        int h = 38;
+
+        String title = "\u00a7e" + cue.initiatorName() + " \u00a7fpediu \u00a76[?]:";
+        String sub = "\u00a76" + cue.ruText() + (!cue.ptText().isEmpty() ? " \u00a77(" + cue.ptText() + ")" : "");
+
+        int textW = Math.max(font.method_1727(title), font.method_1727(sub));
+        int w = Math.min(screenW - 16, Math.max(baseW, textW + 66));
+        int x = (screenW - w) / 2;
+        int y = 12;
+
+        // Dark panel background with gold accent borders
+        ClientCompat.fill((class_332)g, (int)x, (int)y, (int)(x + w), (int)(y + h), (int)PANEL);
+        ClientCompat.fill((class_332)g, (int)x, (int)y, (int)(x + w), (int)(y + 2), (int)GOLD);
+        ClientCompat.fill((class_332)g, (int)x, (int)y, (int)(x + 2), (int)(y + h), (int)GOLD);
+        ClientCompat.fill((class_332)g, (int)(x + w - 2), (int)y, (int)(x + w), (int)(y + h), (int)GOLD);
+
+        // 1. Initiator player face
+        class_2960 skin = null;
+        if (mc.method_1562() != null && cue.initiatorName() != null) {
+            class_640 entry = mc.method_1562().method_2874(cue.initiatorName());
+            if (entry != null) {
+                skin = entry.method_2968();
+            }
+        }
+        if (skin == null) {
+            UUID offlineUuid = UUID.nameUUIDFromBytes(
+                ("OfflinePlayer:" + (cue.initiatorName() != null ? cue.initiatorName() : "Player")).getBytes(StandardCharsets.UTF_8)
+            );
+            skin = class_1068.method_4648(offlineUuid);
+        }
+        if (skin == null) {
+            skin = class_1068.method_4649();
+        }
+        int headX = x + 6;
+        int headY = y + 7;
+        int headSize = 24;
+        class_7532.method_44443(g, skin, headX, headY, headSize);
+
+        // 2. Evocative action item + '?' overlay
+        class_1799 actionStack = resolveActionStack(cue.action());
+        int iconX = headX + headSize + 6;
+        int iconY = y + 11;
+        ClientCompat.item((class_332)g, (class_1799)actionStack, (int)iconX, (int)iconY);
+        g.method_51432(font, actionStack, iconX, iconY, "?");
+
+        // 3. Bilingual request text
+        int tx = iconX + 22;
+        ClientCompat.text((class_332)g, (class_327)font, (String)title, (int)tx, (int)(y + 6), (int)-1);
+        ClientCompat.text((class_332)g, (class_327)font, (String)sub, (int)tx, (int)(y + 18), (int)-1);
+
+        // 4. Time remaining bar
+        float frac = Math.max(0.0f, Math.min(1.0f, 1.0f - ((float)age / (float)cue.durationMs())));
+        ClientCompat.fill((class_332)g, (int)(x + 2), (int)(y + h - 2), (int)(x + w - 2), (int)(y + h), (int)BAR_BG);
+        int barW = (int)((float)(w - 4) * frac);
+        int barColor = frac < 0.25f ? RED : GOLD;
+        ClientCompat.fill((class_332)g, (int)(x + 2), (int)(y + h - 2), (int)(x + 2 + barW), (int)(y + h), (int)barColor);
     }
 }

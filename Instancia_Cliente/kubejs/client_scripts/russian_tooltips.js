@@ -470,6 +470,102 @@ ItemEvents.tooltip(event => {
             gen: 'Masculino (м.р.) + Genitivo',
             tier: 2,
             note: 'Рог significa chifre/galhada (o \'г\' final soa como [k]). Оленя é o genitivo de Олень.'
+        },
+        'farmersrespite:kettle': {
+            ru: 'Чáйник',
+            phon: '[CHAY-neek]',
+            pt: 'Chaleira',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Utensílio para ferver água e preparar infusões. Raiz Чай (chá) com sufixo instrumental -ник.'
+        },
+        'farmersrespite:coffee': {
+            ru: 'Кóфе',
+            phon: '[KOH-fye]',
+            pt: 'Café',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Substantivo indeclinável de gênero masculino. Bebida quente energizante.'
+        },
+        'farmersrespite:green_tea': {
+            ru: 'Зелëный чай',
+            phon: '[zye-LYO-niy CHAY]',
+            pt: 'Chá Verde',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Adjetivo + substantivo. A vogal \'ë\' é sempre tônica na pronúncia russa.'
+        },
+        'farmersrespite:black_tea': {
+            ru: 'Чёрный чай',
+            phon: '[CHYOR-niy CHAY]',
+            pt: 'Chá Preto',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Infusão clássica. Adjetivo Чёрный (preto) com \'ë\' tônico acompanhando Чай.'
+        },
+        'farmersrespite:yellow_tea': {
+            ru: 'Жёлтый чай',
+            phon: '[ZHOL-tiy CHAY]',
+            pt: 'Chá Amarelo',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Chá raro de cura suave. Adjetivo Жёлтый (amarelo) com inicial dura \'ж\'.'
+        },
+        'comforts:sleeping_bag_white': {
+            ru: 'Спáльный мешóк',
+            phon: '[SPAHL-niy mye-SHOK]',
+            pt: 'Saco de Dormir Branco',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Composto: Спальный (para dormir) + Мешок (saco). Permite dormir sem alterar o ponto de renascimento.'
+        },
+        'comforts:hammock_white': {
+            ru: 'Гамáк',
+            phon: '[ga-MAHK]',
+            pt: 'Rede Branca',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Rede de descanso suspensa. Permite avançar o dia e descansar sob a sombra.'
+        },
+        'comforts:rope_and_nail': {
+            ru: 'Верëвка и гвоздь',
+            phon: '[vye-RYOV-ka ee GVOST\']',
+            pt: 'Corda e Prego',
+            gen: 'Feminino + Masculino',
+            tier: 2,
+            note: 'Suporte de fixação da rede. A palavra Гвоздь tem consoante final suave palatizada \'дь\'.'
+        },
+        'handcrafted:chair': {
+            ru: 'Стул',
+            phon: '[STOOL]',
+            pt: 'Cadeira',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Assento individual de madeira. Plural irregular: Стулья (STOOL-ya).'
+        },
+        'handcrafted:oak_chair': {
+            ru: 'Стул',
+            phon: '[STOOL]',
+            pt: 'Cadeira de Carvalho',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Mobília básica de assento individual. Substantivo masculino monossilábico regular.'
+        },
+        'handcrafted:table': {
+            ru: 'Стол',
+            phon: '[STOL]',
+            pt: 'Mesa',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Móvel central da casa eslava. Plural regular: Столы.'
+        },
+        'handcrafted:oak_table': {
+            ru: 'Стол',
+            phon: '[STOL]',
+            pt: 'Mesa de Carvalho',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Mesa de apoio e refeições. \'O\' aberto e tônico. Plural: Столы (sta-LI).'
         }
     };
 

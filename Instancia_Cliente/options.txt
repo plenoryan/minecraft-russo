@@ -129,7 +129,7 @@ key_key.presencefootsteps.settings:key.keyboard.f10
 key_key.presencefootsteps.toggle:key.keyboard.unknown
 key_key.sayitenglish.type:key.keyboard.y
 key_key.sayitenglish.settings:key.keyboard.u
-key_iris.keybind.reload:key.keyboard.r
+key_iris.keybind.reload:key.keyboard.unknown
 key_iris.keybind.toggleShaders:key.keyboard.k
 key_iris.keybind.shaderPackSelection:key.keyboard.o
 key_iris.keybind.wireframe:key.keyboard.unknown

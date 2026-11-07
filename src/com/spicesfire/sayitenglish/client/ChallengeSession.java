@@ -23,6 +23,7 @@
 package com.spicesfire.sayitenglish.client;
 
 import com.spicesfire.sayitenglish.Alphabet;
+import com.spicesfire.sayitenglish.ChallengeManager;
 import com.spicesfire.sayitenglish.Config;
 import com.spicesfire.sayitenglish.Packets;
 import com.spicesfire.sayitenglish.Scorer;
@@ -36,11 +37,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import net.minecraft.class_1792;
+import net.minecraft.class_1799;
+import net.minecraft.class_1935;
 import net.minecraft.class_310;
 import net.minecraft.class_3414;
 import net.minecraft.class_3417;
 
 public final class ChallengeSession {
+    public static String pendingCoopAction = null;
     public static Packets.Challenge current;
     public static Words.Prompt prompt;
     public static long startedAt;
@@ -103,6 +108,60 @@ public final class ChallengeSession {
             }
             alternatives = alts;
         }
+        micOk = false;
+        micTried = false;
+        micRequested = false;
+        ChallengeSession.tryListen();
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1724 != null) {
+            mc.field_1724.method_5783((class_3414)class_3417.field_14622.comp_349(), 0.6f, 1.4f);
+        }
+    }
+
+    public static void startCoopChallenge(String action, String ruText, String ptText, String icon, int seconds, int passScore) {
+        ChallengeSession.stop();
+        pendingCoopAction = action;
+        int clientChallengeId = -100 - Math.abs(action.hashCode()) % 1000;
+        current = new Packets.Challenge(clientChallengeId, "sentence", action, icon != null ? icon : "", seconds, passScore);
+
+        class_1799 iconStack = class_1799.field_8037;
+        if (icon != null && !icon.isEmpty()) {
+            class_1792 it = ChallengeManager.item(icon);
+            if (it != null) {
+                iconStack = new class_1799((class_1935)it);
+            }
+        }
+        prompt = new Words.Prompt(ruText, ptText != null ? ptText : "", iconStack);
+        startedAt = System.currentTimeMillis();
+        pausedAt = 0L;
+        best = 0;
+        heard = "";
+        bestHeard = "";
+        passed = false;
+        banner = null;
+        engine = SpeechEngine.forConfig((String)Config.get().engine, (String)language);
+        engine.prepare(language);
+
+        alternatives = Words.otherSentences(ruText);
+        ArrayList<String> alts = new ArrayList<>(alternatives);
+        List<String> tWords = Scorer.words(ruText);
+        if (tWords.size() > 1) {
+            for (String tw : tWords) {
+                if (tw.length() >= 2 && !alts.contains(tw)) {
+                    alts.add(tw);
+                    String twNoSoft = tw.replace("\u044c", "").replace("\u044a", "");
+                    if (!twNoSoft.isEmpty() && !alts.contains(twNoSoft)) {
+                        alts.add(twNoSoft);
+                    }
+                }
+            }
+        }
+        String targetNoSoft = ruText.replace("\u044c", "").replace("\u044a", "");
+        if (!targetNoSoft.equals(ruText) && !alts.contains(targetNoSoft)) {
+            alts.add(targetNoSoft);
+        }
+        alternatives = alts;
+
         micOk = false;
         micTried = false;
         micRequested = false;
@@ -262,26 +321,36 @@ public final class ChallengeSession {
     private static void finish() {
         Packets.Challenge c = current;
         ChallengeSession.release();
-        boolean ok = best >= c.passScore();
-        ClientPlatform.I.sendToServer((ModPacket)new Packets.Result(c.id(), best, bestHeard.length() > 200 ? bestHeard.substring(0, 200) : bestHeard));
-        banner = new Banner(prompt.target(), best, ok, c.kind(), System.currentTimeMillis());
-        // R2: Restringir speechFeedback exclusivamente para frases completas (suprimir em palavras de item)
-        boolean isSentence = (c != null && "sentence".equals(c.kind()))
-            || (prompt != null && prompt.target() != null && Scorer.words(prompt.target()).size() > 1);
+        boolean ok = c != null && best >= c.passScore();
+        String coop = pendingCoopAction;
+        pendingCoopAction = null;
+        if (coop != null) {
+            if (ok) {
+                ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke(coop, ""));
+            }
+        } else if (c != null && c.id() > 0) {
+            ClientPlatform.I.sendToServer((ModPacket)new Packets.Result(c.id(), best, bestHeard.length() > 200 ? bestHeard.substring(0, 200) : bestHeard));
+        }
+        if (prompt != null && c != null) {
+            banner = new Banner(prompt.target(), best, ok, c.kind(), System.currentTimeMillis());
+            // R2: Restringir speechFeedback exclusivamente para frases completas (suprimir em palavras de item)
+            boolean isSentence = (c != null && "sentence".equals(c.kind()))
+                || (prompt != null && prompt.target() != null && Scorer.words(prompt.target()).size() > 1);
 
-        if (isSentence) {
-            String heardText = (bestHeard != null && !bestHeard.isEmpty()) ? bestHeard : (heard != null ? heard : "");
-            ChallengeHud.speechFeedback = new ChallengeHud.SpeechFeedback(
-                heardText,
-                prompt != null ? prompt.nativeText() : "",
-                prompt != null ? prompt.target() : "",
-                best,
-                ok,
-                c != null ? c.kind() : "sentence",
-                System.currentTimeMillis()
-            );
-        } else {
-            ChallengeHud.speechFeedback = null;
+            if (isSentence) {
+                String heardText = (bestHeard != null && !bestHeard.isEmpty()) ? bestHeard : (heard != null ? heard : "");
+                ChallengeHud.speechFeedback = new ChallengeHud.SpeechFeedback(
+                    heardText,
+                    prompt != null ? prompt.nativeText() : "",
+                    prompt != null ? prompt.target() : "",
+                    best,
+                    ok,
+                    c != null ? c.kind() : "sentence",
+                    System.currentTimeMillis()
+                );
+            } else {
+                ChallengeHud.speechFeedback = null;
+            }
         }
         class_310 mc = class_310.method_1551();
         if (mc.field_1724 != null) {
@@ -292,6 +361,7 @@ public final class ChallengeSession {
     }
 
     public static void stop() {
+        pendingCoopAction = null;
         ChallengeSession.release();
         current = null;
         prompt = null;

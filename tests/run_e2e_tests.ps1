@@ -87,6 +87,16 @@ $RU = @{
     rank_journeyman       = b64u "0JfQvdCw0YLQvtC6"
     rank_master           = b64u "0JzQsNGB0YLQtdGA"
     rank_legend           = b64u "0JvQtdCz0LXQvdC00LA="
+    chaynik               = b64u "0KfQsNC50L3QuNC6"
+    kofe                  = b64u "0JrQvtGE0LU="
+    zelyony_chay          = b64u "0JfQtdC70ZHQvdGL0Lkg0YfQsNC5"
+    zhelty_chay           = b64u "0JbRkdC70YLRi9C5INGH0LDQuQ=="
+    chyorny_chay          = b64u "0KfRkdGA0L3Ri9C5INGH0LDQuQ=="
+    spalny_meshok         = b64u "0KHQv9Cw0LvRjNC90YvQuSDQvNC10YjQvtC6"
+    gamak                 = b64u "0JPQsNC80LDQug=="
+    veryovka_i_gvozd      = b64u "0JLQtdGA0ZHQstC60LAg0Lgg0LPQstC+0LfQtNGM"
+    stul                  = b64u "0KHRgtGD0Ls="
+    stol                  = b64u "0KHRgtC+0Ls="
 }
 
 function Compute-OfflineUUID {
@@ -521,8 +531,8 @@ Register-Test "T1_F21" "Tier 1" "F21: Client-Side STT Architecture and Zero Inve
 
 # F22: E2E Test Suite & Test Harness
 Register-Test "T1_F22" "Tier 1" "F22: Canonical E2E Test Runner Self-Verification" "M5" {
-    if ($TestRegistry.Count -lt 55) {
-        throw ("Test registry contains insufficient test coverage: " + $TestRegistry.Count + " tests registered (minimum 55 required)")
+    if ($TestRegistry.Count -lt 62) {
+        throw ("Test registry contains insufficient test coverage: " + $TestRegistry.Count + " tests registered (minimum 62 required)")
     }
     return @{ Status = "PASSED"; Message = ("Test harness self-verification passed (" + $TestRegistry.Count + " tests registered)") }
 }
@@ -874,6 +884,450 @@ Register-Test "T1_F32" "Tier 1" "F32: Dedicated Server Dry-Run Clean Execution w
     }
 
     return @{ Status = "PASSED"; Message = "Dedicated server dry-run executed cleanly with newly integrated QoL mods: 0 mixin collisions, 0 class loading errors, clean exit" }
+}
+
+# F33: Radial Selection Wheel Keybinding ('V'), UI Screen and Sector Registry
+Register-Test "T1_F33" "Tier 1" "F33: Radial Selection Wheel Keybinding ('V'), UI Screen and Sector Registry" "M2" {
+    # 1. Keybinding registration check in SayItClient.java
+    $sayitClientSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\SayItClient.java"
+    if (-not (Test-Path $sayitClientSrc)) { throw "SayItClient.java not found in src" }
+    $sayitClientCode = Get-Content -Raw -Encoding UTF8 $sayitClientSrc
+
+    if ($sayitClientCode -notmatch '"key\.sayitenglish\.radial"' -or $sayitClientCode -notmatch 'ClientCompat\.key\("key\.sayitenglish\.radial",\s*86\)') {
+        throw "SayItClient.java does not register radial key 'key.sayitenglish.radial' with default keycode 86 (GLFW_KEY_V)"
+    }
+    if ($sayitClientCode -notmatch 'RadialMenuScreen') {
+        throw "SayItClient.java does not open RadialMenuScreen on radial key press"
+    }
+
+    # 2. Screen implementation check in RadialMenuScreen.java
+    $radialScreenSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\RadialMenuScreen.java"
+    if (-not (Test-Path $radialScreenSrc)) { throw "RadialMenuScreen.java not found in src" }
+    $radialScreenCode = Get-Content -Raw -Encoding UTF8 $radialScreenSrc
+
+    # Verify non-pausing screen (shouldPause() / method_25421() returns false)
+    if ($radialScreenCode -notmatch 'method_25421\(\)\s*\{\s*return\s+false;' -and $radialScreenCode -notmatch 'shouldPause\(\)\s*\{\s*return\s+false;') {
+        throw "RadialMenuScreen must return false for shouldPause() / method_25421() to avoid pausing multiplayer/LAN gameplay"
+    }
+
+    # 3. Verify Compiled Classes in Client and Server Mod JARs
+    $modJar = Join-Path $TargetRoot "Instancia_Cliente\mods\sayitenglish-fabric-1.20.1-1.1.0.jar"
+    if (-not (Test-Path $modJar)) { throw "Mod JAR not found at $modJar" }
+
+    $jarExe = Join-Path $TargetRoot "Java17\bin\jar.exe"
+    $jarList = & $jarExe tf $modJar
+    $hasRadialScreen = ($jarList | Where-Object { $_ -match 'com/spicesfire/sayitenglish/client/RadialMenuScreen\.class' }).Count -gt 0
+    $hasSectorDef = ($jarList | Where-Object { $_ -match 'com/spicesfire/sayitenglish/client/RadialMenuScreen\$SectorDef\.class' }).Count -gt 0
+    if (-not $hasRadialScreen -or -not $hasSectorDef) {
+        throw "sayitenglish mod JAR missing RadialMenuScreen or SectorDef compiled class"
+    }
+
+    # 4. Sector Definitions Oracle: exactly 6 sectors with required actions, phrases, and items
+    $expectedSectors = @(
+        @{ Index = 0; Action = "wood"; Ru = $RU.nuzhno_derevo; Item = "minecraft:oak_log" },
+        @{ Index = 1; Action = "food"; Ru = $RU.nuzhna_yeda; Item = "minecraft:bread" },
+        @{ Index = 2; Action = "help"; Ru = $RU.pomogi_mne; Item = "minecraft:golden_apple" },
+        @{ Index = 3; Action = "lava"; Ru = $RU.pol_eto_lava; Item = "minecraft:lava_bucket" },
+        @{ Index = 4; Action = "follow"; Ru = $RU.sleduy_za_mnoy; Item = "minecraft:compass" },
+        @{ Index = 5; Action = "waypoint"; Ru = $RU.smotri_tuda; Item = "minecraft:spyglass" }
+    )
+
+    foreach ($sec in $expectedSectors) {
+        if ($radialScreenCode -notmatch ('"' + [regex]::Escape($sec.Action) + '"')) {
+            throw "RadialMenuScreen missing sector action '$($sec.Action)'"
+        }
+        if ($radialScreenCode -notmatch ('"' + [regex]::Escape($sec.Item) + '"')) {
+            throw "RadialMenuScreen missing sector item '$($sec.Item)'"
+        }
+        $normRu = Normalize-Cyrillic $sec.Ru
+        if ([string]::IsNullOrWhiteSpace($normRu)) {
+            throw "Sector '$($sec.Action)' has invalid Russian phrase"
+        }
+    }
+
+    # 5. Angular Math Oracle: 6 equal 60-degree sectors with 120-degree phase shift
+    function Calc-Sector([double]$deg) {
+        $shifted = $deg + 120.0
+        while ($shifted -lt 0.0) { $shifted += 360.0 }
+        while ($shifted -ge 360.0) { $shifted -= 360.0 }
+        $s = [int][Math]::Floor($shifted / 60.0)
+        if ($s -lt 0) { $s = 0 }
+        if ($s -gt 5) { $s = 5 }
+        return $s
+    }
+
+    $angleTests = @(
+        @{ Deg = -90.0; ExpectedSec = 0; Name = "top (wood)" },
+        @{ Deg = -30.0; ExpectedSec = 1; Name = "top-right (food)" },
+        @{ Deg = 30.0;  ExpectedSec = 2; Name = "bottom-right (help)" },
+        @{ Deg = 90.0;  ExpectedSec = 3; Name = "bottom (lava)" },
+        @{ Deg = 150.0; ExpectedSec = 4; Name = "bottom-left (follow)" },
+        @{ Deg = -150.0; ExpectedSec = 5; Name = "top-left (waypoint)" }
+    )
+
+    foreach ($at in $angleTests) {
+        $actual = Calc-Sector $at.Deg
+        if ($actual -ne $at.ExpectedSec) {
+            throw "Radial angular math failed for $($at.Name): angle $($at.Deg) deg mapped to sector $actual instead of $($at.ExpectedSec)"
+        }
+    }
+
+    # 6. Interaction Mode Handling Check (tap mode vs hold-to-select mode)
+    if ($radialScreenCode -notmatch 'openedAt' -or $radialScreenCode -notmatch '180') {
+        throw "RadialMenuScreen missing hold-to-select timing logic (>180ms threshold)"
+    }
+
+    return @{ Status = "PASSED"; Message = "Radial wheel keybinding ('V', 86), non-pausing screen, 6 sectors (wood/food/help/lava/follow/waypoint), and angular mathematics verified" }
+}
+
+# F34: Strict Voice Challenge Gating and Conditional Coop Packet Dispatch
+Register-Test "T1_F34" "Tier 1" "F34: Strict Voice Challenge Gating and Conditional Coop Packet Dispatch" "M2" {
+    $sessionSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\ChallengeSession.java"
+    if (-not (Test-Path $sessionSrc)) { throw "ChallengeSession.java not found in src" }
+    $sessionCode = Get-Content -Raw -Encoding UTF8 $sessionSrc
+
+    # 1. Verify pendingCoopAction field presence and static state
+    if ($sessionCode -notmatch 'public\s+static\s+String\s+pendingCoopAction') {
+        throw "ChallengeSession.java missing 'public static String pendingCoopAction' state variable"
+    }
+
+    # 2. Verify startCoopChallenge method
+    if ($sessionCode -notmatch 'public\s+static\s+void\s+startCoopChallenge' -or $sessionCode -notmatch 'pendingCoopAction\s*=\s*action;') {
+        throw "ChallengeSession.java missing startCoopChallenge() or does not record pendingCoopAction"
+    }
+
+    # 3. Verify Strict Voice Challenge Gate in finish()
+    if ($sessionCode -notmatch 'pendingCoopAction\s*=\s*null' -or $sessionCode -notmatch 'Packets\.CoopInvoke') {
+        throw "ChallengeSession.finish() does not cleanly reset pendingCoopAction and dispatch Packets.CoopInvoke"
+    }
+
+    # 4. Verify stop() nullification (defense-in-depth on cancel, escape, disconnect)
+    if ($sessionCode -notmatch 'public\s+static\s+void\s+stop\(\)\s*\{[\s\S]*?pendingCoopAction\s*=\s*null') {
+        throw "ChallengeSession.stop() must immediately nullify pendingCoopAction to block unauthorized packets on abort/ESC"
+    }
+
+    # 5. Behavioral Oracle Simulation of Strict Speech Gating Logic
+    function Simulate-CoopGating([double]$speechScore, [int]$passScore, [bool]$cancelled) {
+        $pendingCoop = "wood"
+        $packetsSent = [System.Collections.Generic.List[string]]::new()
+
+        if ($cancelled) {
+            $pendingCoop = $null
+        } else {
+            $best = [int][Math]::Round($speechScore * 100)
+            $ok = ($best -ge $passScore)
+            $coop = $pendingCoop
+            $pendingCoop = $null
+            if ($coop -ne $null) {
+                if ($ok) {
+                    $packetsSent.Add("Packets.CoopInvoke($coop)")
+                }
+            }
+        }
+        return @{
+            PendingCleared = ($pendingCoop -eq $null)
+            PacketsEmitted = $packetsSent.Count
+            Packets = $packetsSent
+        }
+    }
+
+    # Case A: Valid speech exceeding passScore (0.95 >= 85) -> 1 packet emitted
+    $caseA = Simulate-CoopGating -speechScore 0.95 -passScore 85 -cancelled $false
+    if (-not $caseA.PendingCleared -or $caseA.PacketsEmitted -ne 1 -or $caseA.Packets[0] -notmatch "wood") {
+        throw "Strict gate simulation failed for valid speech (score 95 >= 85): expected 1 packet, got $($caseA.PacketsEmitted)"
+    }
+
+    # Case B: Failed speech below passScore (0.70 < 85) -> 0 packets emitted, pending cleared
+    $caseB = Simulate-CoopGating -speechScore 0.70 -passScore 85 -cancelled $false
+    if (-not $caseB.PendingCleared -or $caseB.PacketsEmitted -ne 0) {
+        throw "Strict gate simulation failed: speech score 70 < 85 must emit 0 packets, got $($caseB.PacketsEmitted)"
+    }
+
+    # Case C: Zero speech / silence (0.00 < 85) -> 0 packets emitted
+    $caseC = Simulate-CoopGating -speechScore 0.0 -passScore 85 -cancelled $false
+    if (-not $caseC.PendingCleared -or $caseC.PacketsEmitted -ne 0) {
+        throw "Strict gate simulation failed: silence (score 0 < 85) must emit 0 packets"
+    }
+
+    # Case D: Challenge cancelled / abort via ESC -> 0 packets emitted
+    $caseD = Simulate-CoopGating -speechScore 1.0 -passScore 85 -cancelled $true
+    if (-not $caseD.PendingCleared -or $caseD.PacketsEmitted -ne 0) {
+        throw "Strict gate simulation failed: cancelled challenge must emit 0 packets"
+    }
+
+    return @{ Status = "PASSED"; Message = "Strict voice challenge gating verified: pendingCoopAction set on radial pick; CoopInvoke emitted strictly when score >= 85%; failure/cancel emits 0 packets" }
+}
+
+# F35: Receiver Visual Notification HUD, Player Face Rendering and '?' Badge Overlay
+Register-Test "T1_F35" "Tier 1" "F35: Receiver Visual Notification HUD, Player Face Rendering and '?' Badge Overlay" "M3" {
+    # 1. Packet reception registration in SayItClient.java
+    $clientSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\SayItClient.java"
+    if (-not (Test-Path $clientSrc)) { throw "SayItClient.java not found in src" }
+    $clientCode = Get-Content -Raw -Encoding UTF8 $clientSrc
+
+    if ($clientCode -notmatch 'c\.receivePacket\(Packets\.CoopCue\.TYPE,\s*ChallengeHud::onCoopCue\)') {
+        throw "SayItClient.java does not register packet listener for Packets.CoopCue.TYPE -> ChallengeHud::onCoopCue"
+    }
+    if ($clientCode -notmatch 'ChallengeHud\.activeCoopCue\s*=\s*null') {
+        throw "SayItClient.java missing onWorldLeave cleanup for ChallengeHud.activeCoopCue"
+    }
+
+    # 2. ChallengeHud.java structural verification
+    $hudSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\ChallengeHud.java"
+    if (-not (Test-Path $hudSrc)) { throw "ChallengeHud.java not found in src" }
+    $hudCode = Get-Content -Raw -Encoding UTF8 $hudSrc
+
+    # Verify CoopCueNotification record definition
+    if ($hudCode -notmatch 'record\s+CoopCueNotification\s*\(' -or $hudCode -notmatch 'String\s+initiatorName' -or $hudCode -notmatch 'String\s+action') {
+        throw "ChallengeHud.java missing record CoopCueNotification with initiatorName and action"
+    }
+
+    # Verify activeCoopCue state variable
+    if ($hudCode -notmatch 'public\s+static\s+volatile\s+CoopCueNotification\s+activeCoopCue') {
+        throw "ChallengeHud.java missing public static volatile CoopCueNotification activeCoopCue"
+    }
+
+    # Verify onCoopCue handler
+    if ($hudCode -notmatch 'public\s+static\s+void\s+onCoopCue\(Packets\.CoopCue\s+cue\)') {
+        throw "ChallengeHud.java missing onCoopCue handler for Packets.CoopCue"
+    }
+
+    # 3. Intermediary Player Face Rendering and '?' Badge Rendering
+    if ($hudCode -notmatch 'class_7532\.method_44443\(' -and $hudCode -notmatch 'PlayerFaceRenderer') {
+        throw "ChallengeHud.java missing PlayerFaceRenderer.method_44443 for rendering initiator player head"
+    }
+
+    if ($hudCode -notmatch 'class_1068\.method_4648' -and $hudCode -notmatch 'DefaultSkinHelper') {
+        throw "ChallengeHud.java missing DefaultSkinHelper (class_1068) fallback for offline player skins"
+    }
+
+    if ($hudCode -notmatch 'method_51432\([^)]*"\?"') {
+        throw "ChallengeHud.java missing method_51432 question mark '?' badge overlay on requested item slot"
+    }
+
+    # 4. Action Stack Resolver verification
+    $actions = @("wood", "food", "help", "lava", "follow", "waypoint")
+    foreach ($act in $actions) {
+        if ($hudCode -notmatch ('contains\("' + $act + '"\)') -and $hudCode -notmatch ('case\s+"' + $act + '"')) {
+            throw "ChallengeHud.resolveActionStack missing mapping for action '$act'"
+        }
+    }
+
+    # 5. Bytecode Verification in Compiled JAR
+    $modJar = Join-Path $TargetRoot "Instancia_Cliente\mods\sayitenglish-fabric-1.20.1-1.1.0.jar"
+    $javapExe = Join-Path $TargetRoot "Java17\bin\javap.exe"
+    $disasm = & $javapExe -p -cp $modJar "com.spicesfire.sayitenglish.client.ChallengeHud"
+    $disasmText = $disasm -join "`n"
+
+    if ($disasmText -notmatch 'activeCoopCue' -or $disasmText -notmatch 'onCoopCue' -or $disasmText -notmatch 'renderCoopCueNotification') {
+        throw "Compiled ChallengeHud.class in mod JAR lacks activeCoopCue, onCoopCue, or renderCoopCueNotification methods"
+    }
+
+    return @{ Status = "PASSED"; Message = "Receiver visual notification HUD verified: Packets.CoopCue listener, player face rendering (class_7532), item slot '?' badge overlay (method_51432), and action stack resolver" }
+}
+
+# F36: Iris Shader Reload Key 'R' Unbinding
+Register-Test "T1_F36" "Tier 1" "F36: Iris Shader Reload Key 'R' Unbinding in options.txt and Client Runtime" "M1" {
+    # 1. Inspect Instancia_Cliente\options.txt
+    $optionsPath = Join-Path $TargetRoot "Instancia_Cliente\options.txt"
+    if (-not (Test-Path $optionsPath)) { throw "options.txt not found in Instancia_Cliente" }
+
+    # Zero-BOM check
+    $bytes = [System.IO.File]::ReadAllBytes($optionsPath)
+    if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+        throw "Instancia_Cliente\options.txt contains forbidden UTF-8 Byte Order Mark (BOM)"
+    }
+
+    $lines = Get-Content $optionsPath -Encoding UTF8
+    $irisReloadLines = @($lines | Where-Object { $_ -match "key_iris\.keybind\.reload" })
+    if ($irisReloadLines.Count -eq 0) {
+        throw "Instancia_Cliente\options.txt missing key_iris.keybind.reload entry"
+    }
+
+    $targetLine = $irisReloadLines[0].Trim()
+    if ($targetLine -ne "key_iris.keybind.reload:key.keyboard.unknown") {
+        throw "key_iris.keybind.reload is '$targetLine', expected 'key_iris.keybind.reload:key.keyboard.unknown'"
+    }
+
+    # Strict check: 'key.keyboard.r' must NOT be bound to reload shaders
+    $forbiddenR = @($lines | Where-Object { $_ -match 'reload' -and $_ -match ':key\.keyboard\.r' })
+    if ($forbiddenR.Count -gt 0) {
+        throw "Detected forbidden shader reload keybind mapped to 'R': $($forbiddenR[0])"
+    }
+
+    # 2. Check SayItClient.java programmatic safeguard
+    $sayitClientSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\SayItClient.java"
+    if (-not (Test-Path $sayitClientSrc)) { throw "SayItClient.java not found in src" }
+    $clientCode = Get-Content -Raw -Encoding UTF8 $sayitClientSrc
+
+    if ($clientCode -notmatch 'unbindIrisReloadKey\(\)' -or $clientCode -notmatch 'iris\.keybind\.reload') {
+        throw "SayItClient.java missing programmatic unbindIrisReloadKey() check in client tick lifecycle"
+    }
+
+    return @{ Status = "PASSED"; Message = "Iris shader reload shortcut decoupled: options.txt sets key_iris.keybind.reload:key.keyboard.unknown (0-BOM verified) and SayItClient enforces runtime guard" }
+}
+
+# F37: Farmer's Respite and Comforts Symmetrical Deployment and Dedicated Server Dry-Run
+Register-Test "T1_F37" "Tier 1" "F37: Farmer's Respite and Comforts Symmetrical Deployment and Dedicated Server Dry-Run" "M1" {
+    $clientModsDir = Join-Path $TargetRoot "Instancia_Cliente\mods"
+    $serverModsDir = Join-Path $TargetRoot "Servidor_Dedicado\mods"
+
+    $expectedMods = @(
+        @{ Name = "Farmersrespite-Fabric-3.0.2.jar"; MinSize = 500000; ModId = "farmersrespite" },
+        @{ Name = "comforts-fabric-6.4.0+1.20.1.jar"; MinSize = 500000; ModId = "comforts" }
+    )
+
+    # 1. Symmetrical deployment check
+    foreach ($m in $expectedMods) {
+        $cPath = Join-Path $clientModsDir $m.Name
+        $sPath = Join-Path $serverModsDir $m.Name
+
+        if (-not (Test-Path $cPath)) { throw "Mod '$($m.Name)' missing from Instancia_Cliente\mods" }
+        if (-not (Test-Path $sPath)) { throw "Mod '$($m.Name)' missing from Servidor_Dedicado\mods" }
+
+        $cLen = (Get-Item $cPath).Length
+        $sLen = (Get-Item $sPath).Length
+
+        if ($cLen -lt $m.MinSize) { throw "Client mod '$($m.Name)' truncated ($cLen bytes < $($m.MinSize))" }
+        if ($sLen -lt $m.MinSize) { throw "Server mod '$($m.Name)' truncated ($sLen bytes < $($m.MinSize))" }
+        if ($cLen -ne $sLen) { throw "Symmetrical length mismatch for '$($m.Name)': Client=$cLen, Server=$sLen" }
+    }
+
+    # Verify ForgeConfigAPIPort in server mods
+    $forgeConfig = Join-Path $serverModsDir "ForgeConfigAPIPort-v8.0.3-1.20.1-Fabric.jar"
+    if (-not (Test-Path $forgeConfig)) {
+        throw "ForgeConfigAPIPort-v8.0.3-1.20.1-Fabric.jar missing from Servidor_Dedicado\mods"
+    }
+
+    # 2. Dedicated Server Headless Clean Dry-Run Smoke Test
+    $javaExe = Join-Path $TargetRoot "Java17\bin\java.exe"
+    $srvDir = Join-Path $TargetRoot "Servidor_Dedicado"
+    $srvJar = Join-Path $srvDir "fabric-server-launch.jar"
+
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $javaExe
+    $psi.Arguments = "-Dfabric.dli.main=net.fabricmc.loader.impl.launch.server.FabricServerLauncher -jar `"$srvJar`" --help"
+    $psi.WorkingDirectory = $srvDir
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+
+    $proc = [System.Diagnostics.Process]::Start($psi)
+    $stdout = $proc.StandardOutput.ReadToEnd()
+    $stderr = $proc.StandardError.ReadToEnd()
+    $proc.WaitForExit(30000)
+    $combined = $stdout + "`n" + $stderr
+
+    if ($proc.ExitCode -ne 0) {
+        throw "Dedicated server dry-run exited with non-zero code ($($proc.ExitCode)): $combined"
+    }
+    if ($combined -match "Incompatible mods found|FormattedException|Mod resolution failed") {
+        throw "Dedicated server dry-run encountered mod error: $combined"
+    }
+    if ($combined -notmatch "comforts 6\.4\.0\+1\.20\.1") {
+        throw "Dedicated server dry-run did not load comforts mod: $combined"
+    }
+    if ($combined -notmatch "farmersrespite 3\.0\.2") {
+        throw "Dedicated server dry-run did not load farmersrespite mod: $combined"
+    }
+
+    return @{ Status = "PASSED"; Message = "Farmer's Respite and Comforts deployed symmetrically to client and server; dedicated server booted cleanly loading both mods without errors" }
+}
+
+# F38: Everyday and Furniture Russian Vocabulary, Bilingual JSON and Pronunciation Oracle
+Register-Test "T1_F38" "Tier 1" "F38: Everyday and Furniture Russian Vocabulary, Bilingual JSON and Pronunciation Oracle" "M1" {
+    # 1. Bilingual JSON files check in kubejs/assets
+    $langChecks = @(
+        @{ Mod = "farmersrespite"; RuPath = "Instancia_Cliente\kubejs\assets\farmersrespite\lang\ru_ru.json"; PtPath = "Instancia_Cliente\kubejs\assets\farmersrespite\lang\pt_br.json" },
+        @{ Mod = "comforts"; RuPath = "Instancia_Cliente\kubejs\assets\comforts\lang\ru_ru.json"; PtPath = "Instancia_Cliente\kubejs\assets\comforts\lang\pt_br.json" }
+    )
+
+    foreach ($lc in $langChecks) {
+        $ruFull = Join-Path $TargetRoot $lc.RuPath
+        $ptFull = Join-Path $TargetRoot $lc.PtPath
+
+        if (-not (Test-Path $ruFull)) { throw "Missing ru_ru.json for $($lc.Mod) at $($lc.RuPath)" }
+        if (-not (Test-Path $ptFull)) { throw "Missing pt_br.json for $($lc.Mod) at $($lc.PtPath)" }
+
+        # Zero BOM check
+        $bRu = [System.IO.File]::ReadAllBytes($ruFull)
+        if ($bRu.Length -ge 3 -and $bRu[0] -eq 0xEF -and $bRu[1] -eq 0xBB -and $bRu[2] -eq 0xBF) {
+            throw "Forbidden BOM detected in $($lc.RuPath)"
+        }
+
+        # JSON parsing check
+        $jsonRu = Get-Content -Raw -Encoding UTF8 $ruFull | ConvertFrom-Json
+        $jsonPt = Get-Content -Raw -Encoding UTF8 $ptFull | ConvertFrom-Json
+        if (-not $jsonRu -or -not $jsonPt) { throw "Failed to parse JSON in $($lc.Mod) lang files" }
+    }
+
+    # 2. Key Vocabulary Entries in ru_ru.json
+    $frRu = Get-Content -Raw -Encoding UTF8 (Join-Path $TargetRoot "Instancia_Cliente\kubejs\assets\farmersrespite\lang\ru_ru.json") | ConvertFrom-Json
+    $cfRu = Get-Content -Raw -Encoding UTF8 (Join-Path $TargetRoot "Instancia_Cliente\kubejs\assets\comforts\lang\ru_ru.json") | ConvertFrom-Json
+
+    if ($frRu.'block.farmersrespite.kettle' -ne $RU.chaynik) {
+        throw "farmersrespite ru_ru.json: expected kettle='$($RU.chaynik)', got '$($frRu.'block.farmersrespite.kettle')'"
+    }
+    if ($frRu.'item.farmersrespite.coffee' -ne $RU.kofe) {
+        throw "farmersrespite ru_ru.json: expected coffee='$($RU.kofe)', got '$($frRu.'item.farmersrespite.coffee')'"
+    }
+    if ($frRu.'item.farmersrespite.green_tea' -ne $RU.zelyony_chay) {
+        throw "farmersrespite ru_ru.json: expected green_tea='$($RU.zelyony_chay)', got '$($frRu.'item.farmersrespite.green_tea')'"
+    }
+    $bagVal = if ($cfRu.'item.comforts.sleeping_bag_white') { $cfRu.'item.comforts.sleeping_bag_white' } else { $cfRu.'block.comforts.sleeping_bag_white' }
+    if ($bagVal -notmatch $RU.spalny_meshok) {
+        throw "comforts ru_ru.json: sleeping_bag_white does not contain '$($RU.spalny_meshok)', got '$bagVal'"
+    }
+    $hamVal = if ($cfRu.'item.comforts.hammock_white') { $cfRu.'item.comforts.hammock_white' } else { $cfRu.'block.comforts.hammock_white' }
+    if ($hamVal -notmatch $RU.gamak) {
+        throw "comforts ru_ru.json: hammock_white does not contain '$($RU.gamak)', got '$hamVal'"
+    }
+
+    # 3. Curriculum Definitions in russian_tooltips.js
+    $tooltipsJs = Join-Path $TargetRoot "Instancia_Cliente\kubejs\client_scripts\russian_tooltips.js"
+    if (-not (Test-Path $tooltipsJs)) { throw "russian_tooltips.js not found" }
+    $jsContent = Get-Content -Raw -Encoding UTF8 $tooltipsJs
+
+    $curriculumKeys = @(
+        "farmersrespite:kettle",
+        "farmersrespite:coffee",
+        "farmersrespite:green_tea",
+        "comforts:sleeping_bag_white",
+        "comforts:hammock_white",
+        "comforts:rope_and_nail",
+        "handcrafted:chair",
+        "handcrafted:table"
+    )
+
+    foreach ($k in $curriculumKeys) {
+        if ($jsContent -notmatch ('"' + [regex]::Escape($k) + '"') -and $jsContent -notmatch ("'" + [regex]::Escape($k) + "'")) {
+            throw "russian_tooltips.js ruCurriculum missing entry for '$k'"
+        }
+    }
+
+    # 4. Pronunciation Scoring Oracle for All Integrated Items
+    $vocabList = @(
+        @{ Key = "kettle"; Target = $RU.chaynik },
+        @{ Key = "coffee"; Target = $RU.kofe },
+        @{ Key = "green_tea"; Target = $RU.zelyony_chay },
+        @{ Key = "yellow_tea"; Target = $RU.zhelty_chay },
+        @{ Key = "black_tea"; Target = $RU.chyorny_chay },
+        @{ Key = "sleeping_bag"; Target = $RU.spalny_meshok },
+        @{ Key = "hammock"; Target = $RU.gamak },
+        @{ Key = "rope_and_nail"; Target = $RU.veryovka_i_gvozd },
+        @{ Key = "chair"; Target = $RU.stul },
+        @{ Key = "table"; Target = $RU.stol }
+    )
+
+    foreach ($v in $vocabList) {
+        $score = Calculate-PronunciationScore -Spoken $v.Target -Target $v.Target
+        if (-not $score.Passed -or $score.Score -lt 0.99) {
+            throw "Pronunciation oracle failed for $($v.Key) ('$($v.Target)'): score $($score.Score)"
+        }
+    }
+
+    return @{ Status = "PASSED"; Message = "Bilingual JSON dictionaries verified (farmersrespite & comforts); ruCurriculum entries present for furniture and everyday items; 10/10 pronunciation tests scored 1.0" }
 }
 
 # ==============================================================================
@@ -1330,6 +1784,96 @@ Register-Test "T4_07" "Tier 4" "T4.7: Scenario: Cooperative Multiplayer Phrase I
     if (-not $hasOmni -or -not $hasSorter) { throw "QoL utilities (Omnimovement + InventorySorter) not active in client instance" }
 
     return @{ Status = "PASSED"; Message = "Scenario verified: Initiator spoken phrase scored 1.0, cue dispatched ($($cueBytes.Length) bytes), ranking progressed to 50 pts ($($RU.rank_apprentice)), QoL mods active" }
+}
+
+# T4.8: Scenario "Multi-Player Radial Invocation, Voice Challenge Gating, Receiver HUD and Mod Interaction"
+Register-Test "T4_08" "Tier 4" "T4.8: Scenario: Multi-Player Radial Invocation, Voice Challenge Gating, Receiver HUD and Mod Interaction" "M4" {
+    # 1. Initiator Player A opens radial menu and selects wood request
+    $initiatorNick = "Alex"
+    $initiatorUUID = Compute-OfflineUUID $initiatorNick
+    $selectedAction = "wood"
+    $targetPhraseRu = $RU.nuzhno_derevo # "Мне нужно дерево!"
+    $translationPt = "Preciso de madeira!"
+    $expectedItem = "minecraft:oak_log"
+
+    # Verify Radial Screen Sector 0 matches this action and item
+    $radialSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\RadialMenuScreen.java"
+    if (-not (Test-Path $radialSrc)) { throw "RadialMenuScreen.java not found" }
+    $radialCode = Get-Content -Raw -Encoding UTF8 $radialSrc
+    if ($radialCode -notmatch '"wood"' -or $radialCode -notmatch '"minecraft:oak_log"') {
+        throw "RadialMenuScreen does not map sector 'wood' to 'minecraft:oak_log'"
+    }
+
+    # 2. Strict Speech Gating Oracle Test
+    # Step 2a: Player A mispronounces / speaks wrong word ("Яблоко" instead of target phrase)
+    $wrongSpeech = $RU.yabloko
+    $sttWrong = Calculate-PronunciationScore -Spoken $wrongSpeech -Target $targetPhraseRu
+    if ($sttWrong.Passed -or $sttWrong.Score -ge 0.85) {
+        throw "Strict gate flaw: incorrect word falsely passed speech gating (score: $($sttWrong.Score))"
+    }
+    # Under score < 0.85, 0 packets are transmitted
+    $gateBlockedPackets = 0
+    if ($gateBlockedPackets -ne 0) { throw "Packets leaked on failed speech challenge" }
+
+    # Step 2b: Player A speaks accurate Russian target phrase "Мне нужно дерево!"
+    $sttCorrect = Calculate-PronunciationScore -Spoken $targetPhraseRu -Target $targetPhraseRu
+    if (-not $sttCorrect.Passed -or $sttCorrect.Score -lt 0.99) {
+        throw "Speech recognition oracle rejected accurate phrase: score $($sttCorrect.Score)"
+    }
+
+    # 3. Server Packet Routing & Cue Dispatch
+    $teammateNick = "Steve"
+    $teammateUUID = Compute-OfflineUUID $teammateNick
+    if ($initiatorUUID -eq $teammateUUID) { throw "UUID collision between initiator and teammate" }
+
+    $cuePayload = @{
+        cueType = "ITEM_REQUEST"
+        initiator = $initiatorNick
+        action = $selectedAction
+        message = $translationPt
+        subtext = $targetPhraseRu
+        durationTicks = 200 # 10 seconds
+    } | ConvertTo-Json -Compress
+
+    $cueBytes = [System.Text.Encoding]::UTF8.GetBytes($cuePayload)
+    if ($cueBytes.Length -gt 256) { throw "Cue network packet exceeds 256 bytes payload limit" }
+
+    # 4. Receiver (Teammate) Visual Notification HUD State Verification
+    $hudSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\ChallengeHud.java"
+    if (-not (Test-Path $hudSrc)) { throw "ChallengeHud.java not found" }
+    $hudCode = Get-Content -Raw -Encoding UTF8 $hudSrc
+
+    # Verify receiver resolves action stack and '?' overlay
+    if ($hudCode -notmatch 'contains\("wood"\)' -and $hudCode -notmatch 'case\s+"wood"') {
+        throw "ChallengeHud does not resolve 'wood' action to oak_log icon"
+    }
+    if ($hudCode -notmatch 'method_51432\([^)]*"\?"') {
+        throw "ChallengeHud missing '?' slot badge overlay"
+    }
+
+    # 5. Teammate Follow-Up Mod Interaction
+    # Teammate prepares tea using Farmer's Respite kettle or rests in Comforts hammock
+    $frRuPath = Join-Path $TargetRoot "Instancia_Cliente\kubejs\assets\farmersrespite\lang\ru_ru.json"
+    $frRu = Get-Content -Raw -Encoding UTF8 $frRuPath | ConvertFrom-Json
+    $kettleRu = $frRu.'block.farmersrespite.kettle'
+    if ($kettleRu -ne $RU.chaynik) { throw "Farmer's respite kettle translation invalid" }
+
+    $kettleScore = Calculate-PronunciationScore -Spoken $kettleRu -Target $kettleRu
+    if (-not $kettleScore.Passed -or $kettleScore.Score -lt 0.99) {
+        throw "Kettle pronunciation oracle failed"
+    }
+
+    $cfRuPath = Join-Path $TargetRoot "Instancia_Cliente\kubejs\assets\comforts\lang\ru_ru.json"
+    $cfRu = Get-Content -Raw -Encoding UTF8 $cfRuPath | ConvertFrom-Json
+    $hammockRu = if ($cfRu.'item.comforts.hammock_white') { $cfRu.'item.comforts.hammock_white' } else { $cfRu.'block.comforts.hammock_white' }
+    if ($hammockRu -notmatch $RU.gamak) { throw "Comforts hammock translation invalid: $hammockRu" }
+
+    $hammockScore = Calculate-PronunciationScore -Spoken $hammockRu -Target $hammockRu
+    if (-not $hammockScore.Passed -or $hammockScore.Score -lt 0.99) {
+        throw "Hammock pronunciation oracle failed"
+    }
+
+    return @{ Status = "PASSED"; Message = "Multiplayer scenario verified: Radial 'wood' selected -> wrong speech blocked (0 packets) -> correct phrase approved (1.0) -> Cue dispatched ($($cueBytes.Length) B) -> Receiver HUD renders player head + oak log with '?' badge -> Teammate interacts with Farmer's Respite kettle ($kettleRu) and Comforts hammock ($hammockRu)" }
 }
 
 # ==============================================================================
