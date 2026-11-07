@@ -924,7 +924,7 @@ Register-Test "T1_F33" "Tier 1" "F33: Radial Selection Wheel Keybinding ('V'), U
 
     # 4. Sector Definitions Oracle: exactly 6 sectors with required actions, phrases, and items
     $expectedSectors = @(
-        @{ Index = 0; Action = "wood"; Ru = $RU.nuzhno_derevo; Item = "minecraft:oak_log" },
+        @{ Index = 0; Action = "item"; Ru = $RU.nuzhno_derevo; Item = "minecraft:chest" },
         @{ Index = 1; Action = "food"; Ru = $RU.nuzhna_yeda; Item = "minecraft:bread" },
         @{ Index = 2; Action = "help"; Ru = $RU.pomogi_mne; Item = "minecraft:golden_apple" },
         @{ Index = 3; Action = "lava"; Ru = $RU.pol_eto_lava; Item = "minecraft:lava_bucket" },
@@ -943,6 +943,14 @@ Register-Test "T1_F33" "Tier 1" "F33: Radial Selection Wheel Keybinding ('V'), U
         if ([string]::IsNullOrWhiteSpace($normRu)) {
             throw "Sector '$($sec.Action)' has invalid Russian phrase"
         }
+    }
+
+    # Verify ItemSearchScreen presence, compilation, and non-pausing property
+    $searchScreenSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\ItemSearchScreen.java"
+    if (-not (Test-Path $searchScreenSrc)) { throw "ItemSearchScreen.java not found in src" }
+    $searchScreenCode = Get-Content -Raw -Encoding UTF8 $searchScreenSrc
+    if ($searchScreenCode -notmatch 'method_25421\(\)\s*\{\s*return\s+false;' -and $searchScreenCode -notmatch 'shouldPause\(\)\s*\{\s*return\s+false;') {
+        throw "ItemSearchScreen must return false for shouldPause() to avoid pausing multiplayer sessions"
     }
 
     # 5. Angular Math Oracle: 6 equal 60-degree sectors with 120-degree phase shift
@@ -1788,20 +1796,20 @@ Register-Test "T4_07" "Tier 4" "T4.7: Scenario: Cooperative Multiplayer Phrase I
 
 # T4.8: Scenario "Multi-Player Radial Invocation, Voice Challenge Gating, Receiver HUD and Mod Interaction"
 Register-Test "T4_08" "Tier 4" "T4.8: Scenario: Multi-Player Radial Invocation, Voice Challenge Gating, Receiver HUD and Mod Interaction" "M4" {
-    # 1. Initiator Player A opens radial menu and selects wood request
+    # 1. Initiator Player A opens radial menu and selects searchable item request
     $initiatorNick = "Alex"
     $initiatorUUID = Compute-OfflineUUID $initiatorNick
-    $selectedAction = "wood"
+    $selectedAction = "item:minecraft:oak_log"
     $targetPhraseRu = $RU.nuzhno_derevo # "Мне нужно дерево!"
     $translationPt = "Preciso de madeira!"
     $expectedItem = "minecraft:oak_log"
 
-    # Verify Radial Screen Sector 0 matches this action and item
+    # Verify Radial Screen Sector 0 maps to searchable item request screen
     $radialSrc = Join-Path $TargetRoot "src\com\spicesfire\sayitenglish\client\RadialMenuScreen.java"
     if (-not (Test-Path $radialSrc)) { throw "RadialMenuScreen.java not found" }
     $radialCode = Get-Content -Raw -Encoding UTF8 $radialSrc
-    if ($radialCode -notmatch '"wood"' -or $radialCode -notmatch '"minecraft:oak_log"') {
-        throw "RadialMenuScreen does not map sector 'wood' to 'minecraft:oak_log'"
+    if ($radialCode -notmatch '"item"' -or $radialCode -notmatch 'ItemSearchScreen') {
+        throw "RadialMenuScreen does not map sector 0 to searchable 'item' request"
     }
 
     # 2. Strict Speech Gating Oracle Test

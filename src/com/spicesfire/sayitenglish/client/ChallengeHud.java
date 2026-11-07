@@ -320,6 +320,13 @@ public final class ChallengeHud {
             return new class_1799((class_1935)class_7923.field_41178.method_10223(new class_2960("minecraft:paper")));
         }
         String act = action.toLowerCase();
+        if (act.startsWith("item:") || act.startsWith("request_item:")) {
+            String rawId = action.substring(action.indexOf(':') + 1).trim();
+            class_1792 it = ChallengeManager.item(rawId);
+            if (it != null) {
+                return new class_1799((class_1935)it);
+            }
+        }
         String itemId;
         if (act.contains("wood")) {
             itemId = "minecraft:oak_log";

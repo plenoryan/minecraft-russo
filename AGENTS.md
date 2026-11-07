@@ -391,3 +391,19 @@
   4. **Mods de Vida Cotidiana e Dicionário de Móveis:**
      - Integrados simetricamente os mods *Farmer's Respite* (chaleira, café, chás) e *Comforts* (sacos de dormir e redes) no cliente e servidor dedicado.
      - Adicionadas 109 chaves de tradução bilíngues (ru_ru e pt_br) em KubeJS e resourcepack, e registradas anotações fonéticas pedagógicas em `russian_tooltips.js`.
+
+### L47. Generalização da Roda Radial para Qualquer Item: Tela de Busca Dinâmica, Desafio de Pronúncia e Verificação Cooperativa
+- **Armadilha:**
+  - O setor 0 da roda radial era limitado a uma solicitação estática de madeira ("Мне нужно дерево!"). Em jogabilidade de sobrevivência real, jogadores precisam pedir os mais variados itens (minérios, ferramentas, itens cotidianos de mods, blocos).
+  - Além disso, abrir uma tela GUI no Minecraft por padrão pode acidentalmente pausar o jogo em modo singleplayer ou LAN se `shouldPause()` / `method_25421()` retornar `true`.
+- **Solução Implementada:**
+  1. **Tela de Busca de Itens (ItemSearchScreen.java):**
+     - Tela de busca sem pausa de jogo (`method_25421() = false`), integrada diretamente ao setor 0 da roda radial.
+     - Caching sob demanda de todo o catálogo do Minecraft e de mods (`class_7923.field_41178`), com busca em tempo real em português, russo ou identificador técnico (`class_342`).
+     - Botão de atalho rápido para pedir o item atualmente segurado na mão principal (`[Pedir item na mão: ...]`), além de atalhos rápidos para recursos frequentes.
+  2. **Desafio de Voz e Protocolo de Rede Dinâmicos:**
+     - Ao selecionar qualquer item, o jogo inicia o desafio de voz com a frase russa correspondente (`Мне нужно: <NomeRusso>!`) e pronúncia avaliada pelo `Scorer` e Vosk.
+     - Ao atingir >= 85%, envia `Packets.CoopInvoke("item:<id>", "")`.
+  3. **Reconhecimento no HUD do Receptor e Servidor:**
+     - `ChallengeHud.resolveActionStack` decodifica `item:<id>` e exibe o ícone exato do item solicitado com o distintivo '?' ao lado da cabeça do jogador solicitante.
+     - O servidor (`ChallengeManager$CoopManager`) rastreia o objetivo `REQUEST_ITEM` com verificação de proximidade (<= 6 blocos) e presença do item específico no inventário do parceiro (`hasItem`), concedendo +20 pontos cooperativos para ambos ao concluir.

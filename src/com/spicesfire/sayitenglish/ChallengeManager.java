@@ -1192,6 +1192,20 @@ public final class ChallengeManager {
             return false;
         }
 
+        public static boolean hasItem(class_3222 player, String targetItemId) {
+            if (player == null || targetItemId == null || targetItemId.isEmpty()) return false;
+            class_1661 inv = player.method_31548();
+            for (int i = 0; i < inv.method_5439(); ++i) {
+                class_1799 stack = inv.method_5438(i);
+                if (stack.method_7960()) continue;
+                String id = ChallengeManager.itemId(stack.method_7909());
+                if (id.equals(targetItemId)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static void startPhraseInvocation(class_3222 initiator, String action) {
             if (initiator == null) return;
             String act = action != null ? action.toLowerCase().trim() : "follow";
@@ -1208,6 +1222,38 @@ public final class ChallengeManager {
             }
 
             String taskId = "task_" + (taskCounter++);
+
+            if (act.startsWith("item:") || act.startsWith("request_item:")) {
+                String reqItemId = act.substring(act.indexOf(':') + 1).trim();
+                class_1792 reqItem = ChallengeManager.item(reqItemId);
+                String reqPtName = reqItemId;
+                String reqRuName = Alphabet.getRuWord(reqItemId);
+                if (reqItem != null) {
+                    class_1799 st = new class_1799((class_1935)reqItem);
+                    reqPtName = st.method_7964().getString();
+                }
+                if (reqRuName == null || reqRuName.isEmpty() || reqRuName.equals(reqItemId)) {
+                    reqRuName = reqPtName;
+                }
+                sendBilingualCue(
+                    initiator,
+                    teammates,
+                    "item:" + reqItemId,
+                    "\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e: " + reqRuName + "!",
+                    "[Mnye nuzhno: " + reqRuName + "!]",
+                    "Preciso de " + reqPtName + "!",
+                    "Aproxime-se do aliado com o item solicitado!",
+                    0, 0, 0,
+                    20
+                );
+                ActiveTask task = new ActiveTask(taskId, "REQUEST_ITEM", initiator.method_5667(), 0, 0, 0, now, now + 400L, 1);
+                task.data.put("reqItemId", reqItemId);
+                task.data.put("reqPtName", reqPtName);
+                task.data.put("reqRuName", reqRuName);
+                for (class_3222 t : teammates) task.targetUuids.add(t.method_5667());
+                ACTIVE_TASKS.put(taskId, task);
+                return;
+            }
 
             switch (act) {
                 case "follow": {
@@ -1574,6 +1620,18 @@ public final class ChallengeManager {
                     }
                     return false;
                 }
+                case "REQUEST_ITEM": {
+                    if (initiator == null) return false;
+                    String reqItemId = (String)task.data.get("reqItemId");
+                    for (UUID uid : task.targetUuids) {
+                        class_3222 target = getPlayerByUuid(server, uid);
+                        if (target != null && distance(initiator, target) <= 6.0 && hasItem(target, reqItemId)) {
+                            task.data.put("winner", uid);
+                            return true;
+                        }
+                    }
+                    return false;
+                }
                 case "REQUEST_WOOD": {
                     if (initiator == null) return false;
                     for (UUID uid : task.targetUuids) {
@@ -1702,6 +1760,18 @@ public final class ChallengeManager {
                         awardCoopPoints(winner, 15, "Alcan\u00e7ar ponto marcado (\u0421\u043c\u043e\u0442\u0440\u0438 \u0442\u0443\u0434\u0430!)");
                     }
                     broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Ponto de encontro alcan\u00e7ado! +15 Pontos Cooperativos.");
+                    break;
+                }
+                case "REQUEST_ITEM": {
+                    UUID winUid = (UUID)task.data.get("winner");
+                    class_3222 winner = winUid != null ? getPlayerByUuid(server, winUid) : null;
+                    String ptName = (String)task.data.getOrDefault("reqPtName", "item");
+                    String ruName = (String)task.data.getOrDefault("reqRuName", ptName);
+                    if (initiator != null) awardCoopPoints(initiator, 20, "Solicitar " + ptName + " (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e: " + ruName + "!)");
+                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
+                        awardCoopPoints(winner, 20, "Fornecer " + ptName + " para aliado (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e: " + ruName + "!)");
+                    }
+                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] " + ptName + " compartilhado! +20 Pontos Cooperativos para ambos.");
                     break;
                 }
                 case "REQUEST_WOOD": {

@@ -31,6 +31,15 @@ public class RadialMenuScreen extends class_437 {
         }
 
         public class_1799 getStack() {
+            if ("item".equals(this.action)) {
+                net.minecraft.class_310 mc = net.minecraft.class_310.method_1551();
+                if (mc != null && mc.field_1724 != null) {
+                    class_1799 held = mc.field_1724.method_6047();
+                    if (held != null && !held.method_7960()) {
+                        return held;
+                    }
+                }
+            }
             if (this.cachedStack == null) {
                 class_1792 item = ChallengeManager.item(this.iconId);
                 this.cachedStack = item != null ? new class_1799((class_1935)item) : class_1799.field_8037;
@@ -40,7 +49,7 @@ public class RadialMenuScreen extends class_437 {
     }
 
     public static final SectorDef[] SECTORS = new SectorDef[] {
-        new SectorDef("wood", "\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e \u0434\u0435\u0440\u0435\u0432\u043e!", "Preciso de madeira!", "Madeira", "minecraft:oak_log"),
+        new SectorDef("item", "\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e...", "Pedir qualquer item (Buscar)", "Pedir Item", "minecraft:chest"),
         new SectorDef("food", "\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u0430 \u0435\u0434\u0430!", "Preciso de comida!", "Comida", "minecraft:bread"),
         new SectorDef("help", "\u041f\u043e\u043c\u043e\u0433\u0438 \u043c\u043d\u0435!", "Me ajude!", "Ajuda", "minecraft:golden_apple"),
         new SectorDef("lava", "\u041f\u043e\u043b - \u044d\u0442\u043e \u043b\u0430\u0432\u0430!", "O ch\u00e3o \u00e9 lava!", "Lava", "minecraft:lava_bucket"),
@@ -74,6 +83,10 @@ public class RadialMenuScreen extends class_437 {
         if (index >= 0 && index < SECTORS.length) {
             SectorDef s = SECTORS[index];
             this.method_25419();
+            if ("item".equals(s.action)) {
+                ClientCompat.openScreen(this.field_22787, new ItemSearchScreen());
+                return;
+            }
             ChallengeSession.startCoopChallenge(s.action, s.ruText, s.ptText, s.iconId, 15, Config.get().passScore);
         }
     }
