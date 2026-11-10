@@ -9,6 +9,7 @@ echo ======================================================================
 echo.
 
 :: 1. Auto-detectar diretorios base (suporta raiz ou subpasta Launcher)
+set "SCRIPT_DIR=%~dp0"
 if exist "%~dp0Launcher\UltimMC.exe" (
     set "BASE_DIR=%~dp0"
     set "LAUNCHER_DIR=%~dp0Launcher\"
@@ -63,9 +64,9 @@ if exist "%BUNDLED_JAVA%" (
 set "JAVA_PATH_NORM=%BUNDLED_JAVA:\=/%"
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-    "$j = $env:JAVA_PATH_NORM; if (-not $j) { $p = '%~dp0'.Replace('''', ''''''); $j = ($p + 'Java17/bin/javaw.exe').Replace('\', '/'); }" ^
-    "$d = $env:DATA_DIR; if (-not $d) { $d = '%~dp0'.Replace('''', '''''') + 'Launcher\data'; }" ^
-    "$l = $env:LAUNCHER_DIR; if (-not $l) { $l = '%~dp0'.Replace('''', '''''') + 'Launcher\'; }" ^
+    "$j = $env:JAVA_PATH_NORM; if (-not $j) { $p = $env:SCRIPT_DIR; $j = ($p + 'Java17\bin\javaw.exe').Replace('\', '/'); }" ^
+    "$d = $env:DATA_DIR; if (-not $d) { $d = Join-Path $env:SCRIPT_DIR 'Launcher\data'; }" ^
+    "$l = $env:LAUNCHER_DIR; if (-not $l) { $l = Join-Path $env:SCRIPT_DIR 'Launcher'; }" ^
     "$configs = @(" ^
     "    (Join-Path $d 'ultimmc.cfg')," ^
     "    (Join-Path $l 'ultimmc.cfg')," ^
@@ -73,8 +74,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
     "    (Join-Path $l 'instances\Minecraft_Russo\instance.cfg')" ^
     ");" ^
     "foreach ($cfg in $configs) {" ^
-    "    if (Test-Path $cfg) {" ^
-    "        $c = Get-Content $cfg -Encoding UTF8;" ^
+    "    if (Test-Path -LiteralPath $cfg) {" ^
+    "        $c = Get-Content -LiteralPath $cfg -Encoding UTF8;" ^
     "        if ($c -match '^JavaPath=') {" ^
     "            $c = $c -replace '^JavaPath=.*', ('JavaPath=' + $j);" ^
     "        } else {" ^
@@ -88,8 +89,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
     "    (Join-Path $l 'accounts.json')" ^
     ");" ^
     "foreach ($acc in $accounts) {" ^
-    "    if (Test-Path $acc) {" ^
-    "        $a = Get-Content $acc -Raw -Encoding UTF8;" ^
+    "    if (Test-Path -LiteralPath $acc) {" ^
+    "        $a = Get-Content -LiteralPath $acc -Raw -Encoding UTF8;" ^
     "        $a = $a -replace '\"type\":\s*\"Offline\"', '\"type\": \"dummy\"';" ^
     "        [System.IO.File]::WriteAllText($acc, $a, [System.Text.UTF8Encoding]::new($false));" ^
     "    }" ^

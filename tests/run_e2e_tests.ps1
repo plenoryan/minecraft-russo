@@ -1597,7 +1597,11 @@ Register-Test "T1_F42" "Tier 1" "F42: GitHub Pages Structured Repository & Web A
     }
 
     # Genuine SHA-256 hash check and strict exclusion of dummy empty-string hash
-    $genuineHash = "2c1ba3dd3076bd4a55eb7bc847fd89fa38e8e8541d22856199d2f0b80d0d4764"
+    $shaFile = Join-Path $TargetRoot "dist\Minecraft_Russo_Client_Setup.zip.sha256"
+    if (-not (Test-Path $shaFile)) {
+        throw "dist\Minecraft_Russo_Client_Setup.zip.sha256 not found"
+    }
+    $genuineHash = (Get-Content $shaFile -Raw).Split(" `t`r`n", [System.StringSplitOptions]::RemoveEmptyEntries)[0].Trim().ToLowerInvariant()
     $dummyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     if ($html -match $dummyHash) {
         throw "index.html contains forbidden dummy empty-string hash ($dummyHash)!"
@@ -2444,7 +2448,11 @@ Register-Test "T4_09" "Tier 4" "T4.9: Scenario: End-to-End Portable Distribution
         throw "Integrity check failed: downloaded archive hash ($calcHash) does not match sha256 ($recHash)"
     }
 
-    # Verify website rendered checksum matches genuine zip hash
+    # Verify website rendered checksum matches genuine zip hash and strictly excludes dummy empty-string hash
+    $dummyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    if ($html -match $dummyHash) {
+        throw "Website index.html contains forbidden dummy empty-string hash ($dummyHash)!"
+    }
     $renderedHashMatch = [regex]::Match($html, 'id="sha256-val">([^<]+)<')
     if (-not $renderedHashMatch.Success) {
         throw "Website index.html missing #sha256-val checksum element"
@@ -2455,6 +2463,9 @@ Register-Test "T4_09" "Tier 4" "T4.9: Scenario: End-to-End Portable Distribution
     }
     if ($renderedHash -ne $recHash) {
         throw "Integrity check failed: website rendered hash ($renderedHash) does not match sha256 file ($recHash)"
+    }
+    if ($html -notmatch $calcHash) {
+        throw "Website index.html does not contain the genuine archive SHA-256 hash ($calcHash)!"
     }
 
     # Verify physical file exists at website download CTA path to prevent 404

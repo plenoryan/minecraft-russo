@@ -9,6 +9,7 @@ echo ======================================================================
 echo.
 
 :: 1. Definir diretorio base
+set "SCRIPT_DIR=%~dp0"
 set "BASE_DIR=%~dp0"
 set "LAUNCHER_EXE=%BASE_DIR%Launcher\UltimMC.exe"
 set "BUNDLED_JAVA=%BASE_DIR%Java17\bin\javaw.exe"
@@ -79,7 +80,40 @@ if not exist "%BASE_DIR%Launcher\data\Java17" (
 )
 
 :: Auto-configuracao dinamica do caminho do Java portatil no Launcher e contas offline
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$j = ('%BASE_DIR%Java17/bin/javaw.exe' -replace '\\','/'); @('%BASE_DIR%Launcher\data\ultimmc.cfg', '%BASE_DIR%Launcher\ultimmc.cfg', '%BASE_DIR%Launcher\data\instances\Minecraft_Russo\instance.cfg', '%BASE_DIR%Launcher\instances\Minecraft_Russo\instance.cfg', '%BASE_DIR%Instancia_Cliente\instance.cfg') | ForEach-Object { if (Test-Path $_) { (Get-Content $_) -replace '^JavaPath=.*', ('JavaPath=' + $j) | Set-Content $_ } }; @('%BASE_DIR%Launcher\data\accounts.json', '%BASE_DIR%Launcher\accounts.json') | ForEach-Object { if (Test-Path $_) { (Get-Content $_) -replace '\"type\":\s*\"Offline\"', '\"type\": \"dummy\"' | Set-Content $_ } }" >nul 2>&1
+set "JAVA_PATH_NORM=%BUNDLED_JAVA:\=/%"
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+    "$b = $env:BASE_DIR; if (-not $b) { $b = $env:SCRIPT_DIR; };" ^
+    "$j = $env:JAVA_PATH_NORM; if (-not $j) { $j = ($b + 'Java17\bin\javaw.exe').Replace('\', '/'); };" ^
+    "$configs = @(" ^
+    "    (Join-Path $b 'Launcher\data\ultimmc.cfg')," ^
+    "    (Join-Path $b 'Launcher\ultimmc.cfg')," ^
+    "    (Join-Path $b 'Launcher\data\instances\Minecraft_Russo\instance.cfg')," ^
+    "    (Join-Path $b 'Launcher\instances\Minecraft_Russo\instance.cfg')," ^
+    "    (Join-Path $b 'Instancia_Cliente\instance.cfg')" ^
+    ");" ^
+    "foreach ($cfg in $configs) {" ^
+    "    if (Test-Path -LiteralPath $cfg) {" ^
+    "        $c = Get-Content -LiteralPath $cfg -Encoding UTF8;" ^
+    "        if ($c -match '^JavaPath=') {" ^
+    "            $c = $c -replace '^JavaPath=.*', ('JavaPath=' + $j);" ^
+    "        } else {" ^
+    "            $c += ('JavaPath=' + $j);" ^
+    "        }" ^
+    "        [System.IO.File]::WriteAllLines($cfg, $c, [System.Text.UTF8Encoding]::new($false));" ^
+    "    }" ^
+    "};" ^
+    "$accounts = @(" ^
+    "    (Join-Path $b 'Launcher\data\accounts.json')," ^
+    "    (Join-Path $b 'Launcher\accounts.json')" ^
+    ");" ^
+    "foreach ($acc in $accounts) {" ^
+    "    if (Test-Path -LiteralPath $acc) {" ^
+    "        $a = Get-Content -LiteralPath $acc -Raw -Encoding UTF8;" ^
+    "        $a = $a -replace '\"type\":\s*\"Offline\"', '\"type\": \"dummy\"';" ^
+    "        [System.IO.File]::WriteAllText($acc, $a, [System.Text.UTF8Encoding]::new($false));" ^
+    "    }" ^
+    "}" >nul 2>&1
 
 :: 5. Iniciar o Jogo
 echo.
