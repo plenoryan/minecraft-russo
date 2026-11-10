@@ -1,9 +1,9 @@
-# Handoff Report — Sentinel (Round 2)
+# Handoff Report — Sentinel (Round 3)
 
-**Task**: Roda de seleção radial com portão de voz pedagógico, notificação visual no receptor, desvinculação da tecla R de shaders Iris, e integração dos mods Farmer's Respite e Comforts com vocabulário adaptado.  
-**Author**: Sentinel (`b5b483ad-a798-4b35-bf81-a990f72c0523`)  
+**Task**: Auditoria completa de traduções em russo (ru_ru), implementação de referência fonética com áudio ("pressione para ouvir" / TTS) no SayIt mod/cliente, criação de instalador executável portátil autônomo com UltimMC, e criação de repositório estruturado com site GitHub Pages contendo créditos, changelog e botão de download.  
+**Author**: Sentinel (`48355d4c-7fcb-4a47-af18-c106b0d2f85c`)  
 **Working Directory**: `F:\Jogos\Mine\.agents\teamwork\sentinel\`  
-**Date**: 2026-11-07T07:05:00Z  
+**Date**: 2026-11-10T20:28:00Z  
 **Verdict**: **VICTORY CONFIRMED**
 
 ---
@@ -11,60 +11,62 @@
 ## 1. Observation
 
 1. **Routing & Dispatch**:
-   - The user requested a radial action wheel with Russian voice challenge gating, visual receiver HUD cues (player head + item icon with '?'), unbinding the Iris shader reload shortcut from key 'R', and integrating everyday/furniture mods with adapted Cyrillic vocabulary.
-   - Evaluated under the Task Interview protocol and routed via the **General** path to `teamwork_orchestrator` (`orchestrator_r2`).
+   - The user requested: (1) Russian translation audit & completion for recent mods and pedagogical tooltips; (2) Phonetic audio reference ("press to hear" / audio playback) in the SayIt client; (3) Standalone portable executable installer for easy distribution to friends via UltimMC; (4) GitHub Pages repository and modern static website with credits, changelog, and direct download; (5) Compilation via `build_and_deploy.ps1` and strict E2E test verification in `run_e2e_tests.ps1`.
+   - Processed via the Task Interview protocol and routed via the **General** path to `teamwork_orchestrator` (`orchestrator_r3`, `c67d409e-f430-4c09-9941-ae901d0ac57e`).
    - Recorded canonical approved prompt in `F:\Jogos\Mine\.agents\teamwork\ORIGINAL_REQUEST.md`.
 
 2. **Implementation Delivery**:
-   - **R1 (Radial Wheel & Voice Gate)**: Implemented `RadialMenuScreen` (key 'V', GLFW 86, `shouldPause() == false`, 6 sectors: wood, food, help, lava, follow, waypoint). Action selection strictly triggers `ChallengeSession.startCoopChallenge`; network packet `Packets.CoopInvoke` is only sent on passing oral evaluation ($\ge 85\%$). In case of failure or cancel, 0 packets are dispatched.
-   - **R2 (Receiver Visual Cue HUD)**: Implemented `ChallengeHud` cue rendering displaying requesting player's head/skin via `PlayerFaceRenderer.method_44443` (offline UUID fallback) with evocative `'?'` badge slot overlay via `DrawContext.method_51432` on action item icon.
-   - **R3 (Iris 'R' Key Unbind)**: Unbound `key_iris.keybind.reload:key.keyboard.unknown` in `options.txt` (Zero-BOM pure ASCII), protected with programmatic startup guard in `SayItClient`.
-   - **R4 (Everyday Mods & Vocabulary)**: Downloaded and symmetrically deployed `Farmersrespite-Fabric-3.0.2.jar` and `comforts-fabric-6.4.0+1.20.1.jar` to client and dedicated server; added 109 translation keys across JSON language files and pedagogical curriculum entries in `russian_tooltips.js`.
-   - **R5 (Build & Tests)**: `build_and_deploy.ps1` compiled and packaged cleanly (exit code 0); `run_e2e_tests.ps1 -Strict` passed 62/62 tests (100% pass, exit code 0).
+   - **R1 (Traduções em Russo ru_ru & Tooltips)**: 382 chaves em falta foram 100% eliminadas nos 8 mods recentes (Naturalist: 259, Farmer's Respite: 63, Comforts: 35, Moog's Structure Lib: 14, Moog's Voyager Structures: 7, Exposure: 2, Handcrafted: 2, Towns and Towers: 3). 60 arquivos JSON validados em UTF-8 Zero-BOM. Simetria total entre cliente e servidor KubeJS assets. `Russian_Bilingual_Educational_Pack.zip` reempacotado com separadores universais. `russian_tooltips.js` expandido para 100 itens curriculares pedagógicos com acentuação tônica, pronúncia fonética e gênero gramatical.
+   - **R2 (Áudio Fonético SayIt "Pressione para Ouvir")**: Criado `AudioPlaybackManager.java` utilizando JNA `winmm.dll!mciSendStringW` com reprodução em thread daemon (`sayit-audio-playback`). Cache persistente com 61 frases indexadas e 124 MP3s pré-semeados para uso offline imediato (< 5ms de latência), com fallback automático para Google Translate TTS online. Registrada tecla 'H' (GLFW 72) em `SayItClient`. `ChallengeSession.java` pausa o temporizador durante a audição. `ChallengeHud` renderiza `[H] Ouvir` / `[H] Ouvindo...`. Prévia de áudio integrada à `RadialMenuScreen` (tecla 'H') e `ItemSearchScreen` (tecla 'H' ou clique direito).
+   - **R3 (Instalador Portátil com UltimMC)**: Criado `package_client.ps1 -Clean` produzindo a árvore portátil em `dist\Minecraft_Russo_Client_Portable\` (1,44 GB) com estritamente ZERO junções NTFS / ReparsePoints. `Jogar.bat` e templates utilizam `$env:SCRIPT_DIR`, `$env:DATA_DIR`, `$env:LAUNCHER_DIR` e `-LiteralPath`, imunes a espaços, colchetes e apóstrofos (testado em pasta temporária especial com sucesso). Gerado `dist\Minecraft_Russo_Client_Setup.zip` (1,14 GB) com hash SHA-256 autêntico (`e11c3cdc0d9d8ea3403ff5b6bd93bc37d90ed9fef94466fd0377337cbfbe63f8`).
+   - **R4 (Site GitHub Pages em docs/)**: Desenvolvido site estático moderno em `docs/` (`index.html`, `style.css`, `app.js`, `.nojekyll`, `downloads/`, `assets/audio/`) com dark glassmorphism responsivo. Tabela completa de créditos com 43 mods, licenças e links. Changelog interativo detalhando Rounds 1, 2 e 3. Seção com 14 reprodutores de áudio fonético interativos com formas de onda. Botão de download direto e badge com SHA-256 verificado. Arquivo do instalador e hash espelhados em `docs\downloads\`.
+   - **R5 (Compilação & Testes E2E)**: `build_and_deploy.ps1` executado com código 0 (32 classes compiladas e injetadas nos JARs). Suíte canônica `tests\run_e2e_tests.ps1` estendida de 62 para 71 testes automatizados (adicionados T1_F39-F42, T2_11-12, T3_07-08, T4_09). Execução estrita com `-Strict` resultou em 71/71 testes aprovados (100% pass) em 8.392 ms com código de saída 0.
 
 3. **Multi-Agent Verification & Independent Victory Audit**:
-   - Internal Orchestration Gate passed unanimously: 2 Reviewers (APPROVE), 2 Challengers (APPROVE under 36,000 angular steps, 100,000 cursor tests, 11 gate failure scenarios, 5,000 concurrent packets), 1 Forensic Auditor (CLEAN).
-   - Independent `teamwork_victory_auditor` (`a1358813-3d27-4e00-b25f-9101eba2e9db`) executed with zero shared context, inspected javap bytecode, and independently executed `run_e2e_tests.ps1 -Strict` (62/62 passed in 5,757 ms, exit code 0).
-   - Delivered verdict: **VICTORY CONFIRMED**.
+   - Internal Orchestration Gate aprovado com 2 Reviewers, 2 Challengers e 1 Forensic Auditor. Apontamentos do Reviewer 2 (sincronização de hash no site, inclusão de cards de áudio, proteção de apóstrofo em Jogar.bat) foram remediados por `worker_r3_fix` e `worker_r3_final_fix` e revalidados em 100%.
+   - Independent `teamwork_victory_auditor` (`d6b1fba8-5057-422b-a7d0-a43c89cf6d6b`) executou a auditoria de 3 fases com zero contexto compartilhado:
+     * Phase A (Timeline): PASS (histórico Git e proveniência de arquivos coerentes).
+     * Phase B (Integrity): PASS (zero mocks ou bypasses, JNA winmm autêntico, zero BOMs, zero junções NTFS, hash SHA-256 idêntico no zip e no site, 43 mods creditados).
+     * Phase C (Independent Test Execution): Executou `run_e2e_tests.ps1 -Strict` obtendo 71/71 testes aprovados (100% PASS, 0 falhas, 0 pendências) em 9.021 ms com código de saída 0.
+   - Veredito emitido: **VICTORY CONFIRMED**.
+
+4. **Cleanup Protocol**:
+   - Ambos os crons de monitoramento (task-32 e task-33) foram cancelados via `manage_task(Action='kill')`.
+   - Todos os subagentes foram encerrados via `manage_subagents(Action='kill_all')`.
 
 ---
 
 ## 2. Logic Chain
 
-1. Requirements R1 through R5 were established in `ORIGINAL_REQUEST.md` under the approved task prompt.
-2. The orchestrator decomposed the requirements into 4 milestones (M1 to M4) and executed them via specialized workers and test writers with disjoint file ownership.
-3. Bytecode disassembly confirmed that speech gating and HUD face/badge rendering contain genuine operational branches without mocks or test bypasses.
-4. Independent compilation and testing by both the team and the external Victory Auditor yielded 100% passing results with zero regressions.
-5. All mandatory cleanup procedures (killing monitoring crons and terminating subagents) have been completed.
-6. Therefore, the requirements are fully satisfied.
+1. Os requisitos R1 a R5 foram formulados no prompt aprovado em `ORIGINAL_REQUEST.md`.
+2. O Orquestrador decompôs a entrega em 5 marcos executivos com isolamento de workspaces e ferramentas de verificação empírica.
+3. As correções levantadas durante as revisões adversariais foram implementadas diretamente no código-fonte e ativos estáticos, sem remendos superficiais.
+4. O auditor forense independente executou testes autônomos comprovando que os 71 casos de teste passam estritamente com código de saída 0.
+5. Todos os processos de apoio e subagentes foram devidamente encerrados.
+6. A vitória foi formalmente confirmada com evidência empírica completa.
 
 ---
 
 ## 3. Caveats
 
-- Programmatic Iris key unbinding runs on client initialization; if a player manually re-binds 'R' to Iris shader reload in the in-game Controls menu during an active game session without restarting, the unbind takes effect again upon the next client launch.
-- Non-pausing screen `RadialMenuScreen` allows multiplayer ticks to continue smoothly, but players should be aware they can take damage if opening the menu while in combat or near hostile mobs.
+- **Tamanho do Arquivo Distribuível**: O instalador portátil completo (`dist\Minecraft_Russo_Client_Setup.zip`) possui 1,14 GB devido à inclusão do runtime OpenJDK 17 portátil completo, runtime UltimMC e 43 mods com modelos de voz offline. Para publicação remota no GitHub Pages, recomenda-se hospedar o arquivo `.zip` nas "Releases" do GitHub e apontar o link de download direto caso o repositório possua limites de cota para arquivos estáticos grandes.
 
 ---
 
 ## 4. Conclusion
 
-All requirements (R1, R2, R3, R4, R5) have been completely fulfilled, validated, and confirmed by independent forensic audit.
-Verdict: **VICTORY CONFIRMED**.
+O projeto SayIt Rodada 3 cumpriu integralmente todos os requisitos solicitados:
+1. Auditoria e conclusão de 100% das traduções em russo (`ru_ru`) sem lacunas restantes.
+2. Referência fonética com áudio ("Pressione para Ouvir" via tecla 'H') com reprodução WinMM MCI de baixa latência, pausa de cronômetro no desafio e 61 áudios pré-semeados offline.
+3. Instalador executável portátil autônomo com UltimMC, Java 17 embutido, inicializador `Jogar.bat` imune a caracteres especiais e pacote `.zip` com SHA-256.
+4. Repositório com site moderno GitHub Pages em `docs/` com créditos aos criadores de 43 mods, histórico de versões, reprodutor sonoro interativo e botão direto de download.
+5. Pipeline de compilação operacional e suíte canônica de 71 testes E2E aprovada com 100% de sucesso em modo estrito.
 
 ---
 
 ## 5. Verification Method
 
-To reproduce the verification independently:
-```powershell
-# 1. Compile mod and deploy JARs to client and server
-powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\build_and_deploy.ps1"
-
-# 2. Execute canonical E2E test suite in strict mode
-powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\tests\run_e2e_tests.ps1" -Strict
-
-# 3. Execute adversarial test harnesses
-powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\tests\test_adversarial_radial_voice_gating.ps1"
-powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\tests\test_adversarial_hud_iris_mods.ps1"
-```
+- Compilação: `powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\build_and_deploy.ps1"` (Código de saída: 0).
+- Suíte Canônica E2E: `powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\tests\run_e2e_tests.ps1" -Strict` (71/71 testes aprovados, código de saída: 0).
+- Verificação do Pacote Portátil: `Get-FileHash "F:\Jogos\Mine\dist\Minecraft_Russo_Client_Setup.zip"` -> `E11C3CDC0D9D8EA3403FF5B6BD93BC37D90ED9FEF94466FD0377337CBFBE63F8`.
+- Verificação do Repositório Web: Abertura e inspeção de `F:\Jogos\Mine\docs\index.html`.

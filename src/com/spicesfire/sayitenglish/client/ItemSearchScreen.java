@@ -3,6 +3,7 @@ package com.spicesfire.sayitenglish.client;
 import com.spicesfire.sayitenglish.Alphabet;
 import com.spicesfire.sayitenglish.ChallengeManager;
 import com.spicesfire.sayitenglish.Config;
+import com.spicesfire.sayitenglish.audio.AudioPlaybackManager;
 import com.spicesfire.sayitenglish.client.ChallengeSession;
 import com.spicesfire.sayitenglish.client.ClientCompat;
 import com.spicesfire.sayitenglish.client.Words;
@@ -56,8 +57,23 @@ public class ItemSearchScreen extends class_437 {
     private class_342 searchField;
     private final List<SearchEntry> filtered = new ArrayList<>();
     private SearchEntry heldEntry = null;
+    private SearchEntry selectedEntry = null;
     private int scrollOffset = 0;
     private int hoveredIndex = -1;
+
+    public void setSelectedEntry(SearchEntry entry) {
+        this.selectedEntry = entry;
+    }
+
+    public SearchEntry getSelectedEntry() {
+        if (this.selectedEntry != null) return this.selectedEntry;
+        if (this.hoveredIndex >= 0 && this.hoveredIndex < this.filtered.size()) {
+            return this.filtered.get(this.hoveredIndex);
+        }
+        if (this.heldEntry != null) return this.heldEntry;
+        if (!this.filtered.isEmpty()) return this.filtered.get(0);
+        return null;
+    }
 
     public ItemSearchScreen() {
         super((class_2561)class_2561.method_43470("Pedir Qualquer Item"));
@@ -189,7 +205,7 @@ public class ItemSearchScreen extends class_437 {
 
         // Title and instructions
         ClientCompat.centered(g, this.field_22793, "\u00a76\u00a7lPEDIR QUALQUER ITEM AO ALIADO", cx, 12, -14006);
-        ClientCompat.centered(g, this.field_22793, "\u00a77Pesquise ou selecione um item para iniciar o desafio de voz", cx, 26, 0xAAAAAA);
+        ClientCompat.centered(g, this.field_22793, "\u00a77Pesquise ou selecione um item \u2022 \u00a7b[H] Ouvir pron\u00fancia", cx, 26, 0xAAAAAA);
 
         int listX = cx - 130;
         int listY = 72;
@@ -219,6 +235,7 @@ public class ItemSearchScreen extends class_437 {
                 if (isHover) {
                     this.hoveredIndex = itemIdx;
                     ClientCompat.fill(g, listX, rowY, listX + listW, rowY + 24, -803726810);
+                    ClientCompat.text(g, this.field_22793, "\u00a7b[H] Ouvir", listX + listW - 55, rowY + 8, -14006);
                 }
 
                 // Render item stack
@@ -266,6 +283,26 @@ public class ItemSearchScreen extends class_437 {
                 this.selectEntry(this.filtered.get(this.hoveredIndex));
                 return true;
             }
+        } else if (button == 1) { // Right click to preview Russian pronunciation
+            if (this.hoveredIndex >= 0 && this.hoveredIndex < this.filtered.size()) {
+                SearchEntry entry = this.filtered.get(this.hoveredIndex);
+                if (entry != null && entry.ruName != null && !entry.ruName.isEmpty()) {
+                    AudioPlaybackManager.play(entry.ruName);
+                    return true;
+                }
+            }
+            if (this.heldEntry != null) {
+                int cx = this.field_22789 / 2;
+                int listX = cx - 130;
+                int listY = 72;
+                int listW = 260;
+                int listH = this.maxVisibleRows() * 24;
+                int hy = listY + listH + 6;
+                if (mouseX >= listX && mouseX <= listX + listW && mouseY >= hy && mouseY <= hy + 18) {
+                    AudioPlaybackManager.play(this.heldEntry.ruName);
+                    return true;
+                }
+            }
         }
         return super.method_25402(mouseX, mouseY, button);
     }
@@ -275,6 +312,13 @@ public class ItemSearchScreen extends class_437 {
         if (keyCode == 256) { // ESC
             this.method_25419();
             return true;
+        }
+        if (SayItClient.isHearKey(keyCode)) {
+            SearchEntry entry = getSelectedEntry();
+            if (entry != null && entry.ruName != null && !entry.ruName.isEmpty()) {
+                AudioPlaybackManager.play(entry.ruName);
+                return true;
+            }
         }
         if (this.searchField != null && this.searchField.method_25404(keyCode, scanCode, modifiers)) {
             return true;

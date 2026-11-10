@@ -15,6 +15,7 @@ import com.spicesfire.sayitenglish.client.SpeechEngine;
 import com.spicesfire.sayitenglish.client.TypeAnswerScreen;
 import com.spicesfire.sayitenglish.client.Words;
 import com.spicesfire.sayitenglish.platform.ClientPlatform;
+import com.spicesfire.sayitenglish.audio.AudioPlaybackManager;
 import net.minecraft.class_304;
 import net.minecraft.class_310;
 import net.minecraft.class_3675;
@@ -23,6 +24,7 @@ public final class SayItClient {
     private static class_304 typeKey;
     private static class_304 settingsKey;
     private static class_304 radialKey;
+    private static class_304 hearKey;
     private static String prepared;
     private static boolean irisReloadUnbound = false;
 
@@ -37,6 +39,8 @@ public final class SayItClient {
         c.registerKey(settingsKey);
         radialKey = ClientCompat.key("key.sayitenglish.radial", 86);
         c.registerKey(radialKey);
+        hearKey = ClientCompat.key("key.sayitenglish.hear", 72);
+        c.registerKey(hearKey);
         c.hudLayer(SayIt.id("challenge"), ChallengeHud::render);
         c.settingsScreen(SettingsScreen::new);
         c.receivePacket(Packets.Challenge.TYPE, ChallengeSession::start);
@@ -46,6 +50,7 @@ public final class SayItClient {
         });
         c.receivePacket(Packets.CoopCue.TYPE, ChallengeHud::onCoopCue);
         c.onWorldLeave(() -> {
+            AudioPlaybackManager.stop();
             ChallengeSession.stop();
             ChallengeSession.banner = null;
             Words.forget();
@@ -92,6 +97,10 @@ public final class SayItClient {
             if (ClientCompat.currentScreen(mc) != null) continue;
             ClientCompat.openScreen(mc, new RadialMenuScreen());
         }
+        while (hearKey.method_1436()) {
+            if (ChallengeSession.current == null || ClientCompat.currentScreen(mc) != null) continue;
+            ChallengeSession.triggerHear();
+        }
         ChallengeSession.tick();
     }
 
@@ -124,12 +133,25 @@ public final class SayItClient {
         }
     }
 
+    public static boolean isHearKey(int keyCode) {
+        if (hearKey == null) return keyCode == 72;
+        try {
+            return hearKey.method_1429().method_1444() == keyCode || keyCode == 72;
+        } catch (Throwable t) {
+            return keyCode == 72;
+        }
+    }
+
     public static String typeKeyName() {
         return typeKey == null ? "Y" : typeKey.method_16007().getString();
     }
 
     public static String radialKeyName() {
         return radialKey == null ? "V" : radialKey.method_16007().getString();
+    }
+
+    public static String hearKeyName() {
+        return hearKey == null ? "H" : hearKey.method_16007().getString();
     }
 
     static {

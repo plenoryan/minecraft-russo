@@ -27,6 +27,7 @@ import com.spicesfire.sayitenglish.ChallengeManager;
 import com.spicesfire.sayitenglish.Config;
 import com.spicesfire.sayitenglish.Packets;
 import com.spicesfire.sayitenglish.Scorer;
+import com.spicesfire.sayitenglish.audio.AudioPlaybackManager;
 import com.spicesfire.sayitenglish.client.Microphone;
 import com.spicesfire.sayitenglish.client.Romanizer;
 import com.spicesfire.sayitenglish.client.SpeechEngine;
@@ -307,6 +308,24 @@ public final class ChallengeSession {
         }
     }
 
+    public static void triggerHear() {
+        if (current == null || prompt == null || prompt.target() == null) {
+            return;
+        }
+        String targetText = prompt.target();
+        pause(true);
+        AudioPlaybackManager.play(targetText, () -> {
+            class_310 mc = class_310.method_1551();
+            if (mc != null) {
+                mc.execute(() -> {
+                    pause(false);
+                });
+            } else {
+                pause(false);
+            }
+        });
+    }
+
     public static void tick() {
         if (current == null) {
             return;
@@ -319,6 +338,7 @@ public final class ChallengeSession {
     }
 
     private static void finish() {
+        AudioPlaybackManager.stop();
         Packets.Challenge c = current;
         ChallengeSession.release();
         boolean ok = c != null && best >= c.passScore();
@@ -361,6 +381,7 @@ public final class ChallengeSession {
     }
 
     public static void stop() {
+        AudioPlaybackManager.stop();
         pendingCoopAction = null;
         ChallengeSession.release();
         current = null;

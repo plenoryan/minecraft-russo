@@ -1,41 +1,39 @@
-Expandir o mod SayIt (Minecraft 1.20.1 Fabric) com mecânicas cooperativas multiplayer para incentivar os jogadores a jogarem juntos, ajustar o HUD de feedback de fala, calibrar o ritmo de desbloqueio do alfabeto cirílico e integrar mods adicionais de dinamismo e qualidade de vida (QoL).
+Revisar e completar as traduções em russo (ru_ru), implementar referência fonética com áudio de pronúncia no mod/cliente SayIt (Minecraft 1.20.1 Fabric) e criar um instalador portátil acompanhado de repositório com site GitHub Pages para distribuição.
 
 Working directory: F:\Jogos\Mine
 Integrity mode: development
 
 ## Requirements
 
-### R1. Mecânicas Cooperativas Multiplayer e Invocação de Frases
-Implementar mecânicas que instiguem os jogadores a cooperarem e jogarem juntos. Isso inclui a invocação de frases práticas (como pedir item, apontar lugar, pedir para seguir), minidesafios dinâmicos/kamikaze iniciáveis livremente por qualquer jogador (estilo "o chão é lava"), diálogos cooperativos aleatórios e um sistema de ranking/pontuação. O sistema deve fornecer uma forma compreensível para que o outro jogador entenda a instrução invocada enquanto também aprende o idioma.
+### R1. Auditoria e Conclusão das Traduções em Russo (ru_ru)
+Realizar uma auditoria completa de traduções em russo (`ru_ru`) no modpack, eliminando termos não traduzidos e lacunas nos mods adicionados recentemente (Towns and Towers, Moog's Voyager Structures, Critters and Companions, Ecologics, Exposure, Carry On, Farmer's Respite, Comforts, Handcrafted, Naturalist), itens, blocos, entidades e nos tooltips pedagógicos em `Instancia_Cliente\kubejs\client_scripts\russian_tooltips.js`.
 
-### R2. Ajuste do HUD de Feedback de Fala
-Restringir a exibição da caixa de feedback de fala ("o que eu disse") para aparecer exclusivamente ao pronunciar frases completas, não sendo exibida em desafios de itens de palavra única. A caixa visual deve ter tamanho reduzido e utilizar estritamente o cabeçalho "disse: ".
+### R2. Referência Fonética com Áudio ("Pressione para Ouvir")
+Implementar recurso de referência fonética com áudio no mod SayIt e/ou cliente, permitindo ao jogador acionar a reprodução sonora da pronúncia russa das palavras ou itens antes de falar (estilo "pressione para ouvir" / TTS ou reprodução sonora). A equipe tem autonomia para selecionar a melhor implementação técnica no cliente/mod.
 
-### R3. Calibração da Progressão do Alfabeto Cirílico
-Ajustar a progressão de substituição do alfabeto para que letras cirílicas não-idênticas ao alfabeto latino não sejam fixadas de forma definitiva precocemente após ações básicas iniciais (como coletar madeira). Letras visualmente idênticas (como A, O, E) podem manter a substituição natural, mas letras com grafias diferentes devem exigir avanço gradual antes da fixação definitiva.
+### R3. Empacotador / Instalador Executável Portátil
+Criar uma solução de empacotamento ou instalador executável portátil que torne o repasse e instalação do cliente (incluindo o inicializador portátil UltimMC em `Launcher`) simples e direto para distribuição entre amigos, sem necessidade de configurações manuais complexas. A equipe tem autonomia para decidir a abordagem mais prática e robusta.
 
-### R4. Integração de Mods Adicionais de Dinâmica e Qualidade de Vida (QoL)
-Adicionar mods para tornar a jogabilidade mais dinâmica e menos vanilla. A equipe deve avaliar a complexidade técnica e selecionar mods apropriados, priorizando utilitários de qualidade de vida e desempenho (como correr mais rápido, organizar baús, depositar itens em baús próximos e otimizações) ou mods de conteúdo compatíveis que não sobrecarreguem excessivamente o vocabulário de aprendizado.
+### R4. Repositório e Site GitHub Pages
+Criar um repositório estruturado contendo um site estático moderno (HTML/CSS/JS) para o GitHub Pages. O site deve incluir seções claras de créditos aos criadores originais dos mods, lista detalhada de alterações do usuário e botão direto de download do instalador.
 
-### R5. Compilação, Implantação e Testes
-Garantir que as modificações compilem sem erros e sejam implantadas nas instâncias de cliente e servidor dedicado (`Instancia_Cliente\mods\` e `Servidor_Dedicado\mods\`). A suíte de testes E2E existente deve ser estendida para cobrir as novas funcionalidades e passar integralmente com sucesso.
+### R5. Pipeline de Compilação e Testes Automatizados E2E
+Compilar e injetar os bytecodes nas instâncias de cliente e servidor via `F:\Jogos\Mine\build_and_deploy.ps1`. Estender a suíte canônica de testes `F:\Jogos\Mine\tests\run_e2e_tests.ps1` com testes automatizados para validar a ausência de termos sem tradução em russo e o correto empacotamento do instalador e ativos, garantindo aprovação estrita total (código de saída 0).
 
 ## Acceptance Criteria
 
-### Cooperação Multiplayer & Frases
-- [ ] Jogadores conseguem invocar frases cooperativas (pedir item, apontar lugar, seguir) e desafios dinâmicos (estilo "o chão é lava") durante a sessão multiplayer.
-- [ ] O jogador que recebe uma instrução ou desafio visualiza uma indicação compreensível do objetivo ou comando.
-- [ ] Há um sistema de ranking/pontuação ativo que registra e reflete os desafios cooperativos completados.
+### Traduções em Russo
+- [ ] Não restam itens, blocos, entidades ou tooltips dos mods recentes sem tradução para russo (`ru_ru`) ou chaves pendentes em `russian_tooltips.js`.
 
-### HUD de Fala
-- [ ] A caixa de feedback de fala não é exibida em desafios de itens individuais (palavra única).
-- [ ] A caixa de fala é exibida apenas em frases completas, em tamanho reduzido e com cabeçalho exclusivo "disse: ".
+### Referência Fonética
+- [ ] O jogador consegue acionar a reprodução sonora da pronúncia em russo de termos/itens através do cliente/mod SayIt antes de tentar falar.
 
-### Progressão do Alfabeto
-- [ ] Letras cirílicas não-idênticas não se tornam permanentes após ações básicas iniciais (como pegar madeira pela primeira vez).
-- [ ] Letras com caracteres idênticos permanecem funcionando sem regressões.
+### Instalador Portátil
+- [ ] O pacote de distribuição/instalador portátil gerado é funcional, autossuficiente e permite a execução direta do cliente Minecraft com o inicializador UltimMC.
 
-### Estabilidade, Mods e Verificação
-- [ ] Mods adicionais selecionados carregam corretamente no Fabric 1.20.1 sem conflitos ou falhas de inicialização no cliente e no servidor.
-- [ ] Os arquivos JAR atualizados do mod são gerados e implantados em `Instancia_Cliente\mods\sayitenglish-fabric-1.20.1-1.1.0.jar` e `Servidor_Dedicado\mods\sayitenglish-fabric-1.20.1-1.1.0.jar`.
-- [ ] A execução de `powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\tests\run_e2e_tests.ps1" -Strict` é concluída com todos os testes passando e código de saída 0.
+### Repositório e GitHub Pages
+- [ ] Os arquivos do site estático para o GitHub Pages estão criados e estruturados com seção de créditos aos criadores, lista de alterações e botão funcional de download.
+
+### Compilação e Testes E2E
+- [ ] O pipeline `F:\Jogos\Mine\build_and_deploy.ps1` compila com sucesso sem erros.
+- [ ] A execução de `powershell -ExecutionPolicy Bypass -File "F:\Jogos\Mine\tests\run_e2e_tests.ps1" -Strict` passa integralmente com todos os testes (incluindo os novos testes adicionados) com código de saída 0.

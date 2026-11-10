@@ -1,0 +1,246 @@
+{
+  "Мне нужно...": {
+    "sha256": "fc94acf71eb132d2933cc4570a6fdc9810d07add5602d43994670b4b92b48a23",
+    "md5": "837e6998026711f45c286ab3f5418bce"
+  },
+  "Мне нужна еда!": {
+    "sha256": "85d6e2557dc9430d70bfbdfdca500abad41fead74737727454a674bba3ebf297",
+    "md5": "51c5d71cf11322e6ab2321ea1bca67df"
+  },
+  "Помоги мне!": {
+    "sha256": "15ee276e0a5e26b4dc012d3bf5bb5b817b9fcee2f836dd7e07aa10aed9f24a71",
+    "md5": "6e8caf575f085e938603c251a10a46f9"
+  },
+  "Пол - это лава!": {
+    "sha256": "cabdb631cd1ae6e862ed850e6cb17550156da1746187a67f50ac547977fa59a1",
+    "md5": "28d08478c1002d10fcca82befed874af"
+  },
+  "Следуй за мной!": {
+    "sha256": "663e38ca04e09c194f8ca711390bc04a941c8641f9463db6669795368285c038",
+    "md5": "0a1b3c98364758562c3239cc053db7ec"
+  },
+  "Смотри туда!": {
+    "sha256": "a23ab9c1d2d87c99576822cfdebd7334fe7edb338731a9b14a588771709850f6",
+    "md5": "a88fda5b6fb6477c74f5882b135a0f97"
+  },
+  "Дубовое бревно": {
+    "sha256": "492c19a80227e4e9eb1b20f6da07f25d4f57335b6564cd273e809d1298a3d669",
+    "md5": "55c49d2fea1ae20ca9739edf126eb82a"
+  },
+  "Дерево": {
+    "sha256": "e1daa9e250a9f54fa031339a829dc0138d65c2a103d6ac1bbd9708e9477eaf16",
+    "md5": "43e0fb48bb6ab6b4db4df8adb2780960"
+  },
+  "Бревно": {
+    "sha256": "f3bb9d6b7eaaf1f2ab23615bfa0d9f91a2cbefa929050feecdad2037250a9040",
+    "md5": "b5036e6cee83490bb6bf28fbff7ec10d"
+  },
+  "Камень": {
+    "sha256": "6c3b0cc6f3adcb176aec26927505a663f514c50ec38018a1f34b059235c045fb",
+    "md5": "cfb14775d854339b85f83779c3d5d3f7"
+  },
+  "Булыжник": {
+    "sha256": "4310f9c4092f7aef8b91b6a114b14a23f4756e442095870e2c42f62c417ff3f8",
+    "md5": "4c61462553c14b7869b92d071f5bfc15"
+  },
+  "Железный слиток": {
+    "sha256": "577969ec519fb2ee0cd9c8d25474944714c26d063c030cd8610deb94ef9ebf2d",
+    "md5": "ad0515e22ed0c3f48a6dc18ed854cccc"
+  },
+  "Слиток": {
+    "sha256": "0cb2729039ce7bf15866a564263f65b87c32910cd3069c3b02cb8d712aca90b6",
+    "md5": "b86a4616374d670d86380c9269ff5672"
+  },
+  "Золотой слиток": {
+    "sha256": "aa3cfc35f38e80a73cafbebb9c274e284d95b97b7d2cfba48199d009a6160dc0",
+    "md5": "180a5fdeb703b517ea9ac069814dcac3"
+  },
+  "Медный слиток": {
+    "sha256": "63238c19f1eeefa858b0825d92573f6898d963ce3c9e8185e56c2b6ca21fc7e6",
+    "md5": "c7bfd5d49093a51c4adca836e9dfd425"
+  },
+  "Рудная медь": {
+    "sha256": "ac535931d53542e2d7bac4ddf17ca7fa5e4ce6ecf8bf96aa57d3c8c7d3593a6b",
+    "md5": "9df3b02e5718812d08a94a0d63eaa939"
+  },
+  "Медь": {
+    "sha256": "29bafea3d856247b760c073e04ff7b9af56693a37f0af57020d267a4377f80fe",
+    "md5": "10675052579e2eb22cef5f6ec22de892"
+  },
+  "Уголь": {
+    "sha256": "2b921f3eb6d6fd0fa41c49d2add887e3f9c3a8755b4c2eb10e4f1e5e0fd2cf64",
+    "md5": "e881e58951899f0ecb532892ac40b68c"
+  },
+  "Древесный уголь": {
+    "sha256": "d0b7f798281660216d922fc427db97b1fa0d204d122abddc9b7eab15910a0157",
+    "md5": "f9242bd2839bdcbd0ec5724dccc263be"
+  },
+  "Алмаз": {
+    "sha256": "5192714a619cd05d8efb048ce799f7ae5c80fa7e7cd0ce8a8cc929dbf5117cf5",
+    "md5": "db3ca7d8a4549e8c82c66427aa80bea1"
+  },
+  "Изумруд": {
+    "sha256": "09d345a824ed5531b152e267172854ef55c8309897403a12cc0da89e260778a3",
+    "md5": "8542f5686a0fb0fc4a7ec280ab23b67a"
+  },
+  "Хлеб": {
+    "sha256": "38ef3ee715edd12bd800b23aa9f9ebcc0ded874505b88704baee9974e10668e1",
+    "md5": "0207b930f29b28fef13a112f55c5dc40"
+  },
+  "Яблоко": {
+    "sha256": "3b929831cedbe62f6ceb7db865fe8cb0385157b5da8ff444fe19d5f4be267a3d",
+    "md5": "10dc0decd0384c5a654f231e635c9587"
+  },
+  "Золотое яблоко": {
+    "sha256": "e88edb250c7157e0c4a3876fade2b7881f690d9cb4a7caad53698203fba0e857",
+    "md5": "f6b9b4c649663537a9bd218b82b5dcbb"
+  },
+  "Пшеница": {
+    "sha256": "cc9cbee3c7f0b41048cb87af496b6d1a0c63761d777380e9dce4b79c73af8b48",
+    "md5": "906ba7c8aa575406e4407cc5c8c51831"
+  },
+  "Морковь": {
+    "sha256": "dc04081151a7db9a7ed1e122326361bfe8ca9622e9e2d6af77cc933f11116460",
+    "md5": "0dfed5d312f76f009295b9afc2cb13da"
+  },
+  "Картофель": {
+    "sha256": "d8aff4f02fc9c00f81c502ce1d7273ddfa21c9c964b886f463c02377ddf844ed",
+    "md5": "3ba9a72d76403236cb1da6ba2e531277"
+  },
+  "Печёный картофель": {
+    "sha256": "17e049ed4a06517e3721d8eef5a96ae2885ac28b346c25ff6cd0d7c133decc0e",
+    "md5": "cf20290758935843ce3aaa4a38326bc1"
+  },
+  "Стейк": {
+    "sha256": "0cf73c42262a3e5733015d3a383cc1d4c5f29af2c0c950500bc3f2cdcb89a7f0",
+    "md5": "a3608355adc463c94399085d3e052aba"
+  },
+  "Жареная свинина": {
+    "sha256": "ba8beba562438cf3e586ddbfc66fb48e0eb7bf3b9aea899ed6233d5eb57e5f91",
+    "md5": "ffd4febee9987e9ae8dfc66996967e11"
+  },
+  "Жареная говядина": {
+    "sha256": "af1a92253fc22e82798590365a5f199ddf6be51d35679b38f234076e0a0b5772",
+    "md5": "d6ac0f34c60cde8a7a7aede739be06d7"
+  },
+  "Факел": {
+    "sha256": "bfb6df58580ac44822eec1c0bd0d41b9af2ce5fce6c8b6b7e566e4cd828e6591",
+    "md5": "78855d34c98c488c511920d05370f218"
+  },
+  "Верстак": {
+    "sha256": "e96a0751a4d4d4b6fd1b285e8e8489fdfeb70eb6cf6c3d9ed0518f4ae1d4cf77",
+    "md5": "1b233e5188168dbf4ef2a082c2f34996"
+  },
+  "Печь": {
+    "sha256": "31920d984bcdef0f2abfede610f3e8f6411e4397c4772b9a871ad98c75bb5d73",
+    "md5": "a41c786bbcaa9bca3a6d649e9fccd1bc"
+  },
+  "Сундук": {
+    "sha256": "e1368cabf15752b7fa048ea6d52e95c1c00ec76dedefd11486f2922b317fa2cc",
+    "md5": "808db6f5366e177757ebbd7b2d669fd2"
+  },
+  "Кровать": {
+    "sha256": "2e4748dda68f92c8ff93daeecec077cb8eeefc5e84b12d143df83439e50f9af3",
+    "md5": "7dbcea59de50c09409d00a55227e543c"
+  },
+  "Палка": {
+    "sha256": "19e601628297c1f7b4e5f0e5a06f42ed95a4974d294b677f3b9180736f881352",
+    "md5": "0e74901a1b7fb5e29bacadd8552de834"
+  },
+  "Нить": {
+    "sha256": "14907162a1c443aae36924cce45f92c046abe17bcc49a3796f4318c757fb4db9",
+    "md5": "26754534c79adebac1074efe50bf5c6f"
+  },
+  "Верёвка": {
+    "sha256": "e60b3815a002d09d1d0deac282624b834fc486ab7548713557bec622f265393f",
+    "md5": "dc58f4af0ddfaad4fced27c67a667bcc"
+  },
+  "Щит": {
+    "sha256": "f2518d913d22f38786dd9ee92cb6bef202af1fb4d6d654803490ba660cba67fb",
+    "md5": "a772ec24a9d42b896d98814e1537fccc"
+  },
+  "Лук": {
+    "sha256": "08089a6cfbc731820d422b0fa74a2efa6d80e09c9841216f7bcfb9b35c435443",
+    "md5": "e1a4ac69bfe31eb801c1d9f35baab5bc"
+  },
+  "Стрела": {
+    "sha256": "49a03fc7ec1e13914d5190dd907af7ecd1880b5847d56aec93db2ff768caaa1c",
+    "md5": "dfe5e19c08cbf6d46644942105b77333"
+  },
+  "Железный меч": {
+    "sha256": "589a2d0206b4e07085e29fbf4104a3fb77e8524c8ea3841b320e4c987ed2966d",
+    "md5": "cb74e322f366b0054fe7c346930608c2"
+  },
+  "Железная кирка": {
+    "sha256": "40c4aca15d24b863ab4bd85d46f55758174cb4d4de2e3d78a2cf9f0ea9385fd6",
+    "md5": "e63ae3fbcf59ddc237dfd2b7453acfb5"
+  },
+  "Железный топор": {
+    "sha256": "19efcd85bc1dabe964c5a5055ebecb4725a0634ae55ed1a3d9b25a0c5707e48c",
+    "md5": "a6dc1716a087188cabaf967780493f6c"
+  },
+  "Железная лопата": {
+    "sha256": "6e84f76e8b08ac9902529a9550aedfceb386b4818ed1ee19ac21832f06d77c9f",
+    "md5": "360fa872cf7e5d6e3a8037f1e43c4da5"
+  },
+  "Обсидиан": {
+    "sha256": "9d587a9b83974633ed5cefbfef73977ac443239d129fd1c000c779366ccabe47",
+    "md5": "eaa6d8b7814e372e9c07ad5376990c94"
+  },
+  "Жемчуг Края": {
+    "sha256": "5c1146c0dd8bb9be122a59cfb6ae93b318ab892a5f41ef998c4034fd6fbba1e0",
+    "md5": "be0eb087224366987cb0f5fae06cb448"
+  },
+  "Огниво": {
+    "sha256": "16ab965dd9c6cc139ec205cfbfd2b8529687e770deefefafc00e7f9ee7d1061d",
+    "md5": "5acc8ea8c1716ca95b223dbc97cd0869"
+  },
+  "Ведро воды": {
+    "sha256": "2a83a8ca6eb3f82ecf7b0e0bbf41a54630ea55218d5f9668513cab8ea6744e53",
+    "md5": "a8d36dbb0bd8ba696ef2636a349533cc"
+  },
+  "Ведро лавы": {
+    "sha256": "5fcaadafdb5236a3a26d97f8f7f1955195155f7add7d8db652c8b4aeb570e772",
+    "md5": "5506b53cd4a192d9dfbfbf41fae536ca"
+  },
+  "Чайник": {
+    "sha256": "2f09e1b53960900f03e30b75cbcb3b77c95b39c2c57d5537e213c943a08e766e",
+    "md5": "271d2bb98219722829f83b26624b1583"
+  },
+  "Кофе": {
+    "sha256": "e81804c3e2e115358973f4d7c1b38fc7d030f9b85622623570b292f8d9e66b00",
+    "md5": "a4013d90e6ad665387a924977c2f77f8"
+  },
+  "Зелёный чай": {
+    "sha256": "117631e4a7d77bec7e486d6e329d42b2e46f7d2d03eff338c596d177e0aca962",
+    "md5": "8ad46b2dc6a69a74a17098009b894dd6"
+  },
+  "Жёлтый чай": {
+    "sha256": "54ab1e56fe7e437e209f03631426555e7dc67414d01fb810a712eaf6a4a65967",
+    "md5": "75726a332d1e3ae0f4fe7d9b02e0ed74"
+  },
+  "Чёрный чай": {
+    "sha256": "9ad68b96f62551b6a5f3d07eb73109bba637cf14b049d8a5032276d204b665b9",
+    "md5": "3015fea3bfb391cf3b761a38a0da2ebd"
+  },
+  "Спальный мешок": {
+    "sha256": "cf3dd4e1f11a06ef27c8e3d2de1cf22050aea0b87e4bdbca4b7fa85b6a1912ca",
+    "md5": "476511b3008b1e66e1204a9c3dd18e76"
+  },
+  "Гамак": {
+    "sha256": "43ab8a16c4ba182f5de95dcd1f874f115dc0c63457864eb2d936c953f00720ff",
+    "md5": "6cd4c4c1f472b74e8e6dfe0241579be2"
+  },
+  "Верёвка и гвоздь": {
+    "sha256": "ab029e56471e2aed581281e4f1d90a274eb6f64a9e79f8d4b6b3c7fa1f70bebf",
+    "md5": "b63db3c59128a9bba955d45a3020e220"
+  },
+  "Стул": {
+    "sha256": "1ee721cfbc5ebc18b04ebaac944865746e3b43608de111b64615b4df3628a3a1",
+    "md5": "4a68c6895c4eeace197bfba137bf6e72"
+  },
+  "Стол": {
+    "sha256": "da639244db1d2dd475bf67fc157cbd4d25e92bafbe2634931577a540021a1b9d",
+    "md5": "aa772100ecb518780f2ce390293dabf6"
+  }
+}

@@ -678,6 +678,246 @@ ItemEvents.tooltip(event => {
             gen: 'Feminino (ж.р.)',
             tier: 1,
             note: 'Imagem revelada em papel fotográfico. Pode ser emoldurada em paredes.'
+        },
+        'naturalist:bug_net': {
+            ru: 'Сачóк',
+            phon: '[sa-CHOK]',
+            pt: 'Rede de Insetos / Puçá',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Rede manual para captura de insetos e borboletas. Diminutivo clássico com sufixo -ок.'
+        },
+        'naturalist:butterfly': {
+            ru: 'Бáбочка',
+            phon: '[BAH-bach-ka]',
+            pt: 'Borboleta',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Inseto voador de asas coloridas. Etimologicamente ligado a Бабушка (antiga crença de almas ancestrais).'
+        },
+        'naturalist:moth': {
+            ru: 'Мотылëк',
+            phon: '[ma-ti-LYOK]',
+            pt: 'Mariposa',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Inseto noturno atraído pela luz. \'Ё\' é sempre tônico com som [yo].'
+        },
+        'naturalist:caterpillar': {
+            ru: 'Гýсеница',
+            phon: '[GOO-sye-nee-tsa]',
+            pt: 'Lagarta',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Estágio larval dos lepidópteros. Acento no \'у\' inicial.'
+        },
+        'naturalist:bass': {
+            ru: 'О́кунь',
+            phon: '[OH-koon\']',
+            pt: 'Robalo / Truta-achigã',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Peixe predador de água doce. Sinal brando \'ь\' final palatiza a consoante \'н\'.'
+        },
+        'naturalist:catfish': {
+            ru: 'Сом',
+            phon: '[SOM]',
+            pt: 'Bagre / Peixe-gato',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Peixe de fundo de rio com longos barbilhões táteis. Substantivo masculino monossilábico.'
+        },
+        'naturalist:duck': {
+            ru: 'У́тка',
+            phon: '[OOT-ka]',
+            pt: 'Pato',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Ave aquática palmípede. Diminutivo comum carinhoso: Уточка (OOT-ach-ka).'
+        },
+        'naturalist:worm': {
+            ru: 'Червь',
+            phon: '[CHYERV\']',
+            pt: 'Minhoca / Verme',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Anelídeo de solo usado como isca de pesca. Terminação com sinal brando \'ь\'.'
+        },
+        'crittersandcompanions:koi_fish': {
+            ru: 'Карп кóи',
+            phon: '[KARP KOH-ee]',
+            pt: 'Carpa Koi',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Peixe ornamental de lagoas e jardins. Карп é declinável, Кои indeclinável.'
+        },
+        'crittersandcompanions:pearl': {
+            ru: 'Жéмчуг',
+            phon: '[ZHEHM-chook]',
+            pt: 'Pérola',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Gema marinha preciosa formada em moluscos. O \'г\' final sofre ensurdecimento e soa [k].'
+        },
+        'crittersandcompanions:silk': {
+            ru: 'Шёлк',
+            phon: '[SHOLK]',
+            pt: 'Seda',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Fibra têxtil suave e nobre. A letra \'ё\' após \'ш\' soa [o] com o chiante duro.'
+        },
+        'crittersandcompanions:grappling_hook': {
+            ru: 'Крюк-кóшка',
+            phon: '[KRYOOK KOHSH-ka]',
+            pt: 'Gancho de Escalada',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Instrumento de ascensão e escalada. Substantivo composto hifenizado.'
+        },
+        'ecologics:prickly_pear': {
+            ru: 'Опýнция',
+            phon: '[a-POON-tsee-ya]',
+            pt: 'Figo-da-Índia',
+            gen: 'Feminino (ж.р.)',
+            tier: 2,
+            note: 'Fruto comestível e doce de cactos desérticos. Terminação suave em -ия.'
+        },
+        'ecologics:coconut_slice': {
+            ru: 'Дóлька кокóса',
+            phon: '[DOL\'-ka ka-KOH-sa]',
+            pt: 'Fatia de Coco',
+            gen: 'Feminino + Genitivo',
+            tier: 1,
+            note: 'Долька (pedaço/fatia) com sinal brando + Кокоса (genitivo de Кокос).'
+        },
+        'farmersrespite:rose_hip_tea': {
+            ru: 'Чай из шипóвника',
+            phon: '[CHAY eez shee-POV-nee-ka]',
+            pt: 'Chá de Rosa Mosqueta',
+            gen: 'Masculino + Genitivo',
+            tier: 2,
+            note: 'Bebida rica em vitamina C. Preposição Из (de) exige caso genitivo Шиповника.'
+        },
+        'farmersrespite:coffee_berries': {
+            ru: 'Кофéйные я́годы',
+            phon: '[ka-FYEY-ni-ye YAH-ga-di]',
+            pt: 'Frutos de Café',
+            gen: 'Plural (мн.ч.)',
+            tier: 2,
+            note: 'Frutos frescos colhidos do cafeeiro. Adjetivo Кофейные concordando com Ягоды.'
+        },
+        'farmersrespite:coffee_cake': {
+            ru: 'Кофéйный пирóг',
+            phon: '[ka-FYEY-niy pee-ROHK]',
+            pt: 'Bolo de Café',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Bolo confeitado aromático. O \'г\' final de Пирог ensurdece para [k].'
+        },
+        'handcrafted:bench': {
+            ru: 'Скамéйка',
+            phon: '[ska-MYEY-ka]',
+            pt: 'Banco de Madeira',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Assento coletivo longo. Raiz eslava clássica com ditongo suave -ей-.'
+        },
+        'handcrafted:couch': {
+            ru: 'Дивáн',
+            phon: '[dee-VAHN]',
+            pt: 'Sofá / Divã',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Móvel estofado confortável para descanso na sala. Empréstimo linguístico oriental comum.'
+        },
+        'handcrafted:cupboard': {
+            ru: 'Сервáнт',
+            phon: '[syer-VAHNT]',
+            pt: 'Armário / Louceiro',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Armário com prateleiras e portas para louças e utensílios culinários.'
+        },
+        'handcrafted:drawer': {
+            ru: 'Тýмба',
+            phon: '[TOOM-ba]',
+            pt: 'Gaveteiro / Criado-mudo',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Móvel de cabeceira com gavetas para armazenar pequenos objetos.'
+        },
+        'handcrafted:shelf': {
+            ru: 'Пóлка',
+            phon: '[POHL-ka]',
+            pt: 'Prateleira',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Superfície horizontal fixada na parede para suporte de livros e decorações.'
+        },
+        'handcrafted:counter': {
+            ru: 'Столéшница',
+            phon: '[sta-LYE-shnee-tsa]',
+            pt: 'Balcão / Bancada',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Bancada de preparo e apoio culinário. Derivado de Стол (mesa).'
+        },
+        'naturalist:reptile_hide': {
+            ru: 'Шкýра репти́лии',
+            phon: '[SHKOO-ra ryeep-TEE-lee-ee]',
+            pt: 'Couro de Réptil',
+            gen: 'Feminino + Genitivo',
+            tier: 2,
+            note: 'Couro escamoso resistente obtido de jacarés e lagartos.'
+        },
+        'naturalist:glow_goop': {
+            ru: 'Светя́щаяся слизь',
+            phon: '[svye-TYAH-shcha-ya-sya SLEES\']',
+            pt: 'Visgo Brilhante',
+            gen: 'Feminino (ж.р.)',
+            tier: 2,
+            note: 'Substância luminescente coletada de vaga-lumes e criaturas da noite.'
+        },
+        'naturalist:snail_shell_block': {
+            ru: 'Блок из рáковины',
+            phon: '[BLOK eez RAH-ka-vee-ni]',
+            pt: 'Bloco de Conchas',
+            gen: 'Masculino + Genitivo',
+            tier: 2,
+            note: 'Material de construção calcário ornamental composto de conchas de caracóis.'
+        },
+        'farmersrespite:green_tea_cookie': {
+            ru: 'Печéнье с зелëным чáем',
+            phon: '[pye-CHYE-n\'ye s zye-LYO-nim CHAH-yem]',
+            pt: 'Biscoito de Chá Verde',
+            gen: 'Neutro + Instrumental',
+            tier: 2,
+            note: 'Biscoito aromático matinal assado com folhas trituradas de chá verde.'
+        },
+        'farmersrespite:black_cod': {
+            ru: 'Чёрная трескá',
+            phon: '[CHYOR-na-ya tryes-KAH]',
+            pt: 'Bacalhau-preto / Peixe-carvão',
+            gen: 'Feminino (ж.р.)',
+            tier: 2,
+            note: 'Peixe nobre de águas profundas e gélidas. Adjetivo Чёрная concordando com Треска.'
+        },
+        'farmersrespite:dandelion_tea': {
+            ru: 'Чай из одувáнчиков',
+            phon: '[CHAY eez a-doo-VAHN-chee-kaf]',
+            pt: 'Chá de Dente-de-Leão',
+            gen: 'Masculino + Genitivo Plural',
+            tier: 2,
+            note: 'Infusão campestre depurativa amarela feita com pétalas silvestres.'
+        },
+        'comforts:sleeping_bag_blue': {
+            ru: 'Си́ний спáльный мешóк',
+            phon: '[SEE-neey SPAHL-niy mye-SHOK]',
+            pt: 'Saco de Dormir Azul',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Equipamento de acampamento portátil na cor azul-celeste.'
         }
     };
 

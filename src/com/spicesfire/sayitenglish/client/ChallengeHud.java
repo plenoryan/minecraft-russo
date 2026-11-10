@@ -24,6 +24,7 @@ import com.spicesfire.sayitenglish.ChallengeManager;
 import com.spicesfire.sayitenglish.Config;
 import com.spicesfire.sayitenglish.Packets;
 import com.spicesfire.sayitenglish.Scorer;
+import com.spicesfire.sayitenglish.audio.AudioPlaybackManager;
 import com.spicesfire.sayitenglish.client.ChallengeSession;
 import com.spicesfire.sayitenglish.client.ClientCompat;
 import com.spicesfire.sayitenglish.client.Microphone;
@@ -204,7 +205,13 @@ public final class ChallengeHud {
         }
         float bigScale = sentence ? 1.0f : 1.5f;
         int screenW = mc.method_22683().method_4486();
+        boolean playingAudio = AudioPlaybackManager.isPlaying();
+        String hearLabel = playingAudio ? "\u00a7e\u25b6 [" + SayItClient.hearKeyName() + "] Ouvindo..." : "\u00a7b[" + SayItClient.hearKeyName() + "] Ouvir";
+        String typeLabel = "\u00a78[" + SayItClient.typeKeyName() + "] Digitar";
+        String hudActionHints = typeLabel + "  " + hearLabel;
+        int hintsW = font.method_1727(hudActionHints);
         int textW = Math.max(Math.max((int)((float)font.method_1727(big) * bigScale), font.method_1727(small)), font.method_1727(reading));
+        textW = Math.max(textW, hintsW + 90);
         int x = 8;
         int y = 8;
         int w = Math.min(screenW - 16, Math.max(200, textW + 44));
@@ -237,7 +244,10 @@ public final class ChallengeHud {
         line += 5;
         int color = -7697766;
         SpeechEngine e = SpeechEngine.forConfig((String)Config.get().engine, (String)ChallengeSession.language);
-        if (!ChallengeSession.heard.isEmpty()) {
+        if (playingAudio) {
+            status = "\u00a7b\u25b6 Reproduzindo \u00e1udio...";
+            color = -14006;
+        } else if (!ChallengeSession.heard.isEmpty()) {
             int best = ChallengeSession.best;
             status = class_1074.method_4662((String)"sayitenglish.hud.heard", (Object[])new Object[]{ChallengeSession.bestHeard, best});
             color = best >= c.passScore() ? -10755203 : -42406;
@@ -245,6 +255,10 @@ public final class ChallengeHud {
             status = !e.ready() ? class_1074.method_4662((String)e.statusKey(), (Object[])new Object[]{e.statusArg()}) + "  " + class_1074.method_4662((String)"sayitenglish.hud.type_hint", (Object[])new Object[]{SayItClient.typeKeyName()}) : (ChallengeSession.micTried && !ChallengeSession.micOk ? class_1074.method_4662((String)"sayitenglish.hud.no_mic", (Object[])new Object[]{SayItClient.typeKeyName()}) : class_1074.method_4662((String)"sayitenglish.hud.listening", (Object[])new Object[0]));
         }
         ClientCompat.text((class_332)g, (class_327)font, (String)status, (int)tx, (int)line, (int)color);
+        int hintsX = x + w - 6 - hintsW - (ChallengeSession.micOk ? 6 : 0);
+        if (hintsX > tx + font.method_1727((String)status) + 4) {
+            ClientCompat.text((class_332)g, (class_327)font, (String)hudActionHints, (int)hintsX, (int)line, (int)-7697766);
+        }
         if (ChallengeSession.micOk) {
             int mh = (int)(Microphone.level * (float)(h - 8));
             ClientCompat.fill((class_332)g, (int)(x + w - 4), (int)(y + h - 4 - mh), (int)(x + w - 2), (int)(y + h - 4), (int)-10755203);

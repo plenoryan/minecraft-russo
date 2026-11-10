@@ -1,10 +1,12 @@
 {
-  "block.handcrafted.chair": "Стул",
-  "block.handcrafted.table": "Стол",
   "block.handcrafted.bench": "Скамейка",
+  "block.handcrafted.birch_shelf": "Берёзовая полка",
+  "block.handcrafted.chair": "Стул",
   "block.handcrafted.couch": "Диван",
   "block.handcrafted.counter": "Столешница",
   "block.handcrafted.cupboard": "Сервант",
   "block.handcrafted.drawer": "Тумба",
-  "block.handcrafted.shelf": "Полка"
+  "block.handcrafted.shelf": "Полка",
+  "block.handcrafted.table": "Стол",
+  "tooltip.handcrafted.shift_description": "Удерживайте SHIFT для подробностей"
 }

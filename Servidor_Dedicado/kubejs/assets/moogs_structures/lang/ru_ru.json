@@ -1,0 +1,16 @@
+{
+  "moogs_structures.cloth_required.message": "Экран настроек Moog's Structure Lib требует Cloth Config API. Установите его для настройки прямо в игре.",
+  "moogs_structures.cloth_required.title": "Moog's Structure Lib",
+  "moogs_structures.config.all_of_mod": "Все структуры %s",
+  "moogs_structures.config.category.replace_vanilla": "Заменять ванильные структуры",
+  "moogs_structures.config.category.structures": "Структуры",
+  "moogs_structures.config.disabled": "Отключено",
+  "moogs_structures.config.enabled": "Включено",
+  "moogs_structures.config.mod_frequency.tooltip": "Насколько часто появляются структуры мода %s. 2x означает примерно в два раза чаще, 0.5x — примерно в два раза реже.",
+  "moogs_structures.config.preview": "Предпросмотр",
+  "moogs_structures.config.preview.unavailable": "Предпросмотр недоступен: для этого мода не указана ссылка на предпросмотр (mod_slug).",
+  "moogs_structures.config.reload_notice": "Изменения вступят в силу после перезагрузки мира (выйдите в главное меню и зайдите снова, или выполните /reload), и повлияют только на вновь генерируемые чанки.",
+  "moogs_structures.config.title": "Структуры Муга",
+  "moogs_structures.config.universal_frequency": "Общая частота генерации",
+  "moogs_structures.config.universal_frequency.tooltip": "Насколько часто появляются структуры Муга. 2x означает примерно в два раза чаще, 0.5x — примерно в два раза реже."
+}

@@ -2,6 +2,7 @@ package com.spicesfire.sayitenglish.client;
 
 import com.spicesfire.sayitenglish.ChallengeManager;
 import com.spicesfire.sayitenglish.Config;
+import com.spicesfire.sayitenglish.audio.AudioPlaybackManager;
 import com.spicesfire.sayitenglish.client.ChallengeSession;
 import com.spicesfire.sayitenglish.client.ClientCompat;
 import com.spicesfire.sayitenglish.client.SayItClient;
@@ -179,7 +180,7 @@ public class RadialMenuScreen extends class_437 {
             ClientCompat.item(g, sel.getStack(), cardX + 8, cardY + 9);
             ClientCompat.text(g, this.field_22793, "\u00a7e" + sel.ruText, cardX + 32, cardY + 7, -1);
             ClientCompat.text(g, this.field_22793, "\u00a77" + sel.ptText, cardX + 32, cardY + 19, -1);
-            ClientCompat.text(g, this.field_22793, "\u00a78Solte V ou clique para iniciar o desafio", cardX + 32, cardY + 31, -1);
+            ClientCompat.text(g, this.field_22793, "\u00a78Solte V ou clique para iniciar \u2022 \u00a7b[H] Ouvir", cardX + 32, cardY + 31, -1);
         } else {
             ClientCompat.fill(g, cardX, cardY + 10, cardX + cardW, cardY + 36, -1610612736);
             ClientCompat.centered(g, this.field_22793, "\u00a77Mova o cursor para escolher uma a\u00e7\u00e3o", cx, cardY + 19, -1);
@@ -200,6 +201,15 @@ public class RadialMenuScreen extends class_437 {
         if (keyCode == 256) { // ESC
             this.method_25419();
             return true;
+        }
+        if (SayItClient.isHearKey(keyCode)) {
+            if (this.hoveredSector >= 0 && this.hoveredSector < SECTORS.length) {
+                SectorDef sector = SECTORS[this.hoveredSector];
+                if (sector.ruText != null && !sector.ruText.isEmpty()) {
+                    AudioPlaybackManager.play(sector.ruText);
+                    return true;
+                }
+            }
         }
         return super.method_25404(keyCode, scanCode, modifiers);
     }
