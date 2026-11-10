@@ -566,6 +566,118 @@ ItemEvents.tooltip(event => {
             gen: 'Masculino (м.р.)',
             tier: 1,
             note: 'Mesa de apoio e refeições. \'O\' aberto e tônico. Plural: Столы (sta-LI).'
+        },
+        'crittersandcompanions:otter_spawn_egg': {
+            ru: 'Вы́дра',
+            phon: '[VI-dra]',
+            pt: 'Lontra',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Mamífero semiaquático ágil dos rios. Acento na primeira sílaba.'
+        },
+        'crittersandcompanions:ferret_spawn_egg': {
+            ru: 'Хорёк',
+            phon: '[kha-RYOK]',
+            pt: 'Furão',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Pequeno carnívoro doméstico e curioso. \'Ё\' é sempre tônico.'
+        },
+        'crittersandcompanions:dragonfly_spawn_egg': {
+            ru: 'Стрекозá',
+            phon: '[strye-ka-ZAH]',
+            pt: 'Libélula',
+            gen: 'Feminino (ж.р.)',
+            tier: 2,
+            note: 'Inseto voador predador de rios. Acento final com redução vocálica (ákanie).'
+        },
+        'crittersandcompanions:clam': {
+            ru: 'Моллю́ск',
+            phon: '[ma-LYOOSK]',
+            pt: 'Marisco / Molusco',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Criatura marinha bivalve. \'О\' inicial átono soa como [a].'
+        },
+        'ecologics:coconut': {
+            ru: 'Кокóс',
+            phon: '[ka-KOHS]',
+            pt: 'Coco',
+            gen: 'Masculino (м.р.)',
+            tier: 1,
+            note: 'Fruto da palmeira costeira. Acento no segundo \'о\'.'
+        },
+        'ecologics:crab_claw': {
+            ru: 'Клешня́ крáба',
+            phon: '[klye-SHNYAH KRAH-ba]',
+            pt: 'Garra de Caranguejo',
+            gen: 'Feminino + Genitivo',
+            tier: 2,
+            note: 'Клешня (garra/pinça) no nominativo + Краба (do caranguejo) no caso genitivo.'
+        },
+        'ecologics:crab_meat': {
+            ru: 'Мя́со крáба',
+            phon: '[MYAH-sa KRAH-ba]',
+            pt: 'Carne de Caranguejo',
+            gen: 'Neutro + Genitivo',
+            tier: 2,
+            note: 'Мясо (carne) substantivo neutro terminando em -о átono [a] + Краба no genitivo.'
+        },
+        'ecologics:penguin_feather': {
+            ru: 'Перó пингви́на',
+            phon: '[pye-ROH peen-GVEE-na]',
+            pt: 'Pena de Pinguim',
+            gen: 'Neutro + Genitivo',
+            tier: 2,
+            note: 'Перо (pena, gênero neutro) + Пингвина (do pinguim no caso genitivo).'
+        },
+        'ecologics:walnut': {
+            ru: 'Грéцкий орéх',
+            phon: '[GREHT-skeey a-RYEKH]',
+            pt: 'Noz',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Literalmente \'noz grega\'. Adjetivo Грецкий acompanhando o substantivo Орех.'
+        },
+        'exposure:camera': {
+            ru: 'Кáмера',
+            phon: '[KAH-mye-ra]',
+            pt: 'Câmera Fotográfica',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Aparelho óptico analógico para registrar momentos e animais no mundo.'
+        },
+        'exposure:album': {
+            ru: 'Фотоальбóм',
+            phon: '[fa-ta-al-BOHM]',
+            pt: 'Álbum de Fotos',
+            gen: 'Masculino (м.р.)',
+            tier: 2,
+            note: 'Composto: Фото (foto) + Альбом (álbum). Guarda recordações de viagens.'
+        },
+        'exposure:black_and_white_film': {
+            ru: 'Чёрно-бéлая плëнка',
+            phon: '[CHYOR-na BYE-la-ya PLYON-ka]',
+            pt: 'Filme Preto e Branco',
+            gen: 'Feminino (ж.р.)',
+            tier: 2,
+            note: 'Filme clássico fotossensível. Adjetivo composto Чёрно-белая com dois radicais.'
+        },
+        'exposure:color_film': {
+            ru: 'Цветнáя плëнка',
+            phon: '[tsvyet-NAH-ya PLYON-ka]',
+            pt: 'Filme Colorido',
+            gen: 'Feminino (ж.р.)',
+            tier: 2,
+            note: 'Filme colorido analógico para capturar biomas vívidos. \'Ё\' é tônico em Плёнка.'
+        },
+        'exposure:photograph': {
+            ru: 'Фотогрáфия',
+            phon: '[fa-ta-GRAH-fee-ya]',
+            pt: 'Fotografia',
+            gen: 'Feminino (ж.р.)',
+            tier: 1,
+            note: 'Imagem revelada em papel fotográfico. Pode ser emoldurada em paredes.'
         }
     };
 

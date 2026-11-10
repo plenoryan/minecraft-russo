@@ -407,3 +407,18 @@
   3. **Reconhecimento no HUD do Receptor e Servidor:**
      - `ChallengeHud.resolveActionStack` decodifica `item:<id>` e exibe o ícone exato do item solicitado com o distintivo '?' ao lado da cabeça do jogador solicitante.
      - O servidor (`ChallengeManager$CoopManager`) rastreia o objetivo `REQUEST_ITEM` com verificação de proximidade (<= 6 blocos) e presença do item específico no inventário do parceiro (`hasItem`), concedendo +20 pontos cooperativos para ambos ao concluir.
+### L48. Expansão Imersiva: Fauna Realista (Critters & Ecologics), Ruínas/Vilas (Towns & Towers, MVS) e Interação Física (Exposure & Carry On)
+- **Armadilha:**
+  - A versão mais recente do mod Critters and Companions (2.7.1) no Modrinth possui dependência declarada incorreta com `fabricloader >= 0.19.3`, impedindo a inicialização no Fabric Loader 0.16.14 com erro fatal de resolução de dependências (`HARD_DEP_NO_CANDIDATE`).
+  - Além disso, mods de geração de mundo e entidades precisam ser rigorosamente sincronizados em ambas as instâncias (cliente e servidor dedicado) para evitar descompassos de chunk e desync de pacotes de rede.
+- **Solução Implementada:**
+  1. **Fauna da Vida Real (Critters & Companions 2.3.5 + Ecologics 2.2.7):**
+     - Instalada a versão estável 2.3.5 de Critters & Companions (compatível com Fabric Loader >= 0.15) e Ecologics 2.2.7 em cliente e servidor dedicado.
+     - Adicionadas criaturas da vida real com vocabulário eslavo autêntico: Lontras (Выдра), Furões (Хорёк), Libélulas (Стрекоза), Esquilos (Белка), Pinguins (Пингвин) e Caranguejos (Клешня краба / Пальмовый вор).
+  2. **Ruínas Rústicas e Vilas Vivas (Towns and Towers 1.12 + Moog's Voyager Structures 5.1.3):**
+     - Vilas com arquitetura e portos adaptados para cada bioma, além de ruínas abandonadas e postos de viajantes na natureza selvagem. Suportadas por Cristel Lib e Moog's Structure Lib em ambas as instâncias.
+  3. **Interação Física e Registro Imersivo (Exposure 1.9.24 + Carry On 2.1.2.7):**
+     - Exposure: Câmera fotográfica analógica funcional com filmes preto-e-branco (Чёрно-белая плёнка) e colorido (Цветная плёнка), revelação em câmara escura e montagem de álbuns de fotos (Фотоальбом).
+     - Carry On: Permite levantar pequenos animais e baús nos braços com Shift + Botão Direito.
+  4. **Anotações Pedagógicas Bilíngues (ussian_tooltips.js):**
+     - Adicionadas 14 novas entradas completas no currículo bilíngue com pronúncia fonética e notas gramaticais de gênero/caso.
