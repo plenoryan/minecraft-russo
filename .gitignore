@@ -57,3 +57,8 @@ Launcher/instances/*/.minecraft/resourcepacks/
 Launcher/instances/*/.minecraft/shaderpacks/
 Launcher/data/instances/*/natives/
 Launcher/instances/*/natives/
+
+# Distribution artifacts
+dist/
+docs/downloads/*.zip
+.agents/

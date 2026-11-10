@@ -1,0 +1,790 @@
+﻿/**
+ * Minecraft Russo: SayIt Modpack - Client-Side Application
+ * Pure Vanilla ES6 JavaScript (Zero External Dependencies)
+ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  initNavigation();
+  initAudioPlayer();
+  initAudioTabs();
+  initCreditsTable();
+  initClipboard();
+});
+
+// Authoritative Metadata for all 43 Curated Mod JARs
+const MODS_DATA = [
+    {
+        "Jar":  "AmbientSounds_FABRIC_v6.3.11_mc1.20.1.jar",
+        "Id":  "ambientsounds",
+        "Name":  "AmbientSounds",
+        "Version":  "6.3.11",
+        "Authors":  "CreativeMD, AriaFreeze",
+        "License":  "LGPL-3.0-only",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "",
+        "Description":  "Expands minecraft\u0027s ambient sounds."
+    },
+    {
+        "Jar":  "appleskin-fabric-mc1.20.1-2.5.2.jar",
+        "Id":  "appleskin",
+        "Name":  "AppleSkin",
+        "Version":  "2.5.2+mc1.20.1",
+        "Authors":  "squeek502",
+        "License":  "Unlicense",
+        "Category":  "Jogabilidade \u0026 QoL",
+        "Homepage":  "https://minecraft.curseforge.com/projects/appleskin",
+        "Description":  "Adds various food-related HUD improvements"
+    },
+    {
+        "Jar":  "architectury-9.2.14-fabric.jar",
+        "Id":  "architectury",
+        "Name":  "Architectury",
+        "Version":  "9.2.14",
+        "Authors":  "shedaniel",
+        "License":  "LGPL-3",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://architectury.github.io/architectury-documentations/",
+        "Description":  "A intermediary api aimed to ease developing multiplatform mods."
+    },
+    {
+        "Jar":  "carryon-fabric-1.20.1-2.1.2.7.jar",
+        "Id":  "carryon",
+        "Name":  "Carry On",
+        "Version":  "2.1.2.7",
+        "Authors":  "Tschipp, Purplicious_Cow, cy4n",
+        "License":  "GNU LGPLv3",
+        "Category":  "Jogabilidade \u0026 QoL",
+        "Homepage":  "https://tschipp.ch/",
+        "Description":  "Carry On is a simple mod that improves game interaction by allowing players to pick up, carry, and place single block Tile Entities using only their empty hands."
+    },
+    {
+        "Jar":  "comforts-fabric-6.4.0+1.20.1.jar",
+        "Id":  "comforts",
+        "Name":  "Comforts",
+        "Version":  "6.4.0+1.20.1",
+        "Authors":  "Illusive Soulworks",
+        "License":  "LGPL-3.0-or-later",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "",
+        "Description":  "Adds sleeping bags and hammocks for, respectively, portability and turning day to night, without setting new spawns.\nComes in 16 different colors!"
+    },
+    {
+        "Jar":  "CreativeCore_FABRIC_v2.12.41_mc1.20.1.jar",
+        "Id":  "creativecore",
+        "Name":  "CreativeCore",
+        "Version":  "2.12.41",
+        "Authors":  "CreativeMD, AriaFreeze",
+        "License":  "LGPL-3.0-only",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "",
+        "Description":  "A simple but powerful coremod."
+    },
+    {
+        "Jar":  "cristellib-1.1.5-fabric.jar",
+        "Id":  "cristellib",
+        "Name":  "Cristel Lib",
+        "Version":  "1.1.5",
+        "Authors":  "Cristelknight999",
+        "License":  "CC BY-NC-ND 4.0",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://modrinth.com/mod/cristel-lib",
+        "Description":  "A Library mod for easy structure config and runtime datapacks."
+    },
+    {
+        "Jar":  "crittersandcompanions-fabric-1.20.1-2.3.5.jar",
+        "Id":  "crittersandcompanions",
+        "Name":  "Critters and Companions",
+        "Version":  "1.20.1-2.3.5",
+        "Authors":  "Joosh, EterDelta",
+        "License":  "CC0-1.0",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "",
+        "Description":  "Critters and Companions is a vanilla-style creature mod which fills the overworld with new animals."
+    },
+    {
+        "Jar":  "CustomSkinLoader_Universal-15.1.jar",
+        "Id":  "customskinloader-bootstrap",
+        "Name":  "CustomSkinLoader Bootstrap",
+        "Version":  "15.1",
+        "Authors":  "xfl03, JLChnToZ, ZekerZhayard",
+        "License":  "GPL-3.0-only",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://github.com/xfl03/MCCustomSkinLoader",
+        "Description":  "Custom Skin Loader for Minecraft"
+    },
+    {
+        "Jar":  "e4all-fabric-1.6.4.jar",
+        "Id":  "e4all",
+        "Name":  "e4all",
+        "Version":  "1.6.4",
+        "Authors":  "JustPixel",
+        "License":  "MIT",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://github.com/Synquox/e4all",
+        "Description":  "Open a LAN server to anyone, anywhere, anytime. Enhanced with Online/Offline Mode support."
+    },
+    {
+        "Jar":  "ecologics-fabric-1.20.1-2.2.7.jar",
+        "Id":  "ecologics",
+        "Name":  "Ecologics",
+        "Version":  "2.2.7",
+        "Authors":  "SameButDifferent, Zero_DSRS_VX, Drigonis, Crispytwig, Irishjevil, Foquito Azul",
+        "License":  "MIT",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/ecologics",
+        "Description":  "Simple vanilla biome updates, with fun mobs, blocks, and more!"
+    },
+    {
+        "Jar":  "entityculling-fabric-1.11.3-mc1.20.1.jar",
+        "Id":  "entityculling",
+        "Name":  "EntityCulling",
+        "Version":  "1.11.3",
+        "Authors":  "tr7zw",
+        "License":  "tr7zw Protective License",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "https://modrinth.com/mod/entityculling",
+        "Description":  "This mod uses async path-tracing to hide Tiles/Entities that are not visible."
+    },
+    {
+        "Jar":  "exposure-fabric-1.20.1-1.9.24.jar",
+        "Id":  "exposure",
+        "Name":  "Exposure",
+        "Version":  "1.9.24",
+        "Authors":  "mortuusars",
+        "License":  "MIT",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/exposure",
+        "Description":  "Camera mod with focus on process and aesthetics."
+    },
+    {
+        "Jar":  "fabric-api-0.92.12+1.20.1.jar",
+        "Id":  "fabric-api",
+        "Name":  "Fabric API",
+        "Version":  "0.92.12+1.20.1",
+        "Authors":  "FabricMC",
+        "License":  "Apache-2.0",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://fabricmc.net",
+        "Description":  "Core API module providing key hooks and intercompatibility features."
+    },
+    {
+        "Jar":  "FarmersDelight-1.20.1-2.1.1+refabricated.jar",
+        "Id":  "farmersdelight",
+        "Name":  "Farmer\u0027s Delight",
+        "Version":  "1.20.1-2.1.1+refabricated",
+        "Authors":  "MehVahdJukaar, MerchantPug",
+        "License":  "MIT License",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/farmers-delight-refabricated",
+        "Description":  "A cozy expansion to farming and cooking!"
+    },
+    {
+        "Jar":  "Farmersrespite-Fabric-3.0.2.jar",
+        "Id":  "farmersrespite",
+        "Name":  "Farmer\u0027s Respite",
+        "Version":  "3.0.2",
+        "Authors":  "StevenPlayzz, JustinPlayzz, Umpaz, HoboJoe, SoyTutta, MrSterner",
+        "License":  "MIT",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "",
+        "Description":  "An addon created by Umpaz, HoboJoe, and SoyTutta for the Farmer\u0027s Delight mod by vectorwing. Attempts to add tea and ways to brew it, as well as some other foods!"
+    },
+    {
+        "Jar":  "ferritecore-6.0.1-fabric.jar",
+        "Id":  "ferritecore",
+        "Name":  "FerriteCore",
+        "Version":  "6.0.1",
+        "Authors":  "malte0811",
+        "License":  "MIT",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/ferritecore-fabric",
+        "Description":  "Reduces memory usage"
+    },
+    {
+        "Jar":  "ForgeConfigAPIPort-v8.0.3-1.20.1-Fabric.jar",
+        "Id":  "forgeconfigapiport",
+        "Name":  "Forge Config API Port",
+        "Version":  "8.0.3",
+        "Authors":  "Fuzs",
+        "License":  "MPL-2.0",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://github.com/Fuzss/forgeconfigapiport",
+        "Description":  "Forge\u0027s whole config system provided to the Fabric ecosystem. Designed for a multiloader architecture."
+    },
+    {
+        "Jar":  "geckolib-fabric-1.20.1-4.8.4.jar",
+        "Id":  "geckolib",
+        "Name":  "GeckoLib 4",
+        "Version":  "4.8.4",
+        "Authors":  "Gecko, Eliot, AzureDoom, DerToaster, Tslat, Witixin",
+        "License":  "MIT",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/geckolib",
+        "Description":  "GeckoLib is an animation engine for Minecraft Mods, with support for complex 3D keyframe-based animations, 30+ easings, concurrent animation support, sound and particle keyframes, event keyframes, and more."
+    },
+    {
+        "Jar":  "handcrafted-fabric-1.20.1-3.0.6.jar",
+        "Id":  "handcrafted",
+        "Name":  "Handcrafted",
+        "Version":  "3.0.6",
+        "Authors":  "Alex Nijjar, Kekie6",
+        "License":  "Terrarium Licence",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "",
+        "Description":  "Epic Furniture mod!"
+    },
+    {
+        "Jar":  "Heracles-fabric-1.20.1-1.1.13.jar",
+        "Id":  "heracles",
+        "Name":  "Heracles",
+        "Version":  "1.1.13",
+        "Authors":  "ThatGravyBoat",
+        "License":  "MIT",
+        "Category":  "Jogabilidade \u0026 QoL",
+        "Homepage":  "",
+        "Description":  "Heracles is a comprehensive questing mod that allows pack makers to create tree style quests that can be distributed via the config folder for users to play and complete."
+    },
+    {
+        "Jar":  "heraclesbutton-1.0.0.jar",
+        "Id":  "heraclesbutton",
+        "Name":  "Heracles Button",
+        "Version":  "1.0.0",
+        "Authors":  "kyber-6, Pixel Dream Studios",
+        "License":  "MIT",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://modrinth.com/project/heracles-button",
+        "Description":  "Access your Quests from your Inventory"
+    },
+    {
+        "Jar":  "ImmediatelyFast-Fabric-1.5.5+1.20.4.jar",
+        "Id":  "immediatelyfast",
+        "Name":  "ImmediatelyFast",
+        "Version":  "1.5.5+1.20.4",
+        "Authors":  "RK_01",
+        "License":  "LGPL-3.0-or-later",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "https://github.com/RaphiMC/ImmediatelyFast",
+        "Description":  "Speed up and optimize immediate mode rendering in Minecraft"
+    },
+    {
+        "Jar":  "InventorySorter-1.9.0-1.20.jar",
+        "Id":  "inventorysorter",
+        "Name":  "Inventory Sorter",
+        "Version":  "1.9.0-1.20",
+        "Authors":  "kyrptonaught",
+        "License":  "MIT",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/inventory-sorting",
+        "Description":  "Quickly and easily sort inventorys"
+    },
+    {
+        "Jar":  "iris-1.7.6+mc1.20.1.jar",
+        "Id":  "iris",
+        "Name":  "Iris",
+        "Version":  "1.7.6+mc1.20.1",
+        "Authors":  "coderbot, IMS212, Justsnoopy30, FoundationGames",
+        "License":  "LGPL-3.0-only",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "https://github.com/IrisShaders/Iris",
+        "Description":  "A modern shaders mod for Minecraft intended to be compatible with existing OptiFine shader packs"
+    },
+    {
+        "Jar":  "Jade-1.20-Fabric-11.13.3.jar",
+        "Id":  "jade",
+        "Name":  "Jade",
+        "Version":  "11.13.3+fabric",
+        "Authors":  "Snownee",
+        "License":  "CC BY-NC-SA 4.0",
+        "Category":  "Jogabilidade \u0026 QoL",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/jade",
+        "Description":  "Minecraft mod shows what you are looking at. (Hwyla fork)"
+    },
+    {
+        "Jar":  "kubejs-fabric-2001.6.5-build.26.jar",
+        "Id":  "kubejs",
+        "Name":  "KubeJS",
+        "Version":  "2001.6.5-build.26",
+        "Authors":  "LatvianModder",
+        "License":  "GNU LGPLv3",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://github.com/KubeJS-Mods/KubeJS",
+        "Description":  "Customize your modpack or server with JavaScript!"
+    },
+    {
+        "Jar":  "language-reload-1.7.5+1.20.1.jar",
+        "Id":  "languagereload",
+        "Name":  "Language Reload",
+        "Version":  "1.7.5+1.20.1",
+        "Authors":  "Jerozgen",
+        "License":  "MIT",
+        "Category":  "Jogabilidade \u0026 QoL",
+        "Homepage":  "https://modrinth.com/mod/language-reload",
+        "Description":  "Reduces load times and adds fallbacks for languages."
+    },
+    {
+        "Jar":  "lithium-fabric-mc1.20.1-0.11.4.jar",
+        "Id":  "lithium",
+        "Name":  "Lithium",
+        "Version":  "0.11.4",
+        "Authors":  "JellySquid, 2No2Name",
+        "License":  "LGPL-3.0-only",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "https://jellysquid.me/projects/",
+        "Description":  "Lithium is a free and open-source optimization mod for Minecraft which makes a wide range of performance improvements to the game."
+    },
+    {
+        "Jar":  "modernfix-fabric-5.25.2+mc1.20.1.jar",
+        "Id":  "modernfix",
+        "Name":  "ModernFix",
+        "Version":  "5.25.2+mc1.20.1",
+        "Authors":  "embeddedt",
+        "License":  "LGPL-3.0",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "https://modrinth.com/mod/modernfix",
+        "Description":  "Egregious, yet effective performance improvements for modern Minecraft"
+    },
+    {
+        "Jar":  "ModernUI-Fabric-1.20.1-3.12.0.1-universal.jar",
+        "Id":  "modernui",
+        "Name":  "Modern UI",
+        "Version":  "3.12.0.1",
+        "Authors":  "BloCamLimb",
+        "License":  "LGPL-3.0-or-later",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://curseforge.com/minecraft/mc-mods/modern-ui",
+        "Description":  "Modern desktop framework from low-level 3D graphics API to high-level view model, for development of 2D/3D rendering software or game engine, with internationalization support and many new technologies.\n    Modern UI is a desktop application framework designed for standalone 2D and 3D rendering software development. It makes use of modern 3D graphical APIs and technologies to provide high real-time rendering performance. For good measure, Modern UI improves and optimizes a set of features used by Android and its own set of internationalization supporting text layout engine meeting Unicode specification.\n    This version is an official version that extends to Minecraft and Fabric, which combines Modern UI with Minecraft and provides a large number of additional features and modding APIs."
+    },
+    {
+        "Jar":  "MoogsStructureLib-fabric-1.20-3.4.2.jar",
+        "Id":  "moogs_structures",
+        "Name":  "Moog\u0027s Structure Lib",
+        "Version":  "3.4.2+fabric",
+        "Authors":  "FinnDog",
+        "License":  "GNU Lesser General Public License v3.0",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/moogs-structure-lib",
+        "Description":  "A library mod for generating structures"
+    },
+    {
+        "Jar":  "MoogsVoyagerStructures-universal-1.20-5.1.3.jar",
+        "Id":  "mvs",
+        "Name":  "MoogsVoyagerStructures",
+        "Version":  "5.1.3",
+        "Authors":  "FinnDog",
+        "License":  "GNU Lesser General Public License v3.0",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/moogs-voyager-structures",
+        "Description":  "160+ structures made with vanilla blocks and entities bringing life to your world! Discover loot, enemies, \u0026 villagers along the way!"
+    },
+    {
+        "Jar":  "naturalist-fabric-4.0.3-1.20.1.jar",
+        "Id":  "naturalist",
+        "Name":  "Naturalist",
+        "Version":  "4.0.3",
+        "Authors":  "Starfish Studios",
+        "License":  "MIT",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/naturalist",
+        "Description":  "Enhances the overworld by adding new wildlife with unique behavior!"
+    },
+    {
+        "Jar":  "omnimovement-fabric-1.0+mc1.20.1.jar",
+        "Id":  "omnimovement",
+        "Name":  "Omnimovement",
+        "Version":  "1.0",
+        "Authors":  "RhysR6S",
+        "License":  "All-Rights-Reserved",
+        "Category":  "Jogabilidade \u0026 QoL",
+        "Homepage":  "",
+        "Description":  "An Omnimovement mod."
+    },
+    {
+        "Jar":  "PresenceFootsteps-1.10.1+1.20.1.jar",
+        "Id":  "presencefootsteps",
+        "Name":  "Presence Footsteps",
+        "Version":  "1.10.1+1.20.1",
+        "Authors":  "Hurricaaane (Ha3), Sollace",
+        "License":  "MIT",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "https://github.com/Sollace/Presence-Footsteps",
+        "Description":  "An overly complicated sound mod."
+    },
+    {
+        "Jar":  "resourcefullib-fabric-1.20.1-2.1.29.jar",
+        "Id":  "resourcefullib",
+        "Name":  "Resourceful Lib",
+        "Version":  "2.1.29",
+        "Authors":  "ThatGravyBoat, Epic_Oreo",
+        "License":  "MIT",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://resourcefulbees.com",
+        "Description":  "Library Mod by Team Resourceful"
+    },
+    {
+        "Jar":  "rhino-fabric-2001.2.3-build.10.jar",
+        "Id":  "rhino",
+        "Name":  "Rhino",
+        "Version":  "2001.2.3-build.10",
+        "Authors":  "LatvianModder, Mozilla",
+        "License":  "MPL-2.0",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://github.com/KubeJS-Mods/Rhino",
+        "Description":  "A fork of Mozilla\u0027s Rhino library, modified for use in mods"
+    },
+    {
+        "Jar":  "sayitenglish-fabric-1.20.1-1.1.0.jar",
+        "Id":  "sayitenglish",
+        "Name":  "SayIt",
+        "Version":  "1.1.0",
+        "Authors":  "SpicesFire",
+        "License":  "MIT",
+        "Category":  "SayIt \u0026 IA",
+        "Homepage":  "",
+        "Description":  "Learn a language while you play: say every new item\u0027s name out loud (or type it) in English, German, Spanish, French, Italian, Portuguese, Russian or Turkish before you can keep it, and answer sentence challenges as you craft, fight and explore. Offline speech recognition (Vosk)."
+    },
+    {
+        "Jar":  "sodium-fabric-0.5.13+mc1.20.1.jar",
+        "Id":  "sodium",
+        "Name":  "Sodium",
+        "Version":  "0.5.13+mc1.20.1",
+        "Authors":  "JellySquid (jellysquid3)",
+        "License":  "Polyform-Shield-1.0.0",
+        "Category":  "Otimização \u0026 Visual",
+        "Homepage":  "https://github.com/CaffeineMC/sodium-fabric",
+        "Description":  "Sodium is a powerful rendering engine for Minecraft which greatly improves frame rates and micro-stutter, while fixing many graphical issues"
+    },
+    {
+        "Jar":  "stack-to-nearby-chests-mc1.20.1-0.5.10.jar",
+        "Id":  "stack-to-nearby-chests",
+        "Name":  "Stack to Nearby Chests",
+        "Version":  "0.5.10",
+        "Authors":  "xiaocihua",
+        "License":  "LGPL-3.0",
+        "Category":  "Jogabilidade \u0026 QoL",
+        "Homepage":  "https://github.com/xiaocihua",
+        "Description":  "A client-side ONLY mod, adds the quick stacking and restocking features from Terraria into Minecraft."
+    },
+    {
+        "Jar":  "Towns-and-Towers-1.12-Fabric+Forge.jar",
+        "Id":  "t_and_t",
+        "Name":  "Towns and Towers",
+        "Version":  "1.12",
+        "Authors":  "Kubek and Biban_Auriu, Cristelknight999",
+        "License":  "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "Category":  "Conteúdo \u0026 Mobília",
+        "Homepage":  "https://www.curseforge.com/minecraft/mc-mods/towns-and-towers",
+        "Description":  "Spice up your world with new villages, pillager outposts, and even new ships!"
+    },
+    {
+        "Jar":  "yet_another_config_lib_v3-3.6.6+1.20.1-fabric.jar",
+        "Id":  "yet_another_config_lib_v3",
+        "Name":  "YetAnotherConfigLib",
+        "Version":  "3.6.6+1.20.1-fabric",
+        "Authors":  "isXander",
+        "License":  "LGPL-3.0-or-later",
+        "Category":  "Core \u0026 Bibliotecas",
+        "Homepage":  "https://isxander.dev",
+        "Description":  "YetAnotherConfigLib (yacl) is just that. A builder-based configuration library for Minecraft."
+    }
+]
+;
+
+// Additional Core Infrastructure Attributions
+const INFRA_DATA = [
+  {
+    name: "Vosk Offline Neural Speech Recognition",
+    id: "vosk-model-small-ru-0.22",
+    authors: "Alpha Cephei Inc.",
+    license: "Apache-2.0",
+    category: "SayIt & IA",
+    homepage: "https://alphacephei.com/vosk/",
+    description: "Modelo de rede neural acÃºstica leve em russo operando 100% offline em tempo real."
+  },
+  {
+    name: "UltimMC Portable Launcher",
+    id: "ultimmc",
+    authors: "UltimMC / Prism Launcher Contributors",
+    license: "GPL-3.0-only",
+    category: "Core & Bibliotecas",
+    homepage: "https://github.com/UltimMC/Launcher",
+    description: "Inicializador autÃ´nomo e portÃ¡til baseado no Prism Launcher com suporte a instÃ¢ncias isoladas."
+  }
+];
+
+let activeAudio = null;
+let currentPlayingId = null;
+
+/**
+ * Interactive Audio Player Engine
+ */
+function initAudioPlayer() {
+  const playButtons = document.querySelectorAll(".btn-play-audio");
+
+  playButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const audioSrc = btn.getAttribute("data-audio");
+      const card = btn.closest(".audio-card");
+      const cardId = card ? card.getAttribute("data-id") : audioSrc;
+
+      if (currentPlayingId === cardId && activeAudio && !activeAudio.paused) {
+        activeAudio.pause();
+        resetAudioUI();
+        return;
+      }
+
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+        resetAudioUI();
+      }
+
+      const audio = new Audio(audioSrc);
+      activeAudio = audio;
+      currentPlayingId = cardId;
+
+      if (card) {
+        card.classList.add("active-playback");
+        btn.innerHTML = "<span class=\"play-icon\">â¸</span> Pausar";
+      }
+
+      audio.play().catch(err => {
+        console.warn("[SayIt-WebAudio] ReproduÃ§Ã£o bloqueada pelo navegador:", err);
+        showToast("Clique novamente para permitir a reproduÃ§Ã£o de Ã¡udio.");
+        resetAudioUI();
+      });
+
+      audio.addEventListener("ended", () => {
+        resetAudioUI();
+      });
+
+      audio.addEventListener("error", () => {
+        console.error("[SayIt-WebAudio] Falha ao carregar Ã¡udio:", audioSrc);
+        showToast("Ãudio de demonstraÃ§Ã£o temporariamente indisponÃ­vel.");
+        resetAudioUI();
+      });
+    });
+  });
+}
+
+function resetAudioUI() {
+  document.querySelectorAll(".audio-card").forEach(c => c.classList.remove("active-playback"));
+  document.querySelectorAll(".btn-play-audio").forEach(b => {
+    b.innerHTML = "<span class=\"play-icon\">â–¶</span> Ouvir PronÃºncia";
+  });
+  currentPlayingId = null;
+}
+
+/**
+ * Tab Switcher for Audio Preview Cards
+ */
+function initAudioTabs() {
+  const tabs = document.querySelectorAll(".audio-tabs .tab-btn");
+  const sections = {
+    radial: document.getElementById("tab-content-radial"),
+    survival: document.getElementById("tab-content-survival")
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      const target = tab.getAttribute("data-tab");
+      if (target === "radial") {
+        if (sections.radial) sections.radial.style.display = "grid";
+        if (sections.survival) sections.survival.style.display = "none";
+      } else if (target === "survival") {
+        if (sections.radial) sections.radial.style.display = "none";
+        if (sections.survival) sections.survival.style.display = "grid";
+      } else {
+        if (sections.radial) sections.radial.style.display = "grid";
+        if (sections.survival) sections.survival.style.display = "grid";
+      }
+    });
+  });
+}
+
+/**
+ * Searchable & Filterable Mod Credits Table
+ */
+function initCreditsTable() {
+  const tbody = document.getElementById("credits-tbody");
+  const searchInput = document.getElementById("mod-search-input");
+  const filterPills = document.querySelectorAll(".filter-pill");
+  const countDisplay = document.getElementById("credits-count-display");
+
+  if (!tbody) return;
+
+  const allMods = [...MODS_DATA, ...INFRA_DATA];
+  let currentCategory = "all";
+  let searchQuery = "";
+
+  function renderTable() {
+    tbody.innerHTML = "";
+
+    const filtered = allMods.filter(mod => {
+      const matchesCat = currentCategory === "all" || mod.category === currentCategory;
+      const textToSearch = `${mod.name} ${mod.id} ${mod.authors} ${mod.license} ${mod.description}`.toLowerCase();
+      const matchesSearch = !searchQuery || textToSearch.includes(searchQuery.toLowerCase());
+      return matchesCat && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      const emptyRow = document.createElement("tr");
+      emptyRow.innerHTML = "<td colspan=\"5\" style=\"text-align: center; padding: 2.5rem; color: var(--text-dim);\">Nenhum mod encontrado para os critÃ©rios de busca.</td>";
+      tbody.appendChild(emptyRow);
+      if (countDisplay) countDisplay.textContent = "Mostrando 0 de " + allMods.length + " mods";
+      return;
+    }
+
+    filtered.forEach(mod => {
+      const tr = document.createElement("tr");
+      const linkHtml = mod.homepage
+        ? `<a href=\"${mod.homepage}\" target=\"_blank\" rel=\"noopener noreferrer\" title=\"Visitar pÃ¡gina oficial\">â†— Link</a>`
+        : "<span style=\"color: var(--text-dim);\">â€”</span>";
+
+      tr.innerHTML = `
+        <td>
+          <div class=\"mod-title-cell\">
+            <span class=\"mod-name\">${mod.name}</span>
+            <span class=\"mod-id-code\">${mod.id}</span>
+          </div>
+        </td>
+        <td>${mod.authors || "Comunidade"}</td>
+        <td><span class=\"mod-category-badge\">${mod.category}</span></td>
+        <td><span class=\"mod-license-badge\">${mod.license || "Open Source"}</span></td>
+        <td>${linkHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    if (countDisplay) {
+      countDisplay.textContent = `Mostrando ${filtered.length} de ${allMods.length} mods e componentes`;
+    }
+  }
+
+  filterPills.forEach(pill => {
+    pill.addEventListener("click", () => {
+      filterPills.forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      currentCategory = pill.getAttribute("data-category");
+      renderTable();
+    });
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value.trim();
+      renderTable();
+    });
+  }
+
+  renderTable();
+}
+
+/**
+ * Copy to Clipboard with Feedback Toast
+ */
+function initClipboard() {
+  const copyButtons = document.querySelectorAll("[data-copy]");
+
+  copyButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const textToCopy = btn.getAttribute("data-copy");
+      const label = btn.getAttribute("data-copy-label") || "Texto";
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          showToast(`âœ” ${label} copiado para a Ã¡rea de transferÃªncia!`);
+        }).catch(() => fallbackCopy(textToCopy, label));
+      } else {
+        fallbackCopy(textToCopy, label);
+      }
+    });
+  });
+}
+
+function fallbackCopy(text, label) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.left = "-9999px";
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand("copy");
+    showToast(`âœ” ${label} copiado!`);
+  } catch (err) {
+    showToast(`Falha ao copiar: ${text}`);
+  }
+  document.body.removeChild(ta);
+}
+
+/**
+ * Toast Notification Controller
+ */
+function showToast(message) {
+  let container = document.querySelector(".toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  setTimeout(() => toast.classList.add("show"), 10);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 300);
+  }, 3200);
+}
+
+/**
+ * Smooth Navigation & Mobile Menu
+ */
+function initNavigation() {
+  const menuToggle = document.querySelector(".menu-toggle");
+  const navMenu = document.querySelector(".nav-menu");
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  if (menuToggle && navMenu) {
+    menuToggle.addEventListener("click", () => {
+      navMenu.classList.toggle("open");
+    });
+
+    navLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        navMenu.classList.remove("open");
+      });
+    });
+  }
+
+  const sections = document.querySelectorAll("section[id]");
+  window.addEventListener("scroll", () => {
+    let current = "";
+    const scrollY = window.pageYOffset;
+
+    sections.forEach(section => {
+      const sectionHeight = section.offsetHeight;
+      const sectionTop = section.offsetTop - 120;
+      if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+        current = section.getAttribute("id");
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove("active");
+      if (link.getAttribute("href") === `#${current}`) {
+        link.classList.add("active");
+      }
+    });
+  });
+}

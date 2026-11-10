@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft Russo: SayIt Modpack — Aprenda Russo Jogando</title>
+  <meta name="description" content="Modpack cooperativo para Minecraft 1.20.1 Fabric com reconhecimento de voz neural offline (Vosk), roda radial de ações, desafios kamikaze e imersão pedagógica em russo.">
+  <meta name="theme-color" content="#080c14">
+
+  <!-- Open Graph Metadata -->
+  <meta property="og:title" content="Minecraft Russo: SayIt Modpack">
+  <meta property="og:description" content="Aprenda russo enquanto sobrevive e coopera com seus amigos no Minecraft 1.20.1 Fabric com IA de fala 100% offline.">
+  <meta property="og:type" content="website">
+
+  <!-- Pure Modern CSS3 Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==============================================================================
+       Header & Navigation
+       ============================================================================== -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="#overview" class="brand-link">
+        <div class="brand-icon">🎙️</div>
+        <span>SayIt: Minecraft Russo</span>
+        <span class="brand-badge">Fabric 1.20.1</span>
+      </a>
+
+      <button class="menu-toggle" aria-label="Abrir menu de navegação">☰</button>
+
+      <ul class="nav-menu">
+        <li><a href="#overview" class="nav-link active">Visão Geral</a></li>
+        <li><a href="#features" class="nav-link">Recursos</a></li>
+        <li><a href="#audio-preview" class="nav-link">Treino Fonético</a></li>
+        <li><a href="#radial" class="nav-link">Roda Radial</a></li>
+        <li><a href="#credits" class="nav-link">Mods &amp; Créditos</a></li>
+        <li><a href="#changelog" class="nav-link">Changelog</a></li>
+        <li><a href="#multiplayer" class="nav-link">Como Jogar</a></li>
+      </ul>
+
+      <div class="header-cta">
+        <a href="#downloads" class="btn-header">📥 Baixar Cliente</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==============================================================================
+         Hero Section
+         ============================================================================== -->
+    <section id="overview" class="hero section">
+      <div class="container">
+        <div class="hero-grid">
+          
+          <!-- Hero Copy Column -->
+          <div class="hero-content">
+            <div class="badge-row">
+              <span class="hero-badge highlight">⚡ Fabric 1.20.1</span>
+              <span class="hero-badge ai">🧠 Vosk Offline AI (100% Local)</span>
+              <span class="hero-badge portable">🚀 Windows Portable Turnkey</span>
+              <span class="hero-badge">📦 43 Mods Curados</span>
+            </div>
+
+            <h1 class="hero-title">
+              Minecraft Russo: <br>
+              <span class="glow-cyan">SayIt</span> <span class="glow-gold">Modpack</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Aprenda russo enquanto sobrevive e coopera com seus amigos no Minecraft 1.20.1 Fabric.
+            </p>
+
+            <p class="hero-summary">
+              Uma experiência multiplayer imersiva onde a voz humana é a chave do jogo.
+              Fale em russo para solicitar recursos aos amigos, iniciar desafios kamikaze,
+              acionar comandos na roda radial com validação estrita e dominar o vocabulário
+              de sobrevivência com inteligência artificial offline e referência fonética nativa.
+            </p>
+
+            <div class="hero-cta-group" id="downloads">
+              <a href="downloads/Minecraft_Russo_Client_Setup.zip" class="btn-primary" download>
+                <span>📥 Baixar Cliente Portátil (.zip)</span>
+              </a>
+              <a href="#audio-preview" class="btn-secondary">
+                <span>🎧 Ouvir Pronúncias</span>
+              </a>
+              <a href="#multiplayer" class="btn-secondary">
+                <span>📖 Guia Rápido</span>
+              </a>
+            </div>
+
+            <!-- Copyable Checksum Card -->
+            <div class="checksum-card">
+              <div class="checksum-info">
+                <span class="checksum-label">SHA-256 Checksum do Pacote Oficial</span>
+                <span class="checksum-value" id="sha256-val">2c1ba3dd3076bd4a55eb7bc847fd89fa38e8e8541d22856199d2f0b80d0d4764</span>
+              </div>
+              <button class="btn-copy-chip" data-copy="2c1ba3dd3076bd4a55eb7bc847fd89fa38e8e8541d22856199d2f0b80d0d4764" data-copy-label="SHA-256">
+                Copiar Hash
+              </button>
+            </div>
+          </div>
+
+          <!-- Hero HUD Visual Simulation Card -->
+          <div class="hero-visual-card glass-card">
+            <div class="hud-preview-header">
+              <div class="hud-dots">
+                <span class="hud-dot red"></span>
+                <span class="hud-dot yellow"></span>
+                <span class="hud-dot green"></span>
+              </div>
+              <span class="hud-title">SAYIT SPEECH HUD — COOP V2.1</span>
+            </div>
+
+            <div class="hud-preview-content">
+              <!-- Speech HUD Card -->
+              <div class="hud-speech-box">
+                <div class="hud-speech-header">disse:</div>
+                <div class="hud-speech-body">
+                  <span>« Мне нужно дерево! »</span>
+                  <span class="hud-speech-badge">98% Precisão</span>
+                </div>
+              </div>
+
+              <!-- Receiver Notification Preview -->
+              <div class="hud-speech-box" style="border-color: rgba(251, 191, 36, 0.4);">
+                <div class="hud-speech-header" style="color: var(--accent-cyan);">NOTIFICAÇÃO VISUAL NO RECEPTOR:</div>
+                <div class="hud-speech-body" style="font-size: 0.95rem;">
+                  <span>👤 [EstudanteRusso] 🪵 ❓</span>
+                  <span class="hud-speech-badge" style="background: rgba(251, 191, 36, 0.2); color: var(--accent-gold);">PEDIDO: MADEIRA</span>
+                </div>
+              </div>
+
+              <!-- KPI Stats Grid -->
+              <div class="hud-stats-grid">
+                <div class="hud-stat-pill">
+                  <span class="hud-stat-num cyan">43</span>
+                  <span class="hud-stat-label">Mods Integrados</span>
+                </div>
+                <div class="hud-stat-pill">
+                  <span class="hud-stat-num gold">100%</span>
+                  <span class="hud-stat-label">IA Neural Offline</span>
+                </div>
+                <div class="hud-stat-pill">
+                  <span class="hud-stat-num cyan">6</span>
+                  <span class="hud-stat-label">Ações Radiais ('V')</span>
+                </div>
+                <div class="hud-stat-pill">
+                  <span class="hud-stat-num gold">382</span>
+                  <span class="hud-stat-label">Chaves ru_ru na R3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================================
+         Feature Showcase Section
+         ============================================================================== -->
+    <section id="features" class="section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag">Mecânicas Inovadoras</span>
+          <h2 class="section-title">Projetado para Imersão &amp; Cooperação Real</h2>
+          <p class="section-desc">
+            Cada recurso foi desenvolvido para transformar o Minecraft em uma ferramenta viva
+            de aprendizado de russo, combinando adrenalina multiplayer, pedagogia contextual e IA de ponta.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          
+          <!-- Feature 1 -->
+          <div class="feature-card glass-card">
+            <div class="feature-icon-box cyan">🤝</div>
+            <h3 class="feature-title">Desafios Cooperativos &amp; Lava Kamikaze</h3>
+            <p class="feature-desc">
+              Invoque frases práticas em multiplayer para solicitar materiais ou pedir socorro.
+              Qualquer jogador pode iniciar desafios dinâmicos kamikaze (como «Пол - это лава!» — O chão é lava!),
+              gerando pânico divertido e sincronização entre os amigos.
+            </p>
+            <ul class="feature-list">
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Sistema de ranking em 5 tiers: Novato (Новичок) até Lenda (Легенда).</li>
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> HUD de fala compactado: feedback visual restrito com cabeçalho exclusivo «disse: ».</li>
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Desbloqueio progressivo calibrado do alfabeto cirílico em dois eixos visuais.</li>
+            </ul>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card glass-card">
+            <div class="feature-icon-box gold">🎯</div>
+            <h3 class="feature-title">Roda Radial ('V') com Portão Estrito de Voz</h3>
+            <p class="feature-desc">
+              Acesso instantâneo a 6 setores de ações cooperativas acionadas pela tecla 'V'.
+              A seleção abre imediatamente o desafio de voz, e o pacote só é transmitido
+              se a pronúncia em russo for validada com precisão mínima de 85%.
+            </p>
+            <ul class="feature-list">
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> 6 setores ergonômicos com ícones (Baú, Pão, Maçã Dourada, Lava, Bússola, Luneta).</li>
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Tela ItemSearchScreen com busca rápida de itens para o pedido «Мне нужно...».</li>
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Cancelamento ou erro de pronúncia não polui o chat nem a tela do parceiro.</li>
+            </ul>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card glass-card">
+            <div class="feature-icon-box purple">🔔</div>
+            <h3 class="feature-title">Notificação Visual no Receptor &amp; HUD</h3>
+            <p class="feature-desc">
+              Ao concluir a pronúncia, o parceiro recebe um alerta visual direto com a cabeça e skin
+              do solicitante, acompanhado do ícone sugestivo com ponto de interrogação
+              (ex: madeira com '?', comida com '?').
+            </p>
+            <ul class="feature-list">
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Identificação instantânea de quem precisa de ajuda e qual o recurso solicitado.</li>
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Atalho de recarga de shader ('R' do Iris) desvinculado contra travamentos acidentais.</li>
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Sincronização em tempo real via canal de rede dedicado Fabric.</li>
+            </ul>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="feature-card glass-card">
+            <div class="feature-icon-box rose">🔊</div>
+            <h3 class="feature-title">Referência Fonética ("Pressione para Ouvir" - 'H')</h3>
+            <p class="feature-desc">
+              Ouça a pronúncia nativa das palavras ou frases antes de tentar falar! Pressionando a tecla 'H'
+              em desafios ou pairando sobre setores da roda radial, o subsistema de áudio nativo reproduz o som
+              com latência ultrabaixa via JNA WinMM MCI.
+            </p>
+            <ul class="feature-list">
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Pausa automática do temporizador de desafio durante a reprodução do áudio.</li>
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> Cache offline autossuficiente pré-populado para frases radiais e itens de sobrevivência.</li>
+              <li class="feature-list-item"><span class="feature-bullet">▸</span> 100% de cobertura em russo auditada para todos os mods recentes.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================================
+         Interactive Audio Preview Section
+         ============================================================================== -->
+    <section id="audio-preview" class="section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag emerald">Demonstração Interativa</span>
+          <h2 class="section-title">Treino Fonético &amp; Pronúncia em Tempo Real</h2>
+          <p class="section-desc">
+            Pressione os botões abaixo para ouvir os áudios reais de demonstração gerados pelo
+            subsistema fonético do modpack. Aprenda a entonação correta de cada frase e item.
+          </p>
+        </div>
+
+        <div class="audio-preview-container">
+          <!-- Audio Filter Tabs -->
+          <div class="audio-tabs">
+            <button class="tab-btn active" data-tab="all">Mostrar Todos</button>
+            <button class="tab-btn" data-tab="radial">Frases da Roda Radial ('V')</button>
+            <button class="tab-btn" data-tab="survival">Vocabulário de Sobrevivência</button>
+          </div>
+
+          <!-- Section A: 6 Radial Action Phrases Grid -->
+          <div class="audio-cards-grid" id="tab-content-radial">
+            
+            <!-- Radial Card 1 -->
+            <div class="audio-card glass-card" data-id="radial-item">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">📦</div>
+                <span class="audio-sector-tag">Setor 1: Item</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Мне нужно...</span>
+                <span class="audio-translit">Mnye nuzhno...</span>
+                <span class="audio-translation">Pedir qualquer item (Abre busca)</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/phrase_item.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim">
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Radial Card 2 -->
+            <div class="audio-card glass-card" data-id="radial-food">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🍞</div>
+                <span class="audio-sector-tag">Setor 2: Comida</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Мне нужна еда!</span>
+                <span class="audio-translit">Mnye nuzhna yeda!</span>
+                <span class="audio-translation">Preciso de comida!</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/phrase_food.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim">
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Radial Card 3 -->
+            <div class="audio-card glass-card" data-id="radial-help">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🍎</div>
+                <span class="audio-sector-tag">Setor 3: Ajuda</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Помоги мне!</span>
+                <span class="audio-translit">Pamagi mnye!</span>
+                <span class="audio-translation">Me ajude!</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/phrase_help.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim">
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Radial Card 4 -->
+            <div class="audio-card glass-card" data-id="radial-lava">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🌋</div>
+                <span class="audio-sector-tag" style="color: var(--accent-rose); border-color: rgba(244, 63, 94, 0.4);">Setor 4: Kamikaze</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Пол - это лава!</span>
+                <span class="audio-translit">Pol - eta lava!</span>
+                <span class="audio-translation">O chão é lava! (Desafio Kamikaze)</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/phrase_lava.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim">
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Radial Card 5 -->
+            <div class="audio-card glass-card" data-id="radial-follow">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🧭</div>
+                <span class="audio-sector-tag">Setor 5: Seguir</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Следуй за мной!</span>
+                <span class="audio-translit">Slyeduy za mnoy!</span>
+                <span class="audio-translation">Siga-me!</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/phrase_follow.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim">
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Radial Card 6 -->
+            <div class="audio-card glass-card" data-id="radial-waypoint">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🔭</div>
+                <span class="audio-sector-tag">Setor 6: Ponto</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Смотри туда!</span>
+                <span class="audio-translit">Smatri tuda!</span>
+                <span class="audio-translation">Olhe lá! (Indica localização)</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/phrase_waypoint.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim">
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                  <span class="wave-bar"></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Section B: Essential Survival Vocabulary Grid -->
+          <div class="audio-cards-grid" id="tab-content-survival">
+            
+            <div class="audio-card glass-card" data-id="vocab-wood">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🪵</div>
+                <span class="audio-sector-tag">Básico</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Дерево</span>
+                <span class="audio-translit">Dyereva</span>
+                <span class="audio-translation">Madeira / Árvore</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/vocab_wood.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div>
+              </div>
+            </div>
+
+            <div class="audio-card glass-card" data-id="vocab-stone">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🪨</div>
+                <span class="audio-sector-tag">Básico</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Камень</span>
+                <span class="audio-translit">Kamen'</span>
+                <span class="audio-translation">Pedra</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/vocab_stone.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div>
+              </div>
+            </div>
+
+            <div class="audio-card glass-card" data-id="vocab-iron">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🔩</div>
+                <span class="audio-sector-tag">Minério</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Железный слиток</span>
+                <span class="audio-translit">Zhelezny slitok</span>
+                <span class="audio-translation">Barra de Ferro</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/vocab_iron.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div>
+              </div>
+            </div>
+
+            <div class="audio-card glass-card" data-id="vocab-gold">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🪙</div>
+                <span class="audio-sector-tag">Precioso</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Золотой слиток</span>
+                <span class="audio-translit">Zalatoy slitok</span>
+                <span class="audio-translation">Barra de Ouro</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/vocab_gold.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div>
+              </div>
+            </div>
+
+            <div class="audio-card glass-card" data-id="vocab-diamond">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">💎</div>
+                <span class="audio-sector-tag">Precioso</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Алмаз</span>
+                <span class="audio-translit">Almaz</span>
+                <span class="audio-translation">Diamante</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/vocab_diamond.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div>
+              </div>
+            </div>
+
+            <div class="audio-card glass-card" data-id="vocab-copper">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🧱</div>
+                <span class="audio-sector-tag">Minério</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Медь</span>
+                <span class="audio-translit">Med'</span>
+                <span class="audio-translation">Cobre</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/vocab_copper.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div>
+              </div>
+            </div>
+
+            <div class="audio-card glass-card" data-id="vocab-coal">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">⬛</div>
+                <span class="audio-sector-tag">Combustível</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Уголь</span>
+                <span class="audio-translit">Ugol'</span>
+                <span class="audio-translation">Carvão</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/vocab_coal.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div>
+              </div>
+            </div>
+
+            <div class="audio-card glass-card" data-id="vocab-cobble">
+              <div class="audio-card-top">
+                <div class="audio-icon-wrap">🪨</div>
+                <span class="audio-sector-tag">Construção</span>
+              </div>
+              <div class="audio-text-group">
+                <span class="audio-cyrillic">Булыжник</span>
+                <span class="audio-translit">Bulyzhnik</span>
+                <span class="audio-translation">Pedregulho</span>
+              </div>
+              <div class="audio-play-bar">
+                <button class="btn-play-audio" data-audio="assets/audio/vocab_cobble.mp3">
+                  <span class="play-icon">▶</span> Ouvir Pronúncia
+                </button>
+                <div class="audio-wave-anim"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================================
+         6-Sector Radial Action Wheel Section
+         ============================================================================== -->
+    <section id="radial" class="section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag gold">Controle Tátil &amp; Fala</span>
+          <h2 class="section-title">A Roda Radial de Ações (Tecla 'V')</h2>
+          <p class="section-desc">
+            Acione comandos táticos cooperativos com fluidez sem interromper a movimentação do seu personagem.
+          </p>
+        </div>
+
+        <div class="radial-showcase-grid">
+          
+          <!-- Radial Visual Diagram -->
+          <div class="radial-visual-card glass-card">
+            <span class="section-tag">Diagrama da Roleta</span>
+            <div class="radial-ring-wrap">
+              <div class="radial-node node-1" title="Setor 1: Мне нужно...">📦</div>
+              <div class="radial-node node-2" title="Setor 2: Мне нужна еда!">🍞</div>
+              <div class="radial-node node-3" title="Setor 3: Помоги мне!">🍎</div>
+              <div class="radial-node node-4" title="Setor 4: Пол - это лава!">🌋</div>
+              <div class="radial-node node-5" title="Setor 5: Следуй за мной!">🧭</div>
+              <div class="radial-node node-6" title="Setor 6: Смотри туда!">🔭</div>
+
+              <div class="radial-center-hub">
+                <span class="radial-center-key">V</span>
+                <span class="radial-center-label">Atalho</span>
+              </div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-dim);">Pressione e segure 'V' para abrir o menu radial</p>
+          </div>
+
+          <!-- Radial Explanation Card -->
+          <div class="radial-explain-card glass-card" style="padding: 2.5rem;">
+            <div class="gate-badge-box">
+              <span>🔒 Portão Estrito de Voz: 85% de Precisão Exigida</span>
+            </div>
+
+            <h3 style="font-size: 1.6rem; font-weight: 800; color: #ffffff;">Como Funciona o Fluxo Pedagógico:</h3>
+
+            <p style="color: var(--text-muted); line-height: 1.7;">
+              1. <strong>Seleção Rápida</strong>: Ao pressionar 'V', a roda se abre centralizada na tela com 6 ícones representativos.<br>
+              2. <strong>Início Imediato do Desafio</strong>: Ao clicar em qualquer setor, o HUD inicia a escuta do microfone pelo modelo neural Vosk.<br>
+              3. <strong>Validação em Tempo Real</strong>: Se a pronúncia alcançar o limiar calibrado (85%), o pacote de notificação cooperativa é enviado para o parceiro.<br>
+              4. <strong>Proteção Anti-Spam</strong>: Caso o jogador erre ou cancele o desafio, nenhum aviso ou som é transmitido ao amigo.
+            </p>
+
+            <div style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px;">
+              <span style="font-weight: 700; color: #ffffff;">Dica Pro:</span>
+              <span style="font-size: 0.9rem; color: var(--text-muted);">
+                Você também pode pressionar <kbd style="background: #1e293b; padding: 2px 6px; border-radius: 4px; border: 1px solid #334155; color: var(--accent-gold);">H</kbd> enquanto paira sobre qualquer setor para escutar a pronúncia nativa antes de soltar a roda!
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================================
+         Mod Credits & Authors Section
+         ============================================================================== -->
+    <section id="credits" class="section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag">Transparência &amp; Open-Source</span>
+          <h2 class="section-title">Créditos aos Criadores Originais dos Mods</h2>
+          <p class="section-desc">
+            Este modpack é construído sobre o trabalho incrível da comunidade Fabric.
+            Abaixo você encontra a relação completa de todos os 43 mods, seus autores originais e licenças.
+          </p>
+        </div>
+
+        <div class="credits-toolbar">
+          <div class="credits-search-wrap">
+            <span class="search-icon-inside">🔍</span>
+            <input type="text" id="mod-search-input" class="credits-search-input" placeholder="Buscar mod por nome, mod ID, autor ou licença (ex: SpicesFire, MehVahdJukaar, Farmer's, MIT)...">
+          </div>
+
+          <div class="credits-filter-pills">
+            <button class="filter-pill active" data-category="all">Todos os Mods (43)</button>
+            <button class="filter-pill" data-category="SayIt &amp; IA">SayIt &amp; IA</button>
+            <button class="filter-pill" data-category="Conteúdo &amp; Mobília">Conteúdo &amp; Mobília</button>
+            <button class="filter-pill" data-category="Jogabilidade &amp; QoL">Jogabilidade &amp; QoL</button>
+            <button class="filter-pill" data-category="Otimização &amp; Visual">Otimização &amp; Visual</button>
+            <button class="filter-pill" data-category="Core &amp; Bibliotecas">Core &amp; Bibliotecas</button>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="credits-table-wrap">
+          <table class="credits-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Mod &amp; ID</th>
+                <th style="width: 30%;">Autores / Criadores</th>
+                <th style="width: 20%;">Categoria</th>
+                <th style="width: 15%;">Licença</th>
+                <th style="width: 10%;">Fonte</th>
+              </tr>
+            </thead>
+            <tbody id="credits-tbody">
+              <!-- Dynamically populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="credits-stats-bar">
+          <span id="credits-count-display">Carregando catálogo de mods...</span>
+          <span>Instância Fabric 1.20.1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================================
+         Detailed Multi-Round Changelog Section
+         ============================================================================== -->
+    <section id="changelog" class="section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag emerald">Evolução do Projeto</span>
+          <h2 class="section-title">Histórico de Alterações (Rodadas 1 a 3)</h2>
+          <p class="section-desc">
+            Acompanhe o registro cronológico completo de desenvolvimento do SayIt Russo.
+          </p>
+        </div>
+
+        <div class="changelog-timeline">
+          
+          <!-- Round 3 -->
+          <div class="timeline-entry round-3">
+            <div class="timeline-marker">R3</div>
+            <div class="timeline-content glass-card">
+              <div class="timeline-header">
+                <div class="timeline-title-group">
+                  <span class="section-tag emerald" style="margin: 0;">Rodada 3</span>
+                  <h3 class="timeline-round-title">Tradução Total, Fonética Nativa &amp; Distribuição Portátil</h3>
+                </div>
+                <span class="timeline-date">Novembro 2026</span>
+              </div>
+
+              <div class="changelog-items-grid">
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">🗣️ Referência Fonética («Pressione para Ouvir» - 'H')</span>
+                  <span class="changelog-pill-desc">Subsistema nativo de áudio via JNA WinMM MCI com cache local offline, pausa do temporizador e acionamento direto em desafios e na roda radial.</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">🌐 Auditoria 100% ru_ru (382 Chaves Eliminadas)</span>
+                  <span class="changelog-pill-desc">Tradução cirílica completa para todos os mods recentes (Towns and Towers, MVS, Critters, Ecologics, Exposure, Carry On, Naturalist) e tooltips KubeJS.</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">📦 Empacotador Portátil &amp; Jogar.bat Sem Junções</span>
+                  <span class="changelog-pill-desc">Script package_client.ps1 que empacota o cliente em ZIP autônomo, eliminando junções NTFS com resolução dinâmica de caminhos e OpenJDK 17 embutido.</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">🧪 Suíte E2E Estendida para 71 Testes Canônicos</span>
+                  <span class="changelog-pill-desc">Novos testes T1_F39 a F42, T2_11-12, T3_07-08 e T4_09 cobrindo áudio, traduções, relocabilidade de drive e validação estrita contínua.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Round 2 -->
+          <div class="timeline-entry round-2">
+            <div class="timeline-marker">R2</div>
+            <div class="timeline-content glass-card">
+              <div class="timeline-header">
+                <div class="timeline-title-group">
+                  <span class="section-tag gold" style="margin: 0;">Rodada 2</span>
+                  <h3 class="timeline-round-title">Roda Radial de Ações, Portão de Voz &amp; Mobília</h3>
+                </div>
+                <span class="timeline-date">Novembro 2026</span>
+              </div>
+
+              <div class="changelog-items-grid">
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">🎡 Roda Radial Visual com Tecla 'V'</span>
+                  <span class="changelog-pill-desc">Interface circular com 6 setores representativos para invocar ações cooperativas de socorro, comida, item e localização.</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">🔒 Portão Estrito de Fala (85% de Precisão)</span>
+                  <span class="changelog-pill-desc">Transmissão da ação cooperativa ao parceiro estritamente condicionada à aprovação fonética do jogador emissor.</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">👤 Notificação no Receptor com Cabeça do Jogador</span>
+                  <span class="changelog-pill-desc">Alerta HUD marcante com a skin do solicitante e ícone temático com ponto de interrogação.</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">☕ Mods de Vida Cotidiana &amp; Desvinculação do 'R'</span>
+                  <span class="changelog-pill-desc">Integração do Farmer's Respite (chás/cafés) e Comforts (redes/sacos de dormir) com vocabulário russo adaptado e desativação do atalho 'R' no Iris.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Round 1 -->
+          <div class="timeline-entry round-1">
+            <div class="timeline-marker">R1</div>
+            <div class="timeline-content glass-card">
+              <div class="timeline-header">
+                <div class="timeline-title-group">
+                  <span class="section-tag" style="margin: 0;">Rodada 1</span>
+                  <h3 class="timeline-round-title">Fundação Cooperativa, Alfabeto &amp; Pilha QoL</h3>
+                </div>
+                <span class="timeline-date">Novembro 2026</span>
+              </div>
+
+              <div class="changelog-items-grid">
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">🌋 Desafios Multiplayer &amp; «O chão é lava!»</span>
+                  <span class="changelog-pill-desc">Mecânicas cooperativas de invocação por voz, desafios kamikaze aleatórios e sistema de ranking de pontuação em 5 tiers.</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">💬 Refatoração do HUD de Feedback de Fala</span>
+                  <span class="changelog-pill-desc">Exibição de fala reduzida e restrita exclusivamente a frases completas com prefixo padrão «disse: ».</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">🔤 Calibração do Alfabeto Cirílico em 2 Eixos</span>
+                  <span class="changelog-pill-desc">Letras idênticas vs não-idênticas com progressão gradual calibrada para evitar fixação precoce definitiva.</span>
+                </div>
+                <div class="changelog-pill">
+                  <span class="changelog-pill-title">⚡ Pilha de Desempenho &amp; Otimização</span>
+                  <span class="changelog-pill-desc">Integração do Sodium, Lithium, FerriteCore, ModernFix, Omnimovement, Carry On e Stack to Nearby Chests.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================================
+         Multiplayer Setup Guide
+         ============================================================================== -->
+    <section id="multiplayer" class="section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag">Pronto para Jogar</span>
+          <h2 class="section-title">Como Jogar com Seus Amigos (Passo a Passo)</h2>
+          <p class="section-desc">
+            Criamos uma distribuição portátil autossuficiente para que qualquer amigo possa entrar na partida
+            sem precisar instalar Java nem configurar caminhos complicados.
+          </p>
+        </div>
+
+        <div class="setup-grid">
+          
+          <!-- Steps Column -->
+          <div class="steps-list">
+            
+            <div class="step-card glass-card">
+              <div class="step-number">1</div>
+              <div class="step-text">
+                <h3 class="step-title">Baixe o Pacote Portátil</h3>
+                <p class="step-desc">
+                  Clique no botão de download acima ou obtenha o arquivo <code>Minecraft_Russo_Client_Setup.zip</code>.
+                </p>
+              </div>
+            </div>
+
+            <div class="step-card glass-card">
+              <div class="step-number">2</div>
+              <div class="step-text">
+                <h3 class="step-title">Extraia em Qualquer Pasta</h3>
+                <p class="step-desc">
+                  Descompacte o arquivo ZIP no seu disco (ex: <code>C:\Jogos\Minecraft_Russo</code> ou em um pendrive).
+                  Não são necessários privilégios de administrador.
+                </p>
+              </div>
+            </div>
+
+            <div class="step-card glass-card">
+              <div class="step-number">3</div>
+              <div class="step-text">
+                <h3 class="step-title">Execute o «Jogar.bat»</h3>
+                <p class="step-desc">
+                  Dê dois cliques em <code>Jogar.bat</code> na raiz da pasta. O script auto-reparável detecta
+                  o caminho dinâmico da pasta, ajusta a configuração e inicia o launcher portátil UltimMC com o Java 17 local.
+                </p>
+              </div>
+            </div>
+
+            <div class="step-card glass-card">
+              <div class="step-number">4</div>
+              <div class="step-text">
+                <h3 class="step-title">Clique em Jogar &amp; Conecte</h3>
+                <p class="step-desc">
+                  No inicializador, basta clicar no botão <strong>Jogar</strong> (instância <em>Minecraft_Russo</em>).
+                  Ao abrir o menu Multijogador, adicione o servidor ou conecte-se à rede local (LAN).
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Server Connect & Requirements Column -->
+          <div class="server-connect-card glass-card">
+            <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff;">Conexão Rápida ao Servidor</h3>
+            
+            <div class="server-ip-box">
+              <span class="server-ip-label">Endereço do Servidor Dedicado</span>
+              <div class="server-ip-row">
+                <span class="server-ip-address" id="server-ip-val">sayit.jogar.net:25565</span>
+                <button class="btn-copy-chip" data-copy="sayit.jogar.net:25565" data-copy-label="Endereço IP">
+                  Copiar IP
+                </button>
+              </div>
+            </div>
+
+            <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+              <strong style="color: #ffffff;">Jogando via Internet (sem IP fixo):</strong><br>
+              Recomendamos o uso do <strong>Playit.gg</strong> ou <strong>Radmin VPN</strong> para que amigos fora da sua rede Wi-Fi possam se conectar sem necessidade de abrir portas no roteador (CGNAT bypass).
+            </div>
+
+            <h4 style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-top: 0.5rem;">Requisitos de Sistema:</h4>
+            <ul class="requirements-list">
+              <li>
+                <span class="req-name">Sistema Operacional:</span>
+                <span class="req-val">Windows 10 / 11 (64-bit)</span>
+              </li>
+              <li>
+                <span class="req-name">Memória RAM:</span>
+                <span class="req-val">Mínimo 4 GB (8 GB recomendado)</span>
+              </li>
+              <li>
+                <span class="req-name">Java Runtime:</span>
+                <span class="req-val">OpenJDK 17 (Embutido no pacote)</span>
+              </li>
+              <li>
+                <span class="req-name">Hardware de Áudio:</span>
+                <span class="req-val">Microfone para entrada de voz</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==============================================================================
+       Footer
+       ============================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-brand-col">
+          <div class="brand-link" style="padding: 0;">
+            <div class="brand-icon">🎙️</div>
+            <span>SayIt: Minecraft Russo</span>
+          </div>
+          <p class="footer-desc">
+            Projeto educacional aberto para aprendizado ativo da língua russa através
+            da colaboração, sobrevivência e comunicação oral no Minecraft 1.20.1 Fabric.
+          </p>
+          <div class="badge-row">
+            <span class="hero-badge">Fabric 1.20.1</span>
+            <span class="hero-badge">Vosk Acoustic AI</span>
+            <span class="hero-badge">MIT License</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Seções do Repositório</h4>
+          <ul class="footer-links">
+            <li><a href="#overview">Visão Geral &amp; Download</a></li>
+            <li><a href="#features">Recursos &amp; Inovações</a></li>
+            <li><a href="#audio-preview">Treino Fonético Interativo</a></li>
+            <li><a href="#radial">Roda Radial de Ações ('V')</a></li>
+            <li><a href="#credits">Créditos dos 43 Mods</a></li>
+            <li><a href="#changelog">Changelog das Rodadas 1 a 3</a></li>
+            <li><a href="#multiplayer">Guia de Instalação Rápida</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Atribuições &amp; Repositório</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/SpicesFire/SayIt" target="_blank" rel="noopener noreferrer">↗ SayIt Mod Original (SpicesFire)</a></li>
+            <li><a href="https://alphacephei.com/vosk/" target="_blank" rel="noopener noreferrer">↗ Vosk Neural Engine (Alpha Cephei)</a></li>
+            <li><a href="https://fabricmc.net" target="_blank" rel="noopener noreferrer">↗ FabricMC Project</a></li>
+            <li><a href="https://github.com/UltimMC/Launcher" target="_blank" rel="noopener noreferrer">↗ UltimMC Launcher</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-disclaimer-box">
+        <p>
+          <strong>Aviso Legal de Minecraft:</strong> NÃO É UM PRODUTO OFICIAL DO MINECRAFT. NÃO APROVADO OU ASSOCIADO À MOJANG OU MICROSOFT.
+          Minecraft é uma marca registrada de Mojang AB / Microsoft. Todos os mods pertencem aos seus respectivos autores listados na seção de créditos.
+        </p>
+        <p>© 2026 Minecraft Russo: SayIt Modpack Team — Distribuído sob licenças de código aberto.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vanilla ES6 Client-Side Application -->
+  <script src="app.js"></script>
+</body>
+</html>
