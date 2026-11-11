@@ -1549,11 +1549,15 @@ Register-Test "T1_F41" "Tier 1" "F41: Portable Packager Archive & Checksum Integ
     $portableJava = Join-Path $distDir "Java17\bin\javaw.exe"
     $portableBat = Join-Path $distDir "Jogar.bat"
     $launcherBat = Join-Path $TargetRoot "Launcher\Jogar.bat"
+    $portableNameBat = Join-Path $distDir "Mudar_Nome.bat"
+    $launcherNameBat = Join-Path $TargetRoot "Launcher\Mudar_Nome.bat"
 
     if (-not (Test-Path $portableLauncher)) { throw "UltimMC.exe missing in portable package at $portableLauncher" }
     if (-not (Test-Path $portableJava)) { throw "Java17 javaw.exe missing in portable package at $portableJava" }
     if (-not (Test-Path $portableBat)) { throw "Jogar.bat missing in portable root at $portableBat" }
     if (-not (Test-Path $launcherBat)) { throw "Jogar.bat missing in Launcher\ at $launcherBat" }
+    if (-not (Test-Path $portableNameBat)) { throw "Mudar_Nome.bat missing in portable root at $portableNameBat" }
+    if (-not (Test-Path $launcherNameBat)) { throw "Mudar_Nome.bat missing in Launcher\ at $launcherNameBat" }
 
     # 3. Verify dist\Minecraft_Russo_Client_Setup.zip (> 500 MB) and SHA-256 match
     $zipPath = Join-Path $TargetRoot "dist\Minecraft_Russo_Client_Setup.zip"
@@ -2121,8 +2125,11 @@ Register-Test "T3_08" "Tier 3" "T3.8: Portable Client to Offline Authentication 
     $canPlay = $account.entitlement.canPlayMinecraft
     $accType = $account.type
 
-    if ($username -ne "EstudanteRusso") {
-        throw "Expected pre-configured username 'EstudanteRusso', found '$username'"
+    if ($username -notmatch '^(Estudante|EstudanteRusso|Jogador)(_[0-9A-Za-z]+)?$') {
+        throw "Expected pre-configured username pattern 'Estudante[Russo]_<random>', found '$username'"
+    }
+    if ($username -eq "Ryan") {
+        throw "Portable package username cannot be 'Ryan' to avoid LAN network collisions"
     }
     if ($canPlay -ne $true) {
         throw "canPlayMinecraft is not true in portable accounts.json"
@@ -2133,8 +2140,11 @@ Register-Test "T3_08" "Tier 3" "T3.8: Portable Client to Offline Authentication 
 
     # 2. Verify Offline UUID Algorithm and LocalSkin mapping
     $expectedUUID = Compute-OfflineUUID $username
-    if ($expectedUUID -ne "c7b5ec3f-c30c-30c1-ab8a-86a0f6797f39" -and $expectedUUID.Length -ne 36) {
+    if ($expectedUUID.Length -ne 36) {
         throw ("Offline UUID computation failed for " + $username + ": " + $expectedUUID)
+    }
+    if ($account.profile -and $account.profile.id -ne $expectedUUID) {
+        throw ("Profile UUID mismatch: expected " + $expectedUUID + ", found " + $account.profile.id)
     }
 
     # Verify CustomSkinLoader LocalSkin directory exists in portable package
@@ -2489,7 +2499,8 @@ Register-Test "T4_09" "Tier 4" "T4.9: Scenario: End-to-End Portable Distribution
     if ($batContent -match '[Ff]:[\\/][Jj]ogos') { throw "Jogar.bat contains hardcoded paths" }
     $accountsFile = Join-Path $distRoot "Launcher\data\accounts.json"
     $acc = Get-Content -Raw -Encoding UTF8 $accountsFile | ConvertFrom-Json
-    if ($acc.accounts[0].ygg.extra.userName -ne "EstudanteRusso") { throw "Turnkey account not pre-configured" }
+    if ($acc.accounts[0].ygg.extra.userName -notmatch '^(Estudante|EstudanteRusso|Jogador)(_[0-9A-Za-z]+)?$') { throw "Turnkey account not pre-configured" }
+    if ($acc.accounts[0].ygg.extra.userName -eq "Ryan") { throw "Turnkey account must not collide with host 'Ryan'" }
 
     # Step 4: Pedagogical Tooltip Inspection in-game
     $tooltipsFile = Join-Path $TargetRoot "Instancia_Cliente\kubejs\client_scripts\russian_tooltips.js"

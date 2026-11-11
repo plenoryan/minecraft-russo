@@ -4,15 +4,46 @@ title Minecraft Russo - Carregando Jogo...
 cls
 
 echo ======================================================================
-echo             MINECRAFT RUSSO - PACOTE DE APRENDIZADO
+echo             MINECRAFT RUSSO - PACOTE DE APRENDIZADO PORTATIL
 echo ======================================================================
 echo.
 
-:: 1. Definir diretorio base
+:: 1. Auto-detectar diretorios base (suporta raiz ou subpasta Launcher)
 set "SCRIPT_DIR=%~dp0"
-set "BASE_DIR=%~dp0"
-set "LAUNCHER_EXE=%BASE_DIR%Launcher\UltimMC.exe"
+if exist "%~dp0Launcher\UltimMC.exe" (
+    set "BASE_DIR=%~dp0"
+    set "LAUNCHER_DIR=%~dp0Launcher\"
+) else if exist "%~dp0UltimMC.exe" (
+    set "BASE_DIR=%~dp0..\"
+    set "LAUNCHER_DIR=%~dp0"
+) else (
+    set "BASE_DIR=%~dp0"
+    set "LAUNCHER_DIR=%~dp0Launcher\"
+)
+
+:: 1.1 Suporte a argumento rapido de troca de nome (--nome ou /nome)
+if /I "%~1"=="--nome" (
+    if exist "%~dp0Mudar_Nome.bat" (
+        call "%~dp0Mudar_Nome.bat" %~2
+    ) else if exist "%~dp0..\Mudar_Nome.bat" (
+        call "%~dp0..\Mudar_Nome.bat" %~2
+    )
+    shift
+    shift
+)
+if /I "%~1"=="/nome" (
+    if exist "%~dp0Mudar_Nome.bat" (
+        call "%~dp0Mudar_Nome.bat" %~2
+    ) else if exist "%~dp0..\Mudar_Nome.bat" (
+        call "%~dp0..\Mudar_Nome.bat" %~2
+    )
+    shift
+    shift
+)
+
+set "LAUNCHER_EXE=%LAUNCHER_DIR%UltimMC.exe"
 set "BUNDLED_JAVA=%BASE_DIR%Java17\bin\javaw.exe"
+set "DATA_DIR=%LAUNCHER_DIR%data"
 
 :: 2. Verificar presenca do Launcher
 if not exist "%LAUNCHER_EXE%" (
@@ -25,9 +56,10 @@ if not exist "%LAUNCHER_EXE%" (
     exit /b 1
 )
 
-:: 3. Verificar Java 17 (FIXED: Usando if errorlevel 1 para avaliacao correta em tempo de execucao)
+:: 3. Verificar Java 17
 if exist "%BUNDLED_JAVA%" (
-    echo [OK] Java 17 portatil detectado com sucesso em Java17\bin\javaw.exe.
+    echo [OK] Java 17 portatil detectado com sucesso em:
+    echo      "%BUNDLED_JAVA%"
 ) else (
     where javaw >nul 2>&1
     if errorlevel 1 (
@@ -36,11 +68,10 @@ if exist "%BUNDLED_JAVA%" (
         where java >nul 2>&1
         if errorlevel 1 (
             echo.
-            echo [ERRO CRITICO] O Java nao esta instalado no seu computador e nao foi
+            echo [ERRO CRITICO] O Java 17 nao esta instalado no seu computador e nao foi
             echo               encontrado na pasta Java17.
             echo.
-            echo Execute install_java17.ps1 para baixar o Java 17 portatil ou instale:
-            echo https://adoptium.net/temurin/releases/?version=17
+            echo Instale o Java 17 em: https://adoptium.net/temurin/releases/?version=17
             echo.
             echo Pressione qualquer tecla para sair.
             pause >nul
@@ -49,48 +80,18 @@ if exist "%BUNDLED_JAVA%" (
     )
 )
 
-:: 4. Auto-cura de juncoes NTFS portateis e sincronizacao de Java
-set "INST_DOT_MC=%BASE_DIR%Launcher\data\instances\Minecraft_Russo\.minecraft"
-if exist "%INST_DOT_MC%" (
-    if not exist "%INST_DOT_MC%\mods" (
-        mklink /J "%INST_DOT_MC%\mods" "%BASE_DIR%Instancia_Cliente\mods" >nul 2>&1
-    )
-    if not exist "%INST_DOT_MC%\config" (
-        mklink /J "%INST_DOT_MC%\config" "%BASE_DIR%Instancia_Cliente\config" >nul 2>&1
-    )
-    if not exist "%INST_DOT_MC%\CustomSkinLoader" (
-        mklink /J "%INST_DOT_MC%\CustomSkinLoader" "%BASE_DIR%Instancia_Cliente\CustomSkinLoader" >nul 2>&1
-    )
-    if not exist "%INST_DOT_MC%\resourcepacks" (
-        mklink /J "%INST_DOT_MC%\resourcepacks" "%BASE_DIR%Instancia_Cliente\resourcepacks" >nul 2>&1
-    )
-    if not exist "%INST_DOT_MC%\shaderpacks" (
-        mklink /J "%INST_DOT_MC%\shaderpacks" "%BASE_DIR%Instancia_Cliente\shaderpacks" >nul 2>&1
-    )
-    if not exist "%INST_DOT_MC%\kubejs" (
-        mklink /J "%INST_DOT_MC%\kubejs" "%BASE_DIR%Instancia_Cliente\kubejs" >nul 2>&1
-    )
-)
-
-if not exist "%BASE_DIR%Launcher\Java17" (
-    mklink /J "%BASE_DIR%Launcher\Java17" "%BASE_DIR%Java17" >nul 2>&1
-)
-if not exist "%BASE_DIR%Launcher\data\Java17" (
-    mklink /J "%BASE_DIR%Launcher\data\Java17" "%BASE_DIR%Java17" >nul 2>&1
-)
-
-:: Auto-configuracao dinamica do caminho do Java portatil no Launcher e contas offline
+:: 4. Auto-configuracao dinamica do caminho do Java portatil no Launcher e instancias
 set "JAVA_PATH_NORM=%BUNDLED_JAVA:\=/%"
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-    "$b = $env:BASE_DIR; if (-not $b) { $b = $env:SCRIPT_DIR; };" ^
-    "$j = $env:JAVA_PATH_NORM; if (-not $j) { $j = ($b + 'Java17\bin\javaw.exe').Replace('\', '/'); };" ^
+    "$j = $env:JAVA_PATH_NORM; if (-not $j) { $p = $env:SCRIPT_DIR; $j = ($p + 'Java17\bin\javaw.exe').Replace('\', '/'); }" ^
+    "$d = $env:DATA_DIR; if (-not $d) { $d = Join-Path $env:SCRIPT_DIR 'Launcher\data'; }" ^
+    "$l = $env:LAUNCHER_DIR; if (-not $l) { $l = Join-Path $env:SCRIPT_DIR 'Launcher'; }" ^
     "$configs = @(" ^
-    "    (Join-Path $b 'Launcher\data\ultimmc.cfg')," ^
-    "    (Join-Path $b 'Launcher\ultimmc.cfg')," ^
-    "    (Join-Path $b 'Launcher\data\instances\Minecraft_Russo\instance.cfg')," ^
-    "    (Join-Path $b 'Launcher\instances\Minecraft_Russo\instance.cfg')," ^
-    "    (Join-Path $b 'Instancia_Cliente\instance.cfg')" ^
+    "    (Join-Path $d 'ultimmc.cfg')," ^
+    "    (Join-Path $l 'ultimmc.cfg')," ^
+    "    (Join-Path $d 'instances\Minecraft_Russo\instance.cfg')," ^
+    "    (Join-Path $l 'instances\Minecraft_Russo\instance.cfg')" ^
     ");" ^
     "foreach ($cfg in $configs) {" ^
     "    if (Test-Path -LiteralPath $cfg) {" ^
@@ -104,8 +105,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
     "    }" ^
     "};" ^
     "$accounts = @(" ^
-    "    (Join-Path $b 'Launcher\data\accounts.json')," ^
-    "    (Join-Path $b 'Launcher\accounts.json')" ^
+    "    (Join-Path $d 'accounts.json')," ^
+    "    (Join-Path $l 'accounts.json')" ^
     ");" ^
     "foreach ($acc in $accounts) {" ^
     "    if (Test-Path -LiteralPath $acc) {" ^
@@ -115,16 +116,29 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
     "    }" ^
     "}" >nul 2>&1
 
-:: 5. Iniciar o Jogo
+:: 5. Iniciar o Jogo diretamente no Minecraft_Russo
+echo.
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+    "$d = $env:DATA_DIR; if (-not $d) { $d = Join-Path $env:SCRIPT_DIR 'Launcher\data'; }" ^
+    "$acc = Join-Path $d 'accounts.json';" ^
+    "if (Test-Path -LiteralPath $acc) {" ^
+    "    try {" ^
+    "        $j = Get-Content -LiteralPath $acc -Raw -Encoding UTF8 | ConvertFrom-Json;" ^
+    "        $u = $j.accounts[0].ygg.extra.userName;" ^
+    "        Write-Host ('[JOGADOR] Perfil ativo: ' + $u) -ForegroundColor Yellow;" ^
+    "        Write-Host '          (Para mudar seu nome, feche o jogo e execute Mudar_Nome.bat)' -ForegroundColor DarkGray;" ^
+    "    } catch {}" ^
+    "}"
+
 echo.
 echo [INICIANDO] Abrindo o inicializador e carregando o modpack Minecraft_Russo...
 echo Bom jogo e bons estudos em russo!
 echo.
 
-if exist "%BASE_DIR%Launcher\data\instances\Minecraft_Russo" (
-    start "" "%LAUNCHER_EXE%" --dir "%BASE_DIR%Launcher\data" --launch "Minecraft_Russo"
+if exist "%DATA_DIR%\instances\Minecraft_Russo" (
+    start "" "%LAUNCHER_EXE%" --dir "%DATA_DIR%" -l Minecraft_Russo %*
 ) else (
-    start "" "%LAUNCHER_EXE%" --launch "Minecraft_Russo"
+    start "" "%LAUNCHER_EXE%" -l Minecraft_Russo %*
 )
 
 exit /b 0

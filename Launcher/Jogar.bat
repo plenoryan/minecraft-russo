@@ -21,6 +21,26 @@ if exist "%~dp0Launcher\UltimMC.exe" (
     set "LAUNCHER_DIR=%~dp0Launcher\"
 )
 
+:: 1.1 Suporte a argumento rapido de troca de nome (--nome ou /nome)
+if /I "%~1"=="--nome" (
+    if exist "%~dp0Mudar_Nome.bat" (
+        call "%~dp0Mudar_Nome.bat" %~2
+    ) else if exist "%~dp0..\Mudar_Nome.bat" (
+        call "%~dp0..\Mudar_Nome.bat" %~2
+    )
+    shift
+    shift
+)
+if /I "%~1"=="/nome" (
+    if exist "%~dp0Mudar_Nome.bat" (
+        call "%~dp0Mudar_Nome.bat" %~2
+    ) else if exist "%~dp0..\Mudar_Nome.bat" (
+        call "%~dp0..\Mudar_Nome.bat" %~2
+    )
+    shift
+    shift
+)
+
 set "LAUNCHER_EXE=%LAUNCHER_DIR%UltimMC.exe"
 set "BUNDLED_JAVA=%BASE_DIR%Java17\bin\javaw.exe"
 set "DATA_DIR=%LAUNCHER_DIR%data"
@@ -97,6 +117,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
     "}" >nul 2>&1
 
 :: 5. Iniciar o Jogo diretamente no Minecraft_Russo
+echo.
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+    "$d = $env:DATA_DIR; if (-not $d) { $d = Join-Path $env:SCRIPT_DIR 'Launcher\data'; }" ^
+    "$acc = Join-Path $d 'accounts.json';" ^
+    "if (Test-Path -LiteralPath $acc) {" ^
+    "    try {" ^
+    "        $j = Get-Content -LiteralPath $acc -Raw -Encoding UTF8 | ConvertFrom-Json;" ^
+    "        $u = $j.accounts[0].ygg.extra.userName;" ^
+    "        Write-Host ('[JOGADOR] Perfil ativo: ' + $u) -ForegroundColor Yellow;" ^
+    "        Write-Host '          (Para mudar seu nome, feche o jogo e execute Mudar_Nome.bat)' -ForegroundColor DarkGray;" ^
+    "    } catch {}" ^
+    "}"
+
 echo.
 echo [INICIANDO] Abrindo o inicializador e carregando o modpack Minecraft_Russo...
 echo Bom jogo e bons estudos em russo!

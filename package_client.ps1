@@ -79,6 +79,19 @@ function Write-Utf8NoBom {
     [System.IO.File]::WriteAllText($FilePath, $Content, $encoding)
 }
 
+function Compute-OfflineUUID {
+    param([string]$Username)
+    if ([string]::IsNullOrEmpty($Username)) {
+        return "00000000-0000-0000-0000-000000000000"
+    }
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes("OfflinePlayer:" + $Username)
+    $md5 = [System.Security.Cryptography.MD5]::Create().ComputeHash($bytes)
+    $md5[6] = [byte](($md5[6] -band 0x0f) -bor 0x30)
+    $md5[8] = [byte](($md5[8] -band 0x3f) -bor 0x80)
+    $hex = [System.BitConverter]::ToString($md5).Replace("-", "").ToLower()
+    return "{0}-{1}-{2}-{3}-{4}" -f $hex.Substring(0,8), $hex.Substring(8,4), $hex.Substring(12,4), $hex.Substring(16,4), $hex.Substring(20,12)
+}
+
 function Copy-DirectoryFlattened {
     param(
         [string]$SourcePath,
@@ -391,7 +404,12 @@ $rootUltimMcLines = @(
 Write-Utf8NoBom -FilePath $rootUltimMc -Content (($rootUltimMcLines -join "`r`n") + "`r`n")
 Write-Success "ultimmc.cfg normalizado em data\ e na raiz de Launcher\"
 
-# 7.3 accounts.json com perfil offline EstudanteRusso
+# 7.3 accounts.json com perfil offline exclusivo (codigo aleatorio para evitar colisoes de rede)
+$randChars = [char[]]((48..57) + (65..90) | ForEach-Object { [char]$_ })
+$randCode = -join ($randChars | Get-Random -Count 4)
+$portableUsername = "Estudante_" + $randCode
+$portableUUID = Compute-OfflineUUID $portableUsername
+
 $accountsJsonTemplate = @{
     accounts = @(
         @{
@@ -400,14 +418,20 @@ $accountsJsonTemplate = @{
                 canPlayMinecraft = $true
                 ownsMinecraft = $true
             }
+            profile = @{
+                capes = @()
+                id = $portableUUID
+                name = $portableUsername
+                skins = @()
+            }
             type = "dummy"
             ygg = @{
                 extra = @{
-                    clientToken = "9387eaef0e7738c7ab300a74e6b7dc95"
-                    userName = "EstudanteRusso"
+                    clientToken = [System.Guid]::NewGuid().ToString("N")
+                    userName = $portableUsername
                 }
-                iat = 1794356404
-                token = "EstudanteRusso"
+                iat = [int][DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+                token = $portableUsername
             }
         }
     )
@@ -415,14 +439,17 @@ $accountsJsonTemplate = @{
 } | ConvertTo-Json -Depth 5
 Write-Utf8NoBom -FilePath (Join-Path $dataDst "accounts.json") -Content ($accountsJsonTemplate + "`r`n")
 Write-Utf8NoBom -FilePath (Join-Path $launcherDst "accounts.json") -Content ($accountsJsonTemplate + "`r`n")
-Write-Success "accounts.json configurado com perfil offline 'EstudanteRusso' (dummy)"
+Write-Success ("accounts.json configurado com perfil offline aleatorio '" + $portableUsername + "' (dummy)")
 
 # ------------------------------------------------------------------------------
-# 8. Criar Jogar.bat no Pacote Portatil
+# 8. Criar Jogar.bat e Mudar_Nome.bat no Pacote Portatil
 # ------------------------------------------------------------------------------
-Write-Step "Criando executavel Jogar.bat no pacote portatil"
+Write-Step "Criando executaveis Jogar.bat e Mudar_Nome.bat no pacote portatil"
 
 $sourceJogarBat = Join-Path $launcherSrc "Jogar.bat"
+if (-not (Test-Path $sourceJogarBat)) {
+    $sourceJogarBat = Join-Path $TargetRoot "Jogar.bat"
+}
 if (-not (Test-Path $sourceJogarBat)) {
     throw ("Launcher\Jogar.bat de referencia nao encontrado: " + $sourceJogarBat)
 }
@@ -436,6 +463,18 @@ Write-Utf8NoBom -FilePath $portableJogarBat -Content $jogarBatText
 # Copia para Launcher\Jogar.bat dentro do pacote
 Write-Utf8NoBom -FilePath (Join-Path $launcherDst "Jogar.bat") -Content $jogarBatText
 
+# Copia Mudar_Nome.bat para raiz e Launcher\
+$sourceMudarNomeBat = Join-Path $launcherSrc "Mudar_Nome.bat"
+if (-not (Test-Path $sourceMudarNomeBat)) {
+    $sourceMudarNomeBat = Join-Path $TargetRoot "Mudar_Nome.bat"
+}
+if (Test-Path $sourceMudarNomeBat) {
+    $mudarNomeBatText = Get-Content -Raw -Encoding UTF8 $sourceMudarNomeBat
+    Write-Utf8NoBom -FilePath (Join-Path $OutputDir "Mudar_Nome.bat") -Content $mudarNomeBatText
+    Write-Utf8NoBom -FilePath (Join-Path $launcherDst "Mudar_Nome.bat") -Content $mudarNomeBatText
+    Write-Success "Mudar_Nome.bat copiado para a distribuicao portatil."
+}
+
 # Instrucoes para amigos em LEIA-ME.txt
 $leiaMeText = "======================================================================`r`n" +
     "         MINECRAFT RUSSO - MODPACK COOPERATIVO DE APRENDIZADO`r`n" +
@@ -446,7 +485,11 @@ $leiaMeText = "=================================================================
     "   - 43 mods Fabric 1.20.1 configurados.`r`n" +
     "   - Reconhecimento de voz em russo (offline via modelo neural Vosk).`r`n" +
     "   - Referencia fonetica auditiva com voz russa nativa.`r`n" +
-    "   - Perfil offline EstudanteRusso pre-ativado.`r`n`r`n" +
+    "   - Perfil offline exclusivo pre-configurado para evitar colisoes na rede.`r`n`r`n" +
+    "COMO MUDAR SEU NOME DE JOGADOR:`r`n" +
+    "1. De dois cliques no arquivo Mudar_Nome.bat nesta pasta.`r`n" +
+    "2. Digite seu apelido desejado (ex: Arthur, Pedro, Lucas, etc.) e aperte ENTER.`r`n" +
+    "3. Pronto! O nome sera atualizado instantaneamente.`r`n`r`n" +
     "TECLAS IMPORTANTES NO JOGO:`r`n" +
     " - [V] : Abre a Roleta Radial de Acoes Cooperativas.`r`n" +
     " - [H] : Ouve a pronuncia nativa em russo do item ou desafio atual [Pressione para Ouvir].`r`n" +
@@ -458,7 +501,7 @@ $leiaMeText = "=================================================================
     "Bons estudos e boa diversao!`r`n" +
     "======================================================================`r`n"
 Write-Utf8NoBom -FilePath (Join-Path $OutputDir "LEIA-ME.txt") -Content $leiaMeText
-Write-Success "Jogar.bat e LEIA-ME.txt criados na raiz da distribuicao portatil."
+Write-Success "Jogar.bat, Mudar_Nome.bat e LEIA-ME.txt criados na raiz da distribuicao portatil."
 
 # ------------------------------------------------------------------------------
 # 9. Auditoria de Integridade Estrita (Zero Juncoes / Todos os Arquivos)
@@ -489,6 +532,7 @@ $mustExist = @(
     "Launcher\data\instances\Minecraft_Russo\.minecraft\kubejs\client_scripts\russian_tooltips.js",
     "Launcher\data\instances\Minecraft_Russo\.minecraft\sayit_audio_cache",
     "Jogar.bat",
+    "Mudar_Nome.bat",
     "LEIA-ME.txt"
 )
 

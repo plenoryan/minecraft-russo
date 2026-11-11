@@ -453,3 +453,16 @@
      - Rejeita qualquer pacote de desafio entrante enquanto pendingCoopAction != null ou enquanto as telas de selecao de acao estiverem visiveis.
   4. **Intervalo de Respiro no Servidor (ChallengeManager.tick):**
      - Fixado intervalo minimo de 15 segundos (300 ticks) entre desafios automatizados de inventario, eliminando a sensacao de bombardeio ininterrupto de itens.
+`r`n`r`n### L51. Prevencao de Colisao de Nomes em Partidas LAN/Offline Mode e Facilitador de Troca Rapida
+- **Armadilha:**
+  - Em partidas LAN ou servidores offline (`online-mode=false`), se dois jogadores entram na mesma sessao com o mesmo apelido (por exemplo, se o pacote portatil contiver o nome do host `Ryan` ou se ambos os jogadores usarem o apelido padrao `EstudanteRusso`), o servidor expulsa o jogador com mensagens como "You logged in from another location" ou "Jogador com este nome ja existe".
+  - Alem disso, instruir usuarios nao tecnicos a abrir o UltimMC, navegar por menus aninhados de contas offline para trocar de nome gera atrito desnecessario.
+- **Solucao Implementada:**
+  1. **Geracao de Apelido Aleatorio no Empacotador (`package_client.ps1`):**
+     - O perfil offline de distribuicao portatil gera automaticamente um apelido unico com 4 caracteres alfanumericos aleatorios (ex: `Estudante_NLQ4`, exatamente 14 caracteres, dentro do limite estrito de 16 caracteres do Minecraft Java).
+     - O UUID offline e calculado via algoritmo oficial deterministico (`OfflinePlayer:<nome>` via MD5 com bits RFC 4122 v3). O nome do host local (`Ryan`) permanece 100% intocado em seu workspace.
+  2. **Executavel Interativo de 1 Clique (`Mudar_Nome.bat`):**
+     - Criado o script `Mudar_Nome.bat` na raiz e na pasta `Launcher\`. Ao dar duplo clique, o script detecta o nome ativo, valida o novo apelido digitado (3 a 16 caracteres, `^[a-zA-Z0-9_]{3,16}$`), recalcula o UUID offline e grava em `Launcher\data\accounts.json` e `Launcher\accounts.json` em UTF-8 Zero-BOM.
+     - Tambem suporta execucao direta via parametro (ex: `Mudar_Nome.bat Arthur`) e integracao direta no `Jogar.bat` (ex: `Jogar.bat --nome Arthur`).
+  3. **Visibilidade no `Jogar.bat` e `LEIA-ME.txt`:**
+     - O inicializador exibe claramente o nome ativo antes do boot (`[JOGADOR] Perfil ativo: Estudante_NLQ4`) e instrui o jogador sobre o `Mudar_Nome.bat`.
