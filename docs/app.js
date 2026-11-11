@@ -495,22 +495,22 @@ const MODS_DATA = [
 // Additional Core Infrastructure Attributions
 const INFRA_DATA = [
   {
-    name: "Vosk Offline Neural Speech Recognition",
-    id: "vosk-model-small-ru-0.22",
-    authors: "Alpha Cephei Inc.",
-    license: "Apache-2.0",
-    category: "SayIt & IA",
-    homepage: "https://alphacephei.com/vosk/",
-    description: "Modelo de rede neural acÃºstica leve em russo operando 100% offline em tempo real."
+    Name: "Vosk Offline Neural Speech Recognition",
+    Id: "vosk-model-small-ru-0.22",
+    Authors: "Alpha Cephei Inc.",
+    License: "Apache-2.0",
+    Category: "SayIt & IA",
+    Homepage: "https://alphacephei.com/vosk/",
+    Description: "Modelo de rede neural acÃºstica leve em russo operando 100% offline em tempo real."
   },
   {
-    name: "UltimMC Portable Launcher",
-    id: "ultimmc",
-    authors: "UltimMC / Prism Launcher Contributors",
-    license: "GPL-3.0-only",
-    category: "Core & Bibliotecas",
-    homepage: "https://github.com/UltimMC/Launcher",
-    description: "Inicializador autÃ´nomo e portÃ¡til baseado no Prism Launcher com suporte a instÃ¢ncias isoladas."
+    Name: "UltimMC Portable Launcher",
+    Id: "ultimmc",
+    Authors: "UltimMC / Prism Launcher Contributors",
+    License: "GPL-3.0-only",
+    Category: "Core & Bibliotecas",
+    Homepage: "https://github.com/UltimMC/Launcher",
+    Description: "Inicializador autÃ´nomo e portÃ¡til baseado no Prism Launcher com suporte a instÃ¢ncias isoladas."
   }
 ];
 
@@ -550,11 +550,11 @@ function initAudioPlayer() {
       if (card) {
         card.classList.add("active-playback");
       }
-      btn.innerHTML = '<span class="play-icon">â¸</span> Pausar';
+      btn.innerHTML = '<span class="play-icon">â�¸</span> Pausar';
 
       audio.play().catch(err => {
-        console.warn("[SayIt-WebAudio] ReproduÃ§Ã£o bloqueada pelo navegador:", err);
-        showToast("Clique novamente para permitir a reproduÃ§Ã£o de Ã¡udio.");
+        console.warn("[SayIt-WebAudio] ReproduÃ§Ã£o bloqueada:", err);
+        showToast("Clique para autorizar a reproduÃ§Ã£o de Ã¡udio.");
         resetAudioUI();
       });
 
@@ -564,8 +564,8 @@ function initAudioPlayer() {
 
       audio.addEventListener("error", () => {
         console.error("[SayIt-WebAudio] Falha ao carregar Ã¡udio:", audioSrc);
-        showToast("Ãudio de demonstraÃ§Ã£o temporariamente indisponÃ­vel.");
-        resetAudioUIUI || resetAudioUI();
+        showToast("Ã�udio indisponÃ­vel neste momento.");
+        resetAudioUI();
       });
     });
   });
@@ -654,7 +654,7 @@ function initSimulator() {
       audio: "assets/audio/phrase_item.mp3"
     },
     net: {
-      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶ÐµÐ½ ÑÐ°Ñ‡Ð¾Ðº!",
+      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶ÐµÐ½ Ñ�Ð°Ñ‡Ð¾Ðº!",
       phonetic: "[Mnye nuzhen sa-chok!]",
       pt: '"Preciso do puÃ§Ã¡ de insetos!"',
       audio: "assets/audio/phrase_item.mp3"
@@ -678,7 +678,7 @@ function initSimulator() {
         if (ptText) ptText.textContent = data.pt;
         if (resultBadge) resultBadge.classList.remove("visible");
         if (waveBars) waveBars.classList.remove("active");
-        if (timerDisplay) timerDisplay.textContent = "â± 12.0s";
+        if (timerDisplay) timerDisplay.textContent = "â�± 12.0s";
       }
     });
   });
@@ -700,7 +700,7 @@ function initSimulator() {
       clearInterval(simTimer);
       simTimer = setInterval(() => {
         timeLeft -= 0.1;
-        if (timerDisplay) timerDisplay.textContent = `â± ${Math.max(0, timeLeft).toFixed(1)}s`;
+        if (timerDisplay) timerDisplay.textContent = "â�± " + Math.max(0, timeLeft).toFixed(1) + "s";
         if (timeLeft <= 9.8) {
           clearInterval(simTimer);
           if (waveBars) waveBars.classList.remove("active");
@@ -708,7 +708,7 @@ function initSimulator() {
             resultBadge.textContent = "âœ“ Aprovado: 98% â€¢ +20 Pontos Coop â€¢ Item Preservado!";
             resultBadge.classList.add("visible");
           }
-          showToast(`âœ“ Reconhecimento Vosk: "${data.ru}" (98% precisÃ£o)`);
+          showToast("âœ“ Reconhecimento Vosk: \"" + data.ru + "\" (98% precisÃ£o)");
         }
       }, 100);
     });
@@ -784,36 +784,52 @@ function initCreditsTable() {
     tbody.innerHTML = "";
 
     const filtered = allMods.filter(mod => {
-      const matchesCat = currentCategory === "all" || mod.category === currentCategory;
-      const textToSearch = `${mod.name} ${mod.id} ${mod.authors} ${mod.license} ${mod.description}`.toLowerCase();
+      const name = mod.Name || mod.name || "";
+      const id = mod.Id || mod.id || "";
+      const authors = mod.Authors || mod.authors || "Comunidade";
+      const category = mod.Category || mod.category || "Geral";
+      const license = mod.License || mod.license || "Open Source";
+      const description = mod.Description || mod.description || "";
+
+      const matchesCat = currentCategory === "all" || category === currentCategory;
+      const textToSearch = `${name} ${id} ${authors} ${license} ${description}`.toLowerCase();
       const matchesSearch = !searchQuery || textToSearch.includes(searchQuery.toLowerCase());
       return matchesCat && matchesSearch;
     });
 
     if (filtered.length === 0) {
       const emptyRow = document.createElement("tr");
-      emptyRow.innerHTML = '<td colspan="5" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">Nenhum mod encontrado para os critÃ©rios de busca.</td>';
+      emptyRow.innerHTML = '<td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">Nenhum mod encontrado para os critÃ©rios de busca.</td>';
       tbody.appendChild(emptyRow);
       if (countDisplay) countDisplay.textContent = "Mostrando 0 de " + allMods.length + " mods";
       return;
     }
 
     filtered.forEach(mod => {
+      const name = mod.Name || mod.name || "Mod";
+      const id = mod.Id || mod.id || "";
+      const authors = mod.Authors || mod.authors || "Comunidade";
+      const category = mod.Category || mod.category || "Geral";
+      const license = mod.License || mod.license || "Open Source";
+      const homepage = mod.Homepage || mod.homepage || "";
+      const description = mod.Description || mod.description || "";
+
       const tr = document.createElement("tr");
-      const linkHtml = mod.homepage
-        ? `<a href="${mod.homepage}" target="_blank" rel="noopener noreferrer" title="Visitar pÃ¡gina oficial">â†— Link</a>`
+      const linkHtml = homepage
+        ? `<a href="${homepage}" target="_blank" rel="noopener noreferrer" title="Visitar pÃ¡gina oficial" class="mod-link-btn">â†— Visitar</a>`
         : '<span style="color: var(--text-dim);">â€”</span>';
 
       tr.innerHTML = `
         <td>
           <div class="mod-title-cell">
-            <span class="mod-name">${mod.name}</span>
-            <span class="mod-id-code">${mod.id}</span>
+            <span class="mod-name">${name}</span>
+            <span class="mod-id-code">${id}</span>
           </div>
         </td>
-        <td>${mod.authors || "Comunidade"}</td>
-        <td><span class="mod-category-badge">${mod.category}</span></td>
-        <td><span class="mod-license-badge">${mod.license || "Open Source"}</span></td>
+        <td><span class="mod-category-badge">${category}</span></td>
+        <td><span class="mod-authors-text">${authors}</span></td>
+        <td><span class="mod-license-badge">${license}</span></td>
+        <td><span class="mod-desc-text">${description}</span></td>
         <td>${linkHtml}</td>
       `;
       tbody.appendChild(tr);

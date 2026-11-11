@@ -489,3 +489,18 @@
      - Roda de cooperacao em 6 setores interativos com callouts dinâmicos e reproducao sonora imediata das frases de acao em russo.
   5. **Conformidade E2E Estrita:**
      - Preservados todos os IDs obrigatorios (`overview`, `features`, `audio-preview`, `radial`, `credits`, `changelog`, `multiplayer`, `downloads`), hash SHA-256 autentico (`#sha256-val`), links de instalador e semântica UTF-8 Zero-BOM.
+
+### L54. Resolucao de Falhas Criticas na GitHub Page: Data Binding, Mojibake e Responsividade Mobile
+- **Armadilha:**
+  - 1. **Data Binding Quebrado (Tabela de Creditos):** Em `docs/app.js`, a constante `MODS_DATA` utiliza chaves com inicial maiuscula (`Name`, `Id`, `Authors`, `License`, `Category`, `Homepage`, `Description`). O codigo de renderizacao referenciava `mod.name`, `mod.id`, etc., resultando em 43 linhas exibindo "undefined undefined" com links vazios.
+  - 2. **Mojibake por Encoding Heterogeneo:** Edicoes via scripts CLI no Windows PowerShell 5.1 podem reinterpretar bytes UTF-8 como Windows-1252/ANSI gerando sequencias corrompidas (ex: `âš¡` no lugar de `⚡`, `CrÃ©ditos` no lugar de `Créditos`).
+  - 3. **Estouro de Layout Horizontal em Mobile (390px):** Componentes de largura fixa (ex: hotbar de 9 slots do Minecraft a 44px cada = > 400px, e presenca simultanea de `.brand-link`, `.btn-header-download` e `.menu-toggle` no topo) expandiam o container do `body`, cortando o lado direito da pagina e empurrando o menu hamburguer para fora da tela.
+- **Solucao Implementada:**
+  1. **Acesso Defensivo aos Metadados dos Mods:**
+     - `initCreditsTable()` em `docs/app.js` agora utiliza fallbacks seguros (`mod.Name || mod.name || "Mod"`), sincronizando perfeitamente as 6 colunas da tabela (Mod/ID, Categoria, Autores, Licenca, Descricao e Link externo).
+  2. **Preservacao Rigorosa de UTF-8 Zero-BOM:**
+     - Arquivos web (`index.html`, `style.css`, `app.js`) normalizados com codificacao UTF-8 pura sem BOM, preservando a renderizacao nativa de caracteres cirilicos (`Мне нужно дерево!`) e icones tatil (`⚔️`, `⚡`, `☰`).
+  3. **Ajuste Fino de Responsividade Mobile:**
+     - Em telas $\le 1024px$, o botao de download do topo e ocultado (`.btn-header-download { display: none !important; }`), deixando o espaco do header dedicado ao logotipo a esquerda e ao botao hamburguer a direita.
+     - Em telas $\le 640px$, a hotbar e redimensionada para slots de 28px com espacamento de 2px (largura total 272px), garantindo ajuste perfeito dentro do card do simulador e eliminando qualquer overflow horizontal.
+     - O wrapper da tabela de creditos (`.credits-table-wrap`) e da navegacao de audio (`.audio-tabs`) utilizam rolagem horizontal interna (`overflow-x: auto; -webkit-overflow-scrolling: touch`), isolando elementos largos sem deformar a largura do viewport.
