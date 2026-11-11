@@ -504,3 +504,24 @@
      - Em telas $\le 1024px$, o botao de download do topo e ocultado (`.btn-header-download { display: none !important; }`), deixando o espaco do header dedicado ao logotipo a esquerda e ao botao hamburguer a direita.
      - Em telas $\le 640px$, a hotbar e redimensionada para slots de 28px com espacamento de 2px (largura total 272px), garantindo ajuste perfeito dentro do card do simulador e eliminando qualquer overflow horizontal.
      - O wrapper da tabela de creditos (`.credits-table-wrap`) e da navegacao de audio (`.audio-tabs`) utilizam rolagem horizontal interna (`overflow-x: auto; -webkit-overflow-scrolling: touch`), isolando elementos largos sem deformar a largura do viewport.
+
+
+### L55. Sincronizacao de Audio Integral, Limiar Acustico de 90% e Estetica Paper/Editorial
+- **Armadilha:**
+  - 1. **Audio Truncado ("Мне нужно дерево!"):** O arquivo de audio `phrase_item.mp3` continha apenas o prefixo "Мне нужно..." (9.408 bytes), cortando o substantivo final "дерево!". No cliente, o indice `audio_index.json` nao possuia entrada para a frase completa, impedindo a reproducao integral no jogo e no laboratório fonetico.
+  - 2. **Reconhecimento Precoce de Frases Incompletas no Jogo:** Jogadores reportavam que antes de terminar de pronunciar a frase inteira, o mod ja marcava como correto. Causa raiz:
+     - O reconhecedor Vosk opera em modo de gramatica restrita (`VoskRaw(model, grammar)`). Quando a gramatica e restrita apenas a sentenca alvo, o decodificador de Viterbi forca fonemas parciais em direcao a frase completa.
+     - Combinado a isso, o `passScore` do servidor estava configurado em `70` e o `fuzzyMatchThreshold` do cliente em `0.65`, bastando cerca de dois terços das silabas para disparar aprovacao prematura.
+  - 3. **Poluicao Visual de IA e Falta de Identidade:** Uso de emojis genericos (`⚔️`, `⚡`, `🍞`, `💎`) e cores saturadas que conferiam aspecto generico e cansativo a documentacao web.
+- **Solucao Implementada:**
+  1. **Audio Russo Nativo Integral & Pre-Cache Multiplo:**
+     - Sintetizado e validado audio completo para "Мне нужно дерево!" (13.440 bytes), alem de audio dedicado para "Мне нужен чайник!", "Мне нужна камера!" e "Мне нужен сачок!".
+     - Pre-cacheados os hashes SHA-256 (`cd8257c371b375e807d94de979a366df9dbd4df22182cf0514b733678e7a78d3.mp3`) e MD5 (`5e01646e6aeedc7c24e1d6f45567e045.mp3`) em `Instancia_Cliente`, `Launcher` e `dist`, indexados em `audio_index.json`.
+  2. **Elevacao do Limiar de Aprovacao para 90%:**
+     - `Servidor_Dedicado/config/sayitenglish.json`: `passScore: 90` (era 70).
+     - `Instancia_Cliente/config/sayitenglish.json` e instancias do launcher: `passScore: 90`.
+     - `Instancia_Cliente/config/sayit.json` e launcher/dist: `fuzzyMatchThreshold: 0.90` (era 0.65).
+     - Agora, a aprovacao exige cobertura fonetica quase perfeita da sentenca inteira, impedindo que balbucios ou frases truncadas recebam aprovacao.
+  3. **Overhaul Visual para Estetica Paper / Manual de Campo:**
+     - Paleta artesanal: fundo pergaminho suave (`#f5f2e9`) com grade milimetrada de trado sutil, cartoes brancos de alta legibilidade, tinta ferrogálica profunda (`#181512`), bordas nítidas de 1px (`#dcd4c3`) e carimbos de arquivo monocromaticos/ocre/ferrugem.
+     - Eliminacao de todos os emojis, substituindo por tipografia técnica editorial (`MR`, `[+]`, `[-]`, tokens `DUB`, `XLEB`, `CHAY`).

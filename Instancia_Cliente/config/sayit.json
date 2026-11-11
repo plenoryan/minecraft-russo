@@ -1,4 +1,4 @@
-{
+﻿{
     "version":  1,
     "language":  {
                      "targetLanguage":  "ru_ru",
@@ -6,7 +6,7 @@
                      "dictionarySource":  "config/sayit/lang/ru_ru.json",
                      "normalizeYoToYe":  true,
                      "stripDiacriticsAndAccents":  true,
-                     "fuzzyMatchThreshold":  0.65
+                     "fuzzyMatchThreshold":  0.90
                  },
     "speechEngine":  {
                          "engineType":  "VOSK",

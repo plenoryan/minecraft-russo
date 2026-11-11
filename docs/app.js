@@ -501,7 +501,7 @@ const INFRA_DATA = [
     License: "Apache-2.0",
     Category: "SayIt & IA",
     Homepage: "https://alphacephei.com/vosk/",
-    Description: "Modelo de rede neural acÃºstica leve em russo operando 100% offline em tempo real."
+    Description: "Modelo de rede neural acústica leve em russo operando 100% offline em tempo real."
   },
   {
     Name: "UltimMC Portable Launcher",
@@ -510,7 +510,7 @@ const INFRA_DATA = [
     License: "GPL-3.0-only",
     Category: "Core & Bibliotecas",
     Homepage: "https://github.com/UltimMC/Launcher",
-    Description: "Inicializador autÃ´nomo e portÃ¡til baseado no Prism Launcher com suporte a instÃ¢ncias isoladas."
+    Description: "Inicializador autônomo e portátil baseado no Prism Launcher com suporte a instâncias isoladas."
   }
 ];
 
@@ -550,11 +550,11 @@ function initAudioPlayer() {
       if (card) {
         card.classList.add("active-playback");
       }
-      btn.innerHTML = '<span class="play-icon">â�¸</span> Pausar';
+      btn.innerHTML = '<span class="play-icon">⏸</span> Pausar';
 
       audio.play().catch(err => {
-        console.warn("[SayIt-WebAudio] ReproduÃ§Ã£o bloqueada:", err);
-        showToast("Clique para autorizar a reproduÃ§Ã£o de Ã¡udio.");
+        console.warn("[SayIt-WebAudio] Reprodução bloqueada:", err);
+        showToast("Clique para autorizar a reprodução de áudio.");
         resetAudioUI();
       });
 
@@ -563,8 +563,8 @@ function initAudioPlayer() {
       });
 
       audio.addEventListener("error", () => {
-        console.error("[SayIt-WebAudio] Falha ao carregar Ã¡udio:", audioSrc);
-        showToast("Ã�udio indisponÃ­vel neste momento.");
+        console.error("[SayIt-WebAudio] Falha ao carregar áudio:", audioSrc);
+        showToast("Áudio indisponível neste momento.");
         resetAudioUI();
       });
     });
@@ -574,7 +574,7 @@ function initAudioPlayer() {
 function resetAudioUI() {
   document.querySelectorAll(".audio-card").forEach(c => c.classList.remove("active-playback"));
   document.querySelectorAll(".btn-play-audio").forEach(b => {
-    b.innerHTML = '<span class="play-icon">â–¶</span> Ouvir PronÃºncia';
+    b.innerHTML = '<span class="play-icon">▶</span> Ouvir Pronúncia';
   });
   currentPlayingId = null;
 }
@@ -624,40 +624,40 @@ function initSimulator() {
 
   const itemChallenges = {
     wood: {
-      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶Ð½Ð¾ Ð´ÐµÑ€ÐµÐ²Ð¾!",
+      ru: "Мне нужно дерево!",
       phonetic: "[Mnye nuzhno dye-rye-va!]",
       pt: '"Preciso de madeira!"',
       audio: "assets/audio/phrase_item.mp3"
     },
     bread: {
-      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶Ð½Ð° ÐµÐ´Ð°!",
+      ru: "Мне нужна еда!",
       phonetic: "[Mnye nuzhna ye-da!]",
-      pt: '"Preciso de comida / PÃ£o!"',
+      pt: '"Preciso de comida / Pão!"',
       audio: "assets/audio/phrase_food.mp3"
     },
     diamond: {
-      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶ÐµÐ½ Ð°Ð»Ð¼Ð°Ð·!",
+      ru: "Мне нужен алмаз!",
       phonetic: "[Mnye nuzhen al-maz!]",
       pt: '"Preciso de diamante!"',
       audio: "assets/audio/vocab_diamond.mp3"
     },
     kettle: {
-      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶ÐµÐ½ Ñ‡Ð°Ð¹Ð½Ð¸Ðº!",
+      ru: "Мне нужен чайник!",
       phonetic: "[Mnye nuzhen chay-nik!]",
       pt: '"Preciso de uma chaleira!"',
-      audio: "assets/audio/phrase_item.mp3"
+      audio: "assets/audio/phrase_kettle.mp3"
     },
     camera: {
-      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶Ð½Ð° ÐºÐ°Ð¼ÐµÑ€Ð°!",
+      ru: "Мне нужна камера!",
       phonetic: "[Mnye nuzhna ka-mye-ra!]",
-      pt: '"Preciso da cÃ¢mera fotogrÃ¡fica!"',
-      audio: "assets/audio/phrase_item.mp3"
+      pt: '"Preciso da câmera fotográfica!"',
+      audio: "assets/audio/phrase_camera.mp3"
     },
     net: {
-      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶ÐµÐ½ Ñ�Ð°Ñ‡Ð¾Ðº!",
+      ru: "Мне нужен сачок!",
       phonetic: "[Mnye nuzhen sa-chok!]",
-      pt: '"Preciso do puÃ§Ã¡ de insetos!"',
-      audio: "assets/audio/phrase_item.mp3"
+      pt: '"Preciso do puçá de insetos!"',
+      audio: "assets/audio/phrase_net.mp3"
     }
   };
 
@@ -678,7 +678,7 @@ function initSimulator() {
         if (ptText) ptText.textContent = data.pt;
         if (resultBadge) resultBadge.classList.remove("visible");
         if (waveBars) waveBars.classList.remove("active");
-        if (timerDisplay) timerDisplay.textContent = "â�± 12.0s";
+        if (timerDisplay) timerDisplay.textContent = "[12.0s]";
       }
     });
   });
@@ -700,15 +700,15 @@ function initSimulator() {
       clearInterval(simTimer);
       simTimer = setInterval(() => {
         timeLeft -= 0.1;
-        if (timerDisplay) timerDisplay.textContent = "â�± " + Math.max(0, timeLeft).toFixed(1) + "s";
+        if (timerDisplay) timerDisplay.textContent = "[" + Math.max(0, timeLeft).toFixed(1) + "s]";
         if (timeLeft <= 9.8) {
           clearInterval(simTimer);
           if (waveBars) waveBars.classList.remove("active");
           if (resultBadge) {
-            resultBadge.textContent = "âœ“ Aprovado: 98% â€¢ +20 Pontos Coop â€¢ Item Preservado!";
+            resultBadge.textContent = "[OK] Aprovado: 98% • +20 Pontos Coop • Item Preservado!";
             resultBadge.classList.add("visible");
           }
-          showToast("âœ“ Reconhecimento Vosk: \"" + data.ru + "\" (98% precisÃ£o)");
+          showToast("[OK] Reconhecimento Vosk: \"" + data.ru + "\" (98% precisão)");
         }
       }, 100);
     });
@@ -742,7 +742,7 @@ function initRadialWheel() {
       card.classList.add("active");
 
       const titleEl = card.querySelector(".sector-card-title");
-      const title = titleEl ? titleEl.textContent : "AÃ§Ã£o";
+      const title = titleEl ? titleEl.textContent : "Ação";
       const ru = card.getAttribute("data-ru") || "";
       const phonetic = card.getAttribute("data-phonetic") || "";
       const pt = card.getAttribute("data-pt") || "";
@@ -799,7 +799,7 @@ function initCreditsTable() {
 
     if (filtered.length === 0) {
       const emptyRow = document.createElement("tr");
-      emptyRow.innerHTML = '<td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">Nenhum mod encontrado para os critÃ©rios de busca.</td>';
+      emptyRow.innerHTML = '<td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">Nenhum mod encontrado para os critérios de busca.</td>';
       tbody.appendChild(emptyRow);
       if (countDisplay) countDisplay.textContent = "Mostrando 0 de " + allMods.length + " mods";
       return;
@@ -816,7 +816,7 @@ function initCreditsTable() {
 
       const tr = document.createElement("tr");
       const linkHtml = homepage
-        ? `<a href="${homepage}" target="_blank" rel="noopener noreferrer" title="Visitar pÃ¡gina oficial" class="mod-link-btn">â†— Visitar</a>`
+        ? `<a href="${homepage}" target="_blank" rel="noopener noreferrer" title="Visitar página oficial" class="mod-link-btn">↗ Visitar</a>`
         : '<span style="color: var(--text-dim);">â€”</span>';
 
       tr.innerHTML = `
@@ -878,7 +878,7 @@ function initClipboard() {
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(textToCopy).then(() => {
-          showToast(`âœ“ ${label} copiado para a Ã¡rea de transferÃªncia!`);
+          showToast(`[OK] ${label} copiado para a área de transferência!`);
         }).catch(() => fallbackCopy(textToCopy, label));
       } else {
         fallbackCopy(textToCopy, label);
