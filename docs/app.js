@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Minecraft Russo: SayIt Modpack - Client-Side Application
  * Pure Vanilla ES6 JavaScript (Zero External Dependencies)
  */
@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAudioTabs();
   initCreditsTable();
   initClipboard();
+  initDownloadLinks();
 });
 
 // Authoritative Metadata for all 43 Curated Mod JARs
@@ -787,4 +788,15 @@ function initNavigation() {
       }
     });
   });
+}
+
+
+function initDownloadLinks() {
+  if (window.location.hostname.endsWith('github.io')) {
+    const downloadBtns = document.querySelectorAll('a[href$="Minecraft_Russo_Client_Setup.zip"]');
+    const releaseUrl = 'https://github.com/plenoryan/minecraft-russo/releases/download/v1.1.0/Minecraft_Russo_Client_Setup.zip';
+    downloadBtns.forEach(btn => {
+      btn.href = releaseUrl;
+    });
+  }
 }
