@@ -436,3 +436,20 @@
      - Utilizar o dominio gerado pelo mod e4all (ex: consent-rental.cl.e4mc.link exibido no chat ao abrir para LAN) em vez do IP virtual do Radmin VPN elimina completamente os problemas de MTU e bloqueio de firewall do Radmin VPN.
   3. **Otimizacao de Renderizacao do Host:**
      - Reduzir a distancia de renderizacao (View Distance) do host de 12 para 8 ou 10 durante partidas LAN diminui sensivelmente o volume de pacotes transmitidos pela rede.
+
+### L50. Desafios de Frase Cooperativa e Prevencao de Concorrencia/Sobreposicao de Itens de Inventario
+- **Armadilha:**
+  1. No motor de pronuncia (Scorer), a correspondencia de palavras constituintes (t.size() >= 2) elevava indevidamente o escore para 85%-95% ao reconhecer apenas uma unica palavra isolada (ex: "Мне"), aprovando a frase antes mesmo do jogador pronunciar o item ou o restante da solicitacao.
+  2. No servidor, a rotina de inventario (scanInventory) e a fila de repeticao espacada disparavam desafios de itens a cada poucos segundos sem intervalo de respiro. Quando o jogador abria a Roda Radial ou a Tela de Busca para pedir um item ao amigo, a chegada de um pacote Packets.Challenge do servidor executava ChallengeSession.stop(), sobrepondo e destruindo o pedido ativo.
+- **Solucao Implementada:**
+  1. **Cobertura Integral de Frases (Scorer.java & ChallengeSession.java):**
+     - Removido o boost isolado de palavras constituintes em alvos multi-palavras, confiando no calculo de wordCoverage (proporcional ao percentual real de palavras articuladas).
+     - No cliente (ChallengeSession.offer e finish), a aprovacao de qualquer frase exige estritamente que a quantidade de palavras ouvidas seja compativel com o alvo (heardWords.size() >= targetWords.size()) e que o escore alcance o limiar exigido (s >= passThreshold).
+  2. **Protocolo de Bloqueio Concorrente (coop_busy:true / coop_busy:false):**
+     - Ao abrir a Roda Radial ('V') ou a Tela de Busca de Itens, o cliente despacha CoopInvoke("coop_busy:true").
+     - O servidor pausa imediatamente as checagens de inventario para o jogador e, caso haja um desafio de palavra em andamento, o reagenda na fila sem aplicar penalidades.
+     - Apos concluir o pedido de fala cooperativa ou fechar as telas, o cliente despacha coop_busy:false.
+  3. **Guarda Defensiva no Cliente (ChallengeSession.start):**
+     - Rejeita qualquer pacote de desafio entrante enquanto pendingCoopAction != null ou enquanto as telas de selecao de acao estiverem visiveis.
+  4. **Intervalo de Respiro no Servidor (ChallengeManager.tick):**
+     - Fixado intervalo minimo de 15 segundos (300 ticks) entre desafios automatizados de inventario, eliminando a sensacao de bombardeio ininterrupto de itens.

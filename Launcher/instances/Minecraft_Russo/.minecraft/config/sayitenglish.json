@@ -2,7 +2,7 @@
   "penalty": "delete",
   "wordSeconds": 12,
   "sentenceSeconds": 16,
-  "passScore": 80,
+  "passScore": 90,
   "sentences": true,
   "sentenceCooldown": 120,
   "sentenceXp": 7,

@@ -3,10 +3,13 @@ package com.spicesfire.sayitenglish.client;
 import com.spicesfire.sayitenglish.Alphabet;
 import com.spicesfire.sayitenglish.ChallengeManager;
 import com.spicesfire.sayitenglish.Config;
+import com.spicesfire.sayitenglish.Packets;
 import com.spicesfire.sayitenglish.audio.AudioPlaybackManager;
 import com.spicesfire.sayitenglish.client.ChallengeSession;
 import com.spicesfire.sayitenglish.client.ClientCompat;
 import com.spicesfire.sayitenglish.client.Words;
+import com.spicesfire.sayitenglish.platform.ClientPlatform;
+import com.spicesfire.sayitenglish.platform.ModPacket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +63,7 @@ public class ItemSearchScreen extends class_437 {
     private SearchEntry selectedEntry = null;
     private int scrollOffset = 0;
     private int hoveredIndex = -1;
+    private boolean transitioningToCoop = false;
 
     public void setSelectedEntry(SearchEntry entry) {
         this.selectedEntry = entry;
@@ -86,6 +90,10 @@ public class ItemSearchScreen extends class_437 {
 
     @Override
     public void method_25419() {
+        if (!this.transitioningToCoop && ChallengeSession.pendingCoopAction == null) {
+            ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke("coop_busy:false", ""));
+            ChallengeSession.pause(false);
+        }
         ClientCompat.openScreen(this.field_22787, null);
     }
 
@@ -108,6 +116,9 @@ public class ItemSearchScreen extends class_437 {
 
     @Override
     protected void method_25426() {
+        super.method_25426();
+        ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke("coop_busy:true", ""));
+        ChallengeSession.pause(true);
         ensureCatalogBuilt();
 
         // Check held item in main hand
@@ -177,6 +188,7 @@ public class ItemSearchScreen extends class_437 {
 
     public void selectEntry(SearchEntry entry) {
         if (entry == null) return;
+        this.transitioningToCoop = true;
         this.method_25419();
 
         String action = "item:" + entry.id;

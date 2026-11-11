@@ -392,12 +392,29 @@ Write-Utf8NoBom -FilePath $rootUltimMc -Content (($rootUltimMcLines -join "`r`n"
 Write-Success "ultimmc.cfg normalizado em data\ e na raiz de Launcher\"
 
 # 7.3 accounts.json com perfil offline EstudanteRusso
-$sourceAccounts = Join-Path $dataSrc "accounts.json"
-if (-not (Test-Path $sourceAccounts)) {
-    $sourceAccounts = Join-Path $launcherSrc "accounts.json"
-}
-[System.IO.File]::Copy($sourceAccounts, (Join-Path $dataDst "accounts.json"), $true)
-[System.IO.File]::Copy($sourceAccounts, (Join-Path $launcherDst "accounts.json"), $true)
+$accountsJsonTemplate = @{
+    accounts = @(
+        @{
+            active = $true
+            entitlement = @{
+                canPlayMinecraft = $true
+                ownsMinecraft = $true
+            }
+            type = "dummy"
+            ygg = @{
+                extra = @{
+                    clientToken = "9387eaef0e7738c7ab300a74e6b7dc95"
+                    userName = "EstudanteRusso"
+                }
+                iat = 1794356404
+                token = "EstudanteRusso"
+            }
+        }
+    )
+    formatVersion = 3
+} | ConvertTo-Json -Depth 5
+Write-Utf8NoBom -FilePath (Join-Path $dataDst "accounts.json") -Content ($accountsJsonTemplate + "`r`n")
+Write-Utf8NoBom -FilePath (Join-Path $launcherDst "accounts.json") -Content ($accountsJsonTemplate + "`r`n")
 Write-Success "accounts.json configurado com perfil offline 'EstudanteRusso' (dummy)"
 
 # ------------------------------------------------------------------------------

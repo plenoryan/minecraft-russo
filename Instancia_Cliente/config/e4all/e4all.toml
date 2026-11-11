@@ -33,7 +33,7 @@ dialtoneSanitizeTicket = true
 offlineMode = true
 # Whether the offline mode warning has already been shown to the user
 # default: false
-offlineWarningShown = false
+offlineWarningShown = true
 # Whether to hide the domain in the chat message (click to copy still works)
 # default: false
 hideDomainInChat = false

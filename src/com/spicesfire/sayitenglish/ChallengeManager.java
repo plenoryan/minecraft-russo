@@ -149,12 +149,14 @@ public final class ChallengeManager {
             if (!Platform.I.canSendTo(player, Packets.Challenge.TYPE) || player.method_7325()) continue;
             State s = ChallengeManager.state(player);
             if (s.progress.language == null) continue;
+            if (s.coopBusy) continue;
             ChallengeManager.scanInventory(player, s, now);
             if (s.active != null) {
                 if (now <= s.deadline) continue;
                 ChallengeManager.finish(player, s, 0, "");
                 continue;
             }
+            if (now - s.lastChallengeEnd < 300L) continue;
             if (!s.queue.isEmpty()) {
                 String id = s.queue.poll();
                 class_1792 item = ChallengeManager.item(id);
@@ -435,11 +437,11 @@ public final class ChallengeManager {
         }
         if (currentStars == 0) {
             switch (repIndex) {
-                case 1: return 20L;  // 1s
-                case 2: return 40L;  // 2s
-                case 3: return 60L;  // 3s
-                case 4: return 80L;  // 4s
-                default: return 100L; // 5s
+                case 1: return 200L; // 10s
+                case 2: return 300L; // 15s
+                case 3: return 400L; // 20s
+                case 4: return 500L; // 25s
+                default: return 600L; // 30s
             }
         } else if (currentStars == 1) {
             switch (repIndex) {
@@ -491,6 +493,7 @@ public final class ChallengeManager {
         boolean isRu = "ru".equals(pr.language);
         Set<Character> oldUnlocked = isRu ? Alphabet.computeUnlockedLetters(pr.words(), pr.letterHeat()) : Collections.emptySet();
         long now = ChallengeManager.server(player).method_3780();
+        s.lastChallengeEnd = now;
 
         switch (c.kind()) {
             case "word": {
@@ -934,6 +937,8 @@ public final class ChallengeManager {
         boolean flying;
         Event pending;
         long quietSince;
+        boolean coopBusy;
+        long lastChallengeEnd;
 
         private State() {
         }
@@ -1038,6 +1043,23 @@ public final class ChallengeManager {
 
         public static void onCoopInvoke(Packets.CoopInvoke pkt, class_3222 player) {
             if (pkt == null || player == null) return;
+            String act = pkt.action();
+            if ("coop_busy:true".equals(act)) {
+                State s = ChallengeManager.state(player);
+                s.coopBusy = true;
+                if (s.active != null) {
+                    if ("word".equals(s.active.kind()) && s.active.subject() != null) {
+                        s.queue.add(s.active.subject());
+                    }
+                    s.active = null;
+                }
+                return;
+            } else if ("coop_busy:false".equals(act)) {
+                State s = ChallengeManager.state(player);
+                s.coopBusy = false;
+                s.lastChallengeEnd = ChallengeManager.server(player).method_3780();
+                return;
+            }
             startPhraseInvocation(player, pkt.action());
         }
 

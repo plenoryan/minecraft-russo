@@ -6,19 +6,13 @@
                 "canPlayMinecraft": true,
                 "ownsMinecraft": true
             },
-            "profile": {
-                "capes": [],
-                "id": "9387eaef-0e77-38c7-ab30-0a74e6b7dc95",
-                "name": "Ryan",
-                "skins": []
-            },
             "type": "dummy",
             "ygg": {
                 "extra": {
                     "clientToken": "9387eaef0e7738c7ab300a74e6b7dc95",
                     "userName": "Ryan"
                 },
-                "iat": 1794356218,
+                "iat": 1794356404,
                 "token": "Ryan"
             }
         }

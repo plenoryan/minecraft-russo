@@ -3,10 +3,10 @@
         {
             "base": "asset_indexes",
             "etag": "",
-            "last_changed_timestamp": 1793734181607,
-            "md5sum": "075021477bf8507ac8d027b4d7774080",
+            "last_changed_timestamp": 1794355712846,
+            "md5sum": "54dc42a4c0fae072c884b5219a640296",
             "path": "5.json",
-            "remote_changed_timestamp": "Tue, 03 Nov 2026 13:19:49 GMT"
+            "remote_changed_timestamp": "Tue, 10 Nov 2026 14:30:22 GMT"
         },
         {
             "base": "injectors",
@@ -498,51 +498,51 @@
         },
         {
             "base": "meta",
-            "etag": "\"dmoi37hjr3e71bn-gzip\"",
-            "last_changed_timestamp": 1794009462295,
-            "md5sum": "73a349dcaa5acf0efde250f59ae638cc",
+            "etag": "\"dmrxvl4ih3mv1bn\"",
+            "last_changed_timestamp": 1794355712471,
+            "md5sum": "d559eb1dad32097ad154582210f7ffe8",
             "path": "index.json",
-            "remote_changed_timestamp": "Fri, 06 Nov 2026 23:01:45 GMT"
+            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:06 GMT"
         },
         {
             "base": "meta",
-            "etag": "\"dmoi37j4pm512cb-gzip\"",
-            "last_changed_timestamp": 1794009462555,
+            "etag": "\"dmrxvl63kb332cb\"",
+            "last_changed_timestamp": 1794355712666,
             "md5sum": "36fc8b6464e74e02e85a3da56c2e4237",
             "path": "net.fabricmc.fabric-loader/0.16.14.json",
-            "remote_changed_timestamp": "Fri, 06 Nov 2026 23:01:46 GMT"
+            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:06 GMT"
         },
         {
             "base": "meta",
-            "etag": "\"dmoi37jr791jl6-gzip\"",
-            "last_changed_timestamp": 1794009462487,
+            "etag": "\"dmrxvl6qclypl6\"",
+            "last_changed_timestamp": 1794355712441,
             "md5sum": "805215a1ea696139574edf3f6bd3f4c9",
             "path": "net.fabricmc.intermediary/1.20.1.json",
-            "remote_changed_timestamp": "Fri, 06 Nov 2026 23:01:46 GMT"
+            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:06 GMT"
         },
         {
             "base": "meta",
-            "etag": "\"dmoi37kp2k0wdks-gzip\"",
-            "last_changed_timestamp": 1794009462581,
-            "md5sum": "4b28831eb8bd2d9cc2afa0b4afc2b5db",
+            "etag": "\"dmrxvl7welnkdks\"",
+            "last_changed_timestamp": 1794355712716,
+            "md5sum": "1fe96c019d14957ebf1146145c53b0f9",
             "path": "net.minecraft/1.20.1.json",
-            "remote_changed_timestamp": "Fri, 06 Nov 2026 23:01:46 GMT"
+            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:06 GMT"
         },
         {
             "base": "meta",
-            "etag": "\"dmoi38b21h22aha-gzip\"",
-            "last_changed_timestamp": 1794009462509,
+            "etag": "\"dmrxvm1qawc3aha\"",
+            "last_changed_timestamp": 1794355712463,
             "md5sum": "b4581d4939208a6232554e76a0eb8657",
             "path": "org.lwjgl3/3.3.1.json",
-            "remote_changed_timestamp": "Fri, 06 Nov 2026 23:01:47 GMT"
+            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:08 GMT"
         },
         {
             "base": "translations",
-            "etag": "\"dmnq9j9sw2laajq\"",
-            "last_changed_timestamp": 1794009460153,
-            "md5sum": "8f037bb203ad3998e9328862d216d1a9",
+            "etag": "\"dmqph9tg1fejakl\"",
+            "last_changed_timestamp": 1794355710844,
+            "md5sum": "496aa9ed15cc7660f91ff11e33c9dbdf",
             "path": "index_v2.json",
-            "remote_changed_timestamp": "Fri, 06 Nov 2026 01:13:30 GMT"
+            "remote_changed_timestamp": "Mon, 09 Nov 2026 13:14:35 GMT"
         }
     ],
     "version": "1"

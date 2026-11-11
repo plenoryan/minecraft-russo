@@ -2,10 +2,13 @@ package com.spicesfire.sayitenglish.client;
 
 import com.spicesfire.sayitenglish.ChallengeManager;
 import com.spicesfire.sayitenglish.Config;
+import com.spicesfire.sayitenglish.Packets;
 import com.spicesfire.sayitenglish.audio.AudioPlaybackManager;
 import com.spicesfire.sayitenglish.client.ChallengeSession;
 import com.spicesfire.sayitenglish.client.ClientCompat;
 import com.spicesfire.sayitenglish.client.SayItClient;
+import com.spicesfire.sayitenglish.platform.ClientPlatform;
+import com.spicesfire.sayitenglish.platform.ModPacket;
 import net.minecraft.class_1792;
 import net.minecraft.class_1799;
 import net.minecraft.class_1935;
@@ -60,10 +63,18 @@ public class RadialMenuScreen extends class_437 {
 
     private final long openedAt;
     private int hoveredSector = -1;
+    private boolean transitioningToSearch = false;
 
     public RadialMenuScreen() {
         super((class_2561)class_2561.method_43470("Roda de A\u00e7\u00f5es Cooperativas"));
         this.openedAt = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void method_25426() {
+        super.method_25426();
+        ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke("coop_busy:true", ""));
+        ChallengeSession.pause(true);
     }
 
     @Override
@@ -73,6 +84,10 @@ public class RadialMenuScreen extends class_437 {
 
     @Override
     public void method_25419() {
+        if (!this.transitioningToSearch && ChallengeSession.pendingCoopAction == null) {
+            ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke("coop_busy:false", ""));
+            ChallengeSession.pause(false);
+        }
         ClientCompat.openScreen(this.field_22787, null);
     }
 
@@ -83,11 +98,13 @@ public class RadialMenuScreen extends class_437 {
     public void selectSector(int index) {
         if (index >= 0 && index < SECTORS.length) {
             SectorDef s = SECTORS[index];
-            this.method_25419();
             if ("item".equals(s.action)) {
+                this.transitioningToSearch = true;
+                this.method_25419();
                 ClientCompat.openScreen(this.field_22787, new ItemSearchScreen());
                 return;
             }
+            this.method_25419();
             ChallengeSession.startCoopChallenge(s.action, s.ruText, s.ptText, s.iconId, 15, Config.get().passScore);
         }
     }

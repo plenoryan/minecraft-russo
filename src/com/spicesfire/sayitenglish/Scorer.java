@@ -29,7 +29,7 @@ public final class Scorer {
                 ++i;
             }
         }
-        if (t.size() >= 3) {
+        if (t.size() >= 2) {
             best = Math.max(best, Scorer.wordCoverage(h, t, english));
         }
 
@@ -39,28 +39,6 @@ public final class Scorer {
             String tNoSoft = tj.replace("\u044c", "").replace("\u044a", "");
             if (!hNoSoft.isEmpty() && !tNoSoft.isEmpty()) {
                 best = Math.max(best, Scorer.similarity(hNoSoft, tNoSoft));
-            }
-        }
-
-        // Constituent keyword / head-noun matching for multi-word targets (e.g. "Рудная медь" -> "медь", "рудная")
-        if (t.size() >= 2) {
-            for (String tw : t) {
-                if (tw.length() < 2) continue;
-                for (String hw : h) {
-                    double sim = english ? Scorer.blended(hw, tw) : Scorer.similarity(hw, tw);
-                    if (!english) {
-                        String hwNoSoft = hw.replace("\u044c", "").replace("\u044a", "");
-                        String twNoSoft = tw.replace("\u044c", "").replace("\u044a", "");
-                        if (!hwNoSoft.isEmpty() && !twNoSoft.isEmpty()) {
-                            sim = Math.max(sim, Scorer.similarity(hwNoSoft, twNoSoft));
-                        }
-                    }
-                    if (sim >= 0.75) {
-                        // High accuracy on a key constituent word grants passing score (85% to 95%)
-                        double constituentScore = 0.85 + (sim - 0.75) * 0.4;
-                        best = Math.max(best, constituentScore);
-                    }
-                }
             }
         }
 

@@ -75,6 +75,15 @@ public final class ChallengeSession {
     }
 
     public static void start(Packets.Challenge c) {
+        if (pendingCoopAction != null) {
+            // A cooperative request is actively running! Do not allow server challenges to overwrite it.
+            return;
+        }
+        class_310 mc = class_310.method_1551();
+        if (mc != null && (mc.field_1755 instanceof RadialMenuScreen || mc.field_1755 instanceof ItemSearchScreen)) {
+            // Player is actively in the radial menu or item search screen!
+            return;
+        }
         ChallengeSession.stop();
         current = c;
         prompt = c.kind().equals("sentence") ? Words.sentence((String)c.subject(), (String)c.arg()) : Words.word((String)c.subject());
@@ -113,7 +122,6 @@ public final class ChallengeSession {
         micTried = false;
         micRequested = false;
         ChallengeSession.tryListen();
-        class_310 mc = class_310.method_1551();
         if (mc.field_1724 != null) {
             mc.field_1724.method_5783((class_3414)class_3417.field_14622.comp_349(), 0.6f, 1.4f);
         }
@@ -122,6 +130,7 @@ public final class ChallengeSession {
     public static void startCoopChallenge(String action, String ruText, String ptText, String icon, int seconds, int passScore) {
         ChallengeSession.stop();
         pendingCoopAction = action;
+        ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke("coop_busy:true", ""));
         int clientChallengeId = -100 - Math.abs(action.hashCode()) % 1000;
         current = new Packets.Challenge(clientChallengeId, "sentence", action, icon != null ? icon : "", seconds, passScore);
 
@@ -233,22 +242,10 @@ public final class ChallengeSession {
         boolean eng = Words.learning().english();
         int s = Scorer.score((String)text, (String)target, (boolean)eng);
 
-        // Cross-match against Romanized target and Romanized constituent words
+        // Cross-match against Romanized target whole phrase
         String reading = Romanizer.plain((String)target, (String)language);
         if (reading != null) {
             s = Math.max(s, Scorer.score((String)text, (String)reading, (boolean)false));
-            List<String> tWords = Scorer.words(target);
-            if (tWords.size() > 1) {
-                for (String tw : tWords) {
-                    String twRom = Romanizer.plain((String)tw, (String)language);
-                    if (twRom != null && twRom.length() >= 2) {
-                        int rScore = Scorer.score((String)text, (String)twRom, (boolean)false);
-                        if (rScore >= 75) {
-                            s = Math.max(s, (int)Math.round(85.0 + (double)(rScore - 75) * 0.4));
-                        }
-                    }
-                }
-            }
         }
 
         // Handle guesses from restricted recognizer
@@ -268,18 +265,13 @@ public final class ChallengeSession {
             bestHeard = text;
         }
         if (current != null) {
-            boolean isSentence = "sentence".equals(current.kind());
+            boolean isSentence = "sentence".equals(current.kind())
+                || (prompt != null && prompt.target() != null && Scorer.words(prompt.target()).size() > 1);
             int passThreshold = current.passScore();
-            if (isSentence) {
-                List<String> targetWords = Scorer.words(target);
-                List<String> heardWords = Scorer.words(text);
-                if (heardWords.size() >= Math.max(1, targetWords.size() - 1) && s >= Math.max(passThreshold, 75)) {
-                    passed = true;
-                }
-            } else {
-                if (s >= passThreshold) {
-                    passed = true;
-                }
+            List<String> targetWords = Scorer.words(target);
+            List<String> heardWords = Scorer.words(text);
+            if (heardWords.size() >= targetWords.size() && s >= passThreshold) {
+                passed = true;
             }
         }
     }
@@ -341,10 +333,14 @@ public final class ChallengeSession {
         AudioPlaybackManager.stop();
         Packets.Challenge c = current;
         ChallengeSession.release();
-        boolean ok = c != null && best >= c.passScore();
+        List<String> targetWords = prompt != null && prompt.target() != null ? Scorer.words(prompt.target()) : List.of();
+        List<String> heardWords = Scorer.words(bestHeard != null && !bestHeard.isEmpty() ? bestHeard : heard);
+        boolean phraseComplete = targetWords.isEmpty() || heardWords.size() >= targetWords.size();
+        boolean ok = c != null && best >= c.passScore() && phraseComplete;
         String coop = pendingCoopAction;
         pendingCoopAction = null;
         if (coop != null) {
+            ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke("coop_busy:false", ""));
             if (ok) {
                 ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke(coop, ""));
             }
@@ -382,7 +378,10 @@ public final class ChallengeSession {
 
     public static void stop() {
         AudioPlaybackManager.stop();
-        pendingCoopAction = null;
+        if (pendingCoopAction != null) {
+            ClientPlatform.I.sendToServer((ModPacket)new Packets.CoopInvoke("coop_busy:false", ""));
+            pendingCoopAction = null;
+        }
         ChallengeSession.release();
         current = null;
         prompt = null;
