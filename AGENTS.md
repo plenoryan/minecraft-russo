@@ -422,3 +422,17 @@
      - Carry On: Permite levantar pequenos animais e baús nos braços com Shift + Botão Direito.
   4. **Anotações Pedagógicas Bilíngues (ussian_tooltips.js):**
      - Adicionadas 14 novas entradas completas no currículo bilíngue com pronúncia fonética e notas gramaticais de gênero/caso.
+
+### L49. Desconexao em Sessao LAN/VPN: Limite de Tempo Netty (30s Read Timeout) e Tamanho de Pacotes
+- **Armadilha:**
+  - Em conexoes peer-to-peer (via Radmin VPN ou tuneis WAN), o outro jogador sofria desconexoes repetidas com as mensagens "lost connection: Tempo esgotado" (Timed Out) e "java.net.SocketException: Connection reset".
+  - O Minecraft vanilla possui um temporizador rigido de leitura Netty (ReadTimeoutHandler) fixado em apenas 30 segundos. Durante geracao intensiva de chunks (dripstones, vilas do Towns & Towers), picos de jitter de rede na VPN ou sincronizacao de NBT/avancos de mods, a ausencia temporaria de pacotes por 30s provocava a queda imediata do jogador.
+  - Alem disso, pacotes grandes de sincronizacao de mods excedendo o limite de buffer vanilla provocavam reset subito de socket TCP no cliente.
+- **Solucao Implementada:**
+  1. **Instalacao do Mod Packet Fixer (v3.3.2):**
+     - Integrado packetfixer-3.3.2-1.18-1.20.4-merged.jar em Instancia_Cliente\mods e Servidor_Dedicado\mods.
+     - Criado config/packetfixer.properties elevando o timeout para 180 segundos (timeout=180) e ativando allSizesUnlimited=true com suporte ampliado a NBT (200MB) e VarInt/VarLong.
+  2. **Alternativa Direta com e4all/e4mc:**
+     - Utilizar o dominio gerado pelo mod e4all (ex: consent-rental.cl.e4mc.link exibido no chat ao abrir para LAN) em vez do IP virtual do Radmin VPN elimina completamente os problemas de MTU e bloqueio de firewall do Radmin VPN.
+  3. **Otimizacao de Renderizacao do Host:**
+     - Reduzir a distancia de renderizacao (View Distance) do host de 12 para 8 ou 10 durante partidas LAN diminui sensivelmente o volume de pacotes transmitidos pela rede.
