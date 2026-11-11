@@ -8,17 +8,18 @@
             },
             "profile": {
                 "capes": [],
-                "id": "069a79f4-44e9-3726-a5be-fca90e38aaf5",
-                "name": "EstudanteRusso",
+                "id": "9387eaef-0e77-38c7-ab30-0a74e6b7dc95",
+                "name": "Ryan",
                 "skins": []
             },
             "type": "dummy",
             "ygg": {
                 "extra": {
-                    "clientToken": "069a79f444e93726a5befca90e38aaf5",
-                    "userName": "EstudanteRusso"
+                    "clientToken": "9387eaef0e7738c7ab300a74e6b7dc95",
+                    "userName": "Ryan"
                 },
-                "token": "0"
+                "iat": 1794356218,
+                "token": "Ryan"
             }
         }
     ],
