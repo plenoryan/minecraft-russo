@@ -466,3 +466,9 @@
      - Tambem suporta execucao direta via parametro (ex: `Mudar_Nome.bat Arthur`) e integracao direta no `Jogar.bat` (ex: `Jogar.bat --nome Arthur`).
   3. **Visibilidade no `Jogar.bat` e `LEIA-ME.txt`:**
      - O inicializador exibe claramente o nome ativo antes do boot (`[JOGADOR] Perfil ativo: Estudante_NLQ4`) e instrui o jogador sobre o `Mudar_Nome.bat`.
+`r`n`r`n### L52. Publicacao de Modpacks Grandes no GitHub Pages e Releases
+- **Armadilha:**
+  - Arquivos instaladores de modpacks completos (> 100 MB, no nosso caso 1.11 GB) nao podem ser comitados no git nem servidos como arquivos estaticos puros no GitHub Pages devido ao limite rigido de 100 MB por blob e limites de quota de transferencia de sites estaticos.
+- **Solucao Implementada:**
+  - A arquitetura correta consiste em publicar a arvore `/docs` no GitHub Pages e hospedar o arquivo `.zip` pesado como asset de Release oficial (`gh release create v1.1.0`).
+  - O script JavaScript do frontend (`app.js` via `initDownloadLinks`) detecta quando a pagina esta rodando no dominio `*.github.io` e redireciona automaticamente o botao de download para a CDN oficial do GitHub Release (`https://github.com/plenoryan/minecraft-russo/releases/download/...`), mantendo download local relativo quando inspecionado localmente (`localhost` / `file://`).
