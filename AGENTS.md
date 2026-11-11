@@ -453,7 +453,8 @@
      - Rejeita qualquer pacote de desafio entrante enquanto pendingCoopAction != null ou enquanto as telas de selecao de acao estiverem visiveis.
   4. **Intervalo de Respiro no Servidor (ChallengeManager.tick):**
      - Fixado intervalo minimo de 15 segundos (300 ticks) entre desafios automatizados de inventario, eliminando a sensacao de bombardeio ininterrupto de itens.
-`r`n`r`n### L51. Prevencao de Colisao de Nomes em Partidas LAN/Offline Mode e Facilitador de Troca Rapida
+
+### L51. Prevencao de Colisao de Nomes em Partidas LAN/Offline Mode e Facilitador de Troca Rapida
 - **Armadilha:**
   - Em partidas LAN ou servidores offline (`online-mode=false`), se dois jogadores entram na mesma sessao com o mesmo apelido (por exemplo, se o pacote portatil contiver o nome do host `Ryan` ou se ambos os jogadores usarem o apelido padrao `EstudanteRusso`), o servidor expulsa o jogador com mensagens como "You logged in from another location" ou "Jogador com este nome ja existe".
   - Alem disso, instruir usuarios nao tecnicos a abrir o UltimMC, navegar por menus aninhados de contas offline para trocar de nome gera atrito desnecessario.
@@ -466,9 +467,25 @@
      - Tambem suporta execucao direta via parametro (ex: `Mudar_Nome.bat Arthur`) e integracao direta no `Jogar.bat` (ex: `Jogar.bat --nome Arthur`).
   3. **Visibilidade no `Jogar.bat` e `LEIA-ME.txt`:**
      - O inicializador exibe claramente o nome ativo antes do boot (`[JOGADOR] Perfil ativo: Estudante_NLQ4`) e instrui o jogador sobre o `Mudar_Nome.bat`.
-`r`n`r`n### L52. Publicacao de Modpacks Grandes no GitHub Pages e Releases
+
+### L52. Publicacao de Modpacks Grandes no GitHub Pages e Releases
 - **Armadilha:**
   - Arquivos instaladores de modpacks completos (> 100 MB, no nosso caso 1.11 GB) nao podem ser comitados no git nem servidos como arquivos estaticos puros no GitHub Pages devido ao limite rigido de 100 MB por blob e limites de quota de transferencia de sites estaticos.
 - **Solucao Implementada:**
   - A arquitetura correta consiste em publicar a arvore `/docs` no GitHub Pages e hospedar o arquivo `.zip` pesado como asset de Release oficial (`gh release create v1.1.0`).
   - O script JavaScript do frontend (`app.js` via `initDownloadLinks`) detecta quando a pagina esta rodando no dominio `*.github.io` e redireciona automaticamente o botao de download para a CDN oficial do GitHub Release (`https://github.com/plenoryan/minecraft-russo/releases/download/...`), mantendo download local relativo quando inspecionado localmente (`localhost` / `file://`).
+
+### L53. Eliminacao de Estetica Generica de IA e Redesign Tatil Gamer na GitHub Page
+- **Armadilha:**
+  - Geradores de IA comumente produzem paginas web com vicios de design homogeneos e impessoais: gradientes de fundo roxos/azuis borrados (`linear-gradient(135deg, #6366f1, #a855f7)`), cards monotonos com glassmorphism generico (`backdrop-filter: blur`), pills com emojis descontextualizados (`⚡ 🧠 🚀 📦`), tipografia corporativa SaaS sem personalidade e ausencia de interatividade real do produto.
+- **Solucao Implementada:**
+  1. **Paleta Tatil & Identidade Visual Rustica de Sobrevivencia:**
+     - Substituicao de gradientes borrados por fundos solidos obsidiana (`#0b0d11`) e ardosia (`#13161d`), textura sutil de blocos de 32px e paleta mineral autêntica: âmbar de fogueira (`#f59e0b`), carmim eslavo (`#e11d48`), esmeralda de XP (`#10b981`) e ciano de diamante (`#06b6d4`).
+  2. **Botoes Mecanicos e Componentes em 3D:**
+     - Botoes com chanfros visiveis, borda dupla superior/inferior, sombras inset e feedback tatil ao pressionar (`active: translateY(2px)`), eliminando o aspecto plano e artificial.
+  3. **Simulador de HUD In-Game Interativo no Hero:**
+     - Integrado um simulador funcional do jogo: barra de vida e fome, hotbar clicavel com 6 itens (madeira, pao, diamante, chaleira, camera, puca), atualizacao dinamica da frase em russo e transcricao fonetica, visualizador de ondas de audio animado em tempo real e simulacao neural do Vosk com badge de aprovacao e pontos cooperativos.
+  4. **Roleta Radial Tática Interativa (Tecla V):**
+     - Roda de cooperacao em 6 setores interativos com callouts dinâmicos e reproducao sonora imediata das frases de acao em russo.
+  5. **Conformidade E2E Estrita:**
+     - Preservados todos os IDs obrigatorios (`overview`, `features`, `audio-preview`, `radial`, `credits`, `changelog`, `multiplayer`, `downloads`), hash SHA-256 autentico (`#sha256-val`), links de instalador e semântica UTF-8 Zero-BOM.

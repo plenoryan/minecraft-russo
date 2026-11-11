@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initAudioTabs();
   initCreditsTable();
   initClipboard();
+  initSimulator();
+  initRadialWheel();
   initDownloadLinks();
 });
 
@@ -523,9 +525,11 @@ function initAudioPlayer() {
 
   playButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      const audioSrc = btn.getAttribute("data-audio");
       const card = btn.closest(".audio-card");
-      const cardId = card ? card.getAttribute("data-id") : audioSrc;
+      const audioSrc = btn.getAttribute("data-audio") || (card && card.getAttribute("data-audio-src"));
+      if (!audioSrc) return;
+
+      const cardId = (card && card.getAttribute("data-id")) || audioSrc;
 
       if (currentPlayingId === cardId && activeAudio && !activeAudio.paused) {
         activeAudio.pause();
@@ -545,8 +549,8 @@ function initAudioPlayer() {
 
       if (card) {
         card.classList.add("active-playback");
-        btn.innerHTML = "<span class=\"play-icon\">â¸</span> Pausar";
       }
+      btn.innerHTML = '<span class="play-icon">â¸</span> Pausar';
 
       audio.play().catch(err => {
         console.warn("[SayIt-WebAudio] ReproduÃ§Ã£o bloqueada pelo navegador:", err);
@@ -561,7 +565,7 @@ function initAudioPlayer() {
       audio.addEventListener("error", () => {
         console.error("[SayIt-WebAudio] Falha ao carregar Ã¡udio:", audioSrc);
         showToast("Ãudio de demonstraÃ§Ã£o temporariamente indisponÃ­vel.");
-        resetAudioUI();
+        resetAudioUIUI || resetAudioUI();
       });
     });
   });
@@ -570,7 +574,7 @@ function initAudioPlayer() {
 function resetAudioUI() {
   document.querySelectorAll(".audio-card").forEach(c => c.classList.remove("active-playback"));
   document.querySelectorAll(".btn-play-audio").forEach(b => {
-    b.innerHTML = "<span class=\"play-icon\">â–¶</span> Ouvir PronÃºncia";
+    b.innerHTML = '<span class="play-icon">â–¶</span> Ouvir PronÃºncia';
   });
   currentPlayingId = null;
 }
@@ -606,6 +610,162 @@ function initAudioTabs() {
 }
 
 /**
+ * In-Game HUD Challenge Simulator
+ */
+function initSimulator() {
+  const btnVoice = document.getElementById("btn-simulate-voice");
+  const waveBars = document.getElementById("sim-wave-bars");
+  const resultBadge = document.getElementById("sim-result-badge");
+  const timerDisplay = document.getElementById("sim-timer-display");
+  const ruText = document.getElementById("sim-ru-text");
+  const phoneticText = document.getElementById("sim-phonetic-text");
+  const ptText = document.getElementById("sim-pt-text");
+  const slots = document.querySelectorAll(".mc-slot[data-item]");
+
+  const itemChallenges = {
+    wood: {
+      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶Ð½Ð¾ Ð´ÐµÑ€ÐµÐ²Ð¾!",
+      phonetic: "[Mnye nuzhno dye-rye-va!]",
+      pt: '"Preciso de madeira!"',
+      audio: "assets/audio/phrase_item.mp3"
+    },
+    bread: {
+      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶Ð½Ð° ÐµÐ´Ð°!",
+      phonetic: "[Mnye nuzhna ye-da!]",
+      pt: '"Preciso de comida / PÃ£o!"',
+      audio: "assets/audio/phrase_food.mp3"
+    },
+    diamond: {
+      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶ÐµÐ½ Ð°Ð»Ð¼Ð°Ð·!",
+      phonetic: "[Mnye nuzhen al-maz!]",
+      pt: '"Preciso de diamante!"',
+      audio: "assets/audio/vocab_diamond.mp3"
+    },
+    kettle: {
+      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶ÐµÐ½ Ñ‡Ð°Ð¹Ð½Ð¸Ðº!",
+      phonetic: "[Mnye nuzhen chay-nik!]",
+      pt: '"Preciso de uma chaleira!"',
+      audio: "assets/audio/phrase_item.mp3"
+    },
+    camera: {
+      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶Ð½Ð° ÐºÐ°Ð¼ÐµÑ€Ð°!",
+      phonetic: "[Mnye nuzhna ka-mye-ra!]",
+      pt: '"Preciso da cÃ¢mera fotogrÃ¡fica!"',
+      audio: "assets/audio/phrase_item.mp3"
+    },
+    net: {
+      ru: "ÐœÐ½Ðµ Ð½ÑƒÐ¶ÐµÐ½ ÑÐ°Ñ‡Ð¾Ðº!",
+      phonetic: "[Mnye nuzhen sa-chok!]",
+      pt: '"Preciso do puÃ§Ã¡ de insetos!"',
+      audio: "assets/audio/phrase_item.mp3"
+    }
+  };
+
+  let currentItem = "wood";
+  let simTimer = null;
+  let simAudio = null;
+
+  slots.forEach(slot => {
+    slot.addEventListener("click", () => {
+      slots.forEach(s => s.classList.remove("active"));
+      slot.classList.add("active");
+      const itemKey = slot.getAttribute("data-item");
+      if (itemChallenges[itemKey]) {
+        currentItem = itemKey;
+        const data = itemChallenges[itemKey];
+        if (ruText) ruText.textContent = data.ru;
+        if (phoneticText) phoneticText.textContent = data.phonetic;
+        if (ptText) ptText.textContent = data.pt;
+        if (resultBadge) resultBadge.classList.remove("visible");
+        if (waveBars) waveBars.classList.remove("active");
+        if (timerDisplay) timerDisplay.textContent = "â± 12.0s";
+      }
+    });
+  });
+
+  if (btnVoice) {
+    btnVoice.addEventListener("click", () => {
+      const data = itemChallenges[currentItem] || itemChallenges.wood;
+      if (waveBars) waveBars.classList.add("active");
+      if (resultBadge) resultBadge.classList.remove("visible");
+
+      if (simAudio) {
+        simAudio.pause();
+        simAudio.currentTime = 0;
+      }
+      simAudio = new Audio(data.audio);
+      simAudio.play().catch(() => {});
+
+      let timeLeft = 12.0;
+      clearInterval(simTimer);
+      simTimer = setInterval(() => {
+        timeLeft -= 0.1;
+        if (timerDisplay) timerDisplay.textContent = `â± ${Math.max(0, timeLeft).toFixed(1)}s`;
+        if (timeLeft <= 9.8) {
+          clearInterval(simTimer);
+          if (waveBars) waveBars.classList.remove("active");
+          if (resultBadge) {
+            resultBadge.textContent = "âœ“ Aprovado: 98% â€¢ +20 Pontos Coop â€¢ Item Preservado!";
+            resultBadge.classList.add("visible");
+          }
+          showToast(`âœ“ Reconhecimento Vosk: "${data.ru}" (98% precisÃ£o)`);
+        }
+      }, 100);
+    });
+  }
+}
+
+/**
+ * Interactive Radial Wheel Showcase Controller
+ */
+function initRadialWheel() {
+  const sectorCards = document.querySelectorAll(".sector-card");
+  const panelTitle = document.getElementById("radial-panel-title");
+  const panelDesc = document.getElementById("radial-panel-desc");
+  const panelRu = document.getElementById("radial-panel-ru");
+  const panelPhonetic = document.getElementById("radial-panel-phonetic");
+
+  const actionAudios = {
+    item: "assets/audio/phrase_item.mp3",
+    food: "assets/audio/phrase_food.mp3",
+    help: "assets/audio/phrase_help.mp3",
+    lava: "assets/audio/phrase_lava.mp3",
+    follow: "assets/audio/phrase_follow.mp3",
+    waypoint: "assets/audio/phrase_waypoint.mp3"
+  };
+
+  let radialAudio = null;
+
+  sectorCards.forEach(card => {
+    card.addEventListener("click", () => {
+      sectorCards.forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+
+      const titleEl = card.querySelector(".sector-card-title");
+      const title = titleEl ? titleEl.textContent : "AÃ§Ã£o";
+      const ru = card.getAttribute("data-ru") || "";
+      const phonetic = card.getAttribute("data-phonetic") || "";
+      const pt = card.getAttribute("data-pt") || "";
+      const action = card.getAttribute("data-action") || "item";
+
+      if (panelTitle) panelTitle.textContent = title;
+      if (panelDesc) panelDesc.textContent = pt;
+      if (panelRu) panelRu.textContent = ru;
+      if (panelPhonetic) panelPhonetic.textContent = phonetic;
+
+      if (actionAudios[action]) {
+        if (radialAudio) {
+          radialAudio.pause();
+          radialAudio.currentTime = 0;
+        }
+        radialAudio = new Audio(actionAudios[action]);
+        radialAudio.play().catch(() => {});
+      }
+    });
+  });
+}
+
+/**
  * Searchable & Filterable Mod Credits Table
  */
 function initCreditsTable() {
@@ -632,7 +792,7 @@ function initCreditsTable() {
 
     if (filtered.length === 0) {
       const emptyRow = document.createElement("tr");
-      emptyRow.innerHTML = "<td colspan=\"5\" style=\"text-align: center; padding: 2.5rem; color: var(--text-dim);\">Nenhum mod encontrado para os critÃ©rios de busca.</td>";
+      emptyRow.innerHTML = '<td colspan="5" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">Nenhum mod encontrado para os critÃ©rios de busca.</td>';
       tbody.appendChild(emptyRow);
       if (countDisplay) countDisplay.textContent = "Mostrando 0 de " + allMods.length + " mods";
       return;
@@ -641,19 +801,19 @@ function initCreditsTable() {
     filtered.forEach(mod => {
       const tr = document.createElement("tr");
       const linkHtml = mod.homepage
-        ? `<a href=\"${mod.homepage}\" target=\"_blank\" rel=\"noopener noreferrer\" title=\"Visitar pÃ¡gina oficial\">â†— Link</a>`
-        : "<span style=\"color: var(--text-dim);\">â€”</span>";
+        ? `<a href="${mod.homepage}" target="_blank" rel="noopener noreferrer" title="Visitar pÃ¡gina oficial">â†— Link</a>`
+        : '<span style="color: var(--text-dim);">â€”</span>';
 
       tr.innerHTML = `
         <td>
-          <div class=\"mod-title-cell\">
-            <span class=\"mod-name\">${mod.name}</span>
-            <span class=\"mod-id-code\">${mod.id}</span>
+          <div class="mod-title-cell">
+            <span class="mod-name">${mod.name}</span>
+            <span class="mod-id-code">${mod.id}</span>
           </div>
         </td>
         <td>${mod.authors || "Comunidade"}</td>
-        <td><span class=\"mod-category-badge\">${mod.category}</span></td>
-        <td><span class=\"mod-license-badge\">${mod.license || "Open Source"}</span></td>
+        <td><span class="mod-category-badge">${mod.category}</span></td>
+        <td><span class="mod-license-badge">${mod.license || "Open Source"}</span></td>
         <td>${linkHtml}</td>
       `;
       tbody.appendChild(tr);
@@ -687,16 +847,22 @@ function initCreditsTable() {
  * Copy to Clipboard with Feedback Toast
  */
 function initClipboard() {
-  const copyButtons = document.querySelectorAll("[data-copy]");
+  const copyButtons = document.querySelectorAll("[data-copy], #btn-copy-sha");
 
   copyButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      const textToCopy = btn.getAttribute("data-copy");
-      const label = btn.getAttribute("data-copy-label") || "Texto";
+      let textToCopy = btn.getAttribute("data-copy");
+      let label = btn.getAttribute("data-copy-label") || "Texto";
+
+      if (btn.id === "btn-copy-sha" || !textToCopy) {
+        const hashEl = document.getElementById("sha256-val");
+        textToCopy = hashEl ? hashEl.textContent.trim() : "7dacabded7f319811a467e3085d8d80db2da6b8be7d240a10ed9506a78c4c347";
+        label = "Checksum SHA-256";
+      }
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(textToCopy).then(() => {
-          showToast(`âœ” ${label} copiado para a Ã¡rea de transferÃªncia!`);
+          showToast(`âœ“ ${label} copiado para a Ã¡rea de transferÃªncia!`);
         }).catch(() => fallbackCopy(textToCopy, label));
       } else {
         fallbackCopy(textToCopy, label);
@@ -715,7 +881,7 @@ function fallbackCopy(text, label) {
   ta.select();
   try {
     document.execCommand("copy");
-    showToast(`âœ” ${label} copiado!`);
+    showToast(`âœ“ ${label} copiado!`);
   } catch (err) {
     showToast(`Falha ao copiar: ${text}`);
   }
@@ -789,7 +955,6 @@ function initNavigation() {
     });
   });
 }
-
 
 function initDownloadLinks() {
   if (window.location.hostname.endsWith('github.io')) {
