@@ -118,6 +118,9 @@ key_key.hotbar.6:key.keyboard.6
 key_key.hotbar.7:key.keyboard.7
 key_key.hotbar.8:key.keyboard.8
 key_key.hotbar.9:key.keyboard.9
+key_key.carry.desc:key.keyboard.unknown
+key_key.entityculling.toggle:key.keyboard.unknown
+key_key.exposure.camera_controls:key.keyboard.unknown
 key_key.heracles.open_quests:key.keyboard.u
 key_key.jade.config:key.keyboard.keypad.0
 key_key.jade.show_overlay:key.keyboard.keypad.1
@@ -129,6 +132,8 @@ key_key.presencefootsteps.settings:key.keyboard.f10
 key_key.presencefootsteps.toggle:key.keyboard.unknown
 key_key.sayitenglish.type:key.keyboard.y
 key_key.sayitenglish.settings:key.keyboard.u
+key_key.sayitenglish.radial:key.keyboard.v
+key_key.sayitenglish.hear:key.keyboard.h
 key_iris.keybind.reload:key.keyboard.unknown
 key_iris.keybind.toggleShaders:key.keyboard.k
 key_iris.keybind.shaderPackSelection:key.keyboard.o

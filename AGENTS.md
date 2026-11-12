@@ -576,3 +576,23 @@ ussian_tooltips.js):**
      - **Mob 3D Interativo (Creeper):** Ancorado na calha superior direita com geometria CSS 3D (preserve-3d). A cabeca rastreia o cursor do mouse em tempo real com calculo de angulos yaw/pitch via requestAnimationFrame (olhando diretamente para o ponteiro). Os olhos piscam periodicamente. Acompanhado de balao de dialogo editorial de boas-vindas em russo: Dobro pozhalovat! (com feedback sonoro/visual interativo ao clicar).
      - **Bloco 3D (Bancada de Trabalho / Verstak):** Posicionado na calha esquerda no meio da pagina, um cubo tridimensional completo com as texturas autenticas do Minecraft 1.20.1 (grade de ferramentas no topo, serrote e martelo nas faces), com rotacao isometrica guiada pelo mouse e tag pedagogica bilingue.
      - Ocultado automaticamente em telas menores ou iguais a 1260px e sob prefers-reduced-motion para garantir zero poluicao de leitura.
+
+
+### L59. Migracao Deterministica de Identidade Offline (UUID Aliasing) e Preservacao de Progresso
+- **Armadilha:**
+  - No Minecraft Java com `online-mode=false` (modo offline/LAN), a identidade do jogador e determinada estritamente pelo hash MD5 do nome prefixado por `OfflinePlayer:` (padrao RFC 4122 versao 3).
+  - Renomear uma conta de jogador ou alterar o nickname do cliente sem migrar os arquivos no servidor/host faz com que o jogador entre como um "novo usuario", perdendo todo o inventario (`playerdata`), historico de palavras russas (`sayitenglish`), conquistas (`advancements`) e estatisticas (`stats`).
+  - Mudar o nome deletando ou substituindo apenas os arquivos antigos remove o fallback de seguranca: se o jogador ou amigo acidentalmente reconectar com o nickname anterior, encontraria um perfil resetado do zero.
+- **Solucao Implementada:**
+  1. **Calculo Deterministico de UUID Offline:**
+     - `EstudanteRusso` -> `OfflinePlayer:EstudanteRusso` -> MD5 -> `dd179cd0-2e32-3212-bc98-db81c5795143`.
+     - `Arthur` -> `OfflinePlayer:Arthur` -> MD5 -> `751f28ce-98ce-3ecf-b646-2edf179ac3ad`.
+  2. **Estrategia de Aliasing Dual (Zero Perda de Dados):**
+     - Em todos os mundos e backups (`saves/Ryan e Arthur` e instancias associadas), duplicam-se os arquivos do UUID de origem para o UUID de destino:
+       - `playerdata/<UUID>.dat` e `playerdata/<UUID>.dat_old` (inventario, coordenadas, vida, experiencia)
+       - `sayitenglish/<UUID>.json` (vocabulario russo aprendido, mapa de calor de letras cirilicas, palavras dominadas, contadores de acertos/erros)
+       - `advancements/<UUID>.json` (arvore de conquistas e progresso de missoes Heracles)
+       - `stats/<UUID>.json` (estatisticas de jogo)
+     - A manutencao concomitante dos arquivos do UUID anterior garante tolerancia total a falhas: o jogador pode entrar tanto como `Arthur` quanto como `EstudanteRusso` e seu progresso estara 100% sincronizado e intacto.
+  3. **Atualizacao dos Caches do Servidor e Cliente:**
+     - Sincronizacao explicita de `usernamecache.json` e `usercache.json` no diretorio `.minecraft`, mapeando `"751f28ce-98ce-3ecf-b646-2edf179ac3ad": "Arthur"` para resolucao imediata de skins (`CustomSkinLoader`), mencoes de chat e overlays (`Jade`).
