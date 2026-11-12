@@ -525,3 +525,19 @@
   3. **Overhaul Visual para Estetica Paper / Manual de Campo:**
      - Paleta artesanal: fundo pergaminho suave (`#f5f2e9`) com grade milimetrada de trado sutil, cartoes brancos de alta legibilidade, tinta ferrogálica profunda (`#181512`), bordas nítidas de 1px (`#dcd4c3`) e carimbos de arquivo monocromaticos/ocre/ferrugem.
      - Eliminacao de todos os emojis, substituindo por tipografia técnica editorial (`MR`, `[+]`, `[-]`, tokens `DUB`, `XLEB`, `CHAY`).
+
+
+### L56. Textura de Papel Autentica, Icones Pixel Art Nativos na Hotbar, Roleta V Visual com Zero Texto e Minimizacao Textual
+- **Armadilha:**
+  - Confundir "estetica paper" com mero tema monocromatico claro. Textura de papel real exige fibras organicas visiveis, variacao de polpa, densidade celulosica e paleta pergaminho/kraft tatil.
+  - Substituir icones de itens por siglas textuais (`DUB`, `XLEB`) descaracteriza a interface do Minecraft e prejudica o reconhecimento imediato dos itens.
+  - Paredes de texto expositivo causam fadiga cognitiva. Mecanicas cooperativas como a Roleta Radial (Tecla V) sao muito mais eficientes quando apresentadas como interfaces visuais puras com animacao e zero texto.
+- **Solucao Implementada:**
+  1. **Textura de Papel Organica em Toda a Pagina:**
+     - Gerado `docs/assets/paper-texture.png` (512x512 tileable continuo, fibras escuras e claras de celulose, graneteamento e tons quentes `#ebdcc6` / `#fbf7ee`), aplicado no `body` e nos cartoes.
+  2. **Icones Pixel Art Nativos na Hotbar:**
+     - Extraidos os sprites originais de 16x16 pixel art diretamente dos JARs do Minecraft e dos mods em `docs/assets/items/` (`oak_log.png`, `bread.png`, `diamond.png`, `kettle.png`, `camera.png`, `bug_net.png`), renderizados com `image-rendering: pixelated;`.
+  3. **Roleta Radial Tatica [V] Visual com Zero Texto:**
+     - Removidos todos os paragrafos explicativos de `#radial`. Mantido unicamente o titulo e o dial circular animado: botao fisico central `[ V ]`, aneis de radar em pulsacao continua, display centralizado da frase e 6 setores com icones e reproducao fonetica imediata.
+  4. **Poda e Sintese Visual das Demais Secoes:**
+     - Paragrafos prolixos substituidos por diagramas de fluxo, microcopys diretas e marcadores tecnicos concisos, mantendo estrita conformidade com os 71 testes da bateria E2E.

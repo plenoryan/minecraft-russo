@@ -724,6 +724,7 @@ function initRadialWheel() {
   const panelDesc = document.getElementById("radial-panel-desc");
   const panelRu = document.getElementById("radial-panel-ru");
   const panelPhonetic = document.getElementById("radial-panel-phonetic");
+  const centerHub = document.getElementById("wheel-center-hub");
 
   const actionAudios = {
     item: "assets/audio/phrase_item.mp3",
@@ -736,32 +737,52 @@ function initRadialWheel() {
 
   let radialAudio = null;
 
+  function activateSector(card, playSound) {
+    if (!card) return;
+    sectorCards.forEach(c => c.classList.remove("active"));
+    card.classList.add("active");
+
+    const titleEl = card.querySelector(".sector-card-title, .sector-title");
+    const title = titleEl ? titleEl.textContent : "AÃ§Ã£o";
+    const ru = card.getAttribute("data-ru") || "";
+    const phonetic = card.getAttribute("data-phonetic") || "";
+    const pt = card.getAttribute("data-pt") || "";
+    const action = card.getAttribute("data-action") || "item";
+
+    if (panelTitle) panelTitle.textContent = title;
+    if (panelDesc) panelDesc.textContent = pt;
+    if (panelRu) panelRu.textContent = ru;
+    if (panelPhonetic) panelPhonetic.textContent = phonetic;
+
+    if (centerHub) {
+      centerHub.classList.remove("pulse");
+      void centerHub.offsetWidth;
+      centerHub.classList.add("pulse");
+    }
+
+    if (playSound && actionAudios[action]) {
+      if (radialAudio) {
+        radialAudio.pause();
+        radialAudio.currentTime = 0;
+      }
+      radialAudio = new Audio(actionAudios[action]);
+      radialAudio.play().catch(() => {});
+    }
+  }
+
   sectorCards.forEach(card => {
     card.addEventListener("click", () => {
-      sectorCards.forEach(c => c.classList.remove("active"));
-      card.classList.add("active");
-
-      const titleEl = card.querySelector(".sector-card-title");
-      const title = titleEl ? titleEl.textContent : "Ação";
-      const ru = card.getAttribute("data-ru") || "";
-      const phonetic = card.getAttribute("data-phonetic") || "";
-      const pt = card.getAttribute("data-pt") || "";
-      const action = card.getAttribute("data-action") || "item";
-
-      if (panelTitle) panelTitle.textContent = title;
-      if (panelDesc) panelDesc.textContent = pt;
-      if (panelRu) panelRu.textContent = ru;
-      if (panelPhonetic) panelPhonetic.textContent = phonetic;
-
-      if (actionAudios[action]) {
-        if (radialAudio) {
-          radialAudio.pause();
-          radialAudio.currentTime = 0;
-        }
-        radialAudio = new Audio(actionAudios[action]);
-        radialAudio.play().catch(() => {});
-      }
+      activateSector(card, true);
     });
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+    if (e.key === "v" || e.key === "V") {
+      const activeIdx = Array.from(sectorCards).findIndex(c => c.classList.contains("active"));
+      const nextIdx = (activeIdx + 1) % (sectorCards.length || 1);
+      activateSector(sectorCards[nextIdx], true);
+    }
   });
 }
 
