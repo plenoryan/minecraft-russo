@@ -90,7 +90,7 @@
         </div>
       </div>
 
-      <div class="container">
+      <div class="container hero-container">
         <div class="hero-grid">
           
           <!-- Hero Left Column: Narrative & Action -->
@@ -244,6 +244,26 @@
          Gameplay Systems Architecture (#features)
          ============================================================================== -->
     <section id="features" class="section">
+      
+      <!-- 3D Minecraft Grass Block (Дёрн) with 360° Tumble & Mouse Parallax -->
+      <div class="mc-block-parallax-wrap grass-block-wrap" id="mc-grass-wrap" aria-hidden="true" title="Bloco de Grama (Дёрн)">
+        <div class="mc-3d-cube-stage">
+          <div class="mc-3d-cube" id="mc-3d-grass">
+            <div class="cube-face top grass-top"></div>
+            <div class="cube-face front grass-side"></div>
+            <div class="cube-face right grass-side"></div>
+            <div class="cube-face left grass-side"></div>
+            <div class="cube-face back grass-side"></div>
+            <div class="cube-face bottom grass-bottom"></div>
+          </div>
+        </div>
+        <div class="cube-shadow"></div>
+        <div class="cube-label">
+          <span class="cube-ru">Дёрн</span>
+          <span class="cube-pt">Grama [Dyorn]</span>
+        </div>
+      </div>
+
       <div class="container">
         <div class="section-title-wrap">
           <span class="section-tag">Engenharia do Jogo</span>
@@ -427,13 +447,62 @@
     </section>
 
     <!-- ==============================================================================
-         Phonetic Audio Laboratory (#audio-preview)
+         Phonetic Audio Laboratory (#audio-preview) - Bioma Aquático Submerso
          ============================================================================== -->
-    <section id="audio-preview" class="section">
+    <section id="audio-preview" class="section aquatic-section">
+      
+      <!-- Water Surface Wave Divider (Paper to Ocean Transition) -->
+      <div class="water-surface-waves" aria-hidden="true"></div>
+
+      <!-- Aquatic Biome Ambient Life: Floating Glow Squid & Swimming Pixel Fish -->
+      <div class="aquatic-ambience" aria-hidden="true">
+        <div class="water-caustics-layer"></div>
+        
+        <!-- Minecraft Glow Squid (Светящийся спрут) -->
+        <div class="aquatic-glow-squid" id="aquatic-glow-squid" role="button" tabindex="0" title="Светящийся спрут (Lula Brilhante) - Clique para emitir tinta brilhante!">
+          <div class="squid-glow-halo"></div>
+          <img src="assets/aquatic/glow_squid_sprite.png" class="squid-sprite" alt="Светящийся спрут" width="48" height="72">
+          <div class="squid-tag-bubble">Светящийся спрут</div>
+        </div>
+
+        <!-- Swimming Minecraft Fish (Cod, Salmon & Tropical Fish) -->
+        <div class="aquatic-fish fish-cod" id="fish-cod" title="Треска [Treská] - Bacalhau">
+          <img src="assets/aquatic/cod.png" class="fish-sprite" alt="Треска" width="36" height="36">
+          <span class="fish-tag">Треска</span>
+        </div>
+
+        <div class="aquatic-fish fish-salmon" id="fish-salmon" title="Лосось [Lasós'] - Salmão">
+          <img src="assets/aquatic/salmon.png" class="fish-sprite" alt="Лосось" width="36" height="36">
+          <span class="fish-tag">Лосось</span>
+        </div>
+
+        <div class="aquatic-fish fish-tropical" id="fish-tropical" title="Тропическая рыба - Peixe Tropical">
+          <img src="assets/aquatic/tropical_fish.png" class="fish-sprite" alt="Тропическая рыба" width="32" height="32">
+        </div>
+
+        <!-- Rising Air Bubbles -->
+        <div class="aquatic-bubbles">
+          <span class="bubble b1" style="--b-left: 9%; --b-delay: 0s; --b-dur: 7.5s;"></span>
+          <span class="bubble b2" style="--b-left: 24%; --b-delay: 2.2s; --b-dur: 9.2s;"></span>
+          <span class="bubble b3" style="--b-left: 48%; --b-delay: 1.1s; --b-dur: 6.8s;"></span>
+          <span class="bubble b4" style="--b-left: 71%; --b-delay: 3.5s; --b-dur: 8.4s;"></span>
+          <span class="bubble b5" style="--b-left: 88%; --b-delay: 0.6s; --b-dur: 10.2s;"></span>
+        </div>
+
+        <!-- Swaying Kelp & Seagrass on Seabed -->
+        <div class="aquatic-flora">
+          <img src="assets/aquatic/kelp.png" class="kelp-plant kelp-1" alt="" aria-hidden="true">
+          <img src="assets/aquatic/seagrass.png" class="seagrass-plant grass-1" alt="" aria-hidden="true">
+          <img src="assets/aquatic/kelp.png" class="kelp-plant kelp-2" alt="" aria-hidden="true">
+          <img src="assets/aquatic/seagrass.png" class="seagrass-plant grass-2" alt="" aria-hidden="true">
+          <img src="assets/aquatic/kelp.png" class="kelp-plant kelp-3" alt="" aria-hidden="true">
+        </div>
+      </div>
+
       <div class="container">
         <div class="section-title-wrap">
-          <span class="section-tag emerald">Laboratório Fonético</span>
-          <h2 class="section-title">Pronúncias Nativas</h2>
+          <span class="section-tag ocean-tag">Bioma Aquático • Acústica Submersa</span>
+          <h2 class="section-title">Laboratório Fonético &amp; Pronúncias Nativas</h2>
         </div>
 
         <div class="audio-lab-station">
@@ -623,6 +692,9 @@
 
         </div>
       </div>
+
+      <!-- Seabed Divider (Ocean to Paper Transition) -->
+      <div class="water-seabed-divider" aria-hidden="true"></div>
     </section>
 
     <!-- ==============================================================================

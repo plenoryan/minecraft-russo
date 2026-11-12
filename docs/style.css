@@ -1695,25 +1695,19 @@ h1, h2, h3, h4, h5 {
    ------------------------------------------------------------------------------ */
 .mc-mob-parallax-wrap {
   position: absolute;
-  top: 70px;
-  right: max(20px, calc((100vw - 1200px) / 2 - 110px));
+  top: 75px;
+  right: max(20px, calc((100vw - 1200px) / 2 - 165px));
   display: flex;
   flex-direction: column;
-  align-items: center;
-  z-index: 10;
-  pointer-events: auto;
+  align-items: flex-end;
+  z-index: 5;
+  pointer-events: none;
   user-select: none;
-  animation: mob-idle-float 4.5s ease-in-out infinite alternate;
+  transform: translateY(var(--mob-scroll-y, 0px));
   will-change: transform;
 }
 
-@keyframes mob-idle-float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-/* Speech Bubble (Stacked strictly above the mob to guarantee zero horizontal intrusion) */
+/* Speech Bubble (Stacked strictly above the mob, right-anchored to never intrude left into content) */
 .mob-speech-bubble {
   position: relative;
   background-color: var(--bg-sheet);
@@ -1721,16 +1715,17 @@ h1, h2, h3, h4, h5 {
   background-size: 256px 256px;
   border: 1px solid var(--border-paper);
   border-radius: 4px;
-  padding: 0.55rem 0.8rem;
+  padding: 0.45rem 0.65rem;
   box-shadow: 0 4px 14px rgba(44, 34, 24, 0.16), var(--paper-shadow-xs);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.15rem;
-  width: 165px;
-  margin-bottom: 12px;
+  gap: 0.12rem;
+  width: 142px;
+  margin-bottom: 10px;
   cursor: pointer;
+  pointer-events: auto;
   animation: bubble-bob 3.8s ease-in-out infinite alternate;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
@@ -1743,8 +1738,9 @@ h1, h2, h3, h4, h5 {
 .mob-speech-bubble .bubble-arrow {
   position: absolute;
   bottom: -7px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 22px;
+  left: auto;
+  transform: none;
   width: 0;
   height: 0;
   border-left: 6px solid transparent;
@@ -1793,6 +1789,8 @@ h1, h2, h3, h4, h5 {
   height: 90px;
   perspective: 600px;
   cursor: pointer;
+  pointer-events: auto;
+  margin-right: 6px;
 }
 
 /* Mob Head (3D Cube with 6 faces) */
@@ -1941,6 +1939,15 @@ h1, h2, h3, h4, h5 {
   pointer-events: auto;
   user-select: none;
   perspective: 700px;
+  transform: translateY(var(--block-scroll-y, 0px));
+  will-change: transform;
+}
+
+/* 3D Grass Block in Features Section */
+.grass-block-wrap {
+  left: auto;
+  right: max(20px, calc((100vw - 1200px) / 2 - 100px));
+  transform: translateY(var(--grass-scroll-y, 0px));
 }
 
 .mc-3d-cube-stage {
@@ -2012,6 +2019,24 @@ h1, h2, h3, h4, h5 {
   filter: brightness(0.65);
 }
 
+/* Grass Block Faces */
+.cube-face.grass-top {
+  transform: rotateX(90deg) translateZ(25px);
+  background-image: url('assets/3d/grass_block_top.png');
+  filter: brightness(1.1);
+}
+
+.cube-face.grass-side {
+  background-image: url('assets/3d/grass_block_side.png');
+  filter: brightness(0.95);
+}
+
+.cube-face.grass-bottom {
+  transform: rotateX(-90deg) translateZ(25px);
+  background-image: url('assets/3d/dirt.png');
+  filter: brightness(0.75);
+}
+
 .cube-shadow {
   width: 48px;
   height: 12px;
@@ -2053,17 +2078,17 @@ h1, h2, h3, h4, h5 {
 /* ------------------------------------------------------------------------------
    Responsive Rules: Strict Protection Against Covering Any Information
    ------------------------------------------------------------------------------ */
-@media (max-width: 1380px) {
-  .mc-mob-parallax-wrap {
-    right: 12px;
-    top: 30px;
+@media (min-width: 1100px) and (max-width: 1559px) {
+  .hero-container {
+    padding-right: 160px;
   }
-  .mob-speech-bubble {
-    width: 140px;
+  .mc-mob-parallax-wrap {
+    right: 16px;
+    top: 65px;
   }
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1099px) {
   .mc-mob-parallax-wrap,
   .mc-block-parallax-wrap {
     display: none !important;
@@ -2074,7 +2099,12 @@ h1, h2, h3, h4, h5 {
   .mc-mob-parallax-wrap,
   .mob-speech-bubble,
   .mc-3d-cube,
-  .cube-shadow {
+  .cube-shadow,
+  .aquatic-glow-squid,
+  .aquatic-fish,
+  .bubble,
+  .kelp-plant,
+  .seagrass-plant {
     animation: none !important;
   }
   .mob-head {
@@ -2083,6 +2113,358 @@ h1, h2, h3, h4, h5 {
   .mob-blink-eye {
     animation: none !important;
   }
+}
+
+/* ==============================================================================
+   3. Bioma Aquático Submerso (#audio-preview) - Água com Polvo e Peixes Minecraft
+   ============================================================================== */
+.aquatic-section {
+  position: relative;
+  background: linear-gradient(180deg, #092842 0%, #061c2e 45%, #03101b 100%) !important;
+  color: #f1f5f9;
+  overflow: hidden;
+  padding: 5.5rem 0 6rem !important;
+  box-shadow: inset 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 -20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Water Surface Wave Divider (Paper to Ocean Transition) */
+.water-surface-waves {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: repeating-linear-gradient(90deg, 
+    #0284c7 0px, #0284c7 12px, 
+    #38bdf8 12px, #38bdf8 24px, 
+    #0369a1 24px, #0369a1 36px
+  );
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.45);
+  z-index: 4;
+}
+
+/* Seabed Divider (Ocean to Paper Transition) */
+.water-seabed-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: repeating-linear-gradient(90deg, 
+    #2a2015 0px, #2a2015 16px, 
+    #423223 16px, #423223 32px, 
+    #20170f 32px, #20170f 48px
+  );
+  border-top: 2px solid #574330;
+  z-index: 4;
+}
+
+/* Ambient Aquatic Atmosphere */
+.aquatic-ambience {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Sunlight Caustics Shimmer Layer */
+.water-caustics-layer {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 25% 15%, rgba(56, 189, 248, 0.16) 0%, transparent 55%),
+              radial-gradient(circle at 75% 25%, rgba(45, 212, 191, 0.12) 0%, transparent 50%),
+              linear-gradient(135deg, transparent 0%, rgba(56, 189, 248, 0.05) 50%, transparent 100%);
+  z-index: 1;
+  animation: caustics-shimmer 8s ease-in-out infinite alternate;
+}
+
+@keyframes caustics-shimmer {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.04) translateX(12px); }
+}
+
+/* Minecraft Glow Squid (Светящийся спрут) */
+.aquatic-glow-squid {
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  width: 48px;
+  height: 72px;
+  z-index: 2;
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.75));
+  animation: squid-idle-swim 8.5s ease-in-out infinite alternate;
+  transform: translateY(var(--squid-scroll-y, 0px));
+  transition: filter 0.3s ease, transform 0.25s ease;
+}
+
+.aquatic-glow-squid:hover {
+  filter: drop-shadow(0 0 28px rgba(56, 225, 248, 0.95)) drop-shadow(0 0 8px #ffffff);
+  transform: translateY(var(--squid-scroll-y, 0px)) scale(1.12);
+}
+
+.squid-sprite {
+  image-rendering: pixelated;
+  width: 48px;
+  height: 72px;
+  display: block;
+}
+
+.squid-tag-bubble {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #7dd3fc;
+  background: rgba(3, 16, 27, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 2px;
+  padding: 0.1rem 0.35rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.aquatic-glow-squid:hover .squid-tag-bubble {
+  opacity: 1;
+}
+
+@keyframes squid-idle-swim {
+  0% { transform: translateY(0) translateX(0) rotate(-3deg); }
+  50% { transform: translateY(-24px) translateX(20px) rotate(3deg); }
+  100% { transform: translateY(0) translateX(0) rotate(-3deg); }
+}
+
+/* Swimming Minecraft Fish (Cod, Salmon, Tropical) */
+.aquatic-fish {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+}
+
+.fish-sprite {
+  image-rendering: pixelated;
+  transition: transform 0.2s ease;
+  display: block;
+}
+
+.fish-tag {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #93c5fd;
+  background: rgba(3, 16, 27, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 2px;
+  padding: 0.05rem 0.3rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.aquatic-fish:hover .fish-tag {
+  opacity: 1;
+}
+
+.aquatic-fish.fish-cod {
+  top: 15%;
+  right: -60px;
+  animation: cod-swim-across 24s linear infinite;
+  transform: translateY(var(--cod-scroll-y, 0px));
+}
+
+.aquatic-fish.fish-salmon {
+  bottom: 24%;
+  left: -60px;
+  animation: salmon-swim-across 28s linear infinite;
+  animation-delay: 3.5s;
+  transform: translateY(var(--salmon-scroll-y, 0px));
+}
+
+.aquatic-fish.fish-tropical {
+  top: 64%;
+  right: 14%;
+  animation: tropical-hover 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes cod-swim-across {
+  0% { transform: translateX(0) translateY(0); }
+  49% { transform: translateX(calc(-100vw - 140px)) translateY(-20px); }
+  50% { transform: translateX(calc(-100vw - 140px)) translateY(-20px) scaleX(-1); }
+  99% { transform: translateX(0) translateY(0) scaleX(-1); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+@keyframes salmon-swim-across {
+  0% { transform: translateX(0) translateY(0) scaleX(-1); }
+  49% { transform: translateX(calc(100vw + 140px)) translateY(18px) scaleX(-1); }
+  50% { transform: translateX(calc(100vw + 140px)) translateY(18px) scaleX(1); }
+  99% { transform: translateX(0) translateY(0) scaleX(1); }
+  100% { transform: translateX(0) translateY(0) scaleX(-1); }
+}
+
+@keyframes tropical-hover {
+  0% { transform: translateY(0) translateX(0); }
+  100% { transform: translateY(-16px) translateX(-18px); }
+}
+
+/* Rising Air Bubbles */
+.bubble {
+  position: absolute;
+  bottom: -15px;
+  left: var(--b-left);
+  width: 12px;
+  height: 12px;
+  background: url('assets/aquatic/bubble.png') no-repeat center;
+  background-size: contain;
+  image-rendering: pixelated;
+  animation: bubble-rise var(--b-dur) ease-in infinite;
+  animation-delay: var(--b-delay);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes bubble-rise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  15% { opacity: 0.85; }
+  85% { opacity: 0.85; }
+  100% { transform: translateY(-680px) translateX(25px); opacity: 0; }
+}
+
+/* Swaying Kelp & Seagrass */
+.aquatic-flora {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  justify-content: space-around;
+  overflow: hidden;
+}
+
+.kelp-plant {
+  width: 20px;
+  height: 90px;
+  object-fit: cover;
+  object-position: bottom;
+  image-rendering: pixelated;
+  animation: kelp-sway 4.5s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+
+.seagrass-plant {
+  width: 20px;
+  height: 70px;
+  object-fit: cover;
+  object-position: bottom;
+  image-rendering: pixelated;
+  animation: kelp-sway 3.8s ease-in-out infinite alternate-reverse;
+  transform-origin: bottom center;
+}
+
+@keyframes kelp-sway {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(7deg); }
+}
+
+/* Ocean Biome Themed Typography & Cards in #audio-preview */
+#audio-preview .section-title {
+  color: #f0f9ff !important;
+  text-shadow: 0 2px 14px rgba(14, 165, 233, 0.4);
+}
+
+#audio-preview .section-tag.ocean-tag {
+  background-color: rgba(14, 165, 233, 0.2);
+  color: #7dd3fc;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+#audio-preview .tab-btn {
+  background-color: rgba(6, 28, 46, 0.85);
+  color: #94a3b8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+#audio-preview .tab-btn:hover {
+  background-color: rgba(14, 165, 233, 0.25);
+  color: #e2e8f0;
+  border-color: #38bdf8;
+}
+
+#audio-preview .tab-btn.active {
+  background-color: #0284c7;
+  color: #ffffff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+}
+
+#audio-preview .audio-card {
+  background: rgba(8, 28, 45, 0.82) !important;
+  background-image: none !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  z-index: 3;
+}
+
+#audio-preview .audio-card:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.3);
+  transform: translateY(-2px);
+}
+
+#audio-preview .audio-card.active-playback {
+  border-color: #00f5d4 !important;
+  background: rgba(10, 42, 66, 0.92) !important;
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.4);
+}
+
+#audio-preview .audio-card-ru {
+  color: #7dd3fc !important;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+#audio-preview .audio-card-phonetic {
+  color: #34d399 !important;
+}
+
+#audio-preview .audio-card-pt {
+  color: #cbd5e1 !important;
+}
+
+#audio-preview .audio-card-badge {
+  color: #38bdf8;
+  background-color: rgba(14, 165, 233, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+#audio-preview .btn-play-audio {
+  background-color: #0284c7;
+  color: #ffffff;
+  border: 1px solid #38bdf8;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+
+#audio-preview .btn-play-audio:hover {
+  background-color: #0369a1;
+  border-color: #7dd3fc;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.6);
 }
 
 

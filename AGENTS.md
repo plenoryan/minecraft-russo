@@ -596,3 +596,29 @@ ussian_tooltips.js):**
      - A manutencao concomitante dos arquivos do UUID anterior garante tolerancia total a falhas: o jogador pode entrar tanto como `Arthur` quanto como `EstudanteRusso` e seu progresso estara 100% sincronizado e intacto.
   3. **Atualizacao dos Caches do Servidor e Cliente:**
      - Sincronizacao explicita de `usernamecache.json` e `usercache.json` no diretorio `.minecraft`, mapeando `"751f28ce-98ce-3ecf-b646-2edf179ac3ad": "Arthur"` para resolucao imediata de skins (`CustomSkinLoader`), mencoes de chat e overlays (`Jade`).
+
+
+### L60. Reposicionamento do Creeper Companheiro, Parallax Multiplano e Bioma Aquatico Submerso
+- **Armadilha:**
+  - Posicionar elementos flutuantes 3D ou mascotes (`mc-mob-parallax-wrap`) com valores percentuais ou `max(20px, ...)` ingenuos sem isolamento de colisao no container do Hero (`.mc-hud-simulator`), fazendo com que o balao de fala e o mob fiquem sobrepostos a textos, botoes ou cards em telas de 1200px a 1560px.
+  - O uso exclusivo de rotacao de mouse sem translacao vertical dependente de rolagem (`scrollY`) nao reproduz a sensacao real de profundidade esperada para um efeito Parallax.
+  - Paginas com poucos elementos dispersos criam vazios visuais monotonos e estaticos.
+- **Solucao Implementada:**
+  1. **Ancoragem Segura a Direita e Desobstrucao Total do Hero:**
+     - Aplicacao de `pointer-events: none` no container do mascote e `pointer-events: auto` exclusivamente no mob e no balao de fala, eliminando qualquer bloqueio de cliques sobre cards ou botoes.
+     - Criacao da classe `.hero-container` com `padding-right: 160px` em viewports entre 1100px e 1559px, garantindo que o simulador de HUD termine 160px antes da margem direita e nunca colida com o Creeper (`right: 16px`). Em telas $\ge 1560px$, o Creeper fica ancorado puramente na calha externa (`right: max(20px, calc((100vw - 1200px) / 2 - 165px))`).
+     - Alinhamento do balao de fala a direita (`align-items: flex-end`) com a seta apontando diretamente para a cabeca do mob (`right: 22px; left: auto`), eliminando qualquer intrusao horizontal para a esquerda.
+  2. **Motor de Parallax Multiplano (Scroll + Mouse):**
+     - Sincronizacao via `requestAnimationFrame` da posicao vertical de rolagem em variaveis CSS customizadas:
+       - Creeper: `--mob-scroll-y: scrollY * -0.16`
+       - Bloco de Grama (`#features`): `--grass-scroll-y: dist * 0.16`
+       - Bancada de Trabalho (`#radial`): `--block-scroll-y: dist * 0.18`
+       - Bioma Aquatico (`#audio-preview`): `--squid-scroll-y: dist * 0.22`, peixes e caustics.
+  3. **Bioma Aquatico Submerso no Laboratorio Fonetico (`#audio-preview`):**
+     - Transformacao da secao com gradiente oceanico profundo (`#092842` $\rightarrow$ `#03101b`), divisor de ondas pixeladas no topo e leito marinho com cascalho na base.
+     - Ambientacao com luzes causticas cintilantes, cardumes de peixes pixel art originais do Minecraft (Bacalhau/Треска, Salmao/Лосось e Peixe Tropical) nadando em profundidades alternadas com animacao continua de nado e splay horizontal.
+     - Lula Brilhante (*Glow Squid* / Светящийся спрут) bioluminescente com tentaculos ondulantes, brilho ciano pulsante e resposta interativa ao clique (emissao de tinta brilhante e pronuncia russa).
+     - Colunas de bolhas de ar pixel art subindo em fluxo continuo e algas/laminarias (*kelp* e *seagrass*) ondulando no fundo marinho.
+     - Cards de audio adaptados para vidro temperado submerso com texto ciano luminescente de alto contraste.
+  4. **Novo Bloco 3D de Grama com Terra (`Дёрн`):**
+     - Inserido na calha direita da secao `#features`, alternando lateralmente com a bancada de trabalho (`Верстак`) da secao `#radial`.

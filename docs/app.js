@@ -1005,17 +1005,24 @@ function initDownloadLinks() {
 }
 
 /*
- * 3D Minecraft Parallax: Interactive Mob Head Tracking & Block Perspective
- * Continuous idle bobbing, smooth lerped mouse tracking and zero content collision
+ * 3D Minecraft Parallax: Interactive Mob Head Tracking, Floating Blocks & Aquatic Biome Life
+ * Continuous idle bobbing, smooth lerped mouse tracking, scroll parallax and zero content collision
  */
 function init3DParallax() {
   const mobWrap = document.getElementById("mc-mob-wrap");
   const blockWrap = document.getElementById("mc-block-wrap");
+  const grassWrap = document.getElementById("mc-grass-wrap");
   const bubble = document.getElementById("mob-speech-bubble");
   const mob = document.getElementById("mc-3d-mob");
   const cube = document.getElementById("mc-3d-cube");
+  const grassCube = document.getElementById("mc-3d-grass");
+  const squid = document.getElementById("aquatic-glow-squid");
+  const fishCod = document.getElementById("fish-cod");
+  const fishSalmon = document.getElementById("fish-salmon");
+  const fishTropical = document.getElementById("fish-tropical");
+  const aquaSection = document.getElementById("audio-preview");
 
-  if (!mobWrap && !blockWrap) return;
+  if (!mobWrap && !blockWrap && !squid) return;
 
   if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     return;
@@ -1025,16 +1032,52 @@ function init3DParallax() {
   if (bubble && mob) {
     bubble.addEventListener("click", () => {
       mob.style.transform = "scale(1.22) translateY(-12px)";
-      showToast("\u00AB \u0414\u043E\u0431\u0440\u043E \u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C! \u00BB [Dobro pozhalovat'!]");
+      showToast("\u00AB \u0414\u043E\u0431\u0440\u043E \u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C! \u00BB [Dobro pozhalovat'!] - Bem-vindo!");
       setTimeout(() => {
         mob.style.transform = "";
       }, 350);
     });
   }
 
+  // Crafting Table Click
   if (cube) {
     cube.addEventListener("click", () => {
       showToast("\u0412\u0435\u0440\u0441\u0442\u0430\u043A [Verstak] - Bancada de Trabalho");
+    });
+  }
+
+  // Grass Block Click
+  if (grassCube) {
+    grassCube.addEventListener("click", () => {
+      showToast("\u0414\u0451\u0440\u043D [Dyorn] - Bloco de Grama com Terra");
+    });
+  }
+
+  // Aquatic Glow Squid Click
+  if (squid) {
+    squid.addEventListener("click", () => {
+      showToast("\u00AB \u0421\u0432\u0435\u0442\u044F\u0449\u0438\u0439\u0441\u044F \u0441\u043F\u0440\u0443\u0442 \u00BB [Svyetyashchiysya sprut] - Lula Brilhante!");
+      squid.style.filter = "drop-shadow(0 0 32px rgba(56, 225, 248, 1)) drop-shadow(0 0 16px #ffffff)";
+      setTimeout(() => {
+        squid.style.filter = "";
+      }, 450);
+    });
+  }
+
+  // Fish Clicks
+  if (fishCod) {
+    fishCod.addEventListener("click", () => {
+      showToast("\u0422\u0440\u0435\u0441\u043A\u0430 [Treska] - Bacalhau");
+    });
+  }
+  if (fishSalmon) {
+    fishSalmon.addEventListener("click", () => {
+      showToast("\u041B\u043E\u0441\u043E\u0441\u044C [Lasos'] - Salm\u00E3o");
+    });
+  }
+  if (fishTropical) {
+    fishTropical.addEventListener("click", () => {
+      showToast("\u0422\u0440\u043E\u043F\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0440\u044B\u0431\u0430 - Peixe Tropical");
     });
   }
 
@@ -1064,7 +1107,10 @@ function init3DParallax() {
   }
 
   function updateParallax() {
-    // 1. Mob Head Tracking with smooth lerp
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const vh = window.innerHeight;
+
+    // 1. Mob Head Tracking & Scroll Parallax
     if (mobWrap) {
       const rect = mobWrap.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
@@ -1081,9 +1127,10 @@ function init3DParallax() {
 
       mobWrap.style.setProperty("--mob-yaw", currentMobYaw.toFixed(1) + "deg");
       mobWrap.style.setProperty("--mob-pitch", currentMobPitch.toFixed(1) + "deg");
+      mobWrap.style.setProperty("--mob-scroll-y", (scrollY * -0.16).toFixed(1) + "px");
     }
 
-    // 2. 3D Cube Stage Tilt from Mouse
+    // 2. 3D Crafting Table Stage Tilt & Scroll Parallax
     if (blockWrap) {
       const rect = blockWrap.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
@@ -1100,6 +1147,34 @@ function init3DParallax() {
 
       blockWrap.style.setProperty("--block-pitch", currentBlockPitch.toFixed(1) + "deg");
       blockWrap.style.setProperty("--block-roll", currentBlockRoll.toFixed(1) + "deg");
+
+      const dist = (vh / 2 - (rect.top + rect.height / 2));
+      blockWrap.style.setProperty("--block-scroll-y", (dist * 0.18).toFixed(1) + "px");
+    }
+
+    // 3. 3D Grass Block Tilt & Scroll Parallax
+    if (grassWrap) {
+      const rect = grassWrap.getBoundingClientRect();
+      const dist = (vh / 2 - (rect.top + rect.height / 2));
+      grassWrap.style.setProperty("--grass-scroll-y", (dist * 0.16).toFixed(1) + "px");
+      grassWrap.style.setProperty("--block-pitch", currentBlockPitch.toFixed(1) + "deg");
+      grassWrap.style.setProperty("--block-roll", currentBlockRoll.toFixed(1) + "deg");
+    }
+
+    // 4. Aquatic Biome Scroll Parallax (Squid & Swimming Fish)
+    if (aquaSection) {
+      const rect = aquaSection.getBoundingClientRect();
+      const dist = (vh / 2 - (rect.top + rect.height / 2));
+
+      if (squid) {
+        squid.style.setProperty("--squid-scroll-y", (dist * 0.22).toFixed(1) + "px");
+      }
+      if (fishCod) {
+        fishCod.style.setProperty("--cod-scroll-y", (dist * -0.12).toFixed(1) + "px");
+      }
+      if (fishSalmon) {
+        fishSalmon.style.setProperty("--salmon-scroll-y", (dist * 0.14).toFixed(1) + "px");
+      }
     }
 
     ticking = false;
