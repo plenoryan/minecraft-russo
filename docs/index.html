@@ -18,61 +18,6 @@
 </head>
 <body>
 
-  <!-- 3D Minecraft Parallax Elements: 1 Mob (with mouse tracking, blink & dialogue bubble) + 1 3D Block -->
-  <div class="mc-3d-scene" aria-hidden="true">
-
-    <!-- 1. 3D Mob with Mouse Tracking, Eye Blink & Welcome Dialogue Bubble -->
-    <div class="mc-3d-mob-anchor" id="mc-mob-anchor">
-      <div class="mob-speech-bubble" id="mob-speech-bubble" title="Clique para ouvir a saudação">
-        <div class="bubble-arrow"></div>
-        <div class="bubble-tag">SAYIT VOSTOK</div>
-        <div class="bubble-ru">« Добро пожаловать! »</div>
-        <div class="bubble-phonetic">[Dóbro pajálovat'!]</div>
-        <div class="bubble-pt">Bem-vindo à sobrevivência!</div>
-      </div>
-
-      <div class="mc-3d-mob" id="mc-3d-mob">
-        <!-- 3D Head with 6 faces and blinking eyes -->
-        <div class="mob-head">
-          <div class="mob-face front">
-            <div class="mob-blink-eye eye-left"></div>
-            <div class="mob-blink-eye eye-right"></div>
-          </div>
-          <div class="mob-face back"></div>
-          <div class="mob-face right"></div>
-          <div class="mob-face left"></div>
-          <div class="mob-face top"></div>
-          <div class="mob-face bottom"></div>
-        </div>
-        <!-- 3D Torso -->
-        <div class="mob-body">
-          <div class="body-face front"></div>
-          <div class="body-face right"></div>
-          <div class="body-face left"></div>
-          <div class="body-face top"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. 3D Minecraft Block (Crafting Table / Верстак) further down the page -->
-    <div class="mc-3d-block-anchor" id="mc-block-anchor" title="Bancada de Trabalho (Верстак)">
-      <div class="mc-3d-cube" id="mc-3d-cube">
-        <div class="cube-face top"></div>
-        <div class="cube-face front"></div>
-        <div class="cube-face right"></div>
-        <div class="cube-face left"></div>
-        <div class="cube-face back"></div>
-        <div class="cube-face bottom"></div>
-      </div>
-      <div class="cube-shadow"></div>
-      <div class="cube-label">
-        <span class="cube-ru">Верстак</span>
-        <span class="cube-pt">Bancada de Trabalho</span>
-      </div>
-    </div>
-
-  </div>
-
   <!-- ==============================================================================
        Header & Navigation
        ============================================================================== -->
@@ -112,6 +57,39 @@
          Hero Section & In-Game HUD Simulator (#overview)
          ============================================================================== -->
     <section id="overview" class="hero section">
+      
+      <!-- 3D Interactive Mob Companion: In Hero Gutter, Strictly Non-Overlapping -->
+      <div class="mc-mob-parallax-wrap" id="mc-mob-wrap" aria-hidden="true">
+        <div class="mob-speech-bubble" id="mob-speech-bubble" title="Clique para ouvir a saudação">
+          <div class="bubble-arrow"></div>
+          <div class="bubble-tag">SAYIT RUSSO</div>
+          <div class="bubble-ru">« Добро пожаловать! »</div>
+          <div class="bubble-phonetic">[Dóbro pajálovat'!]</div>
+          <div class="bubble-pt">Bem-vindo à sobrevivência!</div>
+        </div>
+
+        <div class="mc-3d-mob" id="mc-3d-mob">
+          <div class="mob-head">
+            <div class="mob-face front">
+              <div class="mob-blink-eye eye-left"></div>
+              <div class="mob-blink-eye eye-right"></div>
+            </div>
+            <div class="mob-face back"></div>
+            <div class="mob-face right"></div>
+            <div class="mob-face left"></div>
+            <div class="mob-face top"></div>
+            <div class="mob-face bottom"></div>
+          </div>
+          <div class="mob-body">
+            <div class="body-face front"></div>
+            <div class="body-face right"></div>
+            <div class="body-face left"></div>
+            <div class="body-face top"></div>
+          </div>
+          <div class="mob-shadow"></div>
+        </div>
+      </div>
+
       <div class="container">
         <div class="hero-grid">
           
@@ -358,6 +336,26 @@
          Visual Representation with Animation & ZERO Text
          ============================================================================== -->
     <section id="radial" class="section">
+      
+      <!-- 3D Minecraft Block (Crafting Table / Верстак) with 360° Tumble & Mouse Parallax -->
+      <div class="mc-block-parallax-wrap" id="mc-block-wrap" aria-hidden="true" title="Bancada de Trabalho (Верстак)">
+        <div class="mc-3d-cube-stage">
+          <div class="mc-3d-cube" id="mc-3d-cube">
+            <div class="cube-face top"></div>
+            <div class="cube-face front"></div>
+            <div class="cube-face right"></div>
+            <div class="cube-face left"></div>
+            <div class="cube-face back"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+        </div>
+        <div class="cube-shadow"></div>
+        <div class="cube-label">
+          <span class="cube-ru">Верстак</span>
+          <span class="cube-pt">Bancada [Versták]</span>
+        </div>
+      </div>
+
       <div class="container">
         <div class="section-title-wrap">
           <h2 class="section-title">Roleta Radial Tática [V]</h2>

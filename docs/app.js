@@ -1004,86 +1004,104 @@ function initDownloadLinks() {
   }
 }
 
-/**
+/*
  * 3D Minecraft Parallax: Interactive Mob Head Tracking & Block Perspective
+ * Continuous idle bobbing, smooth lerped mouse tracking and zero content collision
  */
 function init3DParallax() {
-  const scene = document.querySelector(".mc-3d-scene");
-  if (!scene) return;
+  const mobWrap = document.getElementById("mc-mob-wrap");
+  const blockWrap = document.getElementById("mc-block-wrap");
+  const bubble = document.getElementById("mob-speech-bubble");
+  const mob = document.getElementById("mc-3d-mob");
+  const cube = document.getElementById("mc-3d-cube");
+
+  if (!mobWrap && !blockWrap) return;
 
   if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     return;
   }
 
-  const mobAnchor = document.getElementById("mc-mob-anchor");
-  const blockAnchor = document.getElementById("mc-block-anchor");
-  const bubble = document.getElementById("mob-speech-bubble");
-  const mob = document.getElementById("mc-3d-mob");
-  const cube = document.getElementById("mc-3d-cube");
-
-  // Interactive bounce on bubble click
+  // Interactive bounce on speech bubble or mob click
   if (bubble && mob) {
     bubble.addEventListener("click", () => {
-      mob.style.transform = "scale(1.15) translateY(-6px)";
-      showToast("Â« Ð”Ð¾Ð±Ñ€Ð¾ Ð¿Ð¾Ð¶Ð°Ð»Ð¾Ð²Ð°Ñ‚ÑŒ! Â» [DÃ³bro pajÃ¡lovat'!]");
+      mob.style.transform = "scale(1.22) translateY(-12px)";
+      showToast("\u00AB \u0414\u043E\u0431\u0440\u043E \u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C! \u00BB [Dobro pozhalovat'!]");
       setTimeout(() => {
         mob.style.transform = "";
       }, 350);
     });
   }
 
-  // Interactive cube rotation on click
   if (cube) {
     cube.addEventListener("click", () => {
-      showToast("Ð’ÐµÑ€ÑÑ‚Ð°Ðº [VerstÃ¡k] - Bancada de Trabalho");
+      showToast("\u0412\u0435\u0440\u0441\u0442\u0430\u043A [Verstak] - Bancada de Trabalho");
     });
   }
 
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
+  let currentMobYaw = 0;
+  let currentMobPitch = 0;
+  let currentBlockPitch = 0;
+  let currentBlockRoll = 0;
   let ticking = false;
 
   window.addEventListener("mousemove", (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
+    requestTick();
+  }, { passive: true });
 
+  window.addEventListener("scroll", () => {
+    requestTick();
+  }, { passive: true });
+
+  function requestTick() {
     if (!ticking) {
-      window.requestAnimationFrame(() => {
-        // 1. Mob Head Tracking
-        if (mobAnchor) {
-          const rect = mobAnchor.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + 28;
-
-          const dx = mouseX - centerX;
-          const dy = mouseY - centerY;
-
-          const yaw = Math.max(-38, Math.min(38, dx * 0.045)).toFixed(1);
-          const pitch = Math.max(-25, Math.min(25, -dy * 0.045)).toFixed(1);
-
-          mobAnchor.style.setProperty("--mob-yaw", yaw + "deg");
-          mobAnchor.style.setProperty("--mob-pitch", pitch + "deg");
-        }
-
-        // 2. 3D Cube Perspective
-        if (blockAnchor) {
-          const rect = blockAnchor.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-
-          const dx = mouseX - centerX;
-          const dy = mouseY - centerY;
-
-          const blockYaw = (dx * 0.025).toFixed(1);
-          const blockPitch = (-dy * 0.025).toFixed(1);
-
-          blockAnchor.style.setProperty("--block-yaw", blockYaw + "deg");
-          blockAnchor.style.setProperty("--block-pitch", blockPitch + "deg");
-        }
-
-        ticking = false;
-      });
+      window.requestAnimationFrame(updateParallax);
       ticking = true;
     }
-  }, { passive: true });
+  }
+
+  function updateParallax() {
+    // 1. Mob Head Tracking with smooth lerp
+    if (mobWrap) {
+      const rect = mobWrap.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + 70;
+
+      const dx = mouseX - centerX;
+      const dy = mouseY - centerY;
+
+      const targetYaw = Math.max(-42, Math.min(42, dx * 0.06));
+      const targetPitch = Math.max(-28, Math.min(28, -dy * 0.05));
+
+      currentMobYaw += (targetYaw - currentMobYaw) * 0.15;
+      currentMobPitch += (targetPitch - currentMobPitch) * 0.15;
+
+      mobWrap.style.setProperty("--mob-yaw", currentMobYaw.toFixed(1) + "deg");
+      mobWrap.style.setProperty("--mob-pitch", currentMobPitch.toFixed(1) + "deg");
+    }
+
+    // 2. 3D Cube Stage Tilt from Mouse
+    if (blockWrap) {
+      const rect = blockWrap.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const dx = mouseX - centerX;
+      const dy = mouseY - centerY;
+
+      const targetPitch = Math.max(-20, Math.min(20, -dy * 0.03));
+      const targetRoll = Math.max(-15, Math.min(15, dx * 0.02));
+
+      currentBlockPitch += (targetPitch - currentBlockPitch) * 0.12;
+      currentBlockRoll += (targetRoll - currentBlockRoll) * 0.12;
+
+      blockWrap.style.setProperty("--block-pitch", currentBlockPitch.toFixed(1) + "deg");
+      blockWrap.style.setProperty("--block-roll", currentBlockRoll.toFixed(1) + "deg");
+    }
+
+    ticking = false;
+  }
 }
