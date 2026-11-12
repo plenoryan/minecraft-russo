@@ -46,6 +46,7 @@ public final class AudioPlaybackManager {
     });
 
     private static volatile boolean isPlaying = false;
+    private static volatile long cooldownUntilMs = 0L;
     private static volatile Future<?> currentTask = null;
 
     private AudioPlaybackManager() {
@@ -55,8 +56,13 @@ public final class AudioPlaybackManager {
         return isPlaying;
     }
 
+    public static boolean isListeningLocked() {
+        return isPlaying || System.currentTimeMillis() < cooldownUntilMs;
+    }
+
     public static synchronized void stop() {
         isPlaying = false;
+        cooldownUntilMs = System.currentTimeMillis() + 400L;
         if (WinMM.INSTANCE != null) {
             try {
                 WinMM.INSTANCE.mciSendStringW("stop " + ALIAS, null, 0, null);
@@ -119,6 +125,7 @@ public final class AudioPlaybackManager {
                 System.err.println("[SayIt-Audio] Playback exception: " + t.getMessage());
             } finally {
                 isPlaying = false;
+                cooldownUntilMs = System.currentTimeMillis() + 750L;
                 if (onComplete != null) {
                     try {
                         onComplete.run();

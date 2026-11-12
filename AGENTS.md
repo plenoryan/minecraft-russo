@@ -552,3 +552,24 @@
      - O changelog e a documentacao web foram higienizados para referenciar exclusivamente papeis funcionais ("jogador anfitriao (Host)"), sem qualquer vazamento de nomes pessoais.
   2. **Isolamento de Caches na Compilacao (`package_client.ps1`):**
      - O script de empacotamento foi blindado para nao copiar caches do host local (`usercache.json`, `usernamecache.json`), gerando em vez disso caches isolados contendo estritamente o perfil gerado aleatoriamente (`Estudante_XXXX`) com seu respectivo UUID, alem de expurgar logs temporarios da instalacao compilada.
+
+
+### L58. Trava de Escuta Durante Reproducao Fonetica [H], Eliminacao de Mojibake e Parallax Minecraft Ambiente
+- **Armadilha:**
+  1. **Aprovacao Prematura por Eco Acustico do Alto-Falante (Tecla 'H'):**
+     Ao pressionar 'H' para escutar o exemplo de audio nativo de um desafio, o microfone captava o audio dos alto-falantes ou fones. O motor neural Vosk reconhecia as palavras da gravacao e aprovava o desafio com escore >= 90% antes mesmo do jogador pronunciar qualquer som.
+  2. **Regressoes de Mojibake:**
+     Uso de hifens longos Unicode (em-dash) e checkmarks em scripts web sem tratamento estrito de codificacao resultava em artefatos de mojibake quando inspecionados ou compilados sob ferramentas Windows.
+  3. **Visual Estatico x Animacoes Exageradas na Web:**
+     A pagina em textura de papel necessitava de elementos de imersao do Minecraft, porem animacoes saturadas ou flutuantes sobrepostas ao conteudo poluiriam o caderno de campo e violariam a diretriz de sutileza tatil.
+- **Solucao Implementada:**
+  1. **Trava de Escuta com Cooldown de Seguranca no Mod (AudioPlaybackManager.java & ChallengeSession.java):**
+     - Criado o metodo estatico AudioPlaybackManager.isListeningLocked(), ativo durante a reproducao (isPlaying == true) e por mais 750ms apos a conclusao (cooldownUntilMs).
+     - Em ChallengeSession.offer(String, String), offer(Guess, String) e no handler assincrono de escuta, hipoteses foneticas sao sumariamente descartadas se isListeningLocked() == true.
+     - Em triggerHear(), as variaveis de hipoteses (heard e best) sao zeradas imediatamente.
+  2. **Eradicacao Definitiva de Mojibake na Web (docs/):**
+     - Removidos todos os caracteres especiais suscetiveis a reinterpretacao ANSI em docs/app.js, docs/index.html e docs/style.css, padronizando hifens ASCII (-) e badges de confirmacao ([OK]).
+  3. **Camada Parallax Minecraft Ambiente e Desacoplada (docs/index.html, style.css, app.js):**
+     - Inserida camada .mc-parallax-canvas exclusivamente nas calhas externas (gutters) do viewport (right/left: max(24px, calc((100vw - 1200px) / 3))).
+     - Renderiza sprites pixel art (diamond.png, bread.png, oak_log.png, camera.png) com baixa opacidade (0.25), filtro sepia de papel, flutuacao suave CSS (@keyframes mc-float-1/2/3) e deslocamento parallax suave guiado pelo cursor via requestAnimationFrame.
+     - Em telas menores (<= 1240px) ou com prefers-reduced-motion, a camada e desativada (display: none), preservando total legibilidade.

@@ -1,5 +1,5 @@
 /**
- * Minecraft Russo: SayIt Modpack — Official Stylesheet
+ * Minecraft Russo: SayIt Modpack - Official Stylesheet
  * Aesthetic: Authentic Textured Paper & Tactical Field Notebook (Caderno de Campo de Sobrevivência)
  * Pure CSS (Zero External Frameworks, Real Paper Texture, Pixel Art Item Icons, Animated Radial V Dial)
  */
@@ -1673,3 +1673,93 @@ h1, h2, h3, h4, h5 {
     align-items: flex-start;
   }
 }
+
+/* ==============================================================================
+   Subtle Ambient Minecraft Parallax Layer
+   Muted pixel-art survival items in viewport gutters (no distraction, pure atmosphere)
+   ============================================================================== */
+.mc-parallax-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.mc-particle {
+  position: absolute;
+  transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
+  transition: transform 0.18s cubic-bezier(0.1, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.mc-particle .particle-img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  opacity: 0.25;
+  filter: sepia(0.28) contrast(0.92) drop-shadow(0 3px 6px rgba(44, 34, 24, 0.12));
+  user-select: none;
+  pointer-events: none;
+}
+
+.p-diamond {
+  top: 18vh;
+  right: max(24px, calc((100vw - 1200px) / 3));
+}
+
+.p-bread {
+  top: 42vh;
+  left: max(24px, calc((100vw - 1200px) / 3));
+}
+
+.p-log {
+  top: 68vh;
+  right: max(28px, calc((100vw - 1200px) / 3.5));
+}
+
+.p-camera {
+  top: 84vh;
+  left: max(26px, calc((100vw - 1200px) / 3.5));
+}
+
+.drift-1 { animation: mc-float-1 7.5s ease-in-out infinite alternate; }
+.drift-2 { animation: mc-float-2 9s ease-in-out infinite alternate; }
+.drift-3 { animation: mc-float-3 8.2s ease-in-out infinite alternate; }
+
+@keyframes mc-float-1 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(3deg); }
+  100% { transform: translateY(5px) rotate(-2deg); }
+}
+
+@keyframes mc-float-2 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(6px) rotate(-4deg); }
+  100% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes mc-float-3 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(2deg); }
+  100% { transform: translateY(7px) rotate(-3deg); }
+}
+
+@media (max-width: 1240px) {
+  .mc-parallax-canvas {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mc-particle {
+    transform: none !important;
+  }
+  .particle-img {
+    animation: none !important;
+  }
+}
+

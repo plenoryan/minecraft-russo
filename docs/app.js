@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSimulator();
   initRadialWheel();
   initDownloadLinks();
+  initParallax();
 });
 
 // Authoritative Metadata for all 43 Curated Mod JARs
@@ -743,7 +744,7 @@ function initRadialWheel() {
     card.classList.add("active");
 
     const titleEl = card.querySelector(".sector-card-title, .sector-title");
-    const title = titleEl ? titleEl.textContent : "AÃ§Ã£o";
+    const title = titleEl ? titleEl.textContent : "Ação";
     const ru = card.getAttribute("data-ru") || "";
     const phonetic = card.getAttribute("data-phonetic") || "";
     const pt = card.getAttribute("data-pt") || "";
@@ -838,7 +839,7 @@ function initCreditsTable() {
       const tr = document.createElement("tr");
       const linkHtml = homepage
         ? `<a href="${homepage}" target="_blank" rel="noopener noreferrer" title="Visitar página oficial" class="mod-link-btn">↗ Visitar</a>`
-        : '<span style="color: var(--text-dim);">â€”</span>';
+        : '<span style="color: var(--text-dim);">-</span>';
 
       tr.innerHTML = `
         <td>
@@ -918,7 +919,7 @@ function fallbackCopy(text, label) {
   ta.select();
   try {
     document.execCommand("copy");
-    showToast(`âœ“ ${label} copiado!`);
+    showToast(`[OK] ${label} copiado!`);
   } catch (err) {
     showToast(`Falha ao copiar: ${text}`);
   }
@@ -1001,4 +1002,45 @@ function initDownloadLinks() {
       btn.href = releaseUrl;
     });
   }
+}
+
+
+/**
+ * Subtle Minecraft Parallax Gutters
+ * Coordinates subtle mouse drift for ambient pixel-art particles in desktop gutters
+ */
+function initParallax() {
+  const canvas = document.querySelector(".mc-parallax-canvas");
+  if (!canvas) return;
+
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const particles = canvas.querySelectorAll(".mc-particle");
+  if (!particles.length) return;
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let ticking = false;
+
+  window.addEventListener("mousemove", (e) => {
+    // Offset from window center: -0.5 to +0.5
+    mouseX = (e.clientX / window.innerWidth) - 0.5;
+    mouseY = (e.clientY / window.innerHeight) - 0.5;
+
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        particles.forEach((p) => {
+          const speed = parseFloat(p.getAttribute("data-speed") || "20");
+          const px = (mouseX * speed).toFixed(1);
+          const py = (mouseY * speed).toFixed(1);
+          p.style.setProperty("--px", px + "px");
+          p.style.setProperty("--py", py + "px");
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 }

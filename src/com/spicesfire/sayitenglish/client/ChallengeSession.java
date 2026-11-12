@@ -192,6 +192,9 @@ public final class ChallengeSession {
         int gen = generation;
         SpeechEngine.Request request = new SpeechEngine.Request(language, target, alternatives, guess -> {
             if (gen == generation) {
+                if (AudioPlaybackManager.isListeningLocked()) {
+                    return;
+                }
                 ChallengeSession.offer(guess, target);
             }
         });
@@ -227,6 +230,9 @@ public final class ChallengeSession {
     }
 
     public static void offer(String text, String target) {
+        if (AudioPlaybackManager.isListeningLocked()) {
+            return;
+        }
         String reading = Romanizer.plain((String)target, (String)language);
         if (reading != null && Scorer.score((String)text, (String)reading, (boolean)false) > Scorer.score((String)text, (String)target, (boolean)false)) {
             target = reading;
@@ -235,6 +241,9 @@ public final class ChallengeSession {
     }
 
     public static void offer(SpeechEngine.Guess guess, String target) {
+        if (AudioPlaybackManager.isListeningLocked()) {
+            return;
+        }
         String text = guess.text();
         if (text == null || text.trim().isEmpty()) {
             return;
@@ -306,6 +315,8 @@ public final class ChallengeSession {
         }
         String targetText = prompt.target();
         pause(true);
+        heard = "";
+        best = 0;
         AudioPlaybackManager.play(targetText, () -> {
             class_310 mc = class_310.method_1551();
             if (mc != null) {
