@@ -73,9 +73,24 @@ public final class ChallengeHud {
         String phonetic,
         String ptText,
         String objective,
+        double targetX,
+        double targetY,
+        double targetZ,
         long receivedAt,
         long durationMs
     ) {
+        public CoopCueNotification(
+            String initiatorName,
+            String action,
+            String ruText,
+            String phonetic,
+            String ptText,
+            String objective,
+            long receivedAt,
+            long durationMs
+        ) {
+            this(initiatorName, action, ruText, phonetic, ptText, objective, 0.0, 0.0, 0.0, receivedAt, durationMs);
+        }
     }
 
     public static volatile CoopCueNotification activeCoopCue = null;
@@ -103,6 +118,9 @@ public final class ChallengeHud {
             cue.phonetic() != null ? cue.phonetic() : "",
             pt,
             cue.objective() != null ? cue.objective() : "",
+            cue.x(),
+            cue.y(),
+            cue.z(),
             System.currentTimeMillis(),
             durationMs
         );
@@ -147,6 +165,9 @@ public final class ChallengeHud {
                 activeCoopCue = null;
             } else {
                 ChallengeHud.renderCoopCueNotification(g, mc, font, cue, age);
+                if (cue.action().contains("waypoint") || (cue.targetX() != 0.0 || cue.targetZ() != 0.0)) {
+                    ChallengeHud.renderWaypointNavigation(g, mc, font, cue, age);
+                }
             }
         }
     }
@@ -433,5 +454,72 @@ public final class ChallengeHud {
         int barW = (int)((float)(w - 4) * frac);
         int barColor = frac < 0.25f ? RED : GOLD;
         ClientCompat.fill((class_332)g, (int)(x + 2), (int)(y + h - 2), (int)(x + 2 + barW), (int)(y + h), (int)barColor);
+    }
+
+    private static void renderWaypointNavigation(
+        class_332 g,
+        class_310 mc,
+        class_327 font,
+        CoopCueNotification cue,
+        long age
+    ) {
+        if (mc.field_1724 == null) return;
+        double dx = cue.targetX() - mc.field_1724.method_23317();
+        double dz = cue.targetZ() - mc.field_1724.method_23321();
+        int dist = (int)Math.round(Math.sqrt(dx * dx + dz * dz));
+
+        double targetYaw = Math.toDegrees(Math.atan2(dz, dx)) - 90.0;
+        double playerYaw = mc.field_1724.method_36454();
+        double diff = (targetYaw - playerYaw) % 360.0;
+        if (diff > 180.0) diff -= 360.0;
+        if (diff < -180.0) diff += 360.0;
+
+        String arrow;
+        if (Math.abs(diff) < 22.5) {
+            arrow = "\u2b06"; // ⬆
+        } else if (diff >= 22.5 && diff < 67.5) {
+            arrow = "\u2b08"; // ⬈
+        } else if (diff >= 67.5 && diff < 112.5) {
+            arrow = "\u27a1"; // ➡
+        } else if (diff >= 112.5 && diff < 157.5) {
+            arrow = "\u2b0a"; // ⬊
+        } else if (Math.abs(diff) >= 157.5) {
+            arrow = "\u2b07"; // ⬇
+        } else if (diff <= -112.5 && diff > -157.5) {
+            arrow = "\u2b0b"; // ⬋
+        } else if (diff <= -67.5 && diff > -112.5) {
+            arrow = "\u2b05"; // ⬅
+        } else {
+            arrow = "\u2b09"; // ⬉
+        }
+
+        boolean onTarget = Math.abs(diff) < 18.0;
+        int screenW = mc.method_22683().method_4486();
+        int w = 240;
+        int h = 30;
+        int x = (screenW - w) / 2;
+        int y = 54;
+
+        int borderColor = onTarget ? GREEN : GOLD;
+
+        // Background and glowing borders
+        ClientCompat.fill((class_332)g, (int)x, (int)y, (int)(x + w), (int)(y + h), (int)PANEL);
+        ClientCompat.fill((class_332)g, (int)x, (int)y, (int)(x + w), (int)(y + 2), (int)borderColor);
+        ClientCompat.fill((class_332)g, (int)x, (int)y, (int)(x + 2), (int)(y + h), (int)borderColor);
+        ClientCompat.fill((class_332)g, (int)(x + w - 2), (int)y, (int)(x + w), (int)(y + h), (int)borderColor);
+        ClientCompat.fill((class_332)g, (int)x, (int)(y + h - 2), (int)(x + w), (int)(y + h), (int)borderColor);
+
+        // Icon
+        class_1799 spyglass = resolveActionStack("waypoint");
+        ClientCompat.item((class_332)g, (class_1799)spyglass, (int)(x + 6), (int)(y + 7));
+
+        // Nav text
+        String navTitle = onTarget
+            ? "\u00a7a\u2726 NO ALVO! " + arrow + " " + dist + "m \u2726"
+            : "\u00a76\u2726 " + arrow + " " + dist + "m \u2726 \u00a7e\u0421\u043c\u043e\u0442\u0440\u0438 \u0442\u0443\u0434\u0430!";
+        String navHint = "\u00a7fSiga o feixe luminoso vertical! \u00a77(Olhe para l\u00e1)";
+
+        ClientCompat.text((class_332)g, (class_327)font, (String)navTitle, (int)(x + 30), (int)(y + 5), (int)-1);
+        ClientCompat.text((class_332)g, (class_327)font, (String)navHint, (int)(x + 30), (int)(y + 17), (int)-4671288);
     }
 }

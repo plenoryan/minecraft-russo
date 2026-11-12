@@ -42,7 +42,7 @@ ao:true
 prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:"true"
-resourcePacks:["vanilla","fabric","file/Faithful 32x - 1.20.1.zip","file/Fast Better Grass.zip","file/Better-Leaves-9.6.zip","file/Dramatic Skys.zip","file/Russian_Bilingual_Educational_Pack.zip"]
+resourcePacks:["vanilla","fabric","file/Faithful 32x - 1.20.1.zip","file/Fast Better Grass.zip","file/Better-Leaves-9.6.zip","file/Dramatic Skys.zip","file/Russian_Bilingual_Educational_Pack.zip","crittersandcompanions:friendlyart"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:pt_br

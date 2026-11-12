@@ -444,11 +444,11 @@
         },
         "zh_TW" : {
             "file" : "zh_TW.qm",
-            "sha1" : "ddb6d3acf36d6aaa068a40fc51e5a20a298ee848",
-            "size" : 133311,
-            "translated" : 1155,
+            "sha1" : "5dccd215de9257f6d236d962f7a1de1f190d2092",
+            "size" : 142380,
+            "translated" : 1253,
             "fuzzy" : 0,
-            "untranslated" : 104
+            "untranslated" : 6
         }
     }
 }

@@ -142,12 +142,28 @@ try {
     Copy-Item -Path $stagingJar -Destination $clientModJar -Force
     Copy-Item -Path $stagingJar -Destination $serverModJar -Force
 
+    $launcherModJar = Join-Path $TargetRoot "Launcher\data\instances\Minecraft_Russo\.minecraft\mods\sayitenglish-fabric-1.20.1-1.1.0.jar"
+    if (Test-Path (Split-Path $launcherModJar -Parent)) {
+        Copy-Item -Path $stagingJar -Destination $launcherModJar -Force
+    }
+
+    $distModJar = Join-Path $TargetRoot "dist\Minecraft_Russo_Client_Portable\Launcher\data\instances\Minecraft_Russo\.minecraft\mods\sayitenglish-fabric-1.20.1-1.1.0.jar"
+    if (Test-Path (Split-Path $distModJar -Parent)) {
+        Copy-Item -Path $stagingJar -Destination $distModJar -Force
+    }
+
     # 5. Post-Deployment Verification
     Write-Host "`n[5/5] Verifying deployed artifacts..." -ForegroundColor Yellow
     $targets = @(
         @{ Name = "Client Mod JAR"; Path = $clientModJar },
         @{ Name = "Server Mod JAR"; Path = $serverModJar }
     )
+    if (Test-Path $launcherModJar) {
+        $targets += @{ Name = "Launcher Instance Mod JAR"; Path = $launcherModJar }
+    }
+    if (Test-Path $distModJar) {
+        $targets += @{ Name = "Dist Client Mod JAR"; Path = $distModJar }
+    }
 
     $now = Get-Date
     foreach ($target in $targets) {

@@ -639,3 +639,23 @@ ussian_tooltips.js):**
      - Criacao automatica das juncoes `Launcher\Java17` e `Launcher\data\Java17` apontando para a pasta raiz `Java17`, garantindo que mesmo se o usuario abrir o `UltimMC.exe` diretamente sem passar pelo `.bat`, o caminho relativo `Java17/bin/javaw.exe` existira fisicamente e o assistente nunca sera aberto.
   3. **Pre-configuracao no Empacotador (`package_client.ps1`):**
      - O manifesto gerado pelo empacotador ja inclui `AnalyticsSeen=2` e empacota o `setup_java.ps1`, garantindo que o pacote `.zip` distribuido venha pronto para execucao em 1 clique sem requerer qualquer intervencao do usuario.
+
+
+### L62. Otimizacao de Resposta do Chao e Lava (20Hz Tick), Conjunto de Metodos para Waypoint (Feixe Vertical + Radar Sonoro + HUD Direcional) e Recompensas Cooperativas Estendidas com Cooldown
+- **Armadilha:**
+  1. *Delay no Chao e Lava:* A rotina `CoopManager.tick()` rodava a cada 5 ticks (`now % 5L == 0L`), gerando ate 250ms de latencia no servidor. Alem disso, ao pisar no chao, a entidade recebia 30 ticks de fogo (`setFireTicks(30)`), e ao subir em um bloco seguro (ex: laje, carpete, madeira ou pedra), o fogo residual permanecia queimando por 1.5s na tela sem extincao imediata (`extinguish()`), transmitindo a sensacao de lag/atraso na deteccao de seguranca.
+  2. *Pouca Visibilidade do Waypoint ("Olhe para la"):* O marcador limitava-se a 12 particulas pequenas no chao e uma notificacao estatica no topo da tela, sendo facilmente bloqueado por relevo ou vegetacao e sem indicacao de direcao.
+  3. *Recompensas Curtas e Sem Cooldown:* Os buffs de desafios duravam apenas de 7 a 20 segundos (140-400 ticks), e os comandos podiam ser invocados repetidamente sem intervalo.
+- **Solucao Implementada:**
+  1. *Eliminacao do Delay no Chao e Lava:*
+     - `CoopManager.tick()` desacoplado para execucao a cada tick do servidor (20Hz / 50ms).
+     - Reconhecimento inteligente e instantaneo de seguranca: no ar (`!isOnGround()`), acima da cota base (`> initY + 0.2`, alcancando lajes, carpetes, bancadas, camas, etc.) ou sobre qualquer bloco nao-natural (madeira, pedra, tijolo, laje, cerca, vidro, etc.).
+     - Extincao compulsoria e imediata (`player.method_5646()` e `setFireTicks(0)`) no primeiro tick seguro, limpando chamas e audio de dano na hora.
+  2. *Conjunto Completo de Metodos para Waypoint:*
+     - **Feixe Vertical de Luz:** Coluna continua de particulas luminosas `END_ROD` e `GLOW` de 36 blocos de altura disparada em direcao ao ceu, visivel de qualquer distancia atraves de arvores e colinas.
+     - **Circulo no Solo:** Anel giratorio de centelhas eletricas (`ELECTRIC_SPARK`) e chama de alma demarcando o ponto de chegada.
+     - **Radar Sonoro:** Chime acustico periodico em ametista/experiencia (`field_14725`) e anuncio no Action Bar com distancia real em metros atualizada dinamicamente.
+     - **HUD de Navegacao Direcional:** Widget no `ChallengeHud` com bussola de 8 vias (`⬆`, `⬈`, `➡`, `⬊`, `⬇`, `⬋`, `⬅`, `⬉`), medidor de metros, aviso de mira no alvo (`✦ NO ALVO! ✦`) e bordas douradas/verdes pulsantes.
+  3. *Recompensas Estendidas (Minutos) e Sistema de Cooldown:*
+     - Duracao de buffs estendida para 2.0 a 3.0 minutos: Chao e Lava (Velocidade II por 2.5m + Resistencia ao Fogo por 3.0m), Parkour (Super Salto II por 2.5m + Velocidade I por 2.5m), Waypoint (Velocidade II por 2.5m + Pressa I por 2.5m), Dialogo (Heroi da Vila + Sorte por 3.0m).
+     - Sistema de Cooldown cooperativo (`COOP_COOLDOWN_TICKS = 2400L` / 2 minutos) com bloqueio de duplicidade de desafio em andamento, impedindo spam e valorizando a cooperacao.

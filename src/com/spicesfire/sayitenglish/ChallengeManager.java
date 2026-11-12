@@ -141,10 +141,11 @@ public final class ChallengeManager {
 
     private static void tick(MinecraftServer server) {
         long now = server.method_3780();
+        // Run CoopManager every tick for 20Hz real-time responsiveness (zero safety detection delay)
+        CoopManager.tick(server, now);
         if (now % 5L != 0L) {
             return;
         }
-        CoopManager.tick(server, now);
         for (class_3222 player : server.method_3760().method_14571()) {
             if (!Platform.I.canSendTo(player, Packets.Challenge.TYPE) || player.method_7325()) continue;
             State s = ChallengeManager.state(player);
@@ -977,8 +978,38 @@ public final class ChallengeManager {
         }
 
         private static final Map<String, ActiveTask> ACTIVE_TASKS = new HashMap<String, ActiveTask>();
+        private static final Map<String, Long> COOLDOWNS = new HashMap<String, Long>();
+        public static final long COOP_COOLDOWN_TICKS = 2400L; // 2 minutes cooldown (120 seconds)
         private static long lastDialogueCheckTick = 0L;
         private static int taskCounter = 1;
+
+        public static long getCooldownRemaining(String action, long now) {
+            if (action == null) return 0L;
+            long cdUntil = COOLDOWNS.getOrDefault(action.toLowerCase(), 0L);
+            return Math.max(0L, cdUntil - now);
+        }
+
+        public static void setCooldown(String action, long now) {
+            if (action != null) {
+                COOLDOWNS.put(action.toLowerCase(), now + COOP_COOLDOWN_TICKS);
+            }
+        }
+
+        public static boolean isLavaSafeBlock(String id) {
+            if (id == null) return false;
+            String lower = id.toLowerCase();
+            return lower.contains("plank") || lower.contains("wood") || lower.contains("log")
+                || lower.contains("stone") || lower.contains("cobble") || lower.contains("brick")
+                || lower.contains("slab") || lower.contains("stair") || lower.contains("fence")
+                || lower.contains("wall") || lower.contains("bed") || lower.contains("chest")
+                || lower.contains("table") || lower.contains("furnace") || lower.contains("barrel")
+                || lower.contains("wool") || lower.contains("glass") || lower.contains("leaves")
+                || lower.contains("ladder") || lower.contains("scaffold") || lower.contains("carpet")
+                || lower.contains("trapdoor") || lower.contains("door") || lower.contains("anvil")
+                || lower.contains("hay") || lower.contains("iron") || lower.contains("gold")
+                || lower.contains("diamond") || lower.contains("netherite") || lower.contains("obsidian")
+                || lower.contains("target") || lower.contains("purpur") || lower.contains("quartz");
+        }
 
         // Dialogue repertory: {Theme, Part1Ru, Part1Phonetic, Part1Pt, Part2Ru, Part2Phonetic, Part2Pt, Keyword}
         private static final String[][] DIALOGUES = new String[][]{
@@ -1235,6 +1266,30 @@ public final class ChallengeManager {
 
             MinecraftServer server = ChallengeManager.server(initiator);
             long now = server != null ? server.method_3780() : 0L;
+
+            // Cooldown check to prevent reward spam
+            long cdRemaining = getCooldownRemaining(act, now);
+            if (cdRemaining > 0) {
+                long sec = (cdRemaining + 19L) / 20L;
+                initiator.method_43496((class_2561)class_2561.method_43470(
+                    "\u00a7c[COOP Cooldown] Desafio '" + act + "' em recarga! Aguarde mais " + sec + "s."
+                ));
+                initiator.method_5783(class_3417.field_14624.comp_349(), 0.8f, 0.8f);
+                return;
+            }
+
+            // Check if active task of this type is already running
+            for (ActiveTask t : ACTIVE_TASKS.values()) {
+                if (t.type.equalsIgnoreCase(act) || ("REQUEST_WOOD".equalsIgnoreCase(t.type) && act.contains("wood"))
+                        || ("REQUEST_FOOD".equalsIgnoreCase(t.type) && act.contains("food"))
+                        || ("WAYPOINT".equalsIgnoreCase(t.type) && act.contains("waypoint"))) {
+                    initiator.method_43496((class_2561)class_2561.method_43470(
+                        "\u00a7e[COOP] O desafio '" + act + "' j\u00e1 est\u00e1 em andamento!"
+                    ));
+                    return;
+                }
+            }
+
             List<class_3222> teammates = getNearbyTeammates(initiator, 48.0);
 
             if (teammates.isEmpty() && !"lava".equals(act) && !"parkour".equals(act)) {
@@ -1243,6 +1298,7 @@ public final class ChallengeManager {
                 ));
             }
 
+            setCooldown(act, now);
             String taskId = "task_" + (taskCounter++);
 
             if (act.startsWith("item:") || act.startsWith("request_item:")) {
@@ -1279,7 +1335,7 @@ public final class ChallengeManager {
 
             switch (act) {
                 case "follow": {
-                    initiator.method_6092(new class_1293(class_1294.field_5914, 200, 0));
+                    initiator.method_6092(new class_1293(class_1294.field_5904, 200, 0));
                     sendBilingualCue(
                         initiator,
                         teammates,
@@ -1298,9 +1354,37 @@ public final class ChallengeManager {
                 }
                 case "waypoint": {
                     class_243 look = initiator.method_5720();
-                    double tx = initiator.method_23317() + look.field_1352 * 16.0;
-                    double ty = initiator.method_23318() + look.field_1351 * 16.0;
-                    double tz = initiator.method_23321() + look.field_1350 * 16.0;
+                    double tx = initiator.method_23317() + look.field_1352 * 20.0;
+                    double ty = initiator.method_23318() + look.field_1351 * 20.0;
+                    double tz = initiator.method_23321() + look.field_1350 * 20.0;
+
+                    // Terrain height snapping to ensure waypoint lands right on ground
+                    class_3218 world = (class_3218)initiator.method_37908();
+                    class_2338 checkPos = new class_2338((int)Math.floor(tx), (int)Math.floor(ty), (int)Math.floor(tz));
+                    if (world.method_8320(checkPos).method_26215()) {
+                        for (int dy = 0; dy < 15; dy++) {
+                            class_2338 down = checkPos.method_10087(dy);
+                            if (!world.method_8320(down).method_26215()) {
+                                ty = down.method_10264() + 1.0;
+                                break;
+                            }
+                        }
+                    } else {
+                        for (int dy = 0; dy < 15; dy++) {
+                            class_2338 up = checkPos.method_10086(dy);
+                            if (world.method_8320(up).method_26215()) {
+                                ty = up.method_10264();
+                                break;
+                            }
+                        }
+                    }
+
+                    // Audible ping on creation
+                    initiator.method_5783(class_3417.field_14622.comp_349(), 1.0f, 1.4f);
+                    for (class_3222 t : teammates) {
+                        t.method_5783(class_3417.field_14622.comp_349(), 1.0f, 1.4f);
+                    }
+
                     sendBilingualCue(
                         initiator,
                         teammates,
@@ -1308,11 +1392,11 @@ public final class ChallengeManager {
                         "\u0421\u043c\u043e\u0442\u0440\u0438 \u0442\u0443\u0434\u0430!",
                         "[Smotri tuda!]",
                         "Olhe para l\u00e1!",
-                        "Alcance o ponto marcado pelas part\u00edculas!",
+                        "Siga o feixe luminoso de part\u00edculas e alcance o ponto!",
                         tx, ty, tz,
-                        15
+                        20
                     );
-                    ActiveTask task = new ActiveTask(taskId, "WAYPOINT", initiator.method_5667(), tx, ty, tz, now, now + 300L, 1);
+                    ActiveTask task = new ActiveTask(taskId, "WAYPOINT", initiator.method_5667(), tx, ty, tz, now, now + 400L, 1);
                     for (class_3222 t : teammates) task.targetUuids.add(t.method_5667());
                     ACTIVE_TASKS.put(taskId, task);
                     break;
@@ -1394,6 +1478,26 @@ public final class ChallengeManager {
         public static void startLavaChallenge(class_3222 initiator, MinecraftServer server) {
             if (server == null) return;
             long now = server.method_3780();
+            long cd = getCooldownRemaining("lava", now);
+            if (cd > 0) {
+                long sec = (cd + 19L) / 20L;
+                if (initiator != null) {
+                    initiator.method_43496((class_2561)class_2561.method_43470(
+                        "\u00a7c[COOP Cooldown] Desafio Ch\u00e3o \u00e9 Lava em recarga! Aguarde mais " + sec + "s."
+                    ));
+                }
+                return;
+            }
+            for (ActiveTask t : ACTIVE_TASKS.values()) {
+                if ("LAVA".equals(t.type)) {
+                    if (initiator != null) {
+                        initiator.method_43496((class_2561)class_2561.method_43470("\u00a7e[COOP] O desafio Ch\u00e3o \u00e9 Lava j\u00e1 est\u00e1 em andamento!"));
+                    }
+                    return;
+                }
+            }
+            setCooldown("lava", now);
+
             String taskId = "lava_" + (taskCounter++);
             ActiveTask task = new ActiveTask(taskId, "LAVA", initiator != null ? initiator.method_5667() : UUID.randomUUID(), 0, 0, 0, now, now + 60L + 240L, 1);
 
@@ -1413,6 +1517,26 @@ public final class ChallengeManager {
         public static void startParkourChallenge(class_3222 initiator, MinecraftServer server) {
             if (server == null) return;
             long now = server.method_3780();
+            long cd = getCooldownRemaining("parkour", now);
+            if (cd > 0) {
+                long sec = (cd + 19L) / 20L;
+                if (initiator != null) {
+                    initiator.method_43496((class_2561)class_2561.method_43470(
+                        "\u00a7c[COOP Cooldown] Desafio de Parkour em recarga! Aguarde mais " + sec + "s."
+                    ));
+                }
+                return;
+            }
+            for (ActiveTask t : ACTIVE_TASKS.values()) {
+                if ("PARKOUR".equals(t.type)) {
+                    if (initiator != null) {
+                        initiator.method_43496((class_2561)class_2561.method_43470("\u00a7e[COOP] O desafio de Parkour j\u00e1 est\u00e1 em andamento!"));
+                    }
+                    return;
+                }
+            }
+            setCooldown("parkour", now);
+
             String taskId = "parkour_" + (taskCounter++);
             ActiveTask task = new ActiveTask(taskId, "PARKOUR", initiator != null ? initiator.method_5667() : UUID.randomUUID(), 0, 0, 0, now, now + 300L, 1);
 
@@ -1428,6 +1552,22 @@ public final class ChallengeManager {
         public static void startRallyChallenge(class_3222 initiator, MinecraftServer server) {
             if (server == null || initiator == null) return;
             long now = server.method_3780();
+            long cd = getCooldownRemaining("rally", now);
+            if (cd > 0) {
+                long sec = (cd + 19L) / 20L;
+                initiator.method_43496((class_2561)class_2561.method_43470(
+                    "\u00a7c[COOP Cooldown] Desafio Reuni\u00e3o em recarga! Aguarde mais " + sec + "s."
+                ));
+                return;
+            }
+            for (ActiveTask t : ACTIVE_TASKS.values()) {
+                if ("RALLY".equals(t.type)) {
+                    initiator.method_43496((class_2561)class_2561.method_43470("\u00a7e[COOP] O desafio Reuni\u00e3o j\u00e1 est\u00e1 em andamento!"));
+                    return;
+                }
+            }
+            setCooldown("rally", now);
+
             String taskId = "rally_" + (taskCounter++);
             ActiveTask task = new ActiveTask(taskId, "RALLY", initiator.method_5667(), 0, 0, 0, now, now + 200L, 1);
 
@@ -1567,15 +1707,19 @@ public final class ChallengeManager {
 
                         class_3222 playerA = getPlayerByUuid(server, task.initiatorUuid);
                         if (playerA != null) {
-                            awardCoopPoints(playerA, 30, "Completar di\u00e1logo cooperativo (" + d[0] + ")");
-                            playerA.method_7255(15);
+                            awardCoopPoints(playerA, 35, "Completar di\u00e1logo cooperativo (" + d[0] + ")");
+                            playerA.method_7255(20);
+                            playerA.method_6092(new class_1293(class_1294.field_18980, 3600, 0)); // Hero of the Village (3m)
+                            playerA.method_6092(new class_1293(class_1294.field_5926, 3600, 0)); // Luck (3m)
                             ChallengeManager.state(playerA).progress.addHeat(d[7], 2);
                         }
-                        awardCoopPoints(player, 30, "Completar di\u00e1logo cooperativo (" + d[0] + ")");
-                        player.method_7255(15);
+                        awardCoopPoints(player, 35, "Completar di\u00e1logo cooperativo (" + d[0] + ")");
+                        player.method_7255(20);
+                        player.method_6092(new class_1293(class_1294.field_18980, 3600, 0)); // Hero of the Village (3m)
+                        player.method_6092(new class_1293(class_1294.field_5926, 3600, 0)); // Luck (3m)
                         ChallengeManager.state(player).progress.addHeat(d[7], 2);
 
-                        broadcastServer(server, "\u00a7a[\u2605 DI\u00c1LOGO CONCLU\u00cdDO] Conversa\u00e7\u00e3o bilateral conclu\u00edda com sucesso! +30 Pontos Cooperativos para ambos!");
+                        broadcastServer(server, "\u00a7a[\u2605 DI\u00c1LOGO CONCLU\u00cdDO] Conversa\u00e7\u00e3o bilateral conclu\u00edda! +35 Pontos Cooperativos, Her\u00f3i da Vila e Sorte (3m) para ambos!");
                     } else {
                         player.method_43496((class_2561)class_2561.method_43470(
                             "\u00a7c[Di\u00e1logo] Pron\u00fancia insuficiente na resposta (" + score + "%). Di\u00e1logo n\u00e3o completado."
@@ -1631,7 +1775,49 @@ public final class ChallengeManager {
                 case "WAYPOINT": {
                     if (initiator != null) {
                         class_3218 world = (class_3218)initiator.method_37908();
-                        world.method_14199(class_2398.field_11234, task.targetX, task.targetY, task.targetZ, 12, 0.2, 0.8, 0.2, 0.05);
+                        // 1. BEACON LIGHT BEAM: High vertical column of END_ROD particles (36 blocks high!)
+                        for (double y = task.targetY; y <= task.targetY + 36.0; y += 1.5) {
+                            world.method_14199(class_2398.field_11202, task.targetX, y, task.targetZ, 2, 0.04, 0.04, 0.04, 0.01);
+                            if (((int)y) % 3 == 0) {
+                                world.method_14199(class_2398.field_28479, task.targetX, y, task.targetZ, 1, 0.08, 0.08, 0.08, 0.02);
+                            }
+                        }
+                        // 2. GROUND TARGET RING: Rotating circle of glowing spark particles around target
+                        double angleBase = (now % 20L) * (Math.PI / 10.0);
+                        for (int i = 0; i < 8; i++) {
+                            double a = angleBase + (i * Math.PI / 4.0);
+                            double rx = task.targetX + Math.cos(a) * 1.8;
+                            double rz = task.targetZ + Math.sin(a) * 1.8;
+                            world.method_14199(class_2398.field_29644, rx, task.targetY + 0.15, rz, 1, 0.0, 0.02, 0.0, 0.01);
+                        }
+                        world.method_14199(class_2398.field_11210, task.targetX, task.targetY + 0.1, task.targetZ, 3, 0.1, 0.1, 0.1, 0.02);
+
+                        // 3. SOUND RADAR PING every 40 ticks (2 seconds)
+                        if (now % 40L == 0L) {
+                            for (UUID uid : task.targetUuids) {
+                                class_3222 target = getPlayerByUuid(server, uid);
+                                if (target != null) {
+                                    target.method_5783(class_3417.field_14725.comp_349(), 1.0f, 1.4f);
+                                }
+                            }
+                            if (initiator != null) {
+                                initiator.method_5783(class_3417.field_14725.comp_349(), 0.8f, 1.4f);
+                            }
+                        }
+
+                        // 4. ACTION BAR RADAR DISTANCE UPDATE every 10 ticks
+                        if (now % 10L == 0L) {
+                            int remSec = Math.max(1, (int)((task.deadlineTick - now) / 20L));
+                            for (UUID uid : task.targetUuids) {
+                                class_3222 target = getPlayerByUuid(server, uid);
+                                if (target != null) {
+                                    int dist = (int)Math.round(distanceToPoint(target, task.targetX, task.targetY, task.targetZ));
+                                    target.method_7353((class_2561)class_2561.method_43470(
+                                        "\u00a7e\u2726 OLHE PARA L\u00c1! \u2726 \u00a7fDist\u00e2ncia: \u00a7b" + dist + "m \u00a77(\u0421\u043c\u043e\u0442\u0440\u0438 \u0442\u0443\u0434\u0430! " + remSec + "s)"
+                                    ), true);
+                                }
+                            }
+                        }
                     }
                     for (UUID uid : task.targetUuids) {
                         class_3222 target = getPlayerByUuid(server, uid);
@@ -1702,7 +1888,10 @@ public final class ChallengeManager {
                             broadcastServer(server, "\u00a7c\u26a0 O CH\u00c3O \u00c9 LAVA AGORA! SUBA EM UM BLOCO OU SOFRA QUEIMADURAS!");
                             for (UUID uid : task.targetUuids) {
                                 class_3222 p = getPlayerByUuid(server, uid);
-                                if (p != null) p.method_5783(class_3417.field_14605, 1.0f, 1.2f);
+                                if (p != null) {
+                                    p.method_5783(class_3417.field_14605, 1.0f, 1.2f);
+                                    task.data.put("y_" + uid.toString(), p.method_23318());
+                                }
                             }
                         }
                         return false;
@@ -1719,18 +1908,33 @@ public final class ChallengeManager {
                         class_2338 pos = p.method_24515();
                         class_3218 world = (class_3218)p.method_37908();
                         class_2680 blockDown = world.method_8320(pos.method_10074());
+                        class_2680 blockAt = world.method_8320(pos);
                         boolean solidGround = !blockDown.method_26215();
 
-                        boolean touchingLava = p.method_24828() && solidGround && (p.method_23318() <= initY + 0.5)
-                            && !p.method_5799() && p.method_5854() == null && !p.method_6101();
+                        String blockDownId = class_7923.field_41175.method_10221(blockDown.method_26204()).toString();
+                        String blockAtId = class_7923.field_41175.method_10221(blockAt.method_26204()).toString();
+                        boolean isSafeBlock = isLavaSafeBlock(blockDownId) || isLavaSafeBlock(blockAtId);
+
+                        // Instantaneous safety detection: jumping, climbing, water, elevation, or safe blocks
+                        boolean isSafe = !p.method_24828()
+                            || (p.method_23318() > initY + 0.2)
+                            || isSafeBlock
+                            || p.method_5799()
+                            || p.method_6101()
+                            || p.method_5854() != null;
+
+                        boolean touchingLava = !isSafe && solidGround;
 
                         if (touchingLava) {
-                            p.method_20803(30);
+                            p.method_20803(12); // Short fire duration (0.6s) so safe recovery is instantaneous
                             world.method_14199(class_2398.field_11244, p.method_23317(), p.method_23318(), p.method_23321(), 8, 0.2, 0.1, 0.2, 0.05);
                             p.method_7353((class_2561)class_2561.method_43470("\u00a7c\ud83d\udd25 VOC\u00ca EST\u00c1 NA LAVA! PULE OU SUBA EM UM BLOCO! (" + remSec + "s) \ud83d\udd25"), true);
                             int burns = (int)task.data.getOrDefault("burn_" + uid.toString(), 0) + 1;
                             task.data.put("burn_" + uid.toString(), burns);
                         } else {
+                            // IMMEDIATELY extinguish fire to eliminate all visual/audio latency!
+                            p.method_5646();
+                            p.method_20803(0);
                             p.method_7353((class_2561)class_2561.method_43470("\u00a7a\u2714 SEGURO! (" + remSec + "s restantes)"), true);
                         }
                     }
@@ -1767,21 +1971,39 @@ public final class ChallengeManager {
                 case "FOLLOW": {
                     UUID winUid = (UUID)task.data.get("lastNearPlayer");
                     class_3222 winner = winUid != null ? getPlayerByUuid(server, winUid) : null;
-                    if (initiator != null) awardCoopPoints(initiator, 15, "Manter-se unido com aliado (\u0421\u043b\u0435\u0434\u0443\u0439 \u0437\u0430 \u043c\u043d\u043e\u0439!)");
-                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
-                        awardCoopPoints(winner, 15, "Seguir o companheiro (\u0421\u043b\u0435\u0434\u0443\u0439 \u0437\u0430 \u043c\u043d\u043e\u0439!)");
+                    if (initiator != null) {
+                        awardCoopPoints(initiator, 20, "Manter-se unido com aliado (\u0421\u043b\u0435\u0434\u0443\u0439 \u0437\u0430 \u043c\u043d\u043e\u0439!)");
+                        initiator.method_6092(new class_1293(class_1294.field_5904, 2400, 0)); // Speed I (2m)
+                        initiator.method_6092(new class_1293(class_1294.field_5924, 1800, 0)); // Regeneration I (1.5m)
                     }
-                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Alian\u00e7a mantida com sucesso! +15 Pontos Cooperativos para ambos.");
+                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
+                        awardCoopPoints(winner, 20, "Seguir o companheiro (\u0421\u043b\u0435\u0434\u0443\u0439 \u0437\u0430 \u043c\u043d\u043e\u0439!)");
+                        winner.method_6092(new class_1293(class_1294.field_5904, 2400, 0)); // Speed I (2m)
+                        winner.method_6092(new class_1293(class_1294.field_5924, 1800, 0)); // Regeneration I (1.5m)
+                    }
+                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Alian\u00e7a mantida com sucesso! +20 Pontos Cooperativos, Velocidade e Regenera\u00e7\u00e3o (2m)!");
                     break;
                 }
                 case "WAYPOINT": {
                     UUID winUid = (UUID)task.data.get("winner");
                     class_3222 winner = winUid != null ? getPlayerByUuid(server, winUid) : null;
-                    if (initiator != null) awardCoopPoints(initiator, 15, "Marcar ponto de encontro (\u0421\u043c\u043e\u0442\u0440\u0438 \u0442\u0443\u0434\u0430!)");
-                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
-                        awardCoopPoints(winner, 15, "Alcan\u00e7ar ponto marcado (\u0421\u043c\u043e\u0442\u0440\u0438 \u0442\u0443\u0434\u0430!)");
+                    if (initiator != null) {
+                        awardCoopPoints(initiator, 25, "Marcar ponto de encontro (\u0421\u043c\u043e\u0442\u0440\u0438 \u0442\u0443\u0434\u0430!)");
+                        initiator.method_6092(new class_1293(class_1294.field_5904, 3000, 1)); // Speed II (2.5m)
+                        initiator.method_6092(new class_1293(class_1294.field_5917, 3000, 0)); // Haste I (2.5m)
+                        initiator.method_43496((class_2561)class_2561.method_43470(
+                            "\u00a7a[\u2605 Recompensa] +25 Pontos Cooperativos, Velocidade II e Pressa (2m30s)!"
+                        ));
                     }
-                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Ponto de encontro alcan\u00e7ado! +15 Pontos Cooperativos.");
+                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
+                        awardCoopPoints(winner, 25, "Alcan\u00e7ar ponto marcado (\u0421\u043c\u043e\u0442\u0440\u0438 \u0442\u0443\u0434\u0430!)");
+                        winner.method_6092(new class_1293(class_1294.field_5904, 3000, 1)); // Speed II (2.5m)
+                        winner.method_6092(new class_1293(class_1294.field_5917, 3000, 0)); // Haste I (2.5m)
+                        winner.method_43496((class_2561)class_2561.method_43470(
+                            "\u00a7a[\u2605 Recompensa] +25 Pontos Cooperativos, Velocidade II e Pressa (2m30s)!"
+                        ));
+                    }
+                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Ponto de encontro alcan\u00e7ado! +25 Pontos Cooperativos, Velocidade II e Pressa (2.5m)!");
                     break;
                 }
                 case "REQUEST_ITEM": {
@@ -1789,45 +2011,69 @@ public final class ChallengeManager {
                     class_3222 winner = winUid != null ? getPlayerByUuid(server, winUid) : null;
                     String ptName = (String)task.data.getOrDefault("reqPtName", "item");
                     String ruName = (String)task.data.getOrDefault("reqRuName", ptName);
-                    if (initiator != null) awardCoopPoints(initiator, 20, "Solicitar " + ptName + " (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e: " + ruName + "!)");
-                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
-                        awardCoopPoints(winner, 20, "Fornecer " + ptName + " para aliado (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e: " + ruName + "!)");
+                    if (initiator != null) {
+                        awardCoopPoints(initiator, 25, "Solicitar " + ptName + " (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e: " + ruName + "!)");
+                        initiator.method_6092(new class_1293(class_1294.field_5926, 3600, 0)); // Luck I (3m)
+                        initiator.method_6092(new class_1293(class_1294.field_5917, 3600, 0)); // Haste I (3m)
                     }
-                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] " + ptName + " compartilhado! +20 Pontos Cooperativos para ambos.");
+                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
+                        awardCoopPoints(winner, 25, "Fornecer " + ptName + " para aliado (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e: " + ruName + "!)");
+                        winner.method_6092(new class_1293(class_1294.field_5926, 3600, 0)); // Luck I (3m)
+                        winner.method_6092(new class_1293(class_1294.field_5917, 3600, 0)); // Haste I (3m)
+                    }
+                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] " + ptName + " compartilhado! +25 Pontos Cooperativos, Sorte e Pressa (3m) para ambos.");
                     break;
                 }
                 case "REQUEST_WOOD": {
                     UUID winUid = (UUID)task.data.get("winner");
                     class_3222 winner = winUid != null ? getPlayerByUuid(server, winUid) : null;
-                    if (initiator != null) awardCoopPoints(initiator, 20, "Solicitar madeira (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e \u0434\u0435\u0440\u0435\u0432\u043e!)");
-                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
-                        awardCoopPoints(winner, 20, "Fornecer madeira para aliado (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e \u0434\u0435\u0440\u0435\u0432\u043e!)");
+                    if (initiator != null) {
+                        awardCoopPoints(initiator, 25, "Solicitar madeira (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e \u0434\u0435\u0440\u0435\u0432\u043e!)");
+                        initiator.method_6092(new class_1293(class_1294.field_5917, 3600, 0)); // Haste I (3m)
                     }
-                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Madeira compartilhada! +20 Pontos Cooperativos para ambos.");
+                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
+                        awardCoopPoints(winner, 25, "Fornecer madeira para aliado (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u043e \u0434\u0435\u0440\u0435\u0432\u043e!)");
+                        winner.method_6092(new class_1293(class_1294.field_5917, 3600, 0)); // Haste I (3m)
+                    }
+                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Madeira compartilhada! +25 Pontos Cooperativos e Pressa de Minera\u00e7\u00e3o (3m) para ambos.");
                     break;
                 }
                 case "REQUEST_FOOD": {
                     UUID winUid = (UUID)task.data.get("winner");
                     class_3222 winner = winUid != null ? getPlayerByUuid(server, winUid) : null;
-                    if (initiator != null) awardCoopPoints(initiator, 20, "Solicitar comida (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u0430 \u0435\u0434\u0430!)");
-                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
-                        awardCoopPoints(winner, 20, "Compartilhar comida com aliado (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u0430 \u0435\u0434\u0430!)");
+                    if (initiator != null) {
+                        awardCoopPoints(initiator, 25, "Solicitar comida (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u0430 \u0435\u0434\u0430!)");
+                        initiator.method_6092(new class_1293(class_1294.field_5922, 1200, 0)); // Saturation (1m)
+                        initiator.method_6092(new class_1293(class_1294.field_5904, 2400, 0)); // Speed I (2m)
                     }
-                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Alimento compartilhado! +20 Pontos Cooperativos para ambos.");
+                    if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
+                        awardCoopPoints(winner, 25, "Compartilhar comida com aliado (\u041c\u043d\u0435 \u043d\u0443\u0436\u043d\u0430 \u0435\u0434\u0430!)");
+                        winner.method_6092(new class_1293(class_1294.field_5922, 1200, 0)); // Saturation (1m)
+                        winner.method_6092(new class_1293(class_1294.field_5904, 2400, 0)); // Speed I (2m)
+                    }
+                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Alimento compartilhado! +25 Pontos Cooperativos, Satura\u00e7\u00e3o e Velocidade (2m) para ambos.");
                     break;
                 }
                 case "HELP": {
                     UUID winUid = (UUID)task.data.get("winner");
                     class_3222 winner = winUid != null ? getPlayerByUuid(server, winUid) : null;
                     if (initiator != null) {
-                        awardCoopPoints(initiator, 20, "Pedir ajuda ao aliado (\u041f\u043e\u043c\u043e\u0433\u0438 \u043c\u043d\u0435!)");
-                        initiator.method_6092(new class_1293(class_1294.field_5908, 140, 0));
+                        awardCoopPoints(initiator, 25, "Pedir ajuda ao aliado (\u041f\u043e\u043c\u043e\u0433\u0438 \u043c\u043d\u0435!)");
+                        initiator.method_6092(new class_1293(class_1294.field_5924, 1800, 1)); // Regeneration II (1.5m)
+                        initiator.method_6092(new class_1293(class_1294.field_5898, 3000, 1)); // Absorption II (2.5m)
+                        initiator.method_43496((class_2561)class_2561.method_43470(
+                            "\u00a7a[\u2605 Socorrido] +25 Pontos Cooperativos, Regenera\u00e7\u00e3o II (1m30s) e Absor\u00e7\u00e3o II (2m30s)!"
+                        ));
                     }
                     if (winner != null && !winner.method_5667().equals(task.initiatorUuid)) {
-                        awardCoopPoints(winner, 20, "Prestar socorro ao aliado (\u041f\u043e\u043c\u043e\u0433\u0438 \u043c\u043d\u0435!)");
-                        winner.method_6092(new class_1293(class_1294.field_5908, 140, 0));
+                        awardCoopPoints(winner, 25, "Prestar socorro ao aliado (\u041f\u043e\u043c\u043e\u0433\u0438 \u043c\u043d\u0435!)");
+                        winner.method_6092(new class_1293(class_1294.field_5924, 1800, 1)); // Regeneration II (1.5m)
+                        winner.method_6092(new class_1293(class_1294.field_5898, 3000, 1)); // Absorption II (2.5m)
+                        winner.method_43496((class_2561)class_2561.method_43470(
+                            "\u00a7a[\u2605 Socorrista] +25 Pontos Cooperativos, Regenera\u00e7\u00e3o II (1m30s) e Absor\u00e7\u00e3o II (2m30s)!"
+                        ));
                     }
-                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Socorro prestado! Regenera\u00e7\u00e3o e +20 Pontos Cooperativos concedidos.");
+                    broadcastToTeam(server, task, "\u00a7a[\u2714 SUCESSO] Socorro prestado! Regenera\u00e7\u00e3o II, Absor\u00e7\u00e3o II e +25 Pontos Cooperativos concedidos!");
                     break;
                 }
                 case "LAVA": {
@@ -1836,9 +2082,12 @@ public final class ChallengeManager {
                         if (p != null) {
                             int burns = (int)task.data.getOrDefault("burn_" + uid.toString(), 0);
                             if (burns < 10) {
-                                awardCoopPoints(p, 25, "Sobreviver ao Ch\u00e3o \u00e9 Lava (\u041f\u043e\u043b - \u044d\u0442\u043e \u043b\u0430\u0432\u0430!)");
-                                p.method_6092(new class_1293(class_1294.field_5904, 300, 1));
-                                p.method_43496((class_2561)class_2561.method_43470("\u00a7a[\u2605 Vit\u00f3ria] Voc\u00ea sobreviveu ao Ch\u00e3o \u00e9 Lava! +25 Pontos Cooperativos e Velocidade II!"));
+                                awardCoopPoints(p, 30, "Sobreviver ao Ch\u00e3o \u00e9 Lava (\u041f\u043e\u043b - \u044d\u0442\u043e \u043b\u0430\u0432\u0430!)");
+                                p.method_6092(new class_1293(class_1294.field_5904, 3000, 1)); // Speed II (2.5m)
+                                p.method_6092(new class_1293(class_1294.field_5918, 3600, 0)); // Fire Resistance (3m)
+                                p.method_43496((class_2561)class_2561.method_43470(
+                                    "\u00a7a[\u2605 Vit\u00f3ria] Voc\u00ea sobreviveu ao Ch\u00e3o \u00e9 Lava! +30 Pontos Cooperativos, Velocidade II (2m30s) e Resist\u00eancia ao Fogo (3m)!"
+                                ));
                             } else {
                                 p.method_43496((class_2561)class_2561.method_43470("\u00a7c[\ud83d\udd25 Queimado] Voc\u00ea sofreu queimaduras excessivas na lava. Tente novamente no pr\u00f3ximo!"));
                             }
@@ -1850,22 +2099,30 @@ public final class ChallengeManager {
                     for (UUID uid : task.targetUuids) {
                         class_3222 p = getPlayerByUuid(server, uid);
                         if (p != null) {
-                            awardCoopPoints(p, 20, "Completar desafio de movimento (\u041f\u0440\u044b\u0433\u0430\u0439 \u0432\u044b\u0448\u0435!)");
-                            p.method_6092(new class_1293(class_1294.field_5915, 400, 1));
+                            awardCoopPoints(p, 25, "Completar desafio de movimento (\u041f\u0440\u044b\u0433\u0430\u0439 \u0432\u044b\u0448\u0435!)");
+                            p.method_6092(new class_1293(class_1294.field_5913, 3000, 1)); // Jump Boost II (2.5m)
+                            p.method_6092(new class_1293(class_1294.field_5904, 3000, 0)); // Speed I (2.5m)
+                            p.method_43496((class_2561)class_2561.method_43470(
+                                "\u00a7a[\u2605 Recompensa] +25 Pontos Cooperativos, Super Salto II e Velocidade (2m30s)!"
+                            ));
                         }
                     }
-                    broadcastServer(server, "\u00a7a[\u2714 PARKOUR CONCLU\u00cdDO] Todos os participantes receberam +20 Pontos Cooperativos e Super Salto!");
+                    broadcastServer(server, "\u00a7a[\u2714 PARKOUR CONCLU\u00cdDO] Todos os participantes receberam +25 Pontos Cooperativos, Super Salto II e Velocidade (2.5m)!");
                     break;
                 }
                 case "RALLY": {
                     for (UUID uid : task.targetUuids) {
                         class_3222 p = getPlayerByUuid(server, uid);
                         if (p != null) {
-                            awardCoopPoints(p, 20, "Reuni\u00e3o de equipe conclu\u00edda (\u0414\u0435\u0440\u0436\u0438\u043c\u0441\u044f \u0432\u043c\u0435\u0441\u0442\u0435!)");
-                            p.method_6092(new class_1293(class_1294.field_5908, 200, 0));
+                            awardCoopPoints(p, 25, "Reuni\u00e3o de equipe conclu\u00edda (\u0414\u0435\u0440\u0436\u0438\u043c\u0441\u044f \u0432\u043c\u0435\u0441\u0442\u0435!)");
+                            p.method_6092(new class_1293(class_1294.field_5924, 2400, 0)); // Regeneration I (2m)
+                            p.method_6092(new class_1293(class_1294.field_5907, 3000, 0)); // Resistance I (2.5m)
+                            p.method_43496((class_2561)class_2561.method_43470(
+                                "\u00a7a[\u2605 Recompensa] +25 Pontos Cooperativos, Regenera\u00e7\u00e3o e Resist\u00eancia (2.5m)!"
+                            ));
                         }
                     }
-                    broadcastServer(server, "\u00a7a[\u2714 REUNI\u00c3O CONCLU\u00cdDA] A equipe est\u00e1 unida! +20 Pontos Cooperativos e Regenera\u00e7\u00e3o!");
+                    broadcastServer(server, "\u00a7a[\u2714 REUNI\u00c3O CONCLU\u00cdDA] A equipe est\u00e1 unida! +25 Pontos Cooperativos, Regenera\u00e7\u00e3o e Resist\u00eancia (2.5m)!");
                     break;
                 }
                 default:

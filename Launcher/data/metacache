@@ -498,51 +498,51 @@
         },
         {
             "base": "meta",
-            "etag": "\"dmrxvl4ih3mv1bn\"",
-            "last_changed_timestamp": 1794355712471,
-            "md5sum": "d559eb1dad32097ad154582210f7ffe8",
+            "etag": "\"dmtcwt6379zf1bn-gzip\"",
+            "last_changed_timestamp": 1794499340741,
+            "md5sum": "647ff379ea5d6c5eaf5f2597791caa48",
             "path": "index.json",
-            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:06 GMT"
+            "remote_changed_timestamp": "Thu, 12 Nov 2026 16:01:38 GMT"
         },
         {
             "base": "meta",
-            "etag": "\"dmrxvl63kb332cb\"",
-            "last_changed_timestamp": 1794355712666,
+            "etag": "\"dmtcwt7n7fzw2cb-gzip\"",
+            "last_changed_timestamp": 1794499340694,
             "md5sum": "36fc8b6464e74e02e85a3da56c2e4237",
             "path": "net.fabricmc.fabric-loader/0.16.14.json",
-            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:06 GMT"
+            "remote_changed_timestamp": "Thu, 12 Nov 2026 16:01:38 GMT"
         },
         {
             "base": "meta",
-            "etag": "\"dmrxvl6qclypl6\"",
-            "last_changed_timestamp": 1794355712441,
+            "etag": "\"dmtcwt8ef6brl6-gzip\"",
+            "last_changed_timestamp": 1794499340707,
             "md5sum": "805215a1ea696139574edf3f6bd3f4c9",
             "path": "net.fabricmc.intermediary/1.20.1.json",
-            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:06 GMT"
+            "remote_changed_timestamp": "Thu, 12 Nov 2026 16:01:38 GMT"
         },
         {
             "base": "meta",
-            "etag": "\"dmrxvl7welnkdks\"",
-            "last_changed_timestamp": 1794355712716,
+            "etag": "\"dmtcwt9aj04fdks-gzip\"",
+            "last_changed_timestamp": 1794499340512,
             "md5sum": "1fe96c019d14957ebf1146145c53b0f9",
             "path": "net.minecraft/1.20.1.json",
-            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:06 GMT"
+            "remote_changed_timestamp": "Thu, 12 Nov 2026 16:01:39 GMT"
         },
         {
             "base": "meta",
-            "etag": "\"dmrxvm1qawc3aha\"",
-            "last_changed_timestamp": 1794355712463,
+            "etag": "\"dmtcwtzdya88aha-gzip\"",
+            "last_changed_timestamp": 1794499340734,
             "md5sum": "b4581d4939208a6232554e76a0eb8657",
             "path": "org.lwjgl3/3.3.1.json",
-            "remote_changed_timestamp": "Wed, 11 Nov 2026 00:02:08 GMT"
+            "remote_changed_timestamp": "Thu, 12 Nov 2026 16:01:40 GMT"
         },
         {
             "base": "translations",
-            "etag": "\"dmqph9tg1fejakl\"",
-            "last_changed_timestamp": 1794355710844,
-            "md5sum": "496aa9ed15cc7660f91ff11e33c9dbdf",
+            "etag": "\"dmsd5irkd63vakj\"",
+            "last_changed_timestamp": 1794499338882,
+            "md5sum": "18141fc712dcb03794ee83630494a6ca",
             "path": "index_v2.json",
-            "remote_changed_timestamp": "Mon, 09 Nov 2026 13:14:35 GMT"
+            "remote_changed_timestamp": "Wed, 11 Nov 2026 12:00:21 GMT"
         }
     ],
     "version": "1"
