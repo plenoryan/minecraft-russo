@@ -18,20 +18,59 @@
 </head>
 <body>
 
-  <!-- Subtle Ambient Minecraft Parallax Layer -->
-  <div class="mc-parallax-canvas" aria-hidden="true">
-    <div class="mc-particle p-diamond" data-speed="25">
-      <img src="assets/items/diamond.png" alt="" class="particle-img drift-1">
+  <!-- 3D Minecraft Parallax Elements: 1 Mob (with mouse tracking, blink & dialogue bubble) + 1 3D Block -->
+  <div class="mc-3d-scene" aria-hidden="true">
+
+    <!-- 1. 3D Mob with Mouse Tracking, Eye Blink & Welcome Dialogue Bubble -->
+    <div class="mc-3d-mob-anchor" id="mc-mob-anchor">
+      <div class="mob-speech-bubble" id="mob-speech-bubble" title="Clique para ouvir a saudação">
+        <div class="bubble-arrow"></div>
+        <div class="bubble-tag">SAYIT VOSTOK</div>
+        <div class="bubble-ru">« Добро пожаловать! »</div>
+        <div class="bubble-phonetic">[Dóbro pajálovat'!]</div>
+        <div class="bubble-pt">Bem-vindo à sobrevivência!</div>
+      </div>
+
+      <div class="mc-3d-mob" id="mc-3d-mob">
+        <!-- 3D Head with 6 faces and blinking eyes -->
+        <div class="mob-head">
+          <div class="mob-face front">
+            <div class="mob-blink-eye eye-left"></div>
+            <div class="mob-blink-eye eye-right"></div>
+          </div>
+          <div class="mob-face back"></div>
+          <div class="mob-face right"></div>
+          <div class="mob-face left"></div>
+          <div class="mob-face top"></div>
+          <div class="mob-face bottom"></div>
+        </div>
+        <!-- 3D Torso -->
+        <div class="mob-body">
+          <div class="body-face front"></div>
+          <div class="body-face right"></div>
+          <div class="body-face left"></div>
+          <div class="body-face top"></div>
+        </div>
+      </div>
     </div>
-    <div class="mc-particle p-bread" data-speed="35">
-      <img src="assets/items/bread.png" alt="" class="particle-img drift-2">
+
+    <!-- 2. 3D Minecraft Block (Crafting Table / Верстак) further down the page -->
+    <div class="mc-3d-block-anchor" id="mc-block-anchor" title="Bancada de Trabalho (Верстак)">
+      <div class="mc-3d-cube" id="mc-3d-cube">
+        <div class="cube-face top"></div>
+        <div class="cube-face front"></div>
+        <div class="cube-face right"></div>
+        <div class="cube-face left"></div>
+        <div class="cube-face back"></div>
+        <div class="cube-face bottom"></div>
+      </div>
+      <div class="cube-shadow"></div>
+      <div class="cube-label">
+        <span class="cube-ru">Верстак</span>
+        <span class="cube-pt">Bancada de Trabalho</span>
+      </div>
     </div>
-    <div class="mc-particle p-log" data-speed="28">
-      <img src="assets/items/oak_log.png" alt="" class="particle-img drift-3">
-    </div>
-    <div class="mc-particle p-camera" data-speed="20">
-      <img src="assets/items/camera.png" alt="" class="particle-img drift-1">
-    </div>
+
   </div>
 
   <!-- ==============================================================================

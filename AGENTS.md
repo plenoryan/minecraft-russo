@@ -280,7 +280,8 @@
   1. **Motor de Substituição Letra por Letra (Alphabet.java):** Criada a classe Alphabet implementando uma sequência canônica de 32 níveis pedagógicos dividida em 5 fases (Gêmeas Transparentes -> Falsos Amigos Cardinais -> Construtores/Gregas -> Chiantes/Sons Eslavos -> Iodizadas e Modificadores Ь/Ъ). Cada nível é desbloqueado a cada 2 estrelas de domínio acumuladas nos desafios (totalStars / 2), exigindo dezenas de itens para atingir a fluência completa.
   2. **Renderização de Palavra Única no HUD (ChallengeHud.java):** A linha de trapaça fonética latina separada foi eliminada do HUD. A palavra alvo agora inicia 100% em letras latinas (Derevo) e se converte cirilicamente caractere por caractere conforme o nível de alfabeto do jogador (Derevо -> Dеrево -> Дерево). A linha inferior passa a exibir exclusivamente a mnemônica e instrução da letra ativa no nível atual (Nível 7/32 • Letra Ativa: В, в [V] (Parece B, mas tem som de V!)).
   3. **Desacoplamento e Automação de Missões Heracles:** Substituídas as tarefas de itens das 5 missões de tier0_alfabeto por tarefas do tipo heracles:check. No servidor (ChallengeManager.java), quando o jogador atinge os marcos de nível (6, 12, 19, 26 e 32), o servidor executa atomicamente o comando heracles complete <quest_id> <player> além de emitir anúncio de celebração no chat, garantindo que as missões só progridam mediante avanço fonético autêntico no microfone.
-  4. **Sincronia com Tooltips KubeJS:** No russian_tooltips.js, itens inspecionam dinamicamente Alphabet.calculateLevel e Alphabet.toHybrid, exibindo a projeção do texto híbrido e a letra ativa no inventário em tempo real.
+  4. **Sincronia com Tooltips KubeJS:** No 
+russian_tooltips.js, itens inspecionam dinamicamente Alphabet.calculateLevel e Alphabet.toHybrid, exibindo a projeção do texto híbrido e a letra ativa no inventário em tempo real.
 
 ### L39. Desbloqueio Inteligente Contextual, Mapa de Calor e Conhecimento Compartilhado
 - **Armadilha:**
@@ -420,7 +421,8 @@
   3. **Interação Física e Registro Imersivo (Exposure 1.9.24 + Carry On 2.1.2.7):**
      - Exposure: Câmera fotográfica analógica funcional com filmes preto-e-branco (Чёрно-белая плёнка) e colorido (Цветная плёнка), revelação em câmara escura e montagem de álbuns de fotos (Фотоальбом).
      - Carry On: Permite levantar pequenos animais e baús nos braços com Shift + Botão Direito.
-  4. **Anotações Pedagógicas Bilíngues (ussian_tooltips.js):**
+  4. **Anotações Pedagógicas Bilíngues (
+ussian_tooltips.js):**
      - Adicionadas 14 novas entradas completas no currículo bilíngue com pronúncia fonética e notas gramaticais de gênero/caso.
 
 ### L49. Desconexao em Sessao LAN/VPN: Limite de Tempo Netty (30s Read Timeout) e Tamanho de Pacotes
@@ -569,7 +571,8 @@
      - Em triggerHear(), as variaveis de hipoteses (heard e best) sao zeradas imediatamente.
   2. **Eradicacao Definitiva de Mojibake na Web (docs/):**
      - Removidos todos os caracteres especiais suscetiveis a reinterpretacao ANSI em docs/app.js, docs/index.html e docs/style.css, padronizando hifens ASCII (-) e badges de confirmacao ([OK]).
-  3. **Camada Parallax Minecraft Ambiente e Desacoplada (docs/index.html, style.css, app.js):**
-     - Inserida camada .mc-parallax-canvas exclusivamente nas calhas externas (gutters) do viewport (right/left: max(24px, calc((100vw - 1200px) / 3))).
-     - Renderiza sprites pixel art (diamond.png, bread.png, oak_log.png, camera.png) com baixa opacidade (0.25), filtro sepia de papel, flutuacao suave CSS (@keyframes mc-float-1/2/3) e deslocamento parallax suave guiado pelo cursor via requestAnimationFrame.
-     - Em telas menores (<= 1240px) ou com prefers-reduced-motion, a camada e desativada (display: none), preservando total legibilidade.
+  3. **Parallax 3D Puro: Mob com Caixa de Dialogo e Bloco Isometrico (docs/index.html, style.css, app.js):**
+     - Sutileza estrita de quantidade (exatamente 2 elementos em toda a pagina) e posicionamento em calhas externas, preservando 100% de opacidade solida e nitidez pixel-art nativa:
+     - **Mob 3D Interativo (Creeper):** Ancorado na calha superior direita com geometria CSS 3D (preserve-3d). A cabeca rastreia o cursor do mouse em tempo real com calculo de angulos yaw/pitch via requestAnimationFrame (olhando diretamente para o ponteiro). Os olhos piscam periodicamente. Acompanhado de balao de dialogo editorial de boas-vindas em russo: Dobro pozhalovat! (com feedback sonoro/visual interativo ao clicar).
+     - **Bloco 3D (Bancada de Trabalho / Verstak):** Posicionado na calha esquerda no meio da pagina, um cubo tridimensional completo com as texturas autenticas do Minecraft 1.20.1 (grade de ferramentas no topo, serrote e martelo nas faces), com rotacao isometrica guiada pelo mouse e tag pedagogica bilingue.
+     - Ocultado automaticamente em telas menores ou iguais a 1260px e sob prefers-reduced-motion para garantir zero poluicao de leitura.
