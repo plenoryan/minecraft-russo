@@ -622,3 +622,20 @@ ussian_tooltips.js):**
      - Cards de audio adaptados para vidro temperado submerso com texto ciano luminescente de alto contraste.
   4. **Novo Bloco 3D de Grama com Terra (`Дёрн`):**
      - Inserido na calha direita da secao `#features`, alternando lateralmente com a bancada de trabalho (`Верстак`) da secao `#radial`.
+
+
+### L61. Vinculo Automatico e Infalivel do Java 17 no UltimMC (Eliminacao de Wizard de Selecao de Java)
+- **Armadilha:**
+  - O MultiMC/UltimMC possui a verificacao interna `SetupWizard::shouldRun()`, que dispara o assistente de selecao de Java se:
+    1. O caminho em `JavaPath` nao existir no disco (`!QFileInfo(JavaPath).exists()`), o que ocorre quando caminhos relativos como `Java17/bin/javaw.exe` sao avaliados a partir do diretorio de trabalho do launcher (`Launcher\`).
+    2. A chave `AnalyticsSeen` nao existir no `ultimmc.cfg` ou for menor que 1.
+  - No `Jogar.bat`, tentativas de rodar comandos multilinhas do PowerShell com quebras `^` e aspas duplas no CMD causavam erro de sintaxe silencioso (`-Command deve ser seguido de um comando`) suprimido por `>nul 2>&1`, impedindo que os caminhos absolutos fossem injetados antes da inicializacao.
+- **Solucao Implementada:**
+  1. **Script de Vinculo Dedicado (`Launcher\setup_java.ps1`):**
+     - Criado script PowerShell dedicado executado com `-File` pelo `Jogar.bat` e `Abrir_Launcher.bat`, eliminando completamente vulnerabilidades de escape em batch.
+     - Detecta automaticamente o caminho absoluto do OpenJDK 17 (`Java17\bin\javaw.exe`), normaliza as barras (`/`) e atualiza de forma atomica `ultimmc.cfg` (em `Launcher\` e `Launcher\data\`) e `instance.cfg`.
+     - Injeta compulsoriamente `AnalyticsSeen=2`, `Language=pt_BR`, `OverrideJava=true` e `OverrideJavaLocation=true`.
+  2. **Juncoes NTFS de Fallback:**
+     - Criacao automatica das juncoes `Launcher\Java17` e `Launcher\data\Java17` apontando para a pasta raiz `Java17`, garantindo que mesmo se o usuario abrir o `UltimMC.exe` diretamente sem passar pelo `.bat`, o caminho relativo `Java17/bin/javaw.exe` existira fisicamente e o assistente nunca sera aberto.
+  3. **Pre-configuracao no Empacotador (`package_client.ps1`):**
+     - O manifesto gerado pelo empacotador ja inclui `AnalyticsSeen=2` e empacota o `setup_java.ps1`, garantindo que o pacote `.zip` distribuido venha pronto para execucao em 1 clique sem requerer qualquer intervencao do usuario.

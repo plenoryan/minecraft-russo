@@ -378,6 +378,7 @@ Write-Success "instance.cfg normalizado com JavaPath=Java17/bin/javaw.exe"
 $dataUltimMc = Join-Path $dataDst "ultimmc.cfg"
 $dataUltimMcLines = @(
     "Analytics=false",
+    "AnalyticsSeen=2",
     "ConsoleMaxLines=100000",
     "ConsoleOverflowStop=true",
     "JavaArchitecture=64",
@@ -394,6 +395,7 @@ Write-Utf8NoBom -FilePath $dataUltimMc -Content (($dataUltimMcLines -join "`r`n"
 $rootUltimMc = Join-Path $launcherDst "ultimmc.cfg"
 $rootUltimMcLines = @(
     "Analytics=false",
+    "AnalyticsSeen=2",
     "JavaArchitecture=64",
     "JavaPath=Java17/bin/javaw.exe",
     "Language=pt_BR",
@@ -500,6 +502,18 @@ if (Test-Path $sourceMudarNomeBat) {
     Write-Utf8NoBom -FilePath (Join-Path $OutputDir "Mudar_Nome.bat") -Content $mudarNomeBatText
     Write-Utf8NoBom -FilePath (Join-Path $launcherDst "Mudar_Nome.bat") -Content $mudarNomeBatText
     Write-Success "Mudar_Nome.bat copiado para a distribuicao portatil."
+}
+
+# Copia setup_java.ps1 para Launcher\ e raiz do pacote
+$sourceSetupJava = Join-Path $launcherSrc "setup_java.ps1"
+if (-not (Test-Path $sourceSetupJava)) {
+    $sourceSetupJava = Join-Path $TargetRoot "Launcher\setup_java.ps1"
+}
+if (Test-Path $sourceSetupJava) {
+    $setupJavaText = Get-Content -Raw -Encoding UTF8 $sourceSetupJava
+    Write-Utf8NoBom -FilePath (Join-Path $launcherDst "setup_java.ps1") -Content $setupJavaText
+    Write-Utf8NoBom -FilePath (Join-Path $OutputDir "setup_java.ps1") -Content $setupJavaText
+    Write-Success "setup_java.ps1 copiado para a distribuicao portatil."
 }
 
 # Instrucoes para amigos em LEIA-ME.txt

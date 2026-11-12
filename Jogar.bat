@@ -80,55 +80,22 @@ if exist "%BUNDLED_JAVA%" (
     )
 )
 
-:: 4. Auto-configuracao dinamica do caminho do Java portatil no Launcher e instancias
+:: 4. Auto-configuracao dinamica do caminho do Java portatil no ultimmc.cfg e instance.cfg
 set "JAVA_PATH_NORM=%BUNDLED_JAVA:\=/%"
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-    "$j = $env:JAVA_PATH_NORM; if (-not $j) { $p = $env:SCRIPT_DIR; $j = ($p + 'Java17\bin\javaw.exe').Replace('\', '/'); }" ^
-    "$d = $env:DATA_DIR; if (-not $d) { $d = Join-Path $env:SCRIPT_DIR 'Launcher\data'; }" ^
-    "$l = $env:LAUNCHER_DIR; if (-not $l) { $l = Join-Path $env:SCRIPT_DIR 'Launcher'; }" ^
-    "$configs = @(" ^
-    "    (Join-Path $d 'ultimmc.cfg')," ^
-    "    (Join-Path $l 'ultimmc.cfg')," ^
-    "    (Join-Path $d 'instances\Minecraft_Russo\instance.cfg')," ^
-    "    (Join-Path $l 'instances\Minecraft_Russo\instance.cfg')" ^
-    ");" ^
-    "foreach ($cfg in $configs) {" ^
-    "    if (Test-Path -LiteralPath $cfg) {" ^
-    "        $c = Get-Content -LiteralPath $cfg -Encoding UTF8;" ^
-    "        if ($c -match '^JavaPath=') {" ^
-    "            $c = $c -replace '^JavaPath=.*', ('JavaPath=' + $j);" ^
-    "        } else {" ^
-    "            $c += ('JavaPath=' + $j);" ^
-    "        }" ^
-    "        [System.IO.File]::WriteAllLines($cfg, $c, [System.Text.UTF8Encoding]::new($false));" ^
-    "    }" ^
-    "};" ^
-    "$accounts = @(" ^
-    "    (Join-Path $d 'accounts.json')," ^
-    "    (Join-Path $l 'accounts.json')" ^
-    ");" ^
-    "foreach ($acc in $accounts) {" ^
-    "    if (Test-Path -LiteralPath $acc) {" ^
-    "        $a = Get-Content -LiteralPath $acc -Raw -Encoding UTF8;" ^
-    "        $a = $a -replace '\"type\":\s*\"Offline\"', '\"type\": \"dummy\"';" ^
-    "        [System.IO.File]::WriteAllText($acc, $a, [System.Text.UTF8Encoding]::new($false));" ^
-    "    }" ^
-    "}" >nul 2>&1
+if exist "%BASE_DIR%Launcher\setup_java.ps1" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%BASE_DIR%Launcher\setup_java.ps1" -BaseDir "%BASE_DIR%"
+) else if exist "%LAUNCHER_DIR%setup_java.ps1" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%LAUNCHER_DIR%setup_java.ps1" -BaseDir "%BASE_DIR%"
+) else if exist "%~dp0setup_java.ps1" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0setup_java.ps1" -BaseDir "%BASE_DIR%"
+) else (
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "& { param($b) $j=($b+'Java17\bin\javaw.exe').Replace('\','/'); @((Join-Path $b 'Launcher\data\ultimmc.cfg'),(Join-Path $b 'Launcher\ultimmc.cfg'),(Join-Path $b 'Launcher\data\instances\Minecraft_Russo\instance.cfg'),(Join-Path $b 'Launcher\instances\Minecraft_Russo\instance.cfg')) | ForEach-Object { if(Test-Path -LiteralPath $_){ $c=[System.Collections.Generic.List[string]](Get-Content -LiteralPath $_ -Encoding UTF8); $h=$false; for($i=0;$i -lt $c.Count;$i++){ if($c[$i] -match '^JavaPath='){$c[$i]='JavaPath='+$j; $h=$true;} elseif($c[$i] -match '^AnalyticsSeen='){$c[$i]='AnalyticsSeen=2';} }; if(-not $h){$c.Add('JavaPath='+$j);}; if($_ -like '*ultimmc.cfg' -and ($c -notmatch '^AnalyticsSeen=')){$c.Add('AnalyticsSeen=2');}; [System.IO.File]::WriteAllLines($_,$c,[System.Text.UTF8Encoding]::new($false)) } } }" "%BASE_DIR%"
+)
 
-:: 5. Iniciar o Jogo diretamente no Minecraft_Russo
+:: 5. Exibir informacoes do jogador e iniciar o Jogo
 echo.
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-    "$d = $env:DATA_DIR; if (-not $d) { $d = Join-Path $env:SCRIPT_DIR 'Launcher\data'; }" ^
-    "$acc = Join-Path $d 'accounts.json';" ^
-    "if (Test-Path -LiteralPath $acc) {" ^
-    "    try {" ^
-    "        $j = Get-Content -LiteralPath $acc -Raw -Encoding UTF8 | ConvertFrom-Json;" ^
-    "        $u = $j.accounts[0].ygg.extra.userName;" ^
-    "        Write-Host ('[JOGADOR] Perfil ativo: ' + $u) -ForegroundColor Yellow;" ^
-    "        Write-Host '          (Para mudar seu nome, feche o jogo e execute Mudar_Nome.bat)' -ForegroundColor DarkGray;" ^
-    "    } catch {}" ^
-    "}"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& { param($d) $acc=Join-Path $d 'accounts.json'; if(Test-Path -LiteralPath $acc){ try{ $j=Get-Content -LiteralPath $acc -Raw -Encoding UTF8 | ConvertFrom-Json; $u=$j.accounts[0].ygg.extra.userName; Write-Host ('[JOGADOR] Perfil ativo: ' + $u) -ForegroundColor Yellow; Write-Host '          (Para mudar seu nome, feche o jogo e execute Mudar_Nome.bat)' -ForegroundColor DarkGray; }catch{} } }" "%DATA_DIR%"
 
 echo.
 echo [INICIANDO] Abrindo o inicializador e carregando o modpack Minecraft_Russo...
