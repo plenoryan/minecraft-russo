@@ -239,9 +239,9 @@ if (-not (Test-Path $mmcPackSrc)) {
 }
 [System.IO.File]::Copy($mmcPackSrc, (Join-Path $instDst "mmc-pack.json"), $true)
 
-# Copiar arquivos de configuracao de topo do .minecraft
+# Copiar arquivos de configuracao de topo do .minecraft (excluindo caches pessoais do host)
 $instClientSrc = Join-Path $TargetRoot "Instancia_Cliente"
-$topFiles = @("iris.properties", "heracles_options.json", "icon.png", "irisUpdateInfo.json", "usercache.json", "usernamecache.json")
+$topFiles = @("iris.properties", "heracles_options.json", "icon.png", "irisUpdateInfo.json")
 foreach ($tf in $topFiles) {
     $tfSrc = Join-Path $instClientSrc $tf
     if (-not (Test-Path $tfSrc)) {
@@ -440,6 +440,33 @@ $accountsJsonTemplate = @{
 Write-Utf8NoBom -FilePath (Join-Path $dataDst "accounts.json") -Content ($accountsJsonTemplate + "`r`n")
 Write-Utf8NoBom -FilePath (Join-Path $launcherDst "accounts.json") -Content ($accountsJsonTemplate + "`r`n")
 Write-Success ("accounts.json configurado com perfil offline aleatorio '" + $portableUsername + "' (dummy)")
+
+# 7.4 usercache.json e usernamecache.json isolados para o jogador portatil (zero vazamento do host)
+$userCacheData = @(
+    @{
+        name = $portableUsername
+        uuid = $portableUUID
+        expiresOn = "2099-12-31 23:59:59 -0300"
+    }
+) | ConvertTo-Json -Depth 3
+Write-Utf8NoBom -FilePath (Join-Path $mcDst "usercache.json") -Content ($userCacheData + "`r`n")
+
+$userNameCacheData = @{
+    $portableUUID = $portableUsername
+} | ConvertTo-Json -Depth 3
+Write-Utf8NoBom -FilePath (Join-Path $mcDst "usernamecache.json") -Content ($userNameCacheData + "`r`n")
+
+$jadeCache = Join-Path $mcDst "config\jade\usernamecache.json"
+if (Test-Path (Split-Path $jadeCache -Parent)) {
+    Write-Utf8NoBom -FilePath $jadeCache -Content ($userNameCacheData + "`r`n")
+}
+
+# Limpar logs locais do host que possam conter o nome pessoal
+$cslLog = Join-Path $mcDst "CustomSkinLoader\CustomSkinLoader.log"
+if (Test-Path $cslLog) {
+    Remove-Item $cslLog -Force -ErrorAction SilentlyContinue
+}
+Write-Success "Caches de usuario higienizados: apenas o perfil portatil compilado esta presente."
 
 # ------------------------------------------------------------------------------
 # 8. Criar Jogar.bat e Mudar_Nome.bat no Pacote Portatil

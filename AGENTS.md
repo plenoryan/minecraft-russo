@@ -541,3 +541,14 @@
      - Removidos todos os paragrafos explicativos de `#radial`. Mantido unicamente o titulo e o dial circular animado: botao fisico central `[ V ]`, aneis de radar em pulsacao continua, display centralizado da frase e 6 setores com icones e reproducao fonetica imediata.
   4. **Poda e Sintese Visual das Demais Secoes:**
      - Paragrafos prolixos substituidos por diagramas de fluxo, microcopys diretas e marcadores tecnicos concisos, mantendo estrita conformidade com os 71 testes da bateria E2E.
+
+
+### L57. Fronteira Estrita Entre Dados Pessoais do Host e Materiais de Divulgacao/Compilacao Publica
+- **Armadilha:**
+  - Citar nomes pessoais do desenvolvedor/anfitriao (`Ryan`) em textos de divulgacao publica (changelog, site publico, documentacao de distribuicao).
+  - Permitir que arquivos de cache de sessoes locais do anfitriao (`usercache.json`, `usernamecache.json`, `config/jade/usernamecache.json`, logs de skins) sejam acidentalmente empacotados pelo gerador portatil (`package_client.ps1`) para terceiros.
+- **Solucao Implementada:**
+  1. **Divulgacao Publica Impessoal (`docs/index.html`):**
+     - O changelog e a documentacao web foram higienizados para referenciar exclusivamente papeis funcionais ("jogador anfitriao (Host)"), sem qualquer vazamento de nomes pessoais.
+  2. **Isolamento de Caches na Compilacao (`package_client.ps1`):**
+     - O script de empacotamento foi blindado para nao copiar caches do host local (`usercache.json`, `usernamecache.json`), gerando em vez disso caches isolados contendo estritamente o perfil gerado aleatoriamente (`Estudante_XXXX`) com seu respectivo UUID, alem de expurgar logs temporarios da instalacao compilada.
